@@ -8,15 +8,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 
-
-@Entity
-class Debt { @Id int key; }
-@Entity
-class Participant { @Id int key; }
-@Entity
-class Event { @Id int key; }
-
-
 @Entity
 @Table(name = "expenses")
 public class Expense {
