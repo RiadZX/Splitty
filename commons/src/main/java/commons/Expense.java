@@ -101,8 +101,12 @@ public class Expense {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {return true;}
-        if (o == null || getClass() != o.getClass()) {return false;}
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Expense expense = (Expense) o;
         return Double.compare(amount, expense.amount) == 0 
                 && Objects.equals(id, expense.id)
