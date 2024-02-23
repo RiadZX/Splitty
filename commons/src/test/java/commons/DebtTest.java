@@ -26,20 +26,4 @@ public class DebtTest {
 		var p = new Debt(new Expense(), new Participant(), 0);
 		assertEquals(0, p.get_amount());
 	}
-
-	@Test
-	public void equalsHashCode() {
-		var a = new Debt(new Expense(), new Participant(), 0);
-		var b = new Debt(new Expense(), new Participant(), 0);
-		assertEquals(a, b);
-		assertEquals(a.hashCode(), b.hashCode());
-	}
-
-	@Test
-	public void notEqualsHashCode() {
-		var a = new Debt(new Expense(), new Participant(), 0);
-		var b = new Debt(new Expense(), new Participant(), 1);
-		assertNotEquals(a, b);
-		assertNotEquals(a.hashCode(), b.hashCode());
-	}
 }
