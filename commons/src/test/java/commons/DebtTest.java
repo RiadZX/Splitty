@@ -17,13 +17,13 @@ package commons;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DebtTest {
 
 	@Test
 	public void checkConstructor() {
 		var p = new Debt(new Expense(), new Participant(), 0);
-		assertEquals(0, p.get_amount());
+		assertEquals(0, p.getAmount());
 	}
 }

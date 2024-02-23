@@ -20,7 +20,7 @@ class Participant { @Id int key; }
 public class Debt {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID debt_id;
+    private UUID debtId;
 
     @ManyToOne
     private Expense expense;
@@ -40,15 +40,15 @@ public class Debt {
         this.amount = amount;
     }
 
-    public boolean is_paid() {
+    public boolean isPaid() {
         return this.paid;
     }
 
-    public boolean need_to_pay() {
+    public boolean needToPay() {
         return !this.paid;
     }
 
-    public void set_paid(boolean paid) {
+    public void setPaid(boolean paid) {
         this.paid = paid;
     }
 
@@ -56,47 +56,52 @@ public class Debt {
         this.paid = true;
     }
 
-    public int get_amount() {
+    public int getAmount() {
         return this.amount;
     }
 
-    public void set_amount(int amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 
-    public Participant get_participant() {
+    public Participant getParticipant() {
         return this.participant;
     }
 
-    public void set_participant(Participant participant) {
+    public void setParticipant(Participant participant) {
         this.participant = participant;
     }
 
-    public Expense get_expenses() {
+    public Expense getexpenses() {
         return this.expense;
     }
 
-    public void set_expense(Expense expense) {
+    public void setExpense(Expense expense) {
         this.expense = expense;
     }
 
-    public UUID get_uuid() {
-        return this.debt_id;
+    public UUID getUuid() {
+        return this.debtId;
     }
 
-    public void set_uuid(UUID uuid) {
-        this.debt_id = uuid;
+    public void setUuid(UUID uuid) {
+        this.debtId = uuid;
     }
 
     @Override
     public String toString() {
-        return "Debt{" +
-                "debt_id=" + debt_id +
-                ", expense=" + expense +
-                ", participant=" + participant +
-                ", amount=" + amount +
-                ", paid=" + paid +
-                '}';
+        return "Debt{"
+                + "debt_id="
+                + debtId
+                + ", expense="
+                + expense
+                + ", participant="
+                + participant
+                + ", amount="
+                + amount
+                + ", paid="
+                + paid
+                + '}';
     }
 
     @Override
@@ -108,10 +113,10 @@ public class Debt {
             return false;
         }
         Debt debt = (Debt) o;
-        return amount == debt.amount &&
-                paid == debt.paid &&
-                Objects.equals(expense, debt.expense) &&
-                Objects.equals(participant, debt.participant);
+        return amount == debt.amount
+                && paid == debt.paid
+                && Objects.equals(expense, debt.expense)
+                && Objects.equals(participant, debt.participant);
     }
 
     @Override
