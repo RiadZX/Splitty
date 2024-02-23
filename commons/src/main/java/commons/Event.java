@@ -4,30 +4,49 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 @Entity
-class Participant{@Id long id; }
-@Entity
-class Expense{@Id long id; }
-
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private final long inviteCode;
     private String nameEvent;
-    private final Participant eventCreator;
-    private ArrayList<Participant> participants;
-    private ArrayList<Expense> expenses = new ArrayList<Expense>();
+    @ManyToOne
+    private Participant eventCreator;
 
+    public void setEventCreator(Participant eventCreator) {
+        this.eventCreator = eventCreator;
+    }
+
+    public String getNameEvent() {
+        return nameEvent;
+    }
+
+    public void setNameEvent(String nameEvent) {
+        this.nameEvent = nameEvent;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @ManyToMany(mappedBy = "eventsPartOf")
+    private ArrayList<Participant> participants;
+    @OneToMany
+    private ArrayList<Expense> expenses = new ArrayList<Expense>();
+    public Event() {
+    }
     public Event(String nameEvent, Participant eventCreator, ArrayList<Participant> participants) {
         this.nameEvent = nameEvent;
         this.eventCreator = eventCreator;
         this.participants.add(eventCreator);
-        this.inviteCode = id;
     }
 
     /**
@@ -56,10 +75,10 @@ public class Event {
      * Sets list of expenses.
      * May be used by creator while event is being created
      * or if they want to edit the current list of expenses.
-     * @param expenses that will be added
+     * @param expens that will be added
      */
-    public void setExpenses(ArrayList<Expense> expenses) {
-        this.expenses = expenses;
+    public void setExpenses(ArrayList<Expense> expens) {
+        this.expenses = expens;
     }
 
     public void addExpense(Expense expense){
@@ -86,9 +105,6 @@ public class Event {
         return this.id;
     }
 
-    public long getInviteCode(){
-        return this.inviteCode;
-    }
 
     public Participant getEventCreator(){
         return this.eventCreator;
@@ -103,7 +119,6 @@ public class Event {
             return false;
         }
         return getId() == event.getId()
-                && getInviteCode() == event.getInviteCode()
                 && Objects.equals(nameEvent, event.nameEvent)
                 && Objects.equals(getEventCreator(), event.getEventCreator())
                 && Objects.equals(getParticipants(), event.getParticipants())
@@ -113,7 +128,6 @@ public class Event {
     @Override
     public int hashCode() {
         return Objects.hash(getId(),
-                getInviteCode(),
                 nameEvent,
                 getEventCreator(),
                 getParticipants(),
