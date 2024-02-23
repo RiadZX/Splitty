@@ -1,13 +1,6 @@
 package commons;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Column;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,11 +16,11 @@ public class Expense {
     private String title;
     private double amount;
     private LocalDateTime date;
-    @Column(name = "paid_by")
+    @JoinColumn(name = "paid_by")
     @ManyToOne
     private Participant paidBy;
 
-    @Column(name = "event_id")
+    @JoinColumn(name = "event_id")
     @ManyToOne
     private Event event;
 
