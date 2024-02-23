@@ -1,11 +1,17 @@
 package commons;
 
+<<<<<<< commons/src/main/java/commons/Expense.java
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 
 
 @Entity
@@ -20,9 +26,8 @@ class Event { @Id int key; }
 @Table(name = "expenses")
 public class Expense {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "expense_id")
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
     private String title;
     private double amount;
     private LocalDateTime date;
@@ -50,11 +55,11 @@ public class Expense {
         this.event = event;
     }
 
-    public UUID getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -125,3 +130,27 @@ public class Expense {
         this.date = date;
     }
 }
+=======
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+@Entity
+public class Expense {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    public Expense() {
+    }
+    public Expense(long id) {
+        this.id = id;
+    }
+    public long getId() {
+        return id;
+    }
+    public void setId(long id) {
+        this.id = id;
+    }
+
+}
+>>>>>>> commons/src/main/java/commons/Expense.java
