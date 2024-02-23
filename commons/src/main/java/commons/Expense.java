@@ -108,7 +108,7 @@ public class Expense {
             return false;
         }
         Expense expense = (Expense) o;
-        return Double.compare(amount, expense.amount) == 0 
+        return Double.compare(amount, expense.amount) == 0
                 && Objects.equals(id, expense.id)
                 && Objects.equals(title, expense.title)
                 && Objects.equals(date, expense.date)
