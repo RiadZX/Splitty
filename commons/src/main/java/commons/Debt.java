@@ -2,38 +2,29 @@ package commons;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
 import java.util.Objects;
-import java.util.UUID;
+
+
 
 @Entity
-class Expense { @Id int key; }
-@Entity
-class Participant { @Id int key; }
-
-@Entity
-@Table(name = "debts")
 public class Debt {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID debtId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @ManyToOne
     private Expense expense;
-
     @ManyToOne
     private Participant participant;
-
     private int amount;
 
     private boolean paid;
 
     public Debt() {}
-
     public Debt(Expense expense, Participant participant, int amount) {
         this.expense = expense;
         this.participant = participant;
@@ -80,19 +71,19 @@ public class Debt {
         this.expense = expense;
     }
 
-    public UUID getUuid() {
-        return this.debtId;
+    public Long getId() {
+        return this.id;
     }
 
-    public void setUuid(UUID uuid) {
-        this.debtId = uuid;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
     public String toString() {
         return "Debt{"
                 + "debt_id="
-                + debtId
+                + id
                 + ", expense="
                 + expense
                 + ", participant="
