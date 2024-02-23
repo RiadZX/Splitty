@@ -1,11 +1,13 @@
 package commons;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 
 @Entity
@@ -95,16 +97,16 @@ public class Expense {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {return true;}
+        if (o == null || getClass() != o.getClass()) {return false;}
         Expense expense = (Expense) o;
-        return Double.compare(amount, expense.amount) == 0 &&
-                Objects.equals(id, expense.id) &&
-                Objects.equals(title, expense.title) &&
-                Objects.equals(date, expense.date) &&
-                Objects.equals(paidBy, expense.paidBy) &&
-                Objects.equals(event, expense.event) &&
-                Objects.equals(debts, expense.debts);
+        return Double.compare(amount, expense.amount) == 0 
+                && Objects.equals(id, expense.id)
+                && Objects.equals(title, expense.title)
+                && Objects.equals(date, expense.date)
+                && Objects.equals(paidBy, expense.paidBy)
+                && Objects.equals(event, expense.event)
+                && Objects.equals(debts, expense.debts);
     }
 
     @Override
