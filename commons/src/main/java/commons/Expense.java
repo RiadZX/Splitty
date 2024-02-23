@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Column;
+import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
 import java.util.List;
