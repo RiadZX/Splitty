@@ -34,4 +34,9 @@ public class ParticipantTest {
         assertEquals(p1.hashCode(), p2.hashCode());
         assertNotEquals(p1.hashCode(), p3.hashCode());
     }
+
+    @Test
+    public void testToString(){
+        assertTrue(p1.toString().contains(p1.getName()));
+    }
 }
