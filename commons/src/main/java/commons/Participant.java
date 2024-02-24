@@ -1,29 +1,25 @@
 package commons;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
+import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 public class Participant {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "participant_id")
+    private UUID id;
 
     private String name;
 
     public Participant() {
     }
 
-    public Participant(Long id, String name, List<Event> eventsPartOf) {
+    public Participant(UUID id, String name, List<Event> eventsPartOf) {
         this.id = id;
         this.name = name;
         this.eventsPartOf = eventsPartOf;
@@ -46,11 +42,11 @@ public class Participant {
     )
     private List<Event> eventsPartOf;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

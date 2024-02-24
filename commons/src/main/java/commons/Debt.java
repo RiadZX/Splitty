@@ -7,14 +7,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
 import java.util.Objects;
-
+import java.util.UUID;
 
 
 @Entity
 public class Debt {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @ManyToOne
     private Expense expense;
@@ -71,11 +71,11 @@ public class Debt {
         this.expense = expense;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return this.id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
