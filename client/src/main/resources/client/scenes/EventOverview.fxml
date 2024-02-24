@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
+<?import java.net.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="462.0" prefWidth="394.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EventOverviewCtrl">
    <children>
-      <TextField fx:id="eventTitle" layoutX="25.0" layoutY="38.0" prefHeight="31.0" prefWidth="211.0" promptText="Event Title">
+      <TextField fx:id="eventTitle" layoutX="25.0" layoutY="52.0" prefHeight="31.0" prefWidth="211.0" promptText="Event Title">
          <font>
             <Font size="15.0" />
          </font>
       </TextField>
-      <Button layoutX="269.0" layoutY="40.0" mnemonicParsing="false" text="Send Invites" />
+      <Button layoutX="266.0" layoutY="54.0" mnemonicParsing="false" text="Send Invites" />
       <Label layoutX="25.0" layoutY="103.0" text="Participants">
          <font>
             <Font size="16.0" />
@@ -32,8 +32,9 @@
             <TableColumn prefWidth="75.0" text="To" />
         </columns>
       </TableView>
-      <Button layoutX="270.0" layoutY="409.0" mnemonicParsing="false" text="Settle Debts" />
+      <Button layoutX="289.0" layoutY="415.0" mnemonicParsing="false" text="Settle Debts" />
       <Label layoutX="40.0" layoutY="132.0" text="No participants, yet" />
+      <Button fx:id="backButton" layoutX="-3.0" layoutY="1.0" mnemonicParsing="false" onAction="#backToStart" prefHeight="27.0" prefWidth="57.0" text="Back" />
    </children>
    <stylesheets>
       <URL value="@../../stylesheets/general.css" />

@@ -32,4 +32,8 @@ public class EventOverviewCtrl implements Initializable {
     public void setEvent(Event newEvent){
         eventTitle.setText(newEvent.getTitle());
     }
+
+    public void backToStart(){
+        mainCtrl.showStart();
+    }
 }

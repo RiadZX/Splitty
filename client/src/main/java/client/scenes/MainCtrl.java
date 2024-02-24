@@ -59,6 +59,7 @@ public class MainCtrl {
 
     public void showStart() {
         primaryStage.setTitle("Splitty: Start");
+        startCtrl.addRecentEvents();
         primaryStage.setScene(start);
     }
     public  void showEventOverview(Event newEvent){
