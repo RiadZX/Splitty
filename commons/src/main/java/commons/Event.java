@@ -8,8 +8,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
-
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -38,12 +37,12 @@ public class Event {
     }
 
     @ManyToMany(mappedBy = "eventsPartOf")
-    private ArrayList<Participant> participants;
+    private List<Participant> participants;
     @OneToMany
-    private ArrayList<Expense> expenses = new ArrayList<Expense>();
+    private List<Expense> expenses;
     public Event() {
     }
-    public Event(String nameEvent, Participant eventCreator, ArrayList<Participant> participants) {
+    public Event(String nameEvent, Participant eventCreator, List<Participant> participants) {
         this.nameEvent = nameEvent;
         this.eventCreator = eventCreator;
         this.participants.add(eventCreator);
@@ -55,7 +54,7 @@ public class Event {
      * or if they want to edit the current participants.
      * @param participants that will be added
      */
-    public void setParticipants(ArrayList<Participant> participants) {
+    public void setParticipants(List<Participant> participants) {
         this.participants = participants;
     }
 
@@ -67,7 +66,7 @@ public class Event {
         this.participants.remove(participant);
     }
 
-    public ArrayList<Participant> getParticipants(){
+    public List<Participant> getParticipants(){
         return this.participants;
     }
 
@@ -75,10 +74,10 @@ public class Event {
      * Sets list of expenses.
      * May be used by creator while event is being created
      * or if they want to edit the current list of expenses.
-     * @param expens that will be added
+     * @param expenses that will be added
      */
-    public void setExpenses(ArrayList<Expense> expens) {
-        this.expenses = expens;
+    public void setExpenses(List<Expense> expenses) {
+        this.expenses = expenses;
     }
 
     public void addExpense(Expense expense){
@@ -89,7 +88,7 @@ public class Event {
         this.expenses.remove(expense);
     }
 
-    public ArrayList<Expense> getExpenses(){
+    public List<Expense> getExpenses(){
         return this.expenses;
     }
 
