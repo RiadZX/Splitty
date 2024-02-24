@@ -15,6 +15,7 @@ public class Event {
     private String nameEvent;
     @ManyToOne
     private Participant eventCreator;
+    private String title; //fix response issue for now
 
     public void setEventCreator(Participant eventCreator) {
         this.eventCreator = eventCreator;
@@ -38,8 +39,12 @@ public class Event {
     private List<Expense> expenses;
     public Event() {
     }
-    public Event(String nameEvent, Participant eventCreator, List<Participant> participants) {
+    public Event(String nameEvent){
+        this();
         this.nameEvent = nameEvent;
+    }
+    public Event(String nameEvent, Participant eventCreator, List<Participant> participants) {
+        this(nameEvent);
         this.eventCreator = eventCreator;
         this.participants.add(eventCreator);
     }

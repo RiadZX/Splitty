@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.Event;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +27,9 @@ public class EventController {
     }
 
     @PostMapping(path = { "", "/" })
-    public Event add(@RequestBody Event event) {
-        return repo.save(event);
+    public ResponseEntity<Event> add(@RequestBody Event event) {
+        Event saved= repo.save(event);
+        return ResponseEntity.ok(saved);
+
     }
 }

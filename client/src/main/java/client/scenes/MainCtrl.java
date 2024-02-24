@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import commons.Event;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -24,29 +25,48 @@ public class MainCtrl {
 
     private Stage primaryStage;
 
-    private QuoteOverviewCtrl overviewCtrl;
-    private Scene overview;
+    private QuoteOverviewCtrl quoteoverviewCtrl;
+    private Scene quoteoverview;
+
+    private EventOverviewCtrl eventOverviewCtrl;
+    private Scene eventOverview;
 
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
-    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add) {
+    private StartCtrl startCtrl;
+    private Scene start;
+
+    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> quoteoverview,
+            Pair<AddQuoteCtrl, Parent> add, Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StartCtrl, Parent> start) {
         this.primaryStage = primaryStage;
-        this.overviewCtrl = overview.getKey();
-        this.overview = new Scene(overview.getValue());
+
+        this.quoteoverviewCtrl = quoteoverview.getKey();
+        this.quoteoverview = new Scene(quoteoverview.getValue());
 
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
 
-        showOverview();
+        this.eventOverviewCtrl=eventOverview.getKey();
+        this.eventOverview= new Scene(eventOverview.getValue());
+
+        this.startCtrl=start.getKey();
+        this.start= new Scene(start.getValue());
+
+        showStart();
         primaryStage.show();
     }
 
-    public void showOverview() {
-        primaryStage.setTitle("Quotes: Overview");
-        primaryStage.setScene(overview);
-        overviewCtrl.refresh();
+    public void showStart() {
+        primaryStage.setTitle("Splitty: Start");
+        startCtrl.addRecentEvents();
+        primaryStage.setScene(start);
+    }
+    public  void showEventOverview(Event newEvent){
+        primaryStage.setTitle("Splitty: Event Overview");
+        eventOverviewCtrl.setEvent(newEvent);
+        primaryStage.setScene(eventOverview);
+
     }
 
     public void showAdd() {
