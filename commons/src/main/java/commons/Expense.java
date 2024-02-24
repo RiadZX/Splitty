@@ -39,12 +39,13 @@ public class Expense {
     }
 
     public Expense(String title, double amount, LocalDateTime date,
-                   Participant paidBy, Event event) {
+                   Participant paidBy, Event event, List<Debt> debts) {
         this.title = title;
         this.amount = amount;
         this.date = date;
         this.paidBy = paidBy;
         this.event = event;
+        this.debts = debts;
     }
 
     public long getId() {
