@@ -46,6 +46,7 @@ public class Event {
     public Event(String nameEvent, Participant eventCreator, List<Participant> participants) {
         this(nameEvent);
         this.eventCreator = eventCreator;
+        this.participants = participants;
         this.participants.add(eventCreator);
     }
 
