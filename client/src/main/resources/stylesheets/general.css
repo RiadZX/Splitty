@@ -1,7 +1,16 @@
 .root{
-    -fx-background-color: #161616;
+    -fx-background-color: #101010;
 }
 
 .label{
-    -fx-text-fill: white;
+    -fx-text-fill: #eaeaea;
+}
+
+.button{
+    -fx-text-alignment: center;
+}
+
+.text-field{
+    -fx-background-color: #161616;
+    -fx-text-fill: #eaeaea;
 }
