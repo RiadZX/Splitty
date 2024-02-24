@@ -46,7 +46,7 @@ public class Event {
     public Event(String nameEvent, Participant eventCreator, ArrayList<Participant> participants) {
         this.nameEvent = nameEvent;
         this.eventCreator = eventCreator;
-        this.participants.add(eventCreator);
+        this.participants = participants;
     }
 
     /**
