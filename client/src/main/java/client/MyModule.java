@@ -15,7 +15,11 @@
  */
 package client;
 
-import client.scenes.*;
+import client.scenes.AddQuoteCtrl;
+import client.scenes.EventOverviewCtrl;
+import client.scenes.MainCtrl;
+import client.scenes.QuoteOverviewCtrl;
+import client.scenes.StartCtrl;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
