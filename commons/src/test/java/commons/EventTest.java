@@ -11,15 +11,24 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class EventTest {
     private Event e1, e2, e3, e4;
+    private List<Participant> p;
 
     @BeforeEach
     public void testSetup(){
-        List<Participant> p = new ArrayList<>();
+        p = new ArrayList<>();
         p.add(new Participant("z"));
         e1 = new Event("a", new Participant("b"), p);
         e2 = new Event("a", new Participant("b"), p);
         e3 = new Event("b", new Participant("b"), p);
         e4 = new Event("a", new Participant("c"), p);
+    }
+
+    @Test
+    public void testConstructor(){
+        assertEquals(e1.getNameEvent(), "a");
+        assertEquals(e1.getEventCreator().getName(), "b");
+        p.add(e1.getEventCreator());
+        assertEquals(e1.getParticipants(), p);
     }
 
     @Test
