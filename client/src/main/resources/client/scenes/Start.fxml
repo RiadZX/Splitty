@@ -12,14 +12,14 @@
             <Font name="System Bold" size="17.0" />
          </font>
       </Label>
-      <TextField fx:id="createEvent" layoutX="58.0" layoutY="77.0" prefHeight="27.0" prefWidth="179.0" />
+      <TextField fx:id="createEventField" layoutX="58.0" layoutY="77.0" prefHeight="27.0" prefWidth="179.0" />
       <Button layoutX="255.0" layoutY="77.0" mnemonicParsing="false" onAction="#createEvent" text="Create" />
       <Label layoutX="58.0" layoutY="121.0" text="Join New Event">
          <font>
             <Font size="17.0" />
          </font>
       </Label>
-      <TextField fx:id="joinEvent" layoutX="58.0" layoutY="153.0" prefHeight="27.0" prefWidth="179.0" />
+      <TextField fx:id="joinEventField" layoutX="58.0" layoutY="153.0" prefHeight="27.0" prefWidth="179.0" />
       <Button layoutX="255.0" layoutY="153.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="58.0" text="Join" />
       <Label layoutX="58.0" layoutY="200.0" text="Recently viewed events">
          <font>

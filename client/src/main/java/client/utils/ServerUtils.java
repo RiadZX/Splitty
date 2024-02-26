@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.UUID;
 
 import commons.Event;
 import org.glassfish.jersey.client.ClientConfig;
@@ -76,4 +77,12 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON) //
 				.get(new GenericType<List<Event>>() {});
 	}
+	public Event getEvent(UUID id) {
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("api/events/"+id) //
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.get(new GenericType<Event>() {});
+	}
+
 }
