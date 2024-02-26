@@ -36,7 +36,7 @@ public class Event {
         this.id = id;
     }
 
-    @ManyToMany(mappedBy = "eventsPartOf", cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToMany(mappedBy = "eventsPartOf")
     private List<Participant> participants;
     @OneToMany
     private List<Expense> expenses;

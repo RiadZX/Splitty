@@ -102,10 +102,24 @@ public class StartCtrl implements Initializable {
             alert.showAndWait();
             return;
         }
+        if (!currEvent.getParticipants().contains(this.mainCtrl.user)){
+            currEvent.getParticipants().add(this.mainCtrl.user);
+            try {
+                currEvent=server.updateEvent(currEvent);
+            } catch (WebApplicationException e) {
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+                return;
+            }
+        }
         System.out.println(currEvent.getEventCreator());
         mainCtrl.showEventOverview(currEvent);
         clearFields();
     }
+
+
 
     public  void clearFields(){
         this.createEventField.clear();

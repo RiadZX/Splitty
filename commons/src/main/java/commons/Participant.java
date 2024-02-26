@@ -62,9 +62,7 @@ public class Participant {
         this.eventsPartOf = eventsPartOf;
     }
 
-    @ManyToMany(
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}
-    )
+    @ManyToMany
     @JoinTable(
             name = "participant_event",
             joinColumns = @JoinColumn(name = "participant_id"),
