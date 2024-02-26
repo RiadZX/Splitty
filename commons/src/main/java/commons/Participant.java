@@ -62,7 +62,9 @@ public class Participant {
         this.eventsPartOf = eventsPartOf;
     }
 
-    @ManyToMany
+    @ManyToMany(
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}
+    )
     @JoinTable(
             name = "participant_event",
             joinColumns = @JoinColumn(name = "participant_id"),
@@ -97,10 +99,10 @@ public class Participant {
     @Override
     public String toString() {
         return "Participant{"
-               +"id=" + id
-               +", name='" + name + '\''
-               +", iban='" + iban + '\''
-               +", eventsPartOf=" + eventsPartOf
-               +'}';
+                + "id=" + id
+                + ", name='" + name + '\''
+                + ", iban='" + iban + '\''
+                + ", eventsPartOf=" + eventsPartOf
+                + '}';
     }
 }

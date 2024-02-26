@@ -36,17 +36,20 @@ public class Event {
         this.id = id;
     }
 
-    @ManyToMany(mappedBy = "eventsPartOf")
+    @ManyToMany(mappedBy = "eventsPartOf", cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     private List<Participant> participants;
     @OneToMany
     private List<Expense> expenses;
+
     public Event() {
-        this.participants=new ArrayList<>();
+        this.participants = new ArrayList<>();
     }
-    public Event(String nameEvent){
+
+    public Event(String nameEvent) {
         this();
         this.nameEvent = nameEvent;
     }
+
     public Event(String nameEvent, Participant eventCreator, List<Participant> participants) {
         this(nameEvent);
         this.eventCreator = eventCreator;
@@ -58,21 +61,22 @@ public class Event {
      * Sets all participants,
      * may be used by creator while event is being created
      * or if they want to edit the current participants.
+     *
      * @param participants that will be added
      */
     public void setParticipants(List<Participant> participants) {
         this.participants = participants;
     }
 
-    public void addParticipant(Participant participant){
+    public void addParticipant(Participant participant) {
         this.participants.add(participant);
     }
 
-    public void removeParticipant(Participant participant){
+    public void removeParticipant(Participant participant) {
         this.participants.remove(participant);
     }
 
-    public List<Participant> getParticipants(){
+    public List<Participant> getParticipants() {
         return this.participants;
     }
 
@@ -80,38 +84,39 @@ public class Event {
      * Sets list of expenses.
      * May be used by creator while event is being created
      * or if they want to edit the current list of expenses.
+     *
      * @param expenses that will be added
      */
     public void setExpenses(List<Expense> expenses) {
         this.expenses = expenses;
     }
 
-    public void addExpense(Expense expense){
+    public void addExpense(Expense expense) {
         this.expenses.add(expense);
     }
 
-    public void removeExpense(Expense expense){
+    public void removeExpense(Expense expense) {
         this.expenses.remove(expense);
     }
 
-    public List<Expense> getExpenses(){
+    public List<Expense> getExpenses() {
         return this.expenses;
     }
 
-    public void editTitle(String nameEvent){
+    public void editTitle(String nameEvent) {
         this.nameEvent = nameEvent;
     }
 
-    public String getTitle(){
+    public String getTitle() {
         return this.nameEvent;
     }
 
-    public UUID getId(){
+    public UUID getId() {
         return this.id;
     }
 
 
-    public Participant getEventCreator(){
+    public Participant getEventCreator() {
         return this.eventCreator;
     }
 

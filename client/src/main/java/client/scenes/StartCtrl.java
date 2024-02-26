@@ -102,6 +102,7 @@ public class StartCtrl implements Initializable {
             alert.showAndWait();
             return;
         }
+        System.out.println(currEvent.getEventCreator());
         mainCtrl.showEventOverview(currEvent);
         clearFields();
     }
