@@ -13,6 +13,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
@@ -38,7 +39,7 @@ public class StartCtrl implements Initializable {
         createEventField.setOnKeyPressed((event -> {
             switch (event.getCode()) {
                 case ENTER -> createEvent();
-                case ESCAPE -> this.createEventField.clear();
+                case ESCAPE -> clearFields();
                 default -> {
                 }
             }
@@ -46,7 +47,7 @@ public class StartCtrl implements Initializable {
         joinEventField.setOnKeyPressed((event -> {
             switch (event.getCode()) {
                 case ENTER -> joinEventAction();
-                case ESCAPE -> this.joinEventField.clear();
+                case ESCAPE -> clearFields();
                 default -> {
                 }
             }
@@ -55,7 +56,8 @@ public class StartCtrl implements Initializable {
 
     public void createEvent(){
         String title=createEventField.getText();
-        Event newEvent= new Event(title);
+        System.out.println(this.mainCtrl.user);
+        Event newEvent= new Event(title, this.mainCtrl.user, new ArrayList<>());
         try {
             server.addEvent(newEvent);
         } catch (WebApplicationException e) {
@@ -66,6 +68,7 @@ public class StartCtrl implements Initializable {
             return;
         }
         mainCtrl.showEventOverview(newEvent);
+        clearFields();
     }
 
     public  void addRecentEvents(){
@@ -101,5 +104,11 @@ public class StartCtrl implements Initializable {
             return;
         }
         mainCtrl.showEventOverview(currEvent);
+        clearFields();
+    }
+
+    public  void clearFields(){
+        this.createEventField.clear();
+        this.joinEventField.clear();
     }
 }

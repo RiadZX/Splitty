@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.Participant;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import server.database.ParticipantRepository;
@@ -44,11 +45,9 @@ public class ParticipantController {
      * @return - added participant
      */
     @PostMapping(path = { "", "/" })
-    public Participant add(@RequestBody Participant participant) {
-        System.out.println(participant.getName());
-        System.out.println(participant.getEventsPartOf());
-
-        return repo.save(participant);
+    public ResponseEntity<Participant> add(@RequestBody Participant participant) {
+        Participant saved=repo.save(participant);
+        return ResponseEntity.ok(saved);
     }
 
     /**
