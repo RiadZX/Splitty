@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.UUID;
 
 import commons.Event;
+import commons.Participant;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -48,26 +49,26 @@ public class ServerUtils {
 	}
 
 	public List<Quote> getQuotes() {
-		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(SERVER).path("api/quotes") //
-				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON) //
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/quotes")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
                 .get(new GenericType<List<Quote>>() {});
 	}
 
-	public Quote addQuote(Quote quote) {
-		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(SERVER).path("api/quotes") //
-				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON) //
-				.post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
+	public Participant addParticipant(Participant participant){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/participants")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.post(Entity.entity(participant, APPLICATION_JSON), Participant.class);
 	}
 
 	public Event addEvent(Event event){
-		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(SERVER).path("api/events") //
-				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON) //
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/events")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
 				.post(Entity.entity(event, APPLICATION_JSON), Event.class);
 	}
 	public List<Event> getEvents() {
