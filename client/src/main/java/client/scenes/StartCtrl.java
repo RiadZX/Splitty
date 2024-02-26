@@ -56,7 +56,7 @@ public class StartCtrl implements Initializable {
         var events = server.getEvents();
         int i=0;
         for (int j=events.size()-1; j>=0 && i<3; j--){
-            Label newEventLabel=new Label(events.get(j).getNameEvent());
+            Label newEventLabel=new Label(events.get(j).getName());
             this.recentEventsGrid.add(newEventLabel, 0, i++);
         }
     }

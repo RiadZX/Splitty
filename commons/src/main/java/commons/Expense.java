@@ -28,7 +28,7 @@ public class Expense {
     @ManyToOne
     private Event event;
 
-    @OneToMany
+    @OneToMany(mappedBy = "expense")
     private List<Debt> debts;
 
     public Expense() {
