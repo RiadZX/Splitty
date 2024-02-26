@@ -5,9 +5,13 @@ import com.google.inject.Inject;
 import commons.Participant;
 import javafx.fxml.FXML;
 
+import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 
-public class FirstTimeCtrl {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class FirstTimeCtrl implements Initializable{
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
@@ -19,6 +23,17 @@ public class FirstTimeCtrl {
     public FirstTimeCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+    }
+
+    public void initialize(URL location, ResourceBundle resources) {
+        this.nameField.setOnKeyPressed((event -> {
+            switch (event.getCode()) {
+                case ENTER -> moveToStart();
+                case ESCAPE -> this.nameField.clear();
+                default -> {
+                }
+            }
+        }));
     }
 
     public void moveToStart(){
