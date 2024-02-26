@@ -56,7 +56,6 @@ public class StartCtrl implements Initializable {
 
     public void createEvent(){
         String title=createEventField.getText();
-        System.out.println(this.mainCtrl.user);
         Event newEvent= new Event(title, this.mainCtrl.user, new ArrayList<>());
         try {
             server.addEvent(newEvent);

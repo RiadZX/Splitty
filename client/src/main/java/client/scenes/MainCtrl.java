@@ -82,7 +82,6 @@ public class MainCtrl {
     }
 
     public  void setUser(Participant user){
-        System.out.println(user);
         this.user=user;
     }
 }
