@@ -6,6 +6,7 @@ import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import commons.Event;
@@ -14,15 +15,16 @@ import javafx.stage.Modality;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 public class StartCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     @FXML
-    private TextField createEvent;
+    private TextField createEventField;
     @FXML
-    private TextField joinEvent;
+    private TextField joinEventField;
 
     @FXML
     private GridPane recentEventsGrid;
@@ -37,7 +39,7 @@ public class StartCtrl implements Initializable {
     }
 
     public void createEvent(){
-        String title=createEvent.getText();
+        String title=createEventField.getText();
         Event newEvent= new Event(title);
         try {
             server.addEvent(newEvent);
@@ -56,8 +58,26 @@ public class StartCtrl implements Initializable {
         var events = server.getEvents();
         int i=0;
         for (int j=events.size()-1; j>=0 && i<3; j--){
-            Label newEventLabel=new Label(events.get(j).getNameEvent());
-            this.recentEventsGrid.add(newEventLabel, 0, i++);
+            Event currentEvent=events.get(j);
+            Hyperlink newEventLink=new Hyperlink(currentEvent.getNameEvent());
+            newEventLink.setOnMouseClicked(event -> {
+                joinEvent(currentEvent.getId());
+            });
+            this.recentEventsGrid.add(newEventLink, 0, i++);
         }
+    }
+
+    public  void joinEvent(UUID id){
+        Event currEvent;
+        try {
+            currEvent=server.getEvent(id);
+        } catch (WebApplicationException e) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
+        }
+        mainCtrl.showEventOverview(currEvent);
     }
 }
