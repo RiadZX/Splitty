@@ -16,13 +16,41 @@ public class Participant {
 
     private String name;
 
+    public String getIban() {
+        return iban;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Participant that = (Participant) o;
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(iban, that.iban) && Objects.equals(eventsPartOf, that.eventsPartOf);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, iban, eventsPartOf);
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
+
+    private String iban;
+
     public Participant() {
     }
 
-    public Participant(UUID id, String name, List<Event> eventsPartOf) {
+    public Participant(UUID id, String name, List<Event> eventsPartOf, String iban) {
         this.id = id;
         this.name = name;
         this.eventsPartOf = eventsPartOf;
+        this.iban = iban;
     }
 
     public Participant(String name) {
@@ -67,29 +95,12 @@ public class Participant {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Participant that = (Participant) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(eventsPartOf, that.eventsPartOf);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, eventsPartOf);
-    }
-    @Override
     public String toString() {
         return "Participant{"
-                + "id=" + id
-                + ", name='"
-                + name + '\''
-                + ", eventsPartOf="
-                + eventsPartOf
-                + '}';
+               +"id=" + id
+               +", name='" + name + '\''
+               +", iban='" + iban + '\''
+               +", eventsPartOf=" + eventsPartOf
+               +'}';
     }
 }
