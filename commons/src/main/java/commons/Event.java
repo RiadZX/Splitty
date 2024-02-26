@@ -2,6 +2,7 @@ package commons;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -40,6 +41,7 @@ public class Event {
     @OneToMany
     private List<Expense> expenses;
     public Event() {
+        this.participants=new ArrayList<>();
     }
     public Event(String nameEvent){
         this();

@@ -58,7 +58,7 @@ public class StartCtrl implements Initializable {
         String title=createEventField.getText();
         Event newEvent= new Event(title, this.mainCtrl.user, new ArrayList<>());
         try {
-            server.addEvent(newEvent);
+            newEvent=server.addEvent(newEvent);
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
