@@ -64,6 +64,14 @@ public class ServerUtils {
 				.post(Entity.entity(participant, APPLICATION_JSON), Participant.class);
 	}
 
+	public  Participant updateParticipant(Participant participant){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/participants/"+participant.getId())
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.put(Entity.entity(participant, APPLICATION_JSON), Participant.class);
+	}
+
 	public Event addEvent(Event event){
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/events")
