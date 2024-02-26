@@ -13,6 +13,8 @@ public class Event {
     @Column(name = "event_id")
     private UUID id;
     private String nameEvent;
+
+    private String inviteCode;
     @ManyToOne
     private Participant eventCreator;
     private String title; //fix response issue for now
@@ -48,6 +50,7 @@ public class Event {
         this.eventCreator = eventCreator;
         this.participants = participants;
         this.participants.add(eventCreator);
+        this.inviteCode=generateInviteCode(this.id);
     }
 
     /**
@@ -133,6 +136,22 @@ public class Event {
                 getEventCreator(),
                 getParticipants(),
                 getExpenses());
+    }
+
+    public static String generateInviteCode(UUID id){
+        String uuid = id.toString();
+
+        // Take a portion of the UUID and convert it to base 36 to get an 8-character string
+        String shortId = Long.toString(Math.abs(uuid.hashCode()), 36);
+
+        // Keep the id 8 char long
+        if (shortId.length() < 8) {
+            shortId = String.format("%-8s", shortId).replace(' ', '0');
+        } else if (shortId.length() > 8) {
+            shortId = shortId.substring(0, 8);
+        }
+
+        return shortId.toUpperCase(); // Convert to Uppercase
     }
 
 }

@@ -7,7 +7,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import commons.Event;
 import javafx.scene.layout.GridPane;
@@ -36,6 +35,22 @@ public class StartCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        createEventField.setOnKeyPressed((event -> {
+            switch (event.getCode()) {
+                case ENTER -> createEvent();
+                case ESCAPE -> this.createEventField.clear();
+                default -> {
+                }
+            }
+        }));
+        joinEventField.setOnKeyPressed((event -> {
+            switch (event.getCode()) {
+                case ENTER -> joinEventAction();
+                case ESCAPE -> this.joinEventField.clear();
+                default -> {
+                }
+            }
+        }));
     }
 
     public void createEvent(){
@@ -60,13 +75,20 @@ public class StartCtrl implements Initializable {
         for (int j=events.size()-1; j>=0 && i<3; j--){
             Event currentEvent=events.get(j);
             Hyperlink newEventLink=new Hyperlink(currentEvent.getNameEvent());
-            newEventLink.setOnMouseClicked(event -> {
-                joinEvent(currentEvent.getId());
-            });
+            newEventLink.setOnMouseClicked(event -> joinEvent(currentEvent.getId())
+            );
             this.recentEventsGrid.add(newEventLink, 0, i++);
         }
     }
 
+    public void joinEventAction(){
+
+    }
+
+    /**
+     * Join an event based on its id. Issue server request for getting the event.
+     * @param id id of the event
+     */
     public  void joinEvent(UUID id){
         Event currEvent;
         try {
