@@ -62,13 +62,16 @@ public class Participant {
         this.eventsPartOf = eventsPartOf;
     }
 
-    @ManyToMany
     @JoinTable(
             name = "participant_event",
             joinColumns = @JoinColumn(name = "participant_id"),
             inverseJoinColumns = @JoinColumn(name = "event_id")
     )
+    @ManyToMany
     private List<Event> eventsPartOf;
+
+    @OneToMany(mappedBy = "participant")
+    private List<Debt> debts;
 
     public UUID getId() {
         return id;

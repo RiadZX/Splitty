@@ -12,7 +12,7 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "event_id")
     private UUID id;
-    private String nameEvent;
+    private String name;
     @ManyToOne
     private Participant eventCreator;
     private String title; //fix response issue for now
@@ -21,12 +21,12 @@ public class Event {
         this.eventCreator = eventCreator;
     }
 
-    public String getNameEvent() {
-        return nameEvent;
+    public String getName() {
+        return name;
     }
 
-    public void setNameEvent(String nameEvent) {
-        this.nameEvent = nameEvent;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setId(UUID id) {
@@ -35,16 +35,15 @@ public class Event {
 
     @ManyToMany(mappedBy = "eventsPartOf")
     private List<Participant> participants;
-    @OneToMany
+    @OneToMany(mappedBy = "event")
     private List<Expense> expenses;
     public Event() {
     }
-    public Event(String nameEvent){
-        this();
-        this.nameEvent = nameEvent;
+    public Event(String name){
+        this.name = name;
     }
-    public Event(String nameEvent, Participant eventCreator, List<Participant> participants) {
-        this(nameEvent);
+    public Event(String name, Participant eventCreator, List<Participant> participants) {
+        this.name = name;
         this.eventCreator = eventCreator;
         this.participants = participants;
         this.participants.add(eventCreator);
@@ -94,12 +93,12 @@ public class Event {
         return this.expenses;
     }
 
-    public void editTitle(String nameEvent){
-        this.nameEvent = nameEvent;
+    public void editTitle(String name){
+        this.name = name;
     }
 
     public String getTitle(){
-        return this.nameEvent;
+        return this.name;
     }
 
     public UUID getId(){
@@ -120,7 +119,7 @@ public class Event {
             return false;
         }
         return getId() == event.getId()
-                && Objects.equals(nameEvent, event.nameEvent)
+                && Objects.equals(name, event.name)
                 && Objects.equals(getEventCreator(), event.getEventCreator())
                 && Objects.equals(getParticipants(), event.getParticipants())
                 && Objects.equals(getExpenses(), event.getExpenses());
@@ -129,7 +128,7 @@ public class Event {
     @Override
     public int hashCode() {
         return Objects.hash(getId(),
-                nameEvent,
+                name,
                 getEventCreator(),
                 getParticipants(),
                 getExpenses());

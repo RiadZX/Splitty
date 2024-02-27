@@ -25,7 +25,7 @@ public class EventTest {
 
     @Test
     public void testConstructor(){
-        assertEquals(e1.getNameEvent(), "a");
+        assertEquals(e1.getName(), "a");
         assertEquals(e1.getEventCreator().getName(), "b");
         p.add(e1.getEventCreator());
         assertEquals(e1.getParticipants(), p);

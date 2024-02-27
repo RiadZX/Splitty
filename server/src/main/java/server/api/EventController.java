@@ -33,7 +33,7 @@ public class EventController {
      */
     @PostMapping(path = { "", "/" })
     public ResponseEntity<Event> add(@RequestBody Event event) {
-        Event saved= repo.save(event);
+        Event saved = repo.save(event);
         return ResponseEntity.ok(saved);
     }
 
