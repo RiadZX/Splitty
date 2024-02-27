@@ -5,8 +5,7 @@
 | Location:    | Drebelweg PC Hall 1 |
 | Chair        | Calin Radoi         |
 | Minute Taker | Riad Zaid           |
-| Attendees:   |                     |
-
+| Attendees:   | Everyone
 ## Agenda opening:
 
 -   Opening by chair (1 min)
