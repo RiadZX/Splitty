@@ -46,7 +46,6 @@ public class ParticipantController {
     @PostMapping(path = { "", "/" })
     public Participant add(@RequestBody Participant participant) {
         System.out.println(participant.getName());
-        System.out.println(participant.getEventsPartOf());
 
         return repo.save(participant);
     }
