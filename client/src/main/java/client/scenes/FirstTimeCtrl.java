@@ -38,7 +38,6 @@ public class FirstTimeCtrl implements Initializable{
 
     public void moveToStart(){
         Participant user=new Participant(nameField.getText()); //create object
-        user=server.addParticipant(user); //store in the db (get id)
         this.mainCtrl.setUser(user);
         this.mainCtrl.showStart();
     }

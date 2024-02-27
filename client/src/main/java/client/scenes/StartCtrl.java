@@ -55,7 +55,7 @@ public class StartCtrl implements Initializable {
 
     public void createEvent(){
         String title=createEventField.getText();
-        Event newEvent= new Event(title);
+        Event newEvent= new Event(title, this.mainCtrl.user);
         try {
             newEvent=server.addEvent(newEvent);
         } catch (WebApplicationException e) {
@@ -100,18 +100,6 @@ public class StartCtrl implements Initializable {
             alert.setContentText(e.getMessage());
             alert.showAndWait();
             return;
-        }
-        if (!currEvent.getParticipants().contains(this.mainCtrl.user)){
-            currEvent.getParticipants().add(this.mainCtrl.user);
-            try {
-                currEvent=server.updateEvent(currEvent);
-            } catch (WebApplicationException e) {
-                var alert = new Alert(Alert.AlertType.ERROR);
-                alert.initModality(Modality.APPLICATION_MODAL);
-                alert.setContentText(e.getMessage());
-                alert.showAndWait();
-                return;
-            }
         }
         mainCtrl.showEventOverview(currEvent);
         clearFields();

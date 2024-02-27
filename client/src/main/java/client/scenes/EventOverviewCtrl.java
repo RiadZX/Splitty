@@ -64,7 +64,7 @@ public class EventOverviewCtrl implements Initializable {
     }
 
     public void changeTitle(){
-        this.event.setNameEvent(this.eventTitle.getText());
+        this.event.setName(this.eventTitle.getText());
         this.server.updateEvent(this.event);
     }
 

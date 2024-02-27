@@ -38,6 +38,10 @@ public class Event {
         this();
         this.name = name;
     }
+    public  Event(String name, Participant creator){
+        this(name);
+        this.participants.add(creator);
+    }
     public Event(String name, List<Participant> participants) {
         this(name);
         this.participants = participants;
