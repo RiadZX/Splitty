@@ -6,12 +6,12 @@
 | Chair        | Calin Radoi         |
 | Minute Taker | Riad Zaid           |
 | Attendees:   |                     |
-|              |                     |
 
 ## Agenda opening:
 
 -   Opening by chair (1 min)
 -   Check -in: How is everyone doing? (1 min)
+-   Potential TA announcements (3 min)
 -   Present the agenda (1 min)
 
 ## Main focus of the agenda
@@ -22,7 +22,7 @@
     -   Making a README?
 -   Discuss on how to design the endpoints of the server-side of the app (10 min)
     -   Talk about the endpoints (Which endpoints should we have, assign them to team members with Gitlab issues)
--   Discuss next steps with the project: (15 min)
+-   Discuss next steps with the project: (13 min)
     -   Where to use WebSockets
     -   How should we continue with the FE
     -   Discuss extra features (e.g. tags)
