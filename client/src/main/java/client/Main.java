@@ -39,13 +39,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-
-        var quoteoverview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
         var eventOverview = FXML.load(EventOverviewCtrl.class, "client", "scenes", "EventOverview.fxml");
         var start=FXML.load(StartCtrl.class, "client", "scenes", "Start.fxml");
         var firstTime=FXML.load(FirstTimeCtrl.class, "client", "scenes", "FirstTime.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, firstTime, quoteoverview,  eventOverview, start);
+        mainCtrl.initialize(primaryStage, firstTime,  eventOverview, start);
     }
 }
