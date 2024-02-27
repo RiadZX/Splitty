@@ -76,7 +76,6 @@ public class Participant {
     }
 
     @ManyToOne
-    @JoinColumn(name = "event_id")
     private Event eventPartOf;
 
     @OneToMany(mappedBy = "participant")

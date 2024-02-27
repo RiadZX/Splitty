@@ -26,7 +26,7 @@ public class Event {
         this.id = id;
     }
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Participant> participants;
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Expense> expenses;
