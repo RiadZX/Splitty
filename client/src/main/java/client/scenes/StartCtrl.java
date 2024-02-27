@@ -13,7 +13,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
@@ -56,7 +55,7 @@ public class StartCtrl implements Initializable {
 
     public void createEvent(){
         String title=createEventField.getText();
-        Event newEvent= new Event(title, this.mainCtrl.user, new ArrayList<>());
+        Event newEvent= new Event(title);
         try {
             newEvent=server.addEvent(newEvent);
         } catch (WebApplicationException e) {
@@ -114,7 +113,6 @@ public class StartCtrl implements Initializable {
                 return;
             }
         }
-        System.out.println(currEvent.getEventCreator());
         mainCtrl.showEventOverview(currEvent);
         clearFields();
     }
