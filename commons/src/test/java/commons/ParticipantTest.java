@@ -3,7 +3,6 @@ package commons;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,15 +11,15 @@ public class ParticipantTest {
 
     @BeforeEach
     public void testSetup(){
-        p1 = new Participant("a", new ArrayList<>());
-        p2 = new Participant("a", new ArrayList<>());
-        p3 = new Participant("b", new ArrayList<>());
+        p1 = new Participant("a", new Event());
+        p2 = new Participant("a", new Event());
+        p3 = new Participant("b", new Event());
     }
 
     @Test
     public void testConstructor(){
         assertEquals(p1.getName(), "a");
-        assertEquals(p1.getEventsPartOf(), new ArrayList<>());
+        assertEquals(p1.getEventPartOf(), new Event());
     }
 
     @Test
