@@ -46,6 +46,7 @@ public class ParticipantController {
      */
     @PostMapping(path = { "", "/" })
     public ResponseEntity<Participant> add(@RequestBody Participant participant) {
+        System.out.println(participant.getName());
         Participant saved=repo.save(participant);
         return ResponseEntity.ok(saved);
     }

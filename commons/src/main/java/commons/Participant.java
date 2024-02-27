@@ -29,12 +29,12 @@ public class Participant {
             return false;
         }
         Participant that = (Participant) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(iban, that.iban) && Objects.equals(eventsPartOf, that.eventsPartOf);
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(iban, that.iban) && Objects.equals(eventPartOf, that.eventPartOf);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, iban, eventsPartOf);
+        return Objects.hash(id, name, iban, eventPartOf);
     }
 
     public void setIban(String iban) {
@@ -46,10 +46,10 @@ public class Participant {
     public Participant() {
     }
 
-    public Participant(UUID id, String name, List<Event> eventsPartOf, String iban) {
+    public Participant(UUID id, String name, Event eventPartOf, String iban) {
         this.id = id;
         this.name = name;
-        this.eventsPartOf = eventsPartOf;
+        this.eventPartOf = eventPartOf;
         this.iban = iban;
     }
 
@@ -57,18 +57,30 @@ public class Participant {
         this.name = name;
     }
 
-    public Participant(String name, List<Event> eventsPartOf) {
+    public Participant(String name, Event eventPartOf) {
         this.name = name;
-        this.eventsPartOf = eventsPartOf;
+        this.eventPartOf = eventPartOf;
     }
 
-    @ManyToMany
-    @JoinTable(
-            name = "participant_event",
-            joinColumns = @JoinColumn(name = "participant_id"),
-            inverseJoinColumns = @JoinColumn(name = "event_id")
-    )
-    private List<Event> eventsPartOf;
+
+    public void setEventPartOf(Event eventPartOf) {
+        this.eventPartOf = eventPartOf;
+    }
+
+    public List<Debt> getDebts() {
+        return debts;
+    }
+
+    public void setDebts(List<Debt> debts) {
+        this.debts = debts;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    private Event eventPartOf;
+
+    @OneToMany(mappedBy = "participant")
+    private List<Debt> debts;
 
     public UUID getId() {
         return id;
@@ -86,21 +98,19 @@ public class Participant {
         this.name = name;
     }
 
-    public List<Event> getEventsPartOf() {
-        return eventsPartOf;
+    public Event getEventPartOf() {
+        return eventPartOf;
     }
 
-    public void setEventsPartOf(List<Event> eventsPartOf) {
-        this.eventsPartOf = eventsPartOf;
-    }
+
 
     @Override
     public String toString() {
         return "Participant{"
-                + "id=" + id
-                + ", name='" + name + '\''
-                + ", iban='" + iban + '\''
-                + ", eventsPartOf=" + eventsPartOf
-                + '}';
+               +"id=" + id
+               +", name='" + name + '\''
+               +", iban='" + iban + '\''
+               +", eventPartOf=" + eventPartOf
+               +'}';
     }
 }

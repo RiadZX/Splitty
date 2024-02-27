@@ -2,7 +2,6 @@ package commons;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -13,70 +12,52 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "event_id")
     private UUID id;
-    private String nameEvent;
-
-    private String inviteCode;
-    @ManyToOne
-    private Participant eventCreator;
+    private String name;
     private String title; //fix response issue for now
-
-    public void setEventCreator(Participant eventCreator) {
-        this.eventCreator = eventCreator;
+    public String getName() {
+        return name;
     }
 
-    public String getNameEvent() {
-        return nameEvent;
-    }
-
-    public void setNameEvent(String nameEvent) {
-        this.nameEvent = nameEvent;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setId(UUID id) {
         this.id = id;
     }
 
-    @ManyToMany(mappedBy = "eventsPartOf")
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Participant> participants;
-    @OneToMany
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Expense> expenses;
-
     public Event() {
-        this.participants = new ArrayList<>();
     }
-
-    public Event(String nameEvent) {
-        this();
-        this.nameEvent = nameEvent;
+    public Event(String name){
+        this.name = name;
     }
-
-    public Event(String nameEvent, Participant eventCreator, List<Participant> participants) {
-        this(nameEvent);
-        this.eventCreator = eventCreator;
+    public Event(String name, List<Participant> participants) {
+        this.name = name;
         this.participants = participants;
-        this.participants.add(eventCreator);
     }
-
     /**
      * Sets all participants,
      * may be used by creator while event is being created
      * or if they want to edit the current participants.
-     *
      * @param participants that will be added
      */
     public void setParticipants(List<Participant> participants) {
         this.participants = participants;
     }
 
-    public void addParticipant(Participant participant) {
+    public void addParticipant(Participant participant){
         this.participants.add(participant);
     }
 
-    public void removeParticipant(Participant participant) {
+    public void removeParticipant(Participant participant){
         this.participants.remove(participant);
     }
 
-    public List<Participant> getParticipants() {
+    public List<Participant> getParticipants(){
         return this.participants;
     }
 
@@ -84,42 +65,35 @@ public class Event {
      * Sets list of expenses.
      * May be used by creator while event is being created
      * or if they want to edit the current list of expenses.
-     *
      * @param expenses that will be added
      */
     public void setExpenses(List<Expense> expenses) {
         this.expenses = expenses;
     }
 
-    public void addExpense(Expense expense) {
+    public void addExpense(Expense expense){
         this.expenses.add(expense);
     }
 
-    public void removeExpense(Expense expense) {
+    public void removeExpense(Expense expense){
         this.expenses.remove(expense);
     }
 
-    public List<Expense> getExpenses() {
+    public List<Expense> getExpenses(){
         return this.expenses;
     }
 
-    public void editTitle(String nameEvent) {
-        this.nameEvent = nameEvent;
+    public void setTitle(String name){
+        this.name = name;
     }
 
-    public String getTitle() {
-        return this.nameEvent;
+    public String getTitle(){
+        return this.name;
     }
 
-    public UUID getId() {
+    public UUID getId(){
         return this.id;
     }
-
-
-    public Participant getEventCreator() {
-        return this.eventCreator;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -129,8 +103,7 @@ public class Event {
             return false;
         }
         return getId() == event.getId()
-                && Objects.equals(nameEvent, event.nameEvent)
-                && Objects.equals(getEventCreator(), event.getEventCreator())
+                && Objects.equals(name, event.name)
                 && Objects.equals(getParticipants(), event.getParticipants())
                 && Objects.equals(getExpenses(), event.getExpenses());
     }
@@ -138,9 +111,9 @@ public class Event {
     @Override
     public int hashCode() {
         return Objects.hash(getId(),
-                nameEvent,
-                getEventCreator(),
+                name,
                 getParticipants(),
                 getExpenses());
     }
+
 }
