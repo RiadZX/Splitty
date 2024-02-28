@@ -75,8 +75,9 @@ public class Participant {
         this.debts = debts;
     }
 
+
     @ManyToOne
-    private Event eventPartOf;
+    private Event eventPartOf; //event part of field does not actually work
 
     @OneToMany(mappedBy = "participant")
     private List<Debt> debts;

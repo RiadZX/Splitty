@@ -16,6 +16,7 @@
 package client.scenes;
 
 import commons.Event;
+import commons.Participant;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -23,7 +24,13 @@ import javafx.util.Pair;
 
 public class MainCtrl {
 
+    public Participant user;
+
     private Stage primaryStage;
+
+    private FirstTimeCtrl firstTimeCtrl;
+
+    private  Scene firstTime;
 
     private QuoteOverviewCtrl quoteoverviewCtrl;
     private Scene quoteoverview;
@@ -31,21 +38,18 @@ public class MainCtrl {
     private EventOverviewCtrl eventOverviewCtrl;
     private Scene eventOverview;
 
-    private AddQuoteCtrl addCtrl;
-    private Scene add;
-
     private StartCtrl startCtrl;
     private Scene start;
 
-    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> quoteoverview,
-            Pair<AddQuoteCtrl, Parent> add, Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StartCtrl, Parent> start) {
+
+    public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime, Pair<QuoteOverviewCtrl, Parent> quoteoverview, Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StartCtrl, Parent> start) {
         this.primaryStage = primaryStage;
+
+        this.firstTimeCtrl=firstTime.getKey();
+        this.firstTime=new Scene(firstTime.getValue());
 
         this.quoteoverviewCtrl = quoteoverview.getKey();
         this.quoteoverview = new Scene(quoteoverview.getValue());
-
-        this.addCtrl = add.getKey();
-        this.add = new Scene(add.getValue());
 
         this.eventOverviewCtrl=eventOverview.getKey();
         this.eventOverview= new Scene(eventOverview.getValue());
@@ -53,8 +57,12 @@ public class MainCtrl {
         this.startCtrl=start.getKey();
         this.start= new Scene(start.getValue());
 
-        showStart();
+        this.showFirstTime();
         primaryStage.show();
+    }
+    public  void showFirstTime(){
+        primaryStage.setTitle("Splitty: Setup");
+        primaryStage.setScene(this.firstTime);
     }
 
     public void showStart() {
@@ -71,7 +79,9 @@ public class MainCtrl {
 
     public void showAdd() {
         primaryStage.setTitle("Quotes: Adding Quote");
-        primaryStage.setScene(add);
-        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
+
+    public  void setUser(Participant user){
+        this.user=user;
     }
 }

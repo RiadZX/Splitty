@@ -2,6 +2,7 @@ package commons;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -31,12 +32,18 @@ public class Event {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Expense> expenses;
     public Event() {
+        this.participants=new ArrayList<>();
     }
     public Event(String name){
+        this();
         this.name = name;
     }
+    public  Event(String name, Participant creator){
+        this(name);
+        this.participants.add(creator);
+    }
     public Event(String name, List<Participant> participants) {
-        this.name = name;
+        this(name);
         this.participants = participants;
     }
     /**
