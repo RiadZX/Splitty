@@ -40,9 +40,12 @@ public class MainCtrl {
 
     private StartCtrl startCtrl;
     private Scene start;
+    private InviteViewCtrl inviteViewCtrl;
+    private Scene inviteView;
 
-
-    public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime, Pair<QuoteOverviewCtrl, Parent> quoteoverview, Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StartCtrl, Parent> start) {
+    public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime, Pair<QuoteOverviewCtrl,
+            Parent> quoteoverview, Pair<EventOverviewCtrl,
+            Parent> eventOverview, Pair<StartCtrl, Parent> start, Pair<InviteViewCtrl, Parent> inviteView) {
         this.primaryStage = primaryStage;
 
         this.firstTimeCtrl=firstTime.getKey();
@@ -56,6 +59,9 @@ public class MainCtrl {
 
         this.startCtrl=start.getKey();
         this.start= new Scene(start.getValue());
+
+        this.inviteViewCtrl=inviteView.getKey();
+        this.inviteView=new Scene(inviteView.getValue());
 
         this.showFirstTime();
         primaryStage.show();
@@ -74,7 +80,11 @@ public class MainCtrl {
         primaryStage.setTitle("Splitty: Event Overview");
         eventOverviewCtrl.setEvent(newEvent);
         primaryStage.setScene(eventOverview);
-
+    }
+    public void showInviteView(Event event){
+        primaryStage.setTitle("Splitty: Invite View");
+        inviteViewCtrl.setEvent(event);
+        primaryStage.setScene(inviteView);
     }
 
     public void showAdd() {

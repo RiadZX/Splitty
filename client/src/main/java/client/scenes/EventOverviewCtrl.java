@@ -6,6 +6,7 @@ import commons.Event;
 import commons.Participant;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
@@ -17,6 +18,8 @@ import java.util.ResourceBundle;
 public class EventOverviewCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    @FXML
+    public Button sendInviteButton;
 
     @FXML
     private Label participantsLabel;
@@ -44,6 +47,7 @@ public class EventOverviewCtrl implements Initializable {
                 }
             }
         }));
+        this.sendInviteButton.setOnAction(event -> sendInvite());
     }
 
     public void setEvent(Event newEvent){
@@ -66,6 +70,9 @@ public class EventOverviewCtrl implements Initializable {
     public void changeTitle(){
         this.event.setName(this.eventTitle.getText());
         this.server.updateEvent(this.event);
+    }
+    public void sendInvite(){
+        mainCtrl.showInviteView(this.event);
     }
 
     public void backToStart(){
