@@ -1,8 +1,8 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import client.utils.User;
 import com.google.inject.Inject;
-import commons.Participant;
 import javafx.fxml.FXML;
 
 import javafx.fxml.Initializable;
@@ -37,9 +37,9 @@ public class FirstTimeCtrl implements Initializable{
     }
 
     public void moveToStart(){
-        Participant user=new Participant(nameField.getText()); //create object
+        User user=new User(nameField.getText());
         this.mainCtrl.setUser(user);
-        this.mainCtrl.showStart();
+        this.mainCtrl.showStartScene();
     }
 
 }

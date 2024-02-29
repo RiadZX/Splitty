@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,6 +14,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
@@ -55,7 +57,8 @@ public class StartCtrl implements Initializable {
 
     public void createEvent(){
         String title=createEventField.getText();
-        Event newEvent= new Event(title, this.mainCtrl.user);
+        Participant creator=new Participant(this.mainCtrl.getUser().getName());
+        Event newEvent= new Event(title, creator);
         try {
             newEvent=server.addEvent(newEvent);
         } catch (WebApplicationException e) {
@@ -65,16 +68,19 @@ public class StartCtrl implements Initializable {
             alert.showAndWait();
             return;
         }
-        mainCtrl.showEventOverview(newEvent);
+        UUID participantId=newEvent.getParticipants().getFirst().getId();
+        this.mainCtrl.addUserEvent(newEvent.getId(), participantId);
+        mainCtrl.showEventOverviewScene(newEvent);
         clearFields();
     }
 
     public  void addRecentEvents(){
         this.recentEventsGrid.getChildren().clear();
-        var events = server.getEvents();
+        List<UUID> eventIDs=this.mainCtrl.getUser().getEvents();
+
         int i=0;
-        for (int j=events.size()-1; j>=0 && i<3; j--){
-            Event currentEvent=events.get(j);
+        for (int j=eventIDs.size()-1; j>=0 && i<3; j--){
+            Event currentEvent=server.getEvent(eventIDs.get(j));
             Hyperlink newEventLink=new Hyperlink(currentEvent.getName());
             newEventLink.setOnMouseClicked(event -> joinEvent(currentEvent.getId())
             );
@@ -90,25 +96,16 @@ public class StartCtrl implements Initializable {
      * Join an event based on its id. Issue server request for getting the event.
      * @param id id of the event
      */
-    public  void joinEvent(UUID id){
-        Event currEvent;
-        try {
-            currEvent=server.getEvent(id);
-        } catch (WebApplicationException e) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-            return;
-        }
-        mainCtrl.showEventOverview(currEvent);
+    public  void joinEvent(UUID id){ //add handling for deleted event
+        Event currEvent=server.getEvent(id);
+        mainCtrl.showEventOverviewScene(currEvent);
         clearFields();
     }
-
 
 
     public  void clearFields(){
         this.createEventField.clear();
         this.joinEventField.clear();
     }
+
 }
