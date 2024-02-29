@@ -40,5 +40,7 @@
    </children>
    <stylesheets>
       <URL value="@../../stylesheets/general.css" />
+       <!-- fix for windows-->
+       <URL value="@../../resources/main/stylesheets/general.css" />
    </stylesheets>
 </AnchorPane>
