@@ -57,3 +57,12 @@ they can be open.
 - use api for emailing.
 - use json for config files
 - mockito for testing
+
+Tasks:
+Everyone: Create milstones for this week and create issues.
+Andrei: Frontend Config file
+Calin: Server Config file
+Codrin: Work on the Add/Edit expense scene
+Georges: Add endpoints
+Tijmen: Add endpoints
+Riad: Add endpoints

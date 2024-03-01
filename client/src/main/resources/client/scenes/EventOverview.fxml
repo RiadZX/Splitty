@@ -33,10 +33,12 @@
         </columns>
       </TableView>
       <Button layoutX="289.0" layoutY="415.0" mnemonicParsing="false" text="Settle Debts" />
-      <Label layoutX="40.0" layoutY="132.0" text="No participants, yet" />
+      <Label fx:id="participantsLabel" layoutX="40.0" layoutY="132.0" text="No participants, yet" />
       <Button fx:id="backButton" layoutX="-3.0" layoutY="1.0" mnemonicParsing="false" onAction="#backToStart" prefHeight="27.0" prefWidth="57.0" text="Back" />
    </children>
    <stylesheets>
       <URL value="@../../stylesheets/general.css" />
+      <!-- fix for windows-->
+      <URL value="@../../resources/main/stylesheets/general.css" />
    </stylesheets>
 </AnchorPane>

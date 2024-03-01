@@ -2,6 +2,7 @@ package commons;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -13,14 +14,7 @@ public class Event {
     @Column(name = "event_id")
     private UUID id;
     private String name;
-    @ManyToOne
-    private Participant eventCreator;
     private String title; //fix response issue for now
-
-    public void setEventCreator(Participant eventCreator) {
-        this.eventCreator = eventCreator;
-    }
-
     public String getName() {
         return name;
     }
@@ -33,22 +27,25 @@ public class Event {
         this.id = id;
     }
 
-    @ManyToMany(mappedBy = "eventsPartOf")
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Participant> participants;
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Expense> expenses;
     public Event() {
+        this.participants=new ArrayList<>();
     }
     public Event(String name){
+        this();
         this.name = name;
     }
-    public Event(String name, Participant eventCreator, List<Participant> participants) {
-        this.name = name;
-        this.eventCreator = eventCreator;
+    public  Event(String name, Participant creator){
+        this(name);
+        this.participants.add(creator);
+    }
+    public Event(String name, List<Participant> participants) {
+        this(name);
         this.participants = participants;
-        this.participants.add(eventCreator);
     }
-
     /**
      * Sets all participants,
      * may be used by creator while event is being created
@@ -93,7 +90,7 @@ public class Event {
         return this.expenses;
     }
 
-    public void editTitle(String name){
+    public void setTitle(String name){
         this.name = name;
     }
 
@@ -104,12 +101,6 @@ public class Event {
     public UUID getId(){
         return this.id;
     }
-
-
-    public Participant getEventCreator(){
-        return this.eventCreator;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -120,7 +111,6 @@ public class Event {
         }
         return getId() == event.getId()
                 && Objects.equals(name, event.name)
-                && Objects.equals(getEventCreator(), event.getEventCreator())
                 && Objects.equals(getParticipants(), event.getParticipants())
                 && Objects.equals(getExpenses(), event.getExpenses());
     }
@@ -129,7 +119,6 @@ public class Event {
     public int hashCode() {
         return Objects.hash(getId(),
                 name,
-                getEventCreator(),
                 getParticipants(),
                 getExpenses());
     }
