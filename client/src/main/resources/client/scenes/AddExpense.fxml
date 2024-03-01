@@ -88,15 +88,15 @@
     </MenuBar>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="629.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
       <children>
-            <Button layoutX="539.0" layoutY="316.0" mnemonicParsing="false" text="Add" />
+            <Button layoutX="539.0" layoutY="316.0" mnemonicParsing="false" onAction="#createExpense" text="Add" />
             <Button layoutX="480.0" layoutY="316.0" mnemonicParsing="false" onAction="#backToOverview" text="Abort" />
-            <TextField layoutX="279.0" layoutY="98.0" />
-            <TextField layoutX="279.0" layoutY="131.0" prefHeight="25.0" prefWidth="96.0" />
+            <TextField fx:id="whatForField" layoutX="279.0" layoutY="98.0" />
+            <TextField fx:id="howMuchField" layoutX="279.0" layoutY="131.0" prefHeight="25.0" prefWidth="96.0" />
             <Text layoutX="155.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="WHO PAID?" />
             <Text layoutX="154.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="WHAT FOR?" />
             <Text layoutX="150.0" layoutY="148.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HOW MUCH?" />
             <Text layoutX="166.0" layoutY="187.0" strokeType="OUTSIDE" strokeWidth="0.0" text="WHEN?" />
-            <DatePicker layoutX="279.0" layoutY="170.0" />
+            <DatePicker fx:id="whenField" layoutX="279.0" layoutY="170.0" />
             <Text layoutX="144.0" layoutY="228.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HOW TO SPLIT?" />
             <CheckBox fx:id="allBox" layoutX="151.0" layoutY="239.0" mnemonicParsing="false" onAction="#checkAll" text="Equally Between Everybody" textAlignment="CENTER" />
             <CheckBox fx:id="someBox" layoutX="151.0" layoutY="262.0" mnemonicParsing="false" onAction="#checkSome" text="Select with whom to share" textAlignment="CENTER" />
