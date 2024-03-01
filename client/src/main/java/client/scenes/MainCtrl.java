@@ -83,6 +83,7 @@ public class MainCtrl {
 
     public void showAddExpense(){
         primaryStage.setTitle("Splitty: Add/Edit Expense");
+        addExpenseCtrl.setup();
         primaryStage.setScene(addExpense);
     }
 }
