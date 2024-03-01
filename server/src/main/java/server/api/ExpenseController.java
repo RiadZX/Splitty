@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/events/{id}/expenses")
+@RequestMapping("/api/events/{event_id}/expenses")
 public class ExpenseController {
     private final ExpenseRepository repo;
     public ExpenseController(ExpenseRepository repo) {
