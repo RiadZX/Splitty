@@ -15,25 +15,25 @@
  */
 package client.scenes;
 
+import client.utils.Config;
+import client.utils.User;
 import commons.Event;
-import commons.Participant;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.UUID;
+
 public class MainCtrl {
 
-    public Participant user;
+    private  User user;
 
     private Stage primaryStage;
 
     private FirstTimeCtrl firstTimeCtrl;
 
     private  Scene firstTime;
-
-    private QuoteOverviewCtrl quoteoverviewCtrl;
-    private Scene quoteoverview;
 
     private EventOverviewCtrl eventOverviewCtrl;
     private Scene eventOverview;
@@ -51,9 +51,6 @@ public class MainCtrl {
         this.firstTimeCtrl=firstTime.getKey();
         this.firstTime=new Scene(firstTime.getValue());
 
-        this.quoteoverviewCtrl = quoteoverview.getKey();
-        this.quoteoverview = new Scene(quoteoverview.getValue());
-
         this.eventOverviewCtrl=eventOverview.getKey();
         this.eventOverview= new Scene(eventOverview.getValue());
 
@@ -66,17 +63,30 @@ public class MainCtrl {
         this.showFirstTime();
         primaryStage.show();
     }
-    public  void showFirstTime(){
+
+    public void chooseFirstPage(){
+        this.user=Config.readUserConfigFile();
+        if (user == null) {
+            this.showFirstTimeScene();
+            primaryStage.show();
+        }
+        else {
+            this.showStartScene();
+            System.out.println(user);
+            primaryStage.show();
+        }
+    }
+    public  void showFirstTimeScene(){
         primaryStage.setTitle("Splitty: Setup");
         primaryStage.setScene(this.firstTime);
     }
 
-    public void showStart() {
+    public void showStartScene() {
         primaryStage.setTitle("Splitty: Start");
         startCtrl.addRecentEvents();
         primaryStage.setScene(start);
     }
-    public  void showEventOverview(Event newEvent){
+    public  void showEventOverviewScene(Event newEvent){
         primaryStage.setTitle("Splitty: Event Overview");
         eventOverviewCtrl.setEvent(newEvent);
         primaryStage.setScene(eventOverview);
@@ -86,12 +96,18 @@ public class MainCtrl {
         inviteViewCtrl.setEvent(event);
         primaryStage.setScene(inviteView);
     }
-
-    public void showAdd() {
-        primaryStage.setTitle("Quotes: Adding Quote");
+    public  User getUser(){
+        return this.user;
     }
 
-    public  void setUser(Participant user){
+    public  void setUser(User user){
         this.user=user;
+        Config.writeUserConfigFile(user);
+    }
+
+    public void addUserEvent(UUID event, UUID participant){
+        this.user.addEventParticipant(event, participant);
+        Config.writeUserConfigFile(user);
+        System.out.println(Config.readUserConfigFile());
     }
 }
