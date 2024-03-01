@@ -27,6 +27,7 @@ public class EventOverviewCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
     }
 
     public void setEvent(Event newEvent){
@@ -37,5 +38,7 @@ public class EventOverviewCtrl implements Initializable {
         mainCtrl.showStart();
     }
 
-    public void addExpense(){mainCtrl.showAddExpense();}
+    public void addExpense() {
+        mainCtrl.showAddExpense();
+    }
 }
