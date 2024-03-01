@@ -36,4 +36,6 @@ public class EventOverviewCtrl implements Initializable {
     public void backToStart(){
         mainCtrl.showStart();
     }
+
+    public void addExpense(){mainCtrl.showAddExpense();}
 }

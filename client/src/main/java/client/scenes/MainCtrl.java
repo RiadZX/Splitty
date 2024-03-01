@@ -37,8 +37,11 @@ public class MainCtrl {
     private StartCtrl startCtrl;
     private Scene start;
 
+    private AddExpenseCtrl addExpenseCtrl;
+    private Scene addExpense;
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> quoteoverview,
-            Pair<AddQuoteCtrl, Parent> add, Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StartCtrl, Parent> start) {
+            Pair<AddQuoteCtrl, Parent> add, Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StartCtrl, Parent> start, Pair<AddExpenseCtrl, Parent> addExpense) {
         this.primaryStage = primaryStage;
 
         this.quoteoverviewCtrl = quoteoverview.getKey();
@@ -52,6 +55,9 @@ public class MainCtrl {
 
         this.startCtrl=start.getKey();
         this.start= new Scene(start.getValue());
+
+        this.addExpenseCtrl = addExpense.getKey();
+        this.addExpense = new Scene(addExpense.getValue());
 
         showStart();
         primaryStage.show();
@@ -73,5 +79,10 @@ public class MainCtrl {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
+
+    public void showAddExpense(){
+        primaryStage.setTitle("Splitty: Add/Edit Expense");
+        primaryStage.setScene(addExpense);
     }
 }
