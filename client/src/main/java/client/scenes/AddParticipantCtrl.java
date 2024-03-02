@@ -53,9 +53,9 @@ public class AddParticipantCtrl {
         if (!participantEmail.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
             return;
         }
-//        if (participantIban.length() != 34) {
-//            return;
-//        }
+        if (participantIban.length() != 34) {
+            return;
+        }
         server.addParticipant(
                 new Participant(
                         participantName,
