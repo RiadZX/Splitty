@@ -16,6 +16,8 @@ public class Participant {
 
     private String name;
 
+    private String email;
+
     public String getIban() {
         return iban;
     }
@@ -43,14 +45,33 @@ public class Participant {
 
     private String iban;
 
+    private String bic;
+
     public Participant() {
     }
 
-    public Participant(UUID id, String name, Event eventPartOf, String iban) {
-        this.id = id;
+    public Participant(String name, Event eventPartOf, String iban, String email, String bic) {
         this.name = name;
         this.eventPartOf = eventPartOf;
         this.iban = iban;
+        this.email = email;
+        this.bic = bic;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getBic() {
+        return bic;
+    }
+
+    public void setBic(String bic) {
+        this.bic = bic;
     }
 
     public Participant(String name) {
