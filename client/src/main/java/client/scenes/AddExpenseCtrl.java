@@ -2,9 +2,11 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Debt;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
@@ -14,6 +16,7 @@ import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class AddExpenseCtrl implements Initializable {
@@ -60,16 +63,34 @@ public class AddExpenseCtrl implements Initializable {
 
     public void setup(){
         partialPaySelector.setVisible(false);
-        //the lines below should be uncommented when we will pas in an event with actual participants
-        //it yields a NullPointerException atm since we are working with a dummy event
-        //paidBySelector.setItems((ObservableList) event.getParticipants().stream().map(p -> p.getName()).toList());
-        //partialPaySelector.setItems((ObservableList) event.getParticipants().stream().map(p -> p.getName()).toList());
+        paidBySelector.setItems(FXCollections.observableList(event.getParticipants().stream().map(Participant::getName).sorted().toList()));
+        partialPaySelector.setItems(FXCollections.observableList(event.getParticipants().stream().map(Participant::getName).sorted().toList()));
     }
 
     public void createExpense(){
-        //it will just create an expense and return to event overview
-        //created the dummy expense with the values of the fields I can get atm
-        Expense newExpense = new Expense(whatForField.getText(), Double.parseDouble(howMuchField.getText()), whenField.getValue().atStartOfDay(), new Participant(), new Event(), new ArrayList<>());
+        //get participants
+        List<Participant> participantList = event.getParticipants();
+
+        //store who paid
+        Participant paidBy = null;
+        for (Participant p : participantList) if (p.getName().equals(paidBySelector.getValue())) paidBy = p;
+        if (paidBy == null) return;
+
+        //create a list of debtors
+        List<Participant> debtors = participantList;
+        debtors.remove(paidBy);
+        List<Debt> debts = createDebts(Double.parseDouble(howMuchField.getText()), debtors);
+
+        //create the expense
+        Expense newExpense = new Expense(whatForField.getText(), Double.parseDouble(howMuchField.getText()), whenField.getValue().atStartOfDay(), paidBy, event, debts);
+        for(Debt d : newExpense.getDebts()) d.setExpense(newExpense); //setup each debt's expense pointer
+        event.addExpense(newExpense);
         mainCtrl.showEventOverviewScene(event);
+    }
+
+    private List<Debt> createDebts(double amount, List<Participant> participants){
+        List<Debt> debts = new ArrayList<>();
+        for (Participant p : participants) debts.add(new Debt(new Expense(), p, amount/participants.size() + 1));
+        return debts;
     }
 }

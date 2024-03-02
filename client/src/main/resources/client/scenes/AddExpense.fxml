@@ -100,7 +100,7 @@
             <Text layoutX="144.0" layoutY="228.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HOW TO SPLIT?" />
             <CheckBox fx:id="allBox" layoutX="151.0" layoutY="239.0" mnemonicParsing="false" onAction="#checkAll" text="Equally Between Everybody" textAlignment="CENTER" />
             <CheckBox fx:id="someBox" layoutX="151.0" layoutY="262.0" mnemonicParsing="false" onAction="#checkSome" text="Select with whom to share" textAlignment="CENTER" />
-            <ComboBox layoutX="279.0" layoutY="64.0" prefWidth="150.0" promptText="select" />
+            <ComboBox fx:id="paidBySelector" layoutX="279.0" layoutY="64.0" prefWidth="150.0" promptText="select" />
             <ComboBox layoutX="372.0" layoutY="131.0" prefHeight="25.0" prefWidth="55.0" visibleRowCount="3" />
             <ComboBox fx:id="partialPaySelector" layoutX="317.0" layoutY="258.0" prefWidth="150.0" promptText="select" />
       </children>

@@ -47,9 +47,8 @@ public class MainCtrl {
     private AddExpenseCtrl addExpenseCtrl;
     private Scene addExpense;
 
-    public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime, Pair<EventOverviewCtrl, Parent> eventOverview, Pair<AddParticipantCtrl, Parent> addParticipant, Pair<StartCtrl, Parent> start) {
+    public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime, Pair<EventOverviewCtrl, Parent> eventOverview, Pair<AddParticipantCtrl, Parent> addParticipant, Pair<StartCtrl, Parent> start, Pair<AddExpenseCtrl, Parent> addExpense) {
 
-    public void initialize(Stage primaryStage, Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StartCtrl, Parent> start, Pair<AddExpenseCtrl, Parent> addExpense, Pair<FirstTimeCtrl, Parent> firstTime) {
         this.primaryStage = primaryStage;
 
         this.firstTimeCtrl=firstTime.getKey();
