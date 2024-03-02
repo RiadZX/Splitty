@@ -72,6 +72,10 @@ public class EventOverviewCtrl implements Initializable {
         mainCtrl.showStartScene();
     }
 
+    public void addParticipant() {
+        mainCtrl.showAddParticipantScene(event);
+    }
+
     public void addExpense() {
         mainCtrl.showAddExpense();
     }

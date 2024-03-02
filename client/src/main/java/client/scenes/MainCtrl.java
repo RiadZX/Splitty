@@ -38,11 +38,16 @@ public class MainCtrl {
     private EventOverviewCtrl eventOverviewCtrl;
     private Scene eventOverview;
 
+    private AddParticipantCtrl addParticipantCtrl;
+    private Scene addParticipant;
+
     private StartCtrl startCtrl;
     private Scene start;
 
     private AddExpenseCtrl addExpenseCtrl;
     private Scene addExpense;
+
+    public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime, Pair<EventOverviewCtrl, Parent> eventOverview, Pair<AddParticipantCtrl, Parent> addParticipant, Pair<StartCtrl, Parent> start) {
 
     public void initialize(Stage primaryStage, Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StartCtrl, Parent> start, Pair<AddExpenseCtrl, Parent> addExpense, Pair<FirstTimeCtrl, Parent> firstTime) {
         this.primaryStage = primaryStage;
@@ -63,6 +68,9 @@ public class MainCtrl {
 
         showStartScene();
         primaryStage.show();
+        this.addParticipantCtrl = addParticipant.getKey();
+        this.addParticipant = new Scene(addParticipant.getValue());
+
         chooseFirstPage();
     }
 
@@ -92,9 +100,13 @@ public class MainCtrl {
         primaryStage.setTitle("Splitty: Event Overview");
         eventOverviewCtrl.setEvent(newEvent);
         primaryStage.setScene(eventOverview);
-
     }
-    public  User getUser(){
+    public void showAddParticipantScene(Event event) {
+        primaryStage.setTitle("Splitty: Add Participant");
+        addParticipantCtrl.setEvent(event);
+        primaryStage.setScene(addParticipant);
+    }
+    public User getUser(){
         return this.user;
     }
 
