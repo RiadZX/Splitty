@@ -44,8 +44,7 @@ public class MainCtrl {
     private AddExpenseCtrl addExpenseCtrl;
     private Scene addExpense;
 
-    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> quoteoverview,
-            Pair<AddQuoteCtrl, Parent> add, Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StartCtrl, Parent> start, Pair<AddExpenseCtrl, Parent> addExpense) {
+    public void initialize(Stage primaryStage, Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StartCtrl, Parent> start, Pair<AddExpenseCtrl, Parent> addExpense, Pair<FirstTimeCtrl, Parent> firstTime) {
         this.primaryStage = primaryStage;
 
         this.firstTimeCtrl=firstTime.getKey();
@@ -60,7 +59,9 @@ public class MainCtrl {
         this.addExpenseCtrl = addExpense.getKey();
         this.addExpense = new Scene(addExpense.getValue());
 
-        showStart();
+        this.user = new User();
+
+        showStartScene();
         primaryStage.show();
         chooseFirstPage();
     }

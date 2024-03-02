@@ -6,6 +6,7 @@ public class Config {
     private static  final String USER_FILENAME="userConfig";
 
     public static void writeUserConfigFile(User user){
+        /*
         File file=new File("./client/build/resources/main", USER_FILENAME);
         try {
             file.createNewFile();
@@ -19,6 +20,7 @@ public class Config {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        */
     }
     public  static User readUserConfigFile(){
         File file=new File("./client/build/resources/main", USER_FILENAME);

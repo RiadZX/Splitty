@@ -43,7 +43,7 @@ public class AddExpenseCtrl implements Initializable {
     }
     @FXML
     public void backToOverview(){
-        mainCtrl.showEventOverview(event);
+        mainCtrl.showEventOverviewScene(event);
     }
 
     @FXML
@@ -70,6 +70,6 @@ public class AddExpenseCtrl implements Initializable {
         //it will just create an expense and return to event overview
         //created the dummy expense with the values of the fields I can get atm
         Expense newExpense = new Expense(whatForField.getText(), Double.parseDouble(howMuchField.getText()), whenField.getValue().atStartOfDay(), new Participant(), new Event(), new ArrayList<>());
-        mainCtrl.showEventOverview(event);
+        mainCtrl.showEventOverviewScene(event);
     }
 }
