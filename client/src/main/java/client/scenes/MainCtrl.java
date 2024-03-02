@@ -97,7 +97,7 @@ public class MainCtrl {
         addParticipantCtrl.setEvent(event);
         primaryStage.setScene(addParticipant);
     }
-    public  User getUser(){
+    public User getUser(){
         return this.user;
     }
 
