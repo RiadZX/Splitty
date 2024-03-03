@@ -50,6 +50,15 @@ public class ParticipantController {
         Participant saved=repo.save(participant);
         return ResponseEntity.ok(saved);
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Participant> remove(@PathVariable("id") UUID id) {
+        if (repo.findById(id).isPresent()) {
+            ResponseEntity<Participant> removedParticipant = ResponseEntity.ok(repo.findById(id).get());
+            repo.deleteById(id);
+            return removedParticipant;
+        }
+        return ResponseEntity.badRequest().build();
+    }
 
     /**
      * Update participant by id
