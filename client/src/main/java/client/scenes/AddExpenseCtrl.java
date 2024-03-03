@@ -16,6 +16,7 @@ import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -28,7 +29,7 @@ public class AddExpenseCtrl implements Initializable {
     @FXML
     private CheckBox someBox;
     @FXML
-    private ComboBox paidBySelector, partialPaySelector;
+    private ComboBox<String> paidBySelector, partialPaySelector;
     @FXML
     private TextField whatForField, howMuchField;
     @FXML
@@ -61,10 +62,12 @@ public class AddExpenseCtrl implements Initializable {
         partialPaySelector.setVisible(true);
     }
 
-    public void setup(){
+    public void setup(Event event){
+        this.event = event;
         partialPaySelector.setVisible(false);
-        paidBySelector.setItems(FXCollections.observableList(event.getParticipants().stream().map(Participant::getName).sorted().toList()));
-        partialPaySelector.setItems(FXCollections.observableList(event.getParticipants().stream().map(Participant::getName).sorted().toList()));
+        for (ComboBox<String> stringComboBox : Arrays.asList(paidBySelector, partialPaySelector)) {
+            stringComboBox.setItems(FXCollections.observableList(event.getParticipants().stream().map(Participant::getName).sorted().toList()));
+        }
     }
 
     public void createExpense(){
@@ -77,9 +80,8 @@ public class AddExpenseCtrl implements Initializable {
         if (paidBy == null) return;
 
         //create a list of debtors
-        List<Participant> debtors = participantList;
-        debtors.remove(paidBy);
-        List<Debt> debts = createDebts(Double.parseDouble(howMuchField.getText()), debtors);
+        participantList.remove(paidBy);
+        List<Debt> debts = createDebts(Double.parseDouble(howMuchField.getText()), participantList);
 
         //create the expense
         Expense newExpense = new Expense(whatForField.getText(), Double.parseDouble(howMuchField.getText()), whenField.getValue().atStartOfDay(), paidBy, event, debts);
