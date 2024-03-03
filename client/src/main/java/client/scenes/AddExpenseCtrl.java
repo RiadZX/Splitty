@@ -95,4 +95,8 @@ public class AddExpenseCtrl implements Initializable {
         for (Participant p : participants) debts.add(new Debt(new Expense(), p, amount/participants.size() + 1));
         return debts;
     }
+
+    public ServerUtils getServer() {
+        return server;
+    }
 }

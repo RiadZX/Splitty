@@ -125,4 +125,12 @@ public class MainCtrl {
         addExpenseCtrl.setup(eventOverviewCtrl.getEvent());
         primaryStage.setScene(addExpense);
     }
+
+    public FirstTimeCtrl getFirstTimeCtrl() {
+        return firstTimeCtrl;
+    }
+
+    public void setFirstTimeCtrl(FirstTimeCtrl firstTimeCtrl) {
+        this.firstTimeCtrl = firstTimeCtrl;
+    }
 }
