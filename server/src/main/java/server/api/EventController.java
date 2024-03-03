@@ -53,7 +53,15 @@ public class EventController {
             return ResponseEntity.badRequest().build();
         }
     }
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Event> remove(@PathVariable("id") UUID id) {
+        if (repo.findById(id).isPresent()) {
+            ResponseEntity<Event> removedEvent = ResponseEntity.ok(repo.findById(id).get());
+            repo.deleteById(id);
+            return removedEvent;
+        }
+        return ResponseEntity.badRequest().build();
+    }
     /**
      * Update event
      * @param id - id of event
