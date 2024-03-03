@@ -18,7 +18,7 @@
             <Font size="15.0" />
          </font>
       </TextField>
-      <Button layoutX="266.0" layoutY="54.0" mnemonicParsing="false" text="Send Invites" />
+      <Button fx:id="sendInviteButton" layoutX="266.0" layoutY="54.0" mnemonicParsing="false" text="Send Invites" />
       <Label layoutX="25.0" layoutY="103.0" text="Participants">
          <font>
             <Font size="16.0" />
