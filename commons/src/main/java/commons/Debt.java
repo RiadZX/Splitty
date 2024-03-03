@@ -20,12 +20,12 @@ public class Debt {
     private Expense expense;
     @ManyToOne
     private Participant participant;
-    private int amount;
+    private double amount;
 
     private boolean paid;
 
     public Debt() {}
-    public Debt(Expense expense, Participant participant, int amount) {
+    public Debt(Expense expense, Participant participant, double amount) {
         this.expense = expense;
         this.participant = participant;
         this.amount = amount;
@@ -47,11 +47,11 @@ public class Debt {
         this.paid = true;
     }
 
-    public int getAmount() {
+    public double getAmount() {
         return this.amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 

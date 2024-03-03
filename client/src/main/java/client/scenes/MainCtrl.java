@@ -28,27 +28,46 @@ import java.util.UUID;
 public class MainCtrl {
 
     private  User user;
+
     private Stage primaryStage;
     private FirstTimeCtrl firstTimeCtrl;
+
     private  Scene firstTime;
+
     private EventOverviewCtrl eventOverviewCtrl;
     private Scene eventOverview;
+
     private AddParticipantCtrl addParticipantCtrl;
     private Scene addParticipant;
+
     private StartCtrl startCtrl;
     private Scene start;
+
+    private AddExpenseCtrl addExpenseCtrl;
+    private Scene addExpense;
     private Scene inviteView;
     private InviteViewCtrl inviteViewCtrl;
 
+    public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime, Pair<EventOverviewCtrl, Parent> eventOverview, Pair<AddParticipantCtrl, Parent> addParticipant, Pair<StartCtrl, Parent> start, Pair<AddExpenseCtrl, Parent> addExpense, Pair<InviteViewCtrl, Parent> inviteView) {
 
-    public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime, Pair<EventOverviewCtrl, Parent> eventOverview, Pair<AddParticipantCtrl, Parent> addParticipant, Pair<StartCtrl, Parent> start, Pair<InviteViewCtrl, Parent> inviteView){
         this.primaryStage = primaryStage;
+
         this.firstTimeCtrl=firstTime.getKey();
         this.firstTime=new Scene(firstTime.getValue());
+
         this.eventOverviewCtrl=eventOverview.getKey();
         this.eventOverview= new Scene(eventOverview.getValue());
+
         this.startCtrl=start.getKey();
         this.start= new Scene(start.getValue());
+
+        this.addExpenseCtrl = addExpense.getKey();
+        this.addExpense = new Scene(addExpense.getValue());
+
+        this.user = new User();
+
+        showStartScene();
+        primaryStage.show();
         this.addParticipantCtrl = addParticipant.getKey();
         this.addParticipant = new Scene(addParticipant.getValue());
 
@@ -99,14 +118,30 @@ public class MainCtrl {
     public User getUser(){
         return this.user;
     }
+
     public  void setUser(User user){
         this.user=user;
         Config.writeUserConfigFile(user);
     }
+
     public void addUserEvent(UUID event, UUID participant){
         this.user.addEventParticipant(event, participant);
         Config.writeUserConfigFile(user);
         System.out.println(Config.readUserConfigFile());
     }
 
+    public void showAddExpense(){
+        primaryStage.setTitle("Splitty: Add/Edit Expense");
+        addExpenseCtrl.setup(eventOverviewCtrl.getEvent());
+        primaryStage.setScene(addExpense);
+    }
+
+    //hardcoded temporary exchange rates
+    public double getUsdToEur(){
+        return 0.92;
+    }
+
+    public double getRonToEur() {
+        return 0.2;
+    }
 }
