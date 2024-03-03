@@ -73,7 +73,11 @@ public class AddExpenseCtrl implements Initializable {
 
         //store who paid
         Participant paidBy = null;
-        for (Participant p : participantList) if (p.getName().equals(paidBySelector.getValue())) paidBy = p;
+        for (Participant p : participantList){
+            if (p.getName().equals(paidBySelector.getValue())){
+                paidBy = p;
+            }
+        }
         if (paidBy == null) return;
 
         //create a list of debtors
@@ -82,14 +86,18 @@ public class AddExpenseCtrl implements Initializable {
 
         //create the expense
         Expense newExpense = new Expense(whatForField.getText(), Double.parseDouble(howMuchField.getText()), whenField.getValue().atStartOfDay(), paidBy, event, debts);
-        for(Debt d : newExpense.getDebts()) d.setExpense(newExpense); //setup each debt's expense pointer
+        for (Debt d : newExpense.getDebts()){
+            d.setExpense(newExpense); //setup each debt's expense pointer
+        }
         event.addExpense(newExpense);
         mainCtrl.showEventOverviewScene(event);
     }
 
     private List<Debt> createDebts(double amount, List<Participant> participants){
         List<Debt> debts = new ArrayList<>();
-        for (Participant p : participants) debts.add(new Debt(new Expense(), p, amount/participants.size() + 1));
+        for (Participant p : participants){
+            debts.add(new Debt(new Expense(), p, amount/participants.size() + 1));
+        }
         return debts;
     }
 }

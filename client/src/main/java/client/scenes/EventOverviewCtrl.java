@@ -46,7 +46,9 @@ public class EventOverviewCtrl implements Initializable {
         }));
     }
 
-    public Event getEvent(){return this.event;}
+    public Event getEvent(){
+        return this.event;
+    }
 
     public void setEvent(Event newEvent){
         this.event=newEvent;
@@ -74,11 +76,11 @@ public class EventOverviewCtrl implements Initializable {
         mainCtrl.showStartScene();
     }
 
-    public void addParticipant() {
+    public void addParticipant(){
         mainCtrl.showAddParticipantScene(event);
     }
 
-    public void addExpense() {
+    public void addExpense(){
         mainCtrl.showAddExpense();
     }
 }
