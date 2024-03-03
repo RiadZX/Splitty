@@ -1,151 +1,46 @@
 package commons;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-class EventTest {
-    @Test
-    void testEqualsHashcode() {
-        Participant chris = new Participant("chris");
-        Participant john = new Participant("john");
+public class EventTest {
+    private Event e1, e2, e3, e4;
+    private List<Participant> p;
 
-        ArrayList<Participant> participantArrayList = new ArrayList<>();
-
-        participantArrayList.add(chris);
-        participantArrayList.add(john);
-
-        Event a = new Event("john's Birthday Party", chris, participantArrayList);
-        Event b = new Event("john's Birthday Party", chris, participantArrayList);
-
-        assertEquals(a, b);
-        assertEquals(a.hashCode(), b.hashCode());
+    @BeforeEach
+    public void testSetup(){
+        p = new ArrayList<>();
+        p.add(new Participant("z"));
+        e1 = new Event("a");
+        e2 = new Event("a");
+        e3 = new Event("b");
+        e4 = new Event("a");
     }
 
     @Test
-    void testNotEqualsHashCode() {
-        Participant chris = new Participant("Chris");
-        Participant john = new Participant("John");
+    public void testConstructor(){
+        assertEquals(e1.getName(), "a");
 
-        ArrayList<Participant> participantArrayList = new ArrayList<>();
 
-        participantArrayList.add(chris);
-        participantArrayList.add(john);
-
-        Event a = new Event("John's Birthday Party", chris, participantArrayList);
-        Event b = new Event("Jimmy's Birthday Party", chris, participantArrayList);
-
-        assertNotEquals(a, b);
-        assertNotEquals(a.hashCode(), b.hashCode());
-    }
-    @Test
-    void setParticipants() {
-        Participant chris = new Participant("Chris");
-        Participant john = new Participant("John");
-
-        Event a = new Event("John's Birthday Party", chris, new ArrayList<>());
-
-        ArrayList<Participant> participantArrayList = new ArrayList<>();
-
-        participantArrayList.add(chris);
-        participantArrayList.add(john);
-
-        a.setParticipants(participantArrayList);
-        assertEquals(participantArrayList, a.getParticipants());
     }
 
     @Test
-    void addParticipant() {
-        Participant john = new Participant("John");
-        Participant chris = new Participant("Chris");
-
-        Event a = new Event("John's Birthday Party", chris, new ArrayList<>());
-        a.addParticipant(john);
-
-        ArrayList<Participant> participantArrayList = new ArrayList<>();
-        participantArrayList.add(john);
-
-        assertEquals(participantArrayList, a.getParticipants());
+    public void testEqualsMethod(){
+        assertEquals(e1, e2);
+        assertNotEquals(e1, e3);
+        assertEquals(e1, e4);
     }
 
     @Test
-    void removeParticipant() {
-        Participant john = new Participant("John");
-        Participant chris = new Participant("Chris");
-
-        ArrayList<Participant> participantArrayList = new ArrayList<>();
-        participantArrayList.add(john);
-        participantArrayList.add(chris);
-
-        Event a = new Event("John's Birthday Party", chris, participantArrayList);
-        participantArrayList.remove(john);
-        a.removeParticipant(john);
-
-        assertEquals(participantArrayList, a.getParticipants());
-    }
-
-    @Test
-    void setExpenses() {
-        Participant chris = new Participant("Chris");
-        Expense balloon = new Expense();
-
-        ArrayList<Expense> expenseArrayList = new ArrayList<>();
-        expenseArrayList.add(balloon);
-
-        Event a = new Event("John's Birthday Party", chris, new ArrayList<>());
-        a.setExpenses(expenseArrayList);
-
-        assertEquals(expenseArrayList, a.getExpenses());
-    }
-
-    @Test
-    void removeExpense() {
-        Participant chris = new Participant("Chris");
-        Expense balloon = new Expense();
-
-        ArrayList<Expense> expenseArrayList = new ArrayList<>();
-        expenseArrayList.add(balloon);
-
-        Event a = new Event("John's Birthday Party", chris, new ArrayList<>());
-        a.setExpenses(expenseArrayList);
-
-        a.removeExpense(balloon);
-        assertEquals(a.getExpenses(), new ArrayList<>());
-    }
-
-    @Test
-    void addExpenses() {
-        Participant chris = new Participant("Chris");
-        Expense balloon = new Expense();
-
-        ArrayList<Expense> expenseArrayList = new ArrayList<>();
-        expenseArrayList.add(balloon);
-
-        Event a = new Event("John's Birthday Party", chris, new ArrayList<>());
-        a.addExpense(balloon);
-
-        assertEquals(expenseArrayList, a.getExpenses());
-    }
-
-    @Test
-    void editTitle() {
-        Participant chris = new Participant("Chris");
-
-        Event a = new Event("John's Birthday Party", chris, new ArrayList<>());
-
-        a.editTitle("Jane's Birthday Party");
-
-        assertEquals("Jane's Birthday Party", a.getTitle());
-    }
-    @Test
-    void getEventCreator() {
-        Participant chris = new Participant("Chris");
-
-        Event a = new Event("John's Birthday Party", chris, new ArrayList<>());
-
-        assertEquals(chris, a.getEventCreator());
+    public void testHashMethod(){
+        assertEquals(e1.hashCode(), e2.hashCode());
+        assertNotEquals(e1.hashCode(), e3.hashCode());
+        assertEquals(e1.hashCode(), e4.hashCode());
     }
 }

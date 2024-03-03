@@ -4,7 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -12,26 +11,24 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 
 @Entity
 @Table(name = "expenses")
 public class Expense {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private String title;
     private double amount;
     private LocalDateTime date;
-    @JoinColumn(name = "paid_by")
     @ManyToOne
     private Participant paidBy;
-
-    @JoinColumn(name = "event_id")
     @ManyToOne
     private Event event;
 
-    @OneToMany
+    @OneToMany(mappedBy = "expense")
     private List<Debt> debts;
 
     public Expense() {
@@ -39,19 +36,20 @@ public class Expense {
     }
 
     public Expense(String title, double amount, LocalDateTime date,
-                   Participant paidBy, Event event) {
+                   Participant paidBy, Event event, List<Debt> debts) {
         this.title = title;
         this.amount = amount;
         this.date = date;
         this.paidBy = paidBy;
         this.event = event;
+        this.debts = debts;
     }
 
-    public long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

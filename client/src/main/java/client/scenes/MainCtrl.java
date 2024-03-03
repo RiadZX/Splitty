@@ -15,43 +15,100 @@
  */
 package client.scenes;
 
+import client.utils.Config;
+import client.utils.User;
+import commons.Event;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.UUID;
+
 public class MainCtrl {
+
+    private  User user;
 
     private Stage primaryStage;
 
-    private QuoteOverviewCtrl overviewCtrl;
-    private Scene overview;
+    private FirstTimeCtrl firstTimeCtrl;
 
-    private AddQuoteCtrl addCtrl;
-    private Scene add;
+    private  Scene firstTime;
 
-    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add) {
+    private EventOverviewCtrl eventOverviewCtrl;
+    private Scene eventOverview;
+
+    private AddParticipantCtrl addParticipantCtrl;
+    private Scene addParticipant;
+
+    private StartCtrl startCtrl;
+    private Scene start;
+
+
+    public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime, Pair<EventOverviewCtrl, Parent> eventOverview, Pair<AddParticipantCtrl, Parent> addParticipant, Pair<StartCtrl, Parent> start) {
+
+
         this.primaryStage = primaryStage;
-        this.overviewCtrl = overview.getKey();
-        this.overview = new Scene(overview.getValue());
 
-        this.addCtrl = add.getKey();
-        this.add = new Scene(add.getValue());
+        this.firstTimeCtrl=firstTime.getKey();
+        this.firstTime=new Scene(firstTime.getValue());
 
-        showOverview();
-        primaryStage.show();
+        this.eventOverviewCtrl=eventOverview.getKey();
+        this.eventOverview= new Scene(eventOverview.getValue());
+
+        this.startCtrl=start.getKey();
+        this.start= new Scene(start.getValue());
+
+        this.addParticipantCtrl = addParticipant.getKey();
+        this.addParticipant = new Scene(addParticipant.getValue());
+
+        chooseFirstPage();
     }
 
-    public void showOverview() {
-        primaryStage.setTitle("Quotes: Overview");
-        primaryStage.setScene(overview);
-        overviewCtrl.refresh();
+    public void chooseFirstPage(){
+        this.user=Config.readUserConfigFile();
+        if (user == null) {
+            this.showFirstTimeScene();
+            primaryStage.show();
+        }
+        else {
+            this.showStartScene();
+            System.out.println(user);
+            primaryStage.show();
+        }
+    }
+    public  void showFirstTimeScene(){
+        primaryStage.setTitle("Splitty: Setup");
+        primaryStage.setScene(this.firstTime);
     }
 
-    public void showAdd() {
-        primaryStage.setTitle("Quotes: Adding Quote");
-        primaryStage.setScene(add);
-        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    public void showStartScene() {
+        primaryStage.setTitle("Splitty: Start");
+        startCtrl.addRecentEvents();
+        primaryStage.setScene(start);
+    }
+    public  void showEventOverviewScene(Event newEvent){
+        primaryStage.setTitle("Splitty: Event Overview");
+        eventOverviewCtrl.setEvent(newEvent);
+        primaryStage.setScene(eventOverview);
+    }
+    public void showAddParticipantScene(Event event) {
+        primaryStage.setTitle("Splitty: Add Participant");
+        addParticipantCtrl.setEvent(event);
+        primaryStage.setScene(addParticipant);
+    }
+    public User getUser(){
+        return this.user;
+    }
+
+    public  void setUser(User user){
+        this.user=user;
+        Config.writeUserConfigFile(user);
+    }
+
+    public void addUserEvent(UUID event, UUID participant){
+        this.user.addEventParticipant(event, participant);
+        Config.writeUserConfigFile(user);
+        System.out.println(Config.readUserConfigFile());
     }
 }

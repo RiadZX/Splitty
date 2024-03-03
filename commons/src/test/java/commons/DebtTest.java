@@ -17,7 +17,7 @@ package commons;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DebtTest {
 
@@ -25,5 +25,21 @@ public class DebtTest {
 	public void checkConstructor() {
 		var p = new Debt(new Expense(), new Participant(), 0);
 		assertEquals(0, p.getAmount());
+	}
+
+	@Test
+	public void checkEqualsMethod() {
+		Debt d1 = new Debt(new Expense(), new Participant(), 0);
+		Debt d2 = new Debt(new Expense(), new Participant(), 0);
+		Debt d3 = new Debt(new Expense(), new Participant(), 1);
+        assertEquals(d1, d2);
+        assertNotEquals(d1, d3);
+	}
+
+	@Test
+	public void checkHashMethod() {
+		Debt d1 = new Debt(new Expense(), new Participant(), 0);
+		Debt d2 = new Debt(new Expense(), new Participant(), 1);
+		assertNotEquals(d1.hashCode(), d2.hashCode());
 	}
 }

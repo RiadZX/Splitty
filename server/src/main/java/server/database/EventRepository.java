@@ -13,21 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client;
+package server.database;
 
-import client.scenes.*;
-import com.google.inject.Binder;
-import com.google.inject.Module;
-import com.google.inject.Scopes;
+import commons.Event;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.UUID;
 
 
-public class MyModule implements Module {
-
-    @Override
-    public void configure(Binder binder) {
-        binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(EventOverviewCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(StartCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(FirstTimeCtrl.class).in(Scopes.SINGLETON);
-    }
-}
+public interface EventRepository extends JpaRepository<Event, UUID> {}
