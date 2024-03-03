@@ -68,6 +68,6 @@ public class InviteViewCtrl implements Initializable {
 
     }
     public void backToEvent(){
-        mainCtrl.showEventOverview(event);
+        mainCtrl.showEventOverviewScene(event);
     }
 }

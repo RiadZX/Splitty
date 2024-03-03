@@ -60,7 +60,7 @@ public class MainCtrl {
         this.inviteViewCtrl=inviteView.getKey();
         this.inviteView=new Scene(inviteView.getValue());
 
-        this.showFirstTime();
+        this.showFirstTimeScene();
         primaryStage.show();
     }
 
