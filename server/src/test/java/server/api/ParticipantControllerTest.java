@@ -6,11 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.OK;
 
 import commons.Participant;
-
-import java.util.UUID;
 
 public class ParticipantControllerTest {
     private TestParticipantRepository repo;
@@ -25,8 +22,7 @@ public class ParticipantControllerTest {
         participantController = new ParticipantController(repo);
         testEvent = new Event("eventA");
         testParticipant1 = new Participant();
-        testParticipant2 = new Participant("Jason", testEvent, "BE123456789"
-                , "Jason@smith.com", "12472014");
+        testParticipant2 = new Participant("Jason", testEvent, "BE123456789", "Jason@smith.com", "12472014");
     }
 
     @Test
