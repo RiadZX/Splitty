@@ -129,8 +129,4 @@ public class MainCtrl {
     public FirstTimeCtrl getFirstTimeCtrl() {
         return firstTimeCtrl;
     }
-
-    public void setFirstTimeCtrl(FirstTimeCtrl firstTimeCtrl) {
-        this.firstTimeCtrl = firstTimeCtrl;
-    }
 }
