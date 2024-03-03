@@ -15,7 +15,13 @@
  */
 package client.utils;
 
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import commons.Event;
+import commons.Participant;
+import commons.Quote;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.GenericType;
+import org.glassfish.jersey.client.ClientConfig;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,14 +31,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.UUID;
 
-import commons.Event;
-import commons.Participant;
-import org.glassfish.jersey.client.ClientConfig;
-
-import commons.Quote;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.GenericType;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
@@ -101,5 +100,4 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON) //
 				.get(new GenericType<Event>() {});
 	}
-
 }

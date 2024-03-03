@@ -122,4 +122,13 @@ public class MainCtrl {
         addExpenseCtrl.setup(eventOverviewCtrl.getEvent());
         primaryStage.setScene(addExpense);
     }
+
+    //hardcoded temporary exchange rates
+    public double getUsdToEur(){
+        return 0.92;
+    }
+
+    public double getRonToEur() {
+        return 0.2;
+    }
 }

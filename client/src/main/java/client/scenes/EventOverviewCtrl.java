@@ -46,7 +46,9 @@ public class EventOverviewCtrl implements Initializable {
         }));
     }
 
-    public Event getEvent(){return this.event;}
+    public Event getEvent(){
+        return this.event;
+    }
 
     public void setEvent(Event newEvent){
         this.event=newEvent;

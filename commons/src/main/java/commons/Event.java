@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+
 @Entity
 public class Event {
     @Id
@@ -33,6 +34,7 @@ public class Event {
     private List<Expense> expenses;
     public Event() {
         this.participants=new ArrayList<>();
+        this.expenses = new ArrayList<>();
     }
     public Event(String name){
         this();
