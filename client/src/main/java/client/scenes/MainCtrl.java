@@ -31,8 +31,6 @@ public class MainCtrl {
 
     private Stage primaryStage;
 
-    private FirstTimeCtrl firstTimeCtrl;
-
     private  Scene firstTime;
 
     private EventOverviewCtrl eventOverviewCtrl;
@@ -51,7 +49,6 @@ public class MainCtrl {
 
         this.primaryStage = primaryStage;
 
-        this.firstTimeCtrl=firstTime.getKey();
         this.firstTime=new Scene(firstTime.getValue());
 
         this.eventOverviewCtrl=eventOverview.getKey();
@@ -124,9 +121,5 @@ public class MainCtrl {
         primaryStage.setTitle("Splitty: Add/Edit Expense");
         addExpenseCtrl.setup(eventOverviewCtrl.getEvent());
         primaryStage.setScene(addExpense);
-    }
-
-    public FirstTimeCtrl getFirstTimeCtrl() {
-        return firstTimeCtrl;
     }
 }

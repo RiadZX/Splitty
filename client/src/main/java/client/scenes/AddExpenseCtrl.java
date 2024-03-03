@@ -1,6 +1,5 @@
 package client.scenes;
 
-import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Debt;
 import commons.Event;
@@ -21,7 +20,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class AddExpenseCtrl implements Initializable {
-    private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private Event event;
     @FXML
@@ -36,8 +34,7 @@ public class AddExpenseCtrl implements Initializable {
     private DatePicker whenField;
 
     @Inject
-    public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl, Event event) {
-        this.server = server;
+    public AddExpenseCtrl(MainCtrl mainCtrl, Event event) {
         this.mainCtrl = mainCtrl;
         this.event = event;
     }
@@ -94,9 +91,5 @@ public class AddExpenseCtrl implements Initializable {
         List<Debt> debts = new ArrayList<>();
         for (Participant p : participants) debts.add(new Debt(new Expense(), p, amount/participants.size() + 1));
         return debts;
-    }
-
-    public ServerUtils getServer() {
-        return server;
     }
 }
