@@ -48,7 +48,7 @@ public class MainCtrl {
     private Scene inviteView;
     private InviteViewCtrl inviteViewCtrl;
 
-    public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime, Pair<EventOverviewCtrl, Parent> eventOverview, Pair<AddParticipantCtrl, Parent> addParticipant, Pair<StartCtrl, Parent> start, Pair<AddExpenseCtrl, Parent> addExpense) {
+    public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime, Pair<EventOverviewCtrl, Parent> eventOverview, Pair<AddParticipantCtrl, Parent> addParticipant, Pair<StartCtrl, Parent> start, Pair<AddExpenseCtrl, Parent> addExpense, Pair<InviteViewCtrl, Parent> inviteView) {
 
         this.primaryStage = primaryStage;
 
