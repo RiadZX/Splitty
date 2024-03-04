@@ -46,6 +46,10 @@ public class ParticipantController {
      */
     @PostMapping(path = { "", "/" })
     public ResponseEntity<Participant> add(@RequestBody Participant participant) {
+        if (participant == null || isNullOrEmpty(participant.getName()) || isNullOrEmpty(participant.getIban())
+                || isNullOrEmpty(participant.getEmail()) || participant.getId() == null) {
+            return ResponseEntity.badRequest().build();
+        }
         System.out.println(participant.getName());
         Participant saved=repo.save(participant);
         return ResponseEntity.ok(saved);
@@ -58,6 +62,10 @@ public class ParticipantController {
             return removedParticipant;
         }
         return ResponseEntity.badRequest().build();
+    }
+
+    private static boolean isNullOrEmpty(String s) {
+        return s == null || s.isEmpty();
     }
 
     /**
