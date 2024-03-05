@@ -6,11 +6,18 @@ public class Config {
     private static  final String USER_FILENAME="userConfig";
 
     public static void writeUserConfigFile(User user){
-        File file=new File("./build/resources/main", USER_FILENAME);
+        File file=new File("./client/build/resources/main", USER_FILENAME);
+        String userDirectory = new File("").getAbsolutePath();
+        System.out.println(userDirectory);
         try {
-            file.createNewFile();
+            if (file.createNewFile()){
+                System.out.println("User config file was created");
+            }
+            else {
+                System.out.println("User config file already exists");
+            }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("Error creating user config file");
         }
         try (FileOutputStream fos = new FileOutputStream(file);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
