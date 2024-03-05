@@ -57,7 +57,7 @@ public class AddParticipantCtrl {
             return;
         }
         server.addParticipant(
-                event, 
+                event,
                 new Participant(
                         participantName,
                         this.event,
