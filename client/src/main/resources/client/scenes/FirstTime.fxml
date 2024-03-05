@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="341.0" prefWidth="330.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.FirstTimeCtrl">
+<AnchorPane stylesheets="@/client/stylesheets/general.css" prefHeight="341.0" prefWidth="330.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.FirstTimeCtrl">
    <children>
       <Label layoutX="107.0" layoutY="30.0" text="Splitty" textAlignment="CENTER">
          <font>
@@ -24,7 +24,4 @@
          </font>
       </Button>
    </children>
-   <stylesheets>
-      <URL value="@../../stylesheets/general.css" />
-   </stylesheets>
 </AnchorPane>
