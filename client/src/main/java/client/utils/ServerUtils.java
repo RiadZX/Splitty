@@ -55,17 +55,17 @@ public class ServerUtils {
                 .get(new GenericType<List<Quote>>() {});
 	}
 
-	public Participant addParticipant(Participant participant){
+	public Participant addParticipant(Event event, Participant participant){
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/participants")
+				.target(SERVER).path("api/events/" + event.getId() + "/participants")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(participant, APPLICATION_JSON), Participant.class);
 	}
 
-	public  Participant updateParticipant(Participant participant){
+	public  Participant updateParticipant(Event event, Participant participant){
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/participants/"+participant.getId())
+				.target(SERVER).path("api/events/" + event.getId() + "/participants/" + participant.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.put(Entity.entity(participant, APPLICATION_JSON), Participant.class);

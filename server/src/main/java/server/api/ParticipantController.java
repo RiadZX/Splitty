@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/participants")
+@RequestMapping("/api/events/{event_id}/participants")
 public class ParticipantController {
 
     private final ParticipantRepository repo;
