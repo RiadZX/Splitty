@@ -31,12 +31,12 @@ public class Participant {
             return false;
         }
         Participant that = (Participant) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(iban, that.iban) && Objects.equals(eventPartOf, that.eventPartOf);
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(iban, that.iban) && Objects.equals(event, that.event);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, iban, eventPartOf);
+        return Objects.hash(id, name, iban, event);
     }
 
     public void setIban(String iban) {
@@ -50,9 +50,9 @@ public class Participant {
     public Participant() {
     }
 
-    public Participant(String name, Event eventPartOf, String iban, String email, String bic) {
+    public Participant(String name, Event event, String iban, String email, String bic) {
         this.name = name;
-        this.eventPartOf = eventPartOf;
+        this.event = event;
         this.iban = iban;
         this.email = email;
         this.bic = bic;
@@ -78,14 +78,14 @@ public class Participant {
         this.name = name;
     }
 
-    public Participant(String name, Event eventPartOf) {
+    public Participant(String name, Event event) {
         this.name = name;
-        this.eventPartOf = eventPartOf;
+        this.event = event;
     }
 
 
-    public void setEventPartOf(Event eventPartOf) {
-        this.eventPartOf = eventPartOf;
+    public void setEventPartOf(Event event) {
+        this.event = event;
     }
 
     public List<Debt> getDebts() {
@@ -98,7 +98,7 @@ public class Participant {
 
 
     @ManyToOne
-    private Event eventPartOf; //event part of field does not actually work
+    private Event event; //event part of field does not actually work
 
     @OneToMany(mappedBy = "participant")
     private List<Debt> debts;
@@ -119,8 +119,8 @@ public class Participant {
         this.name = name;
     }
 
-    public Event getEventPartOf() {
-        return eventPartOf;
+    public Event getEvent() {
+        return event;
     }
 
 
@@ -131,7 +131,7 @@ public class Participant {
                +"id=" + id
                +", name='" + name + '\''
                +", iban='" + iban + '\''
-               +", eventPartOf=" + eventPartOf
+               +", eventPartOf=" + event
                +'}';
     }
 }
