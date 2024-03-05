@@ -19,7 +19,7 @@ public class ParticipantTest {
     @Test
     public void testConstructor(){
         assertEquals(p1.getName(), "a");
-        assertEquals(p1.getEventPartOf(), new Event());
+        assertEquals(p1.getEvent(), new Event());
     }
 
     @Test
