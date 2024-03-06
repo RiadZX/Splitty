@@ -17,8 +17,12 @@ public class ExpenseController {
     }
 
     @GetMapping(path = {"", "/"})
-    public List<Expense> getAll() {
-        return repo.findAll();
+    public  ResponseEntity<List<Expense>> getAll() {
+        try {
+            return ResponseEntity.ok(repo.findAll());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @PostMapping(path = {"", "/"})

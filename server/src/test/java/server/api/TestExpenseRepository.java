@@ -129,7 +129,8 @@ public class TestExpenseRepository implements ExpenseRepository {
 
     @Override
     public List<Expense> findAll() {
-        return null;
+        call("findAll");
+        return expenses;
     }
 
     @Override
@@ -144,7 +145,8 @@ public class TestExpenseRepository implements ExpenseRepository {
 
     @Override
     public void deleteById(UUID uuid) {
-
+        call("deleteById");
+        expenses.removeIf(e -> e.getId().equals(uuid));
     }
 
     @Override
@@ -169,7 +171,8 @@ public class TestExpenseRepository implements ExpenseRepository {
 
     @Override
     public List<Expense> findAll(Sort sort) {
-        return null;
+        call("findAll");
+        return expenses;
     }
 
     @Override
