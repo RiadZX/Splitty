@@ -8,6 +8,7 @@ build/
 **/*.mv.db
 /coverage/*
 **/*.swp
+**/.DS_STORE
 
 ### STS ###
 .apt_generated
