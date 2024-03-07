@@ -22,8 +22,12 @@ public class DebtController {
      * @return - list of all debts
      */
     @GetMapping(path = { "", "/" })
-    public List<Debt> getAll() {
-        return repo.findAll();
+    public ResponseEntity<List<Debt>> getAll() {
+        try {
+            return ResponseEntity.ok(repo.findAll());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     /**
@@ -34,7 +38,10 @@ public class DebtController {
     @PostMapping(path = { "", "/" })
     public ResponseEntity<Debt> add(@RequestBody Debt debt) {
         Debt saved = repo.save(debt);
-        return ResponseEntity.ok(saved);
+        if (repo.findById(saved.getId()).isPresent()) {
+            return ResponseEntity.ok(saved);
+        }
+        return ResponseEntity.internalServerError().build();
     }
 
     /**

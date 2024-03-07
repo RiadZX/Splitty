@@ -63,7 +63,7 @@ public class Debt {
         this.participant = participant;
     }
 
-    public Expense getexpenses() {
+    public Expense getExpense() {
         return this.expense;
     }
 
