@@ -1,22 +1,15 @@
 package client.utils;
 
 import java.io.*;
-import java.util.Objects;
 
 public class Config {
     private static  final String USER_FILENAME="userConfig";
 
     public static void writeUserConfigFile(User user){
-        String userDirectory = new File("").getAbsolutePath();
-        String[] sp=userDirectory.split("/");
-        File file;
-        if (Objects.equals(sp[sp.length - 1], "client")) {
-            file = new File("./build/resources/main", USER_FILENAME);
-        }
-        else {
-            file = new File("./client/build/resources/main", USER_FILENAME);
-        }
-        System.out.println(userDirectory);
+        String projectDir = new File("").getAbsolutePath();
+        projectDir=projectDir.substring(0, projectDir.indexOf("oopp-team-35"))+"oopp-team-35/";
+        File file = new File(projectDir+"client/build/resources/main", USER_FILENAME);
+        System.out.println(projectDir);
         try {
             if (file.createNewFile()){
                 System.out.println("User config file was created");
