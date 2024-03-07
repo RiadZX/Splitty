@@ -32,15 +32,19 @@ public class Event {
     private List<Participant> participants;
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Expense> expenses;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private List<Tag> tags;
     public Event() {
         this.participants=new ArrayList<>();
         this.expenses = new ArrayList<>();
+        this.tags = new ArrayList<>();
     }
     public Event(String name){
         this();
         this.name = name;
     }
-    public  Event(String name, Participant creator){
+    public Event(String name, Participant creator){
         this(name);
         this.participants.add(creator);
     }
@@ -68,6 +72,14 @@ public class Event {
 
     public List<Participant> getParticipants(){
         return this.participants;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 
     /**
@@ -114,7 +126,8 @@ public class Event {
         return getId() == event.getId()
                 && Objects.equals(name, event.name)
                 && Objects.equals(getParticipants(), event.getParticipants())
-                && Objects.equals(getExpenses(), event.getExpenses());
+                && Objects.equals(getExpenses(), event.getExpenses())
+                && Objects.equals(getTags(), event.getTags());
     }
 
     @Override
@@ -122,7 +135,8 @@ public class Event {
         return Objects.hash(getId(),
                 name,
                 getParticipants(),
-                getExpenses());
+                getExpenses(),
+                getTags());
     }
-
+    public void addTag(Tag tag){tags.add(tag);}
 }

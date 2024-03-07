@@ -6,9 +6,11 @@ public class Config {
     private static  final String USER_FILENAME="userConfig";
 
     public static void writeUserConfigFile(User user){
-        File file=new File("./client/build/resources/main", USER_FILENAME);
-        String userDirectory = new File("").getAbsolutePath();
-        System.out.println(userDirectory);
+
+        String projectDir = new File("").getAbsolutePath();
+        projectDir=projectDir.substring(0, projectDir.indexOf("oopp-team-35"))+"oopp-team-35/";
+        File file = new File(projectDir+"client/build/resources/main", USER_FILENAME);
+        System.out.println(projectDir);
         try {
             if (file.createNewFile()){
                 System.out.println("User config file was created");

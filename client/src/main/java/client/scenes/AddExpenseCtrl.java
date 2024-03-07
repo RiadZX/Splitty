@@ -2,21 +2,15 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.Debt;
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
+import commons.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
@@ -31,9 +25,15 @@ public class AddExpenseCtrl implements Initializable {
     @FXML
     private ComboBox<String> paidBySelector, partialPaySelector, currencySelector;
     @FXML
-    private TextField whatForField, howMuchField;
+    private TextField howMuchField, tagField;
     @FXML
     private DatePicker whenField;
+    @FXML
+    private VBox tagSelector;
+    @FXML
+    private VBox createTagBox;
+    @FXML
+    private Label tagErrorLabel;
 
     @Inject
     public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl, Event event) {
@@ -52,23 +52,23 @@ public class AddExpenseCtrl implements Initializable {
     @FXML
     public void checkAll(){
         someBox.setSelected(false);
-        partialPaySelector.setVisible((false));
     }
 
     @FXML
     public void checkSome(){
         allBox.setSelected(false);
-        partialPaySelector.setVisible(true);
     }
 
     public void setup(Event event){
         this.event = event;
-        partialPaySelector.setVisible(false);
-        for (ComboBox<String> stringComboBox : Arrays.asList(paidBySelector, partialPaySelector)) {
-            stringComboBox.setItems(FXCollections.observableList(event.getParticipants().stream().map(Participant::getName).sorted().toList()));
-        }
+        createTagBox.setVisible(false);
         currencySelector.setItems(FXCollections.observableList(Stream.of("EUR", "USD", "RON").toList()));
+        currencySelector.setValue("EUR");
         currencySelector.setVisible(true);
+        for (int i = 1; i<event.getTags().size() + 1; i++){
+            CheckBox checkbox = new CheckBox(event.getTags().get(i-1).getTag());
+            tagSelector.getChildren().add(checkbox);
+        }
     }
 
     public void createExpense(){
@@ -91,7 +91,7 @@ public class AddExpenseCtrl implements Initializable {
         List<Debt> debts = createDebts(toEur(Double.parseDouble(howMuchField.getText()), currencySelector.getValue()), participantList);
 
         //create the expense
-        Expense newExpense = new Expense(whatForField.getText(), Double.parseDouble(howMuchField.getText()), whenField.getValue().atStartOfDay(), paidBy, event, debts);
+        Expense newExpense = new Expense("a", Double.parseDouble(howMuchField.getText()), whenField.getValue().atStartOfDay(), paidBy, event, debts, new ArrayList<>());
         for (Debt d : newExpense.getDebts()){
             d.setExpense(newExpense); //setup each debt's expense pointer
         }
@@ -115,5 +115,25 @@ public class AddExpenseCtrl implements Initializable {
             case "RON" -> amount * mainCtrl.getRonToEur();
             default -> amount;
         };
+    }
+
+    public void createTag(){
+        String tagName = tagField.getText();
+        if(tagName == null || tagName.isEmpty() || event.getTags().stream().map(Tag::getTag).toList().contains(tagName)) tagErrorLabel.setVisible(true);
+        else{
+            Tag tag = new Tag(tagName);
+            event.addTag(tag);
+            tagSelector.getChildren().add(new CheckBox(tag.getTag()));
+            closeCreateTag();
+        }
+    }
+
+    public void openTagScene(){
+        createTagBox.setVisible(true);
+        tagErrorLabel.setVisible(false);
+    }
+
+    public void closeCreateTag(){
+        createTagBox.setVisible(false);
     }
 }
