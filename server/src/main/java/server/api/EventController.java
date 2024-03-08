@@ -42,6 +42,12 @@ public class EventController {
      * @param id - id of event
      * @return - event with id
      */
+
+//    @GetMapping("/join/{inviteCode}")
+//    public ResponseEntity<Event> join(@PathVariable("id") UUID id) {
+//
+//    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Event> getById(@PathVariable("id") UUID id) {
         if (!repo.existsById(id)) {
@@ -76,4 +82,5 @@ public class EventController {
         Event saved = repo.save(event);
         return ResponseEntity.ok(saved);
     }
+
 }
