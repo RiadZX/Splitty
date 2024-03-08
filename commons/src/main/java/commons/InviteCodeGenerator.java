@@ -26,9 +26,9 @@ public class InviteCodeGenerator implements BeforeExecutionGenerator {
 
     @Override
     public Object generate(SharedSessionContractImplementor sharedSessionContractImplementor, Object o, Object o1, EventType eventType) {
+        //Method that runs when generate is called from hibernate
         while (true) {
             try {
-                System.out.println("Asdas");
                 return generateUniqueCode();
             } catch (ConstraintViolationException ex) {
                 // If a constraint violation occurs, retry generation

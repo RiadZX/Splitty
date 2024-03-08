@@ -2,7 +2,6 @@ package commons;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ValueGenerationType;
-
 import java.lang.annotation.Retention;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -109,6 +108,15 @@ public class Event {
     public UUID getId(){
         return this.id;
     }
+
+    public String getInviteCode() {
+        return inviteCode;
+    }
+
+    public void setInviteCode(String inviteCode) {
+        this.inviteCode = inviteCode;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -132,14 +140,6 @@ public class Event {
     }
 
 
-    public String getInviteCode() {
-        return inviteCode;
-    }
-
-    public void setInviteCode(String inviteCode) {
-        this.inviteCode = inviteCode;
-    }
-
     public static String generateInviteCode(){
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         StringBuilder codeBuilder = new StringBuilder(8);
@@ -151,7 +151,6 @@ public class Event {
         return codeBuilder.toString();
     }
 }
-
 @ValueGenerationType(generatedBy =InviteCodeGenerator.class)
 @Retention(RUNTIME)
 @interface INVITECODE {}
