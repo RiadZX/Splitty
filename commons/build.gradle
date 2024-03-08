@@ -1,4 +1,6 @@
-
+plugins {
+	id("org.hibernate.orm") version "6.4.4.Final"
+}
 java {
 	sourceCompatibility = '21'
 }
@@ -7,3 +9,4 @@ java {
 dependencies {
 	implementation group: 'jakarta.persistence', name: 'jakarta.persistence-api', version: '3.1.0'
 }
+
