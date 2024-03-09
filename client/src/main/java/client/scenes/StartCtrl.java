@@ -98,8 +98,7 @@ public class StartCtrl implements Initializable {
         try {
             Event joined = server.joinEvent(inviteCode);
             Participant participant=this.mainCtrl.getUser().createParticipant();
-            participant.setEventPartOf(joined);
-            participant=server.addParticipant(participant);
+            participant=server.addParticipant(joined.getId(), participant);
             mainCtrl.addUserEvent(joined.getId(), participant.getId());
             mainCtrl.showEventOverviewScene(joined);
             clearFields();

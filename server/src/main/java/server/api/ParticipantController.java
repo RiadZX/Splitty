@@ -1,5 +1,6 @@
 package server.api;
 
+import commons.Event;
 import commons.Participant;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/events/{event_id}/participants")
+@RequestMapping("/api/events/{eventId}/participants")
 public class ParticipantController {
 
     private final ParticipantRepository repo;
@@ -45,12 +46,16 @@ public class ParticipantController {
      * @return - added participant
      */
     @PostMapping(path = { "", "/" })
-    public ResponseEntity<Participant> add(@RequestBody Participant participant) {
+    public ResponseEntity<Participant> add(@RequestBody Participant participant, @PathVariable String eventId) {
+        //check if participant has empty fields
         if (participant == null || isNullOrEmpty(participant.getName()) || isNullOrEmpty(participant.getIban())
                 || isNullOrEmpty(participant.getEmail())) {
             return ResponseEntity.badRequest().build();
         }
-        System.out.println(participant.getEvent());
+        //set event part of based on id
+        Event event=new Event();
+        event.setId(UUID.fromString(eventId));
+        participant.setEventPartOf(event);
         Participant saved=repo.save(participant);
         return ResponseEntity.ok(saved);
     }
