@@ -55,9 +55,9 @@ public class ServerUtils {
                 .get(new GenericType<List<Quote>>() {});
 	}
 
-	public Participant addParticipant(Participant participant){
+	public Participant addParticipant(UUID eventId, Participant participant){
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events/" + participant.getEvent().getId() + "/participants")
+				.target(SERVER).path("api/events/" + eventId + "/participants")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(participant, APPLICATION_JSON), Participant.class);
