@@ -1,6 +1,8 @@
 package client.utils;
 
 
+import commons.Participant;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -9,6 +11,12 @@ import java.util.UUID;
 
 public class User implements Serializable {
     private String name;
+
+    private String email;
+
+    private String iban;
+
+    private  String bic;
     private LinkedHashMap<UUID, UUID> eventParticipant;
 
 
@@ -19,6 +27,13 @@ public class User implements Serializable {
     public User(String name){
         this();
         this.name=name;
+        this.email="test@test.com";
+        this.iban="GB12ABCD10203012345678";
+        this.bic="AAAABBCCDD";
+    }
+
+    public Participant createParticipant(){
+        return new Participant(name, null, iban, email, bic);
     }
 
     public String getName() {
