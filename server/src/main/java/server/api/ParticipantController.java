@@ -25,8 +25,8 @@ public class ParticipantController {
      * @return - list of all participants
      */
     @GetMapping(path = { "", "/" })
-    public List<Participant> getAll() {
-        return repo.findAll();
+    public ResponseEntity<List<Participant>> getAll() {
+        return ResponseEntity.ok(repo.findAll());
     }
 
     /**
@@ -35,9 +35,9 @@ public class ParticipantController {
      * @return - participant with id
      */
     @GetMapping("/{id}")
-    public Participant getById(@PathVariable("id") UUID id) {
+    public ResponseEntity<Participant> getById(@PathVariable("id") UUID id, @PathVariable("eventId") UUID eventId) {
         Optional<Participant> participant = repo.findById(id);
-        return participant.orElse(null);
+        return ResponseEntity.ok(participant.orElse(null));
     }
 
     /**
@@ -80,11 +80,11 @@ public class ParticipantController {
      * @return - updated participant
      */
     @PutMapping("/{id}")
-    public Participant update(@PathVariable("id") UUID id, @RequestBody Participant participant) {
+    public ResponseEntity<Participant> update(@PathVariable("id") UUID id, @RequestBody Participant participant) {
         if (repo.existsById(id)) {
             participant.setId(id);
-            return repo.save(participant);
+            return ResponseEntity.ok(repo.save(participant));
         }
-        return null;
+        return ResponseEntity.badRequest().build();
     }
 }

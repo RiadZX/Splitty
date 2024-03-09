@@ -66,8 +66,6 @@ public class MainCtrl {
 
         this.user = new User();
 
-        showStartScene();
-        primaryStage.show();
         this.addParticipantCtrl = addParticipant.getKey();
         this.addParticipant = new Scene(addParticipant.getValue());
 
@@ -91,7 +89,6 @@ public class MainCtrl {
         }
         else {
             this.showStartScene();
-            System.out.println(user);
             primaryStage.show();
         }
     }

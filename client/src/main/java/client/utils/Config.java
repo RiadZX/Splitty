@@ -29,7 +29,9 @@ public class Config {
         }
     }
     public  static User readUserConfigFile(){
-        File file=new File("./build/resources/main", USER_FILENAME);
+        String projectDir = new File("").getAbsolutePath();
+        projectDir=projectDir.substring(0, projectDir.indexOf("oopp-team-35"))+"oopp-team-35/";
+        File file=new File(projectDir+"client/build/resources/main", USER_FILENAME);
         User user=null;
         try (FileInputStream fis = new FileInputStream(file);
              ObjectInputStream ois = new ObjectInputStream(fis)) {
