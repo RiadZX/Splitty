@@ -38,10 +38,6 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -53,45 +49,6 @@
 
 <VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpenseCtrl">
   <children>
-    <MenuBar VBox.vgrow="NEVER">
-      <menus>
-        <Menu mnemonicParsing="false" text="File">
-          <items>
-            <MenuItem mnemonicParsing="false" text="New" />
-            <MenuItem mnemonicParsing="false" text="Open…" />
-            <Menu mnemonicParsing="false" text="Open Recent" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Close" />
-            <MenuItem mnemonicParsing="false" text="Save" />
-            <MenuItem mnemonicParsing="false" text="Save As…" />
-            <MenuItem mnemonicParsing="false" text="Revert" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Preferences…" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Quit" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Edit">
-          <items>
-            <MenuItem mnemonicParsing="false" text="Undo" />
-            <MenuItem mnemonicParsing="false" text="Redo" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Cut" />
-            <MenuItem mnemonicParsing="false" text="Copy" />
-            <MenuItem mnemonicParsing="false" text="Paste" />
-            <MenuItem mnemonicParsing="false" text="Delete" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Select All" />
-            <MenuItem mnemonicParsing="false" text="Unselect All" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Help">
-          <items>
-            <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
-          </items>
-        </Menu>
-      </menus>
-    </MenuBar>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="629.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
       <children>
             <Button layoutX="539.0" layoutY="316.0" mnemonicParsing="false" onAction="#createExpense" text="Add" />
@@ -122,11 +79,8 @@
                   <TextField fx:id="howMuchField" maxWidth="85.0" prefHeight="25.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
             </GridPane>
-            <VBox fx:id="tagSelector" alignment="TOP_CENTER" layoutX="374.0" layoutY="66.0" prefHeight="145.0" prefWidth="153.0">
-               <children>
-                  <Button alignment="CENTER" contentDisplay="BOTTOM" mnemonicParsing="false" onAction="#openTagScene" prefHeight="25.0" prefWidth="111.0" text="Create new tag" textAlignment="CENTER" />
-               </children>
-            </VBox>
+            <VBox fx:id="tagSelector" layoutX="404.0" layoutY="102.0" prefHeight="145.0" prefWidth="153.0" spacing="3.0" />
+            <Button alignment="CENTER" contentDisplay="BOTTOM" layoutX="395.0" layoutY="62.0" mnemonicParsing="false" onAction="#openTagScene" prefHeight="25.0" prefWidth="111.0" text="Create new tag" textAlignment="CENTER" />
             <VBox fx:id="createTagBox" alignment="CENTER" layoutX="150.0" layoutY="74.0" prefHeight="192.0" prefWidth="302.0">
                <children>
                   <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="200.0" prefWidth="377.0">
@@ -156,6 +110,8 @@
                   <Insets />
                </opaqueInsets>
             </VBox>
+            <VBox fx:id="partialPaidSelector" layoutX="155.0" layoutY="189.0" prefHeight="200.0" prefWidth="153.0" />
+            <Label fx:id="errorLabel" alignment="CENTER" layoutX="335.0" layoutY="353.0" prefHeight="17.0" prefWidth="292.0" text="Label" textAlignment="CENTER" textFill="RED" />
       </children>
     </AnchorPane>
   </children>
