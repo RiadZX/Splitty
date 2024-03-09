@@ -61,7 +61,6 @@ public class AddExpenseCtrl implements Initializable {
     public void setup(Event event){
         this.event = event;
         createTagBox.setVisible(false);
-        System.out.println(event.getParticipants().size());
         paidBySelector.setItems(FXCollections.observableList(event.getParticipants().stream().map(Participant::getName).toList()));
         errorLabel.setVisible(false);
 

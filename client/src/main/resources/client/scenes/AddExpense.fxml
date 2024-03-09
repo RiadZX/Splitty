@@ -110,7 +110,7 @@
                   <Insets />
                </opaqueInsets>
             </VBox>
-            <VBox fx:id="partialPaidSelector" layoutX="155.0" layoutY="189.0" prefHeight="200.0" prefWidth="153.0" />
+            <VBox fx:id="partialPaidSelector" layoutX="155.0" layoutY="189.0" prefHeight="200.0" prefWidth="153.0" spacing="3.0" />
             <Label fx:id="errorLabel" alignment="CENTER" layoutX="335.0" layoutY="353.0" prefHeight="17.0" prefWidth="292.0" text="Label" textAlignment="CENTER" textFill="RED" />
       </children>
     </AnchorPane>
