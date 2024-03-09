@@ -46,7 +46,7 @@ public class EventControllerTest {
 
     @Test
     void testAdd() {
-        Event event = new Event( "New Event");
+        Event event = new Event("New Event");
         event.setId(UUID.randomUUID());
         when(eventRepository.save(any(Event.class))).thenReturn(event);
 
@@ -56,7 +56,7 @@ public class EventControllerTest {
     }
     @Test
     void testJoinExistingEvent() {
-        Event event = new Event( "Event 1");
+        Event event = new Event("Event 1");
         event.setId(UUID.randomUUID());
         when(eventRepository.getEventForInviteCode("inviteCode")).thenReturn(event);
 
