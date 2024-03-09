@@ -4,11 +4,14 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Participant;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 
 import java.net.URL;
 import java.util.List;
@@ -73,7 +76,16 @@ public class EventOverviewCtrl implements Initializable {
 
     public void changeTitle(){
         this.event.setName(this.eventTitle.getText());
-        this.server.updateEvent(this.event);
+        try {
+            this.server.updateEvent(this.event);
+        }
+        catch (WebApplicationException e){
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("Could not change page name");
+            alert.showAndWait();
+            return;
+        }
     }
     public void sendInvite(){
         mainCtrl.showInviteView(this.event);
@@ -89,5 +101,18 @@ public class EventOverviewCtrl implements Initializable {
 
     public void addExpense(){
         mainCtrl.showAddExpense();
+    }
+
+    public void refresh(){
+        try {
+            Event refreshed = server.getEvent(event.getId());
+            this.setEvent(refreshed);
+        }catch (WebApplicationException e) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("Could not load page...");
+            alert.showAndWait();
+            return;
+        }
     }
 }

@@ -108,6 +108,7 @@ public class MainCtrl {
     public  void showEventOverviewScene(Event newEvent){
         primaryStage.setTitle("Splitty: Event Overview");
         eventOverviewCtrl.setEvent(newEvent);
+        eventOverviewCtrl.refresh();
         primaryStage.setScene(eventOverview);
     }
     public void showAddParticipantScene(Event event) {

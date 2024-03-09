@@ -105,7 +105,7 @@ public class Participant {
     @JsonBackReference ("event-participants")
     private Event event; //event part of field does not actually work
 
-    @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference ("participant-debts")
     private List<Debt> debts;
 

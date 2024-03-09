@@ -47,14 +47,15 @@ public class ParticipantController {
      */
     @PostMapping(path = { "", "/" })
     public ResponseEntity<Participant> add(@RequestBody Participant participant, @PathVariable String eventId) {
+        //check if participant has empty fields
         if (participant == null || isNullOrEmpty(participant.getName()) || isNullOrEmpty(participant.getIban())
                 || isNullOrEmpty(participant.getEmail())) {
             return ResponseEntity.badRequest().build();
         }
+        //set event part of based on id
         Event event=new Event();
         event.setId(UUID.fromString(eventId));
         participant.setEventPartOf(event);
-        System.out.println(participant.getEvent());
         Participant saved=repo.save(participant);
         return ResponseEntity.ok(saved);
     }
