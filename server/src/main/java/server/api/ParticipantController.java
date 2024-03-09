@@ -47,7 +47,7 @@ public class ParticipantController {
     @PostMapping(path = { "", "/" })
     public ResponseEntity<Participant> add(@RequestBody Participant participant) {
         if (participant == null || isNullOrEmpty(participant.getName()) || isNullOrEmpty(participant.getIban())
-                || isNullOrEmpty(participant.getEmail()) || participant.getId() == null) {
+                || isNullOrEmpty(participant.getEmail())) {
             return ResponseEntity.badRequest().build();
         }
         System.out.println(participant.getName());
