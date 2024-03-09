@@ -9,6 +9,8 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import commons.Participant;
 
+import java.util.UUID;
+
 public class ParticipantControllerTest {
     private TestParticipantRepository repo;
     private ParticipantController participantController;
@@ -27,7 +29,7 @@ public class ParticipantControllerTest {
 
     @Test
     public void testAddEmpty(){
-        var requestResult1 = participantController.add(testParticipant1);
+        var requestResult1 = participantController.add(testParticipant1,UUID.randomUUID().toString());
 
         assertEquals(BAD_REQUEST, requestResult1.getStatusCode());
     }
