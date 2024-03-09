@@ -1,12 +1,15 @@
 package commons;
 
 import jakarta.persistence.*;
-
+import org.hibernate.annotations.ValueGenerationType;
+import java.lang.annotation.Retention;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Entity
 public class Event {
@@ -15,6 +18,8 @@ public class Event {
     @Column(name = "event_id")
     private UUID id;
     private String name;
+    @Column(nullable = false, unique = true)
+    @INVITECODE String inviteCode;
     private String title; //fix response issue for now
     public String getName() {
         return name;
@@ -28,9 +33,9 @@ public class Event {
         this.id = id;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "event", fetch = FetchType.LAZY)
     private List<Participant> participants;
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Expense> expenses;
     public Event() {
         this.participants=new ArrayList<>();
@@ -103,6 +108,15 @@ public class Event {
     public UUID getId(){
         return this.id;
     }
+
+    public String getInviteCode() {
+        return inviteCode;
+    }
+
+    public void setInviteCode(String inviteCode) {
+        this.inviteCode = inviteCode;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -125,4 +139,18 @@ public class Event {
                 getExpenses());
     }
 
+
+    public static String generateInviteCode(){
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder codeBuilder = new StringBuilder(8);
+        SecureRandom secureRandom = new SecureRandom();
+        for (int i = 0; i < 8; i++) {
+            int randomIndex = secureRandom.nextInt(characters.length());
+            codeBuilder.append(characters.charAt(randomIndex));
+        }
+        return codeBuilder.toString();
+    }
 }
+@ValueGenerationType(generatedBy =InviteCodeGenerator.class)
+@Retention(RUNTIME)
+@interface INVITECODE {}

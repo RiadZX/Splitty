@@ -64,7 +64,7 @@ public class InviteViewCtrl implements Initializable {
     public void setEvent(Event newEvent){
         this.event=newEvent;
         eventTitle.setText(this.event.getTitle());
-        eventCode.setText(this.event.getId().toString());
+        eventCode.setText(this.event.getInviteCode());
 
     }
     public void backToEvent(){

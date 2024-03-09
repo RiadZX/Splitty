@@ -100,7 +100,7 @@ public class Participant {
     @ManyToOne
     private Event event; //event part of field does not actually work
 
-    @OneToMany(mappedBy = "participant")
+    @OneToMany(mappedBy = "participant", fetch = FetchType.LAZY)
     private List<Debt> debts;
 
     public UUID getId() {

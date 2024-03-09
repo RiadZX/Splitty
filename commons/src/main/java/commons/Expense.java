@@ -1,12 +1,6 @@
 package commons;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,7 +22,7 @@ public class Expense {
     @ManyToOne
     private Event event;
 
-    @OneToMany(mappedBy = "expense")
+    @OneToMany(mappedBy = "expense", fetch = FetchType.LAZY)
     private List<Debt> debts;
 
     public Expense() {

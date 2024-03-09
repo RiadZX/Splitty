@@ -55,17 +55,17 @@ public class ServerUtils {
                 .get(new GenericType<List<Quote>>() {});
 	}
 
-	public Participant addParticipant(Event event, Participant participant){
+	public Participant addParticipant(Participant participant){
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events/" + event.getId() + "/participants")
+				.target(SERVER).path("api/events/" + participant.getEvent().getId() + "/participants")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(participant, APPLICATION_JSON), Participant.class);
 	}
 
-	public  Participant updateParticipant(Event event, Participant participant){
+	public  Participant updateParticipant(Participant participant){
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events/" + event.getId() + "/participants/" + participant.getId())
+				.target(SERVER).path("api/events/" + participant.getEvent().getId() + "/participants/" + participant.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.put(Entity.entity(participant, APPLICATION_JSON), Participant.class);
@@ -96,6 +96,13 @@ public class ServerUtils {
 	public Event getEvent(UUID id) {
 		return ClientBuilder.newClient(new ClientConfig()) //
 				.target(SERVER).path("api/events/"+id) //
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.get(new GenericType<Event>() {});
+	}
+	public Event joinEvent(String inviteCode){
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("api/events/join/"+inviteCode) //
 				.request(APPLICATION_JSON) //
 				.accept(APPLICATION_JSON) //
 				.get(new GenericType<Event>() {});

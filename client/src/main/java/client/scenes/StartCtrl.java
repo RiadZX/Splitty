@@ -80,23 +80,43 @@ public class StartCtrl implements Initializable {
 
         int i=0;
         for (int j=eventIDs.size()-1; j>=0 && i<3; j--){
-            Event currentEvent=server.getEvent(eventIDs.get(j));
-            Hyperlink newEventLink=new Hyperlink(currentEvent.getName());
-            newEventLink.setOnMouseClicked(event -> joinEvent(currentEvent.getId())
-            );
-            this.recentEventsGrid.add(newEventLink, 0, i++);
+            try {
+                Event currentEvent = server.getEvent(eventIDs.get(j));
+                Hyperlink newEventLink=new Hyperlink(currentEvent.getName());
+                newEventLink.setOnMouseClicked(event -> joinRecentEvent(currentEvent.getId())
+                );
+                this.recentEventsGrid.add(newEventLink, 0, i++);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
     public void joinEventAction(){
-
+        String inviteCode=this.joinEventField.getText();
+        try {
+            Event joined = server.joinEvent(inviteCode);
+            Participant participant=this.mainCtrl.getUser().createParticipant();
+            participant.setEventPartOf(joined);
+            participant=server.addParticipant(participant);
+            mainCtrl.addUserEvent(joined.getId(), participant.getId());
+            mainCtrl.showEventOverviewScene(joined);
+            clearFields();
+        }catch (WebApplicationException e) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("Wrong Invite Code...");
+            alert.showAndWait();
+            return;
+        }
     }
 
     /**
      * Join an event based on its id. Issue server request for getting the event.
      * @param id id of the event
      */
-    public  void joinEvent(UUID id){ //add handling for deleted event
+    public  void joinRecentEvent(UUID id){ //add handling for deleted event
         Event currEvent=server.getEvent(id);
         mainCtrl.showEventOverviewScene(currEvent);
         clearFields();

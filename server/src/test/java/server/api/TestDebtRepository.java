@@ -18,6 +18,12 @@ public class TestDebtRepository implements DebtRepository {
 
     public final List<Debt> debts = new ArrayList<>();
 
+    public final List<String> calledMethods = new ArrayList<>();
+
+    private void call(String name) {
+        calledMethods.add(name);
+    }
+
     @Override
     public void flush() {
 
@@ -101,6 +107,7 @@ public class TestDebtRepository implements DebtRepository {
     @Override
     public <S extends Debt> S save(S entity) {
         entity.setId(UUID.randomUUID());
+        call("save");
         debts.add(entity);
         return entity;
     }
@@ -112,17 +119,25 @@ public class TestDebtRepository implements DebtRepository {
 
     @Override
     public Optional<Debt> findById(UUID uuid) {
-        return Optional.empty();
+        call("findById");
+        return debts.stream().filter(e -> e.getId().equals(uuid)).findFirst();
     }
 
     @Override
     public boolean existsById(UUID uuid) {
+        call("existsById");
+        for (Debt debt : debts) {
+            if (debt.getId().equals(uuid)) {
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
     public List<Debt> findAll() {
-        return null;
+        call("findAll");
+        return debts;
     }
 
     @Override
@@ -137,7 +152,8 @@ public class TestDebtRepository implements DebtRepository {
 
     @Override
     public void deleteById(UUID uuid) {
-
+        call("deleteById");
+        debts.removeIf(e -> e.getId().equals(uuid));
     }
 
     @Override
@@ -162,7 +178,8 @@ public class TestDebtRepository implements DebtRepository {
 
     @Override
     public List<Debt> findAll(Sort sort) {
-        return null;
+        call("findAll");
+        return debts;
     }
 
     @Override
