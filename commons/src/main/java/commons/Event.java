@@ -7,14 +7,16 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-
 @Entity
+@Table(name = "events")
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "event_id")
     private UUID id;
     private String name;
+    @Column(nullable = false, unique = true)
+    @INVITECODE String inviteCode;
     private String title; //fix response issue for now
     public String getName() {
         return name;
@@ -28,9 +30,11 @@ public class Event {
         this.id = id;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference ("event-participants")
     private List<Participant> participants;
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference ("event-expenses")
     private List<Expense> expenses;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
@@ -115,6 +119,15 @@ public class Event {
     public UUID getId(){
         return this.id;
     }
+
+    public String getInviteCode() {
+        return inviteCode;
+    }
+
+    public void setInviteCode(String inviteCode) {
+        this.inviteCode = inviteCode;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -140,3 +153,18 @@ public class Event {
     }
     public void addTag(Tag tag){tags.add(tag);}
 }
+
+    public static String generateInviteCode(){
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder codeBuilder = new StringBuilder(8);
+        SecureRandom secureRandom = new SecureRandom();
+        for (int i = 0; i < 8; i++) {
+            int randomIndex = secureRandom.nextInt(characters.length());
+            codeBuilder.append(characters.charAt(randomIndex));
+        }
+        return codeBuilder.toString();
+    }
+}
+@ValueGenerationType(generatedBy =InviteCodeGenerator.class)
+@Retention(RUNTIME)
+@interface INVITECODE {}

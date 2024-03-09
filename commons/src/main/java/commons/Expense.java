@@ -1,6 +1,9 @@
 package commons;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,18 +16,24 @@ import java.util.UUID;
 public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "expense_id")
     private UUID id;
     private String title;
     private double amount;
     private LocalDateTime date;
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn(name = "participant_id")
+    @JsonBackReference ("participant-expenses")
     private Participant paidBy;
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn(name = "event_id")
+    @JsonBackReference ("event-expenses")
     private Event event;
     @ManyToMany
     private List<Tag> tags;
 
-    @OneToMany(mappedBy = "expense")
+    @OneToMany(mappedBy = "expense", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference ("expense-debts")
     private List<Debt> debts;
 
     public Expense() {

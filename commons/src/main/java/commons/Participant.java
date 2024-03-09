@@ -1,6 +1,8 @@
 package commons;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
+@Table(name = "participants")
 public class Participant {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -97,10 +100,13 @@ public class Participant {
     }
 
 
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn(name = "event_id")
+    @JsonBackReference ("event-participants")
     private Event event; //event part of field does not actually work
 
-    @OneToMany(mappedBy = "participant")
+    @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
+    @JsonManagedReference ("participant-debts")
     private List<Debt> debts;
 
     public UUID getId() {

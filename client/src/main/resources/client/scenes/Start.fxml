@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" stylesheets="@/client/stylesheets/general.css" prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StartCtrl">
+<AnchorPane prefHeight="400.0" prefWidth="400.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StartCtrl">
    <children>
       <Label layoutX="58.0" layoutY="44.0" text="Create New Event">
          <font>
@@ -20,7 +19,7 @@
          </font>
       </Label>
       <TextField fx:id="joinEventField" layoutX="58.0" layoutY="153.0" prefHeight="27.0" prefWidth="179.0" />
-      <Button layoutX="255.0" layoutY="153.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="58.0" text="Join" />
+      <Button layoutX="255.0" layoutY="153.0" mnemonicParsing="false" onAction="#joinEventAction" prefHeight="27.0" prefWidth="58.0" text="Join" />
       <Label layoutX="58.0" layoutY="200.0" text="Recently viewed events">
          <font>
             <Font size="16.0" />

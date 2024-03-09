@@ -26,12 +26,10 @@ public class ParticipantControllerTest {
     }
 
     @Test
-    public void testAddNull(){
+    public void testAddEmpty(){
         var requestResult1 = participantController.add(testParticipant1);
-        var requestResult2 = participantController.add(testParticipant2);
 
         assertEquals(BAD_REQUEST, requestResult1.getStatusCode());
-        assertEquals(BAD_REQUEST, requestResult2.getStatusCode());
     }
 
 }

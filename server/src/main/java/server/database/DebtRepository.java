@@ -15,19 +15,10 @@
  */
 package server.database;
 
-import commons.Event;
+import commons.Debt;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.UUID;
 
 
-public interface EventRepository extends JpaRepository<Event, UUID> {
-    /**
-     * Custom query method to find Events by inviteCode
-     * @param inviteCode invite code for the event
-     * @return Event with the given invite code
-     */
-    @Query("SELECT e FROM Event e WHERE e.inviteCode = :inviteCode")
-    Event getEventForInviteCode(String inviteCode);
-}
+public interface DebtRepository extends JpaRepository<Debt, UUID> {}

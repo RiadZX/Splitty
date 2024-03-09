@@ -6,7 +6,6 @@ public class Config {
     private static  final String USER_FILENAME="userConfig";
 
     public static void writeUserConfigFile(User user){
-
         String projectDir = new File("").getAbsolutePath();
         projectDir=projectDir.substring(0, projectDir.indexOf("oopp-team-35"))+"oopp-team-35/";
         File file = new File(projectDir+"client/build/resources/main", USER_FILENAME);
