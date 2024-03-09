@@ -1,24 +1,26 @@
 package commons;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 import java.util.UUID;
 
 
 @Entity
+@Table(name = "debts")
 public class Debt {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn(name = "expense_id")
+    @JsonBackReference ("expense-debts")
     private Expense expense;
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn(name = "participant_id")
+    @JsonBackReference ("participant-debts")
     private Participant participant;
     private double amount;
 

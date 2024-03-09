@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ValueGenerationType;
 import java.lang.annotation.Retention;
@@ -12,6 +13,7 @@ import java.util.UUID;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Entity
+@Table(name = "events")
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -33,9 +35,11 @@ public class Event {
         this.id = id;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "event", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference ("event-participants")
     private List<Participant> participants;
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference ("event-expenses")
     private List<Expense> expenses;
     public Event() {
         this.participants=new ArrayList<>();
