@@ -50,7 +50,7 @@ public class ParticipantController {
                 || isNullOrEmpty(participant.getEmail())) {
             return ResponseEntity.badRequest().build();
         }
-        System.out.println(participant.getName());
+        System.out.println(participant.getEvent());
         Participant saved=repo.save(participant);
         return ResponseEntity.ok(saved);
     }
