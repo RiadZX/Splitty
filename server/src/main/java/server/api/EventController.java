@@ -37,6 +37,22 @@ public class EventController {
         return ResponseEntity.ok(saved);
     }
 
+
+    /**
+     * Join an event
+     * @param inviteCode - invite code for the event
+     * @return - found event
+     */
+    @GetMapping("/join/{inviteCode}")
+    public ResponseEntity<Event> join(@PathVariable("inviteCode") String inviteCode) {
+        Event saved=repo.getEventForInviteCode(inviteCode);
+        if (saved==null){
+            return ResponseEntity.badRequest().build();
+        }
+        else {
+            return ResponseEntity.ok(saved);
+        }
+    }
     /**
      * Get event by id
      * @param id - id of event
@@ -76,4 +92,5 @@ public class EventController {
         Event saved = repo.save(event);
         return ResponseEntity.ok(saved);
     }
+
 }
