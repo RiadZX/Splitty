@@ -79,7 +79,6 @@ public class StartCtrl implements Initializable {
         System.out.println(this.mainCtrl.getUser().getEvents()
                 .size() + " big blana");
         List<UUID> eventIDs=this.mainCtrl.getUser().getEvents();
-
         int i=0;
         for (int j=eventIDs.size()-1; j>=0 && i<3; j--){
             try {
@@ -89,7 +88,6 @@ public class StartCtrl implements Initializable {
                 );
                 this.recentEventsGrid.add(newEventLink, 0, i++);
             } catch (Exception e) {
-                e.printStackTrace();
             }
 
         }

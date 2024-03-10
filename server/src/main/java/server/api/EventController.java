@@ -22,8 +22,8 @@ public class EventController {
      * @return - list of all events
      */
     @GetMapping(path = { "", "/" })
-    public List<Event> getAll() {
-        return repo.findAll();
+    public ResponseEntity<List<Event>> getAll() {
+        return ResponseEntity.ok(repo.findAll());
     }
 
     /**

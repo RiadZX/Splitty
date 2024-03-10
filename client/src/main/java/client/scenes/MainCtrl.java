@@ -91,7 +91,6 @@ public class MainCtrl {
         }
         else {
             this.showStartScene();
-            System.out.println(user);
             primaryStage.show();
         }
     }
