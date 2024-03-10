@@ -11,12 +11,14 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
 public class AddExpenseCtrl implements Initializable {
+    private ServerUtils server;
     private final MainCtrl mainCtrl;
     private Event event;
     @FXML
@@ -34,6 +36,7 @@ public class AddExpenseCtrl implements Initializable {
 
     @Inject
     public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl, Event event) {
+        this.server = server;
         this.mainCtrl = mainCtrl;
         this.event = event;
     }
@@ -54,6 +57,7 @@ public class AddExpenseCtrl implements Initializable {
 
     @FXML
     public void checkSome(){
+        System.out.println(paidBySelector.getValue());
         allBox.setSelected(false);
         partialPaidSelector.setVisible(true);
     }
@@ -62,7 +66,12 @@ public class AddExpenseCtrl implements Initializable {
         this.event = event;
         createTagBox.setVisible(false);
         paidBySelector.setItems(FXCollections.observableList(event.getParticipants().stream().map(Participant::getName).toList()));
+        paidBySelector.setValue(event.getParticipants().get(0).getName());
         errorLabel.setVisible(false);
+
+        howMuchField.setText("");
+        someBox.setSelected(false);
+        allBox.setSelected(false);
 
         currencySelector.setItems(FXCollections.observableList(Stream.of("EUR", "USD", "RON").toList()));
         currencySelector.setValue("EUR");
@@ -83,12 +92,22 @@ public class AddExpenseCtrl implements Initializable {
 
     public void createExpense(){
         //get participants
-        List<Participant> participantList = event.getParticipants();
+        List<Participant> participantList = new ArrayList<>(event.getParticipants());
 
         //store who paid
         Participant paidBy = findParticipant(paidBySelector.getValue());
         if (paidBy == null) {
             showErrorLabel("Please select who paid!");
+            return;
+        }
+
+        LocalDate date = null;
+
+        try{
+            date = whenField.getValue();
+        }
+        catch (NullPointerException e){
+            showErrorLabel("Please select a date!");
             return;
         }
 
@@ -123,12 +142,12 @@ public class AddExpenseCtrl implements Initializable {
         }
 
         //create the expense
-        Expense newExpense = new Expense(paidBy.getName() + " paid for " + tags.get(0).getTag(), Double.parseDouble(howMuchField.getText()), whenField.getValue().atStartOfDay(), paidBy, event, debts, tags);
+        Expense newExpense = new Expense(paidBy.getName() + " paid for " + tags.get(0).getTag(), Double.parseDouble(howMuchField.getText()), date.atStartOfDay(), paidBy, event, debts, tags);
         for (Debt d : newExpense.getDebts()){
             d.setExpense(newExpense); //setup each debt's expense pointer
         }
         event.addExpense(newExpense);
-        //server.updateEvent(event); yields a StackOverFlow when serializing because of bidirectional pointers inside Expense.java and Event.java
+        server.updateEvent(event); //yields a StackOverFlow when serializing because of bidirectional pointers inside Expense.java and Event.java
         mainCtrl.showEventOverviewScene(event);
     }
 
