@@ -76,8 +76,6 @@ public class StartCtrl implements Initializable {
 
     public  void addRecentEvents(){
         this.recentEventsGrid.getChildren().clear();
-        System.out.println(this.mainCtrl.getUser().getEvents()
-                .size() + " big blana");
         List<UUID> eventIDs=this.mainCtrl.getUser().getEvents();
 
         int i=0;
