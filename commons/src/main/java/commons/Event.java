@@ -157,9 +157,7 @@ public class Event {
                 getExpenses(),
                 getTags());
     }
-    public void addTag(Tag tag){
-        tags.add(tag);
-    }
+    public void addTag(Tag tag){tags.add(tag);}
 
 
     public static String generateInviteCode(){
