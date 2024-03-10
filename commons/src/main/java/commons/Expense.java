@@ -1,8 +1,8 @@
 package commons;
 
+import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,6 +28,8 @@ public class Expense {
     @JoinColumn(name = "event_id")
     @JsonBackReference ("event-expenses")
     private Event event;
+    @ManyToMany
+    private List<Tag> tags;
 
     @OneToMany(mappedBy = "expense", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference ("expense-debts")
@@ -38,13 +40,14 @@ public class Expense {
     }
 
     public Expense(String title, double amount, LocalDateTime date,
-                   Participant paidBy, Event event, List<Debt> debts) {
+                   Participant paidBy, Event event, List<Debt> debts, List<Tag> tags) {
         this.title = title;
         this.amount = amount;
         this.date = date;
         this.paidBy = paidBy;
         this.event = event;
         this.debts = debts;
+        this.tags = tags;
     }
 
     public UUID getId() {
@@ -114,15 +117,24 @@ public class Expense {
                 && Objects.equals(date, expense.date)
                 && Objects.equals(paidBy, expense.paidBy)
                 && Objects.equals(event, expense.event)
-                && Objects.equals(debts, expense.debts);
+                && Objects.equals(debts, expense.debts)
+                && Objects.equals(tags, expense.tags);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, amount, date, paidBy, event, debts);
+        return Objects.hash(id, title, amount, date, paidBy, event, debts, tags);
     }
 
     public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 }
