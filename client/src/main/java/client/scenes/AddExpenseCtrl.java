@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
 public class AddExpenseCtrl implements Initializable {
-    private ServerUtils server;
+    private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private Event event;
     @FXML
@@ -147,7 +147,7 @@ public class AddExpenseCtrl implements Initializable {
             d.setExpense(newExpense); //setup each debt's expense pointer
         }
         event.addExpense(newExpense);
-        server.updateEvent(event); //yields a StackOverFlow when serializing because of bidirectional pointers inside Expense.java and Event.java
+        server.updateEvent(event);
         mainCtrl.showEventOverviewScene(event);
     }
 
