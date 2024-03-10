@@ -101,13 +101,9 @@ public class AddExpenseCtrl implements Initializable {
             return;
         }
 
-        LocalDate date = null;
-
-        try{
-            date = whenField.getValue();
-        }
-        catch (NullPointerException e){
-            showErrorLabel("Please select a date!");
+        LocalDate date = whenField.getValue();
+        if (date == null){
+            showErrorLabel("Please select a valid date!");
             return;
         }
 
@@ -134,7 +130,7 @@ public class AddExpenseCtrl implements Initializable {
         List<Debt> debts = createDebts(toEur(Double.parseDouble(howMuchField.getText()), currencySelector.getValue()), participantList);
 
         //create the list of tags (God bless the creator of stream() :) )
-        List<Tag> tags = tagSelector.getChildren().stream().filter(n -> n.getClass() == CheckBox.class).map(n -> ((CheckBox) n).getText()).map(this::findTag).toList();
+        List<Tag> tags = tagSelector.getChildren().stream().filter(n -> n.getClass() == CheckBox.class).map(n -> ((CheckBox) n)).filter(CheckBox::isSelected).map(Labeled::getText).map(this::findTag).toList();
 
         if (tags.isEmpty()){
             showErrorLabel("Please select at least one tag or create one!");
@@ -147,7 +143,8 @@ public class AddExpenseCtrl implements Initializable {
             d.setExpense(newExpense); //setup each debt's expense pointer
         }
         event.addExpense(newExpense);
-        server.updateEvent(event);
+        //server.updateEvent(event);
+        //the line above yields a HTTP 500 error
         mainCtrl.showEventOverviewScene(event);
     }
 
