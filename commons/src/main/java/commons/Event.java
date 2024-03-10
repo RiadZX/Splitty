@@ -1,11 +1,17 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import org.hibernate.annotations.ValueGenerationType;
 
+import java.lang.annotation.Retention;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Entity
 @Table(name = "events")
@@ -34,7 +40,7 @@ public class Event {
     @JsonManagedReference ("event-participants")
     private List<Participant> participants;
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference ("event-expenses")
+    @JsonManagedReference("event-expenses")
     private List<Expense> expenses;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
@@ -152,7 +158,7 @@ public class Event {
                 getTags());
     }
     public void addTag(Tag tag){tags.add(tag);}
-}
+
 
     public static String generateInviteCode(){
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
