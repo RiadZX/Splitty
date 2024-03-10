@@ -119,7 +119,7 @@ public class AddExpenseCtrl implements Initializable {
         //create a list of debtors
         participantList.remove(paidBy);
         if (someBox.isSelected()){
-            for(Node c : partialPaidSelector.getChildren()){
+            for (Node c : partialPaidSelector.getChildren()){
                 if (c.getClass() == CheckBox.class && !((CheckBox) c).isSelected()){
                     participantList.remove(findParticipant(((CheckBox) c).getText()));
                 }
@@ -170,8 +170,10 @@ public class AddExpenseCtrl implements Initializable {
 
     public void createTag(){
         String tagName = tagField.getText();
-        if(tagName == null || tagName.isEmpty() || event.getTags().stream().map(Tag::getTag).toList().contains(tagName)) tagErrorLabel.setVisible(true);
-        else{
+        if (tagName == null || tagName.isEmpty() || event.getTags().stream().map(Tag::getTag).toList().contains(tagName)){
+            tagErrorLabel.setVisible(true);
+        }
+        else {
             Tag tag = new Tag(tagName);
             event.addTag(tag);
             tagSelector.getChildren().add(new CheckBox(tag.getTag()));
@@ -189,13 +191,21 @@ public class AddExpenseCtrl implements Initializable {
     }
     public Participant findParticipant(String name){
         Participant r = null;
-        for (Participant p : event.getParticipants()) if (p.getName().equals(name)) r = p;
+        for (Participant p : event.getParticipants()){
+            if (p.getName().equals(name)){
+                r = p;
+            }
+        }
         return r;
     }
 
     public Tag findTag(String name){
         Tag t = null;
-        for (Tag tag : event.getTags()) if (tag.getTag().equals(name)) t = tag;
+        for (Tag tag : event.getTags()){
+            if (tag.getTag().equals(name)){
+                t = tag;
+            }
+        }
         return t;
     }
 
