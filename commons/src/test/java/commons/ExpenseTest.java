@@ -20,13 +20,13 @@ public class ExpenseTest {
         Event event = new Event();
         List<Debt> debts = new ArrayList<>();
         debts.add(new Debt());
-        tester = new Expense("Food", 10.0, LocalDateTime.of(2024, Month.FEBRUARY, 24, 15, 0, 0), participant, event, debts);
-        tester2 = new Expense("Food", 10.0, LocalDateTime.of(2024, Month.FEBRUARY, 24, 15, 0, 0), participant, event, debts);
-        tester3 = new Expense("Drinks", 10.0, LocalDateTime.of(2024, Month.FEBRUARY, 24, 15, 0, 0), participant, event, debts);
+        tester = new Expense("Food", 10.0, LocalDateTime.of(2024, Month.FEBRUARY, 24, 15, 0, 0), participant, event, debts, new ArrayList<>());
+        tester2 = new Expense("Food", 10.0, LocalDateTime.of(2024, Month.FEBRUARY, 24, 15, 0, 0), participant, event, debts, new ArrayList<>());
+        tester3 = new Expense("Drinks", 10.0, LocalDateTime.of(2024, Month.FEBRUARY, 24, 15, 0, 0), participant, event, debts, new ArrayList<>());
         List<Debt> debts2 = new ArrayList<>();
         debts2.add(new Debt());
         debts2.add(new Debt());
-        tester4 = new Expense("Food", 10.0, LocalDateTime.of(2024, Month.FEBRUARY, 24, 15, 0, 0), participant, event, debts2);
+        tester4 = new Expense("Food", 10.0, LocalDateTime.of(2024, Month.FEBRUARY, 24, 15, 0, 0), participant, event, debts2, new ArrayList<>());
     }
 
     @Test
