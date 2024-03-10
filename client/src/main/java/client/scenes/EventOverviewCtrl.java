@@ -84,6 +84,7 @@ public class EventOverviewCtrl implements Initializable {
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText("Could not change page name");
             alert.showAndWait();
+            return;
         }
     }
     public void sendInvite(){
@@ -106,14 +107,12 @@ public class EventOverviewCtrl implements Initializable {
         try {
             Event refreshed = server.getEvent(event.getId());
             this.setEvent(refreshed);
-            /* TO DO:
-            * - refresh all data related to the event
-            * - add functionality to the expense list and filtering*/
         }catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText("Could not load page...");
             alert.showAndWait();
+            return;
         }
     }
 }
