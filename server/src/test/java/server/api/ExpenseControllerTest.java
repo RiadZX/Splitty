@@ -5,37 +5,42 @@ import commons.Expense;
 import commons.Participant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import server.database.ExpenseRepository;
 
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 public class ExpenseControllerTest {
-    TestExpenseRepository expenseRepository;
+    @Mock
+    private ExpenseRepository expenseRepository;
+    @InjectMocks
     ExpenseController expenseController;
 
     @BeforeEach
     public void setup() {
-        expenseRepository = new TestExpenseRepository();
-        expenseController = new ExpenseController(expenseRepository);
+        MockitoAnnotations.openMocks(this);
     }
     @Test
     public void addExpense(){
         Expense expense = new Expense();
         expense.setTitle("Test");
         expense.setAmount(100);
+        expense.setId(UUID.randomUUID());
+        when(expenseRepository.save(any(Expense.class))).thenReturn(expense);
+        when(expenseRepository.findById(any(UUID.class))).thenReturn(java.util.Optional.of(expense));
 
-        ResponseEntity<Expense> response = expenseController.add(expense);
-        assert(response.getStatusCode() == HttpStatus.OK);
-        assert(expenseRepository.calledMethods.contains("save"));
-        assert(expenseRepository.calledMethods.contains("findById"));
-        assert(expenseRepository.expenses.contains(expense));
-        assert(expenseRepository.expenses.size() ==1);
-        assertNotNull(expenseRepository.expenses.getFirst().getId());
+        ResponseEntity<Expense> responseEntity = expenseController.add(expense);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(expense, responseEntity.getBody());
     }
 
     @Test
@@ -44,15 +49,14 @@ public class ExpenseControllerTest {
         expense.setTitle("Test");
         expense.setAmount(100);
         UUID id = UUID.randomUUID();
-
         expense.setId(id);
-        expenseRepository.expenses.add(expense);
 
-        ResponseEntity<Expense> response = expenseController.getById(id);
-        assert (response.getStatusCode() == HttpStatus.OK);
-        assert (expenseRepository.calledMethods.contains("findById"));
-        assert (expenseRepository.expenses.contains(expense));
-        assert (expenseRepository.expenses.getFirst() == expense);
+        when(expenseRepository.findById(any(UUID.class))).thenReturn(java.util.Optional.of(expense));
+
+        ResponseEntity<Expense> responseEntity = expenseController.getById(id);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(expense, responseEntity.getBody());
+
     }
 
     @Test
@@ -61,15 +65,14 @@ public class ExpenseControllerTest {
         expense.setTitle("Test");
         expense.setAmount(100);
         UUID id = UUID.randomUUID();
-
         expense.setId(id);
-        expenseRepository.expenses.add(expense);
 
-        ResponseEntity<Expense> response = expenseController.remove(id);
-        assert (response.getStatusCode() == HttpStatus.OK);
-        assert (expenseRepository.calledMethods.contains("findById"));
-        assert (expenseRepository.calledMethods.contains("deleteById"));
-        assertTrue(expenseRepository.expenses.isEmpty());
+        when(expenseRepository.findById(any(UUID.class))).thenReturn(java.util.Optional.of(expense));
+        ResponseEntity<Expense> responseEntity = expenseController.remove(id);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(expense, responseEntity.getBody());
+
+        verify(expenseRepository, times(1)).deleteById(any(UUID.class));
     }
 
     @Test
@@ -80,61 +83,71 @@ public class ExpenseControllerTest {
 
         expense.setPaidBy(new Participant());
         UUID id = UUID.randomUUID();
-
         expense.setId(id);
-        expenseRepository.expenses.add(expense);
 
-        expense.setTitle("Test2");
+        when(expenseRepository.save(any(Expense.class))).thenReturn(expense);
+        when(expenseRepository.findById(any(UUID.class))).thenReturn(java.util.Optional.of(expense));
 
-        ResponseEntity<Expense> response = expenseController.update(id, expense);
-        assert (response.getStatusCode() == HttpStatus.OK);
-        assert (expenseRepository.calledMethods.contains("findById"));
-        assert (expenseRepository.calledMethods.contains("deleteById"));
-        assert (expenseRepository.calledMethods.contains("save"));
-        assert (expenseRepository.expenses.contains(expense));
-        assert (expenseRepository.expenses.getFirst() == expense);
+        ResponseEntity<Expense> responseEntity = expenseController.update(id, expense);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(expense, responseEntity.getBody());
+
+        verify(expenseRepository, times(1)).deleteById(any(UUID.class));
+
     }
 
     @Test
     public void getAllExpenses(){
-        Expense e1 = new Expense();
-        e1.setTitle("Test");
-        Expense e2 = new Expense();
-        e2.setTitle("Test2");
-        Expense e3 = new Expense();
-        e3.setTitle("Test3");
+        List<Expense> expenses = List.of(new Expense(), new Expense());
+        expenses.get(0).setTitle("Test1");
+        expenses.get(1).setTitle("Test2");
+        expenses.get(0).setId(UUID.randomUUID());
+        expenses.get(1).setId(UUID.randomUUID());
 
-        expenseRepository.expenses.add(e1);
-        expenseRepository.expenses.add(e2);
-        expenseRepository.expenses.add(e3);
+        when(expenseRepository.findAll()).thenReturn(expenses);
 
-        ResponseEntity<List<Expense>> response = expenseController.getAll();
-        assert (response.getStatusCode() == HttpStatus.OK);
-        assert (expenseRepository.calledMethods.contains("findAll"));
-        assert (expenseRepository.expenses.contains(e1));
-        assert (expenseRepository.expenses.contains(e2));
-        assert (expenseRepository.expenses.contains(e3));
-        assert (response.getBody().size() == 3);
+        ResponseEntity<List<Expense>> responseEntity = expenseController.getAll();
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(expenses, responseEntity.getBody());
     }
 
     @Test
     public void deleteExpenseFail(){
-        ResponseEntity<Expense> response = expenseController.remove(UUID.randomUUID());
-        assert (response.getStatusCode() == HttpStatus.BAD_REQUEST);
-        assert (expenseRepository.calledMethods.contains("findById"));
+
+        UUID id = UUID.randomUUID();
+
+        when(expenseRepository.findById(any(UUID.class))).thenReturn(java.util.Optional.empty());
+
+        ResponseEntity<Expense> responseEntity = expenseController.remove(id);
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertNull(responseEntity.getBody());
+
+        verify(expenseRepository, times(0)).deleteById(any(UUID.class));
     }
 
     @Test
     public void getExpenseFail(){
-        ResponseEntity<Expense> response = expenseController.getById(UUID.randomUUID());
-        assert (response.getStatusCode() == HttpStatus.BAD_REQUEST);
-        assert (expenseRepository.calledMethods.contains("findById"));
+        UUID id = UUID.randomUUID();
+
+        when(expenseRepository.findById(any(UUID.class))).thenReturn(java.util.Optional.empty());
+
+        ResponseEntity<Expense> responseEntity = expenseController.getById(id);
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertNull(responseEntity.getBody());
+
     }
 
     @Test
     public void updateExpenseFail(){
-        ResponseEntity<Expense> response = expenseController.update(UUID.randomUUID(), new Expense());
-        assert (response.getStatusCode() == HttpStatus.BAD_REQUEST);
-        assert (expenseRepository.calledMethods.contains("findById"));
+
+        UUID id = UUID.randomUUID();
+
+        when(expenseRepository.existsById(any(UUID.class))).thenReturn(false);
+
+        ResponseEntity<Expense> responseEntity = expenseController.update(id, new Expense());
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertNull(responseEntity.getBody());
+
+        verify(expenseRepository, times(0)).deleteById(any(UUID.class));
     }
 }
