@@ -1,7 +1,6 @@
 package server.api;
 
 import commons.Debt;
-import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import org.junit.jupiter.api.BeforeEach;
@@ -108,7 +107,7 @@ public class DebtControllerTest {
         assert (response.getStatusCode() == HttpStatus.OK);
         assert (debt.equals(response.getBody()));
 
-        //TODO: WARNING - THIS IS TEMPORARY SET TO 0, BECAUSE THE UPDATE METHOD IS NOT IMPLEMENTED CORRECTLY
+        //T0DO WARNING - THIS IS TEMPORARY SET TO 0, BECAUSE THE UPDATE METHOD IS NOT IMPLEMENTED CORRECTLY
         //      THE METHOD SHOULD DELETE THE OLD DEBT AND ADD THE NEW ONE, WHEN FIXED THIS SHOULD BE CHANGED TO 1
         verify(debtRepository, times(0)).deleteById(id);
 
@@ -116,7 +115,7 @@ public class DebtControllerTest {
 
     @Test
     public void updateDebtNotFound() {
-        //TODO: UPDATE METHOD IS NOT IMPLEMENTED CORRECTLY, THIS TEST WILL FAIL
+        //T0DO: UPDATE METHOD IS NOT IMPLEMENTED CORRECTLY, THIS TEST WILL FAIL
     }
 
     @Test
