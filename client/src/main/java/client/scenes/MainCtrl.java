@@ -40,6 +40,10 @@ public class MainCtrl {
     private AddParticipantCtrl addParticipantCtrl;
     private Scene addParticipant;
 
+
+    private EditParticipantCtrl editParticipantCtrl;
+    private Scene editParticipant;
+
     private StartCtrl startCtrl;
     private Scene start;
 
@@ -48,7 +52,14 @@ public class MainCtrl {
     private Scene inviteView;
     private InviteViewCtrl inviteViewCtrl;
 
-    public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime, Pair<EventOverviewCtrl, Parent> eventOverview, Pair<AddParticipantCtrl, Parent> addParticipant, Pair<StartCtrl, Parent> start, Pair<AddExpenseCtrl, Parent> addExpense, Pair<InviteViewCtrl, Parent> inviteView) {
+    public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime,
+                           Pair<EventOverviewCtrl, Parent> eventOverview,
+                           Pair<AddParticipantCtrl, Parent> addParticipant,
+                           Pair<StartCtrl, Parent> start,
+                           Pair<AddExpenseCtrl, Parent> addExpense,
+                           Pair<InviteViewCtrl, Parent> inviteView,
+                           Pair<EditParticipantCtrl, Parent> editParticipant
+    ) {
 
         this.primaryStage = primaryStage;
 
@@ -70,6 +81,9 @@ public class MainCtrl {
         //primaryStage.show();
         this.addParticipantCtrl = addParticipant.getKey();
         this.addParticipant = new Scene(addParticipant.getValue());
+
+        this.editParticipantCtrl = editParticipant.getKey();
+        this.editParticipant = new Scene(editParticipant.getValue());
 
         this.inviteViewCtrl=inviteView.getKey();
         this.inviteView=new Scene(inviteView.getValue());
@@ -114,6 +128,12 @@ public class MainCtrl {
         primaryStage.setTitle("Splitty: Add Participant");
         addParticipantCtrl.setEvent(event);
         primaryStage.setScene(addParticipant);
+    }
+
+    public void showEditParticipantScene(Event event) {
+        primaryStage.setTitle("Splitty: Edit Participant");
+        editParticipantCtrl.setEvent(event);
+        primaryStage.setScene(editParticipant);
     }
     public User getUser(){
         return this.user;
