@@ -56,6 +56,9 @@ public class StartCtrl implements Initializable {
         }));
     }
 
+    /**
+     * Action pointed to by the createEvent button
+     */
     public void createEvent(){
         String title=createEventField.getText();
         if (title.isBlank()){
@@ -77,6 +80,9 @@ public class StartCtrl implements Initializable {
         clearFields();
     }
 
+    /**
+     * Add/Refresh links to joining recent events
+     */
     public  void addRecentEvents(){
         this.recentEventsGrid.getChildren().clear();
         System.out.println(this.mainCtrl.getUser().getEvents()
@@ -96,6 +102,9 @@ public class StartCtrl implements Initializable {
         }
     }
 
+    /**
+     * Action executed by the join event button
+     */
     public void joinEventAction(){
         String inviteCode=this.joinEventField.getText();
         if (inviteCode.isBlank()){
@@ -104,9 +113,13 @@ public class StartCtrl implements Initializable {
         }
         try {
             Event joined = server.joinEvent(inviteCode);
-            Participant participant=this.mainCtrl.getUser().createParticipant();
-            participant=server.addParticipant(joined.getId(), participant);
-            mainCtrl.addUserEvent(joined.getId(), participant.getId());
+            if (!this.mainCtrl.getUser().eventExists(joined.getId())) {
+                //Add user to event if it is not already part of
+                Participant participant = this.mainCtrl.getUser().createParticipant();
+                participant = server.addParticipant(joined.getId(), participant);
+                mainCtrl.addUserEvent(joined.getId(), participant.getId());
+            }
+            //move to correct scene
             mainCtrl.showEventOverviewScene(joined);
             clearFields();
         }catch (WebApplicationException e) {
@@ -125,7 +138,9 @@ public class StartCtrl implements Initializable {
         clearFields();
     }
 
-
+    /**
+     * Clear the text fields
+     */
     public  void clearFields(){
         this.createEventField.clear();
         this.joinEventField.clear();

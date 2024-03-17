@@ -52,6 +52,10 @@ public class User implements Serializable {
         return this.eventParticipant.keySet().stream().toList();
     }
 
+    public boolean eventExists(UUID eventId){
+        return  this.eventParticipant.containsKey(eventId);
+    }
+
     public void setEventParticipant(LinkedHashMap<UUID, UUID> eventParticipant) {
         this.eventParticipant = eventParticipant;
     }
