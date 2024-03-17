@@ -31,7 +31,7 @@ public class Expense {
     @ManyToMany
     private List<Tag> tags;
 
-    @OneToMany(mappedBy = "expense", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "expense", orphanRemoval = true)
     @JsonManagedReference ("expense-debts")
     private List<Debt> debts;
 
