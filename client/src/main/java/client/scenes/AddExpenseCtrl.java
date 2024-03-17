@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.services.NotificationHelper;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.*;
@@ -97,18 +98,34 @@ public class AddExpenseCtrl implements Initializable {
         //store who paid
         Participant paidBy = findParticipant(paidBySelector.getValue());
         if (paidBy == null) {
-            showErrorLabel("Please select who paid!");
+            NotificationHelper notificationHelper = new NotificationHelper();
+            String warningMessage = """
+                    Your payee information is incorrect
+                    please add a valid payee
+                    """;
+            notificationHelper.showError("Warning", warningMessage);
             return;
         }
 
         LocalDate date = whenField.getValue();
         if (date == null){
-            showErrorLabel("Please select a valid date!");
+            NotificationHelper notificationHelper = new NotificationHelper();
+            String warningMessage = """
+                    You have not selected any date
+                    please select a valid date
+                    """;
+            notificationHelper.showError("Warning", warningMessage);
             return;
         }
 
         if (!someBox.isSelected() && !allBox.isSelected()){
-            showErrorLabel("Please select how to split!");
+            NotificationHelper notificationHelper = new NotificationHelper();
+            String warningMessage = """
+                    You have not selected any split options
+                    please select how you wish to split
+                    or if you wish to split with the whole group
+                    """;
+            notificationHelper.showError("Warning", warningMessage);
             return;
         }
 
@@ -123,7 +140,22 @@ public class AddExpenseCtrl implements Initializable {
         }
 
         if (howMuchField.getText() == null || howMuchField.getText().isEmpty()){
-            showErrorLabel("Please type in the amount!");
+            NotificationHelper notificationHelper = new NotificationHelper();
+            String warningMessage = """
+                    You have not selected an amount to pay
+                    please type in an amount
+                    """;
+            notificationHelper.showError("Warning", warningMessage);
+            return;
+        }
+
+        if (Integer.parseInt(howMuchField.getText()) < 0){
+            NotificationHelper notificationHelper = new NotificationHelper();
+            String warningMessage = """
+                    You cannot select a negative amount
+                    please type in a positive number
+                    """;
+            notificationHelper.showError("Warning", warningMessage);
             return;
         }
 
@@ -133,7 +165,13 @@ public class AddExpenseCtrl implements Initializable {
         List<Tag> tags = tagSelector.getChildren().stream().filter(n -> n.getClass() == CheckBox.class).map(n -> ((CheckBox) n)).filter(CheckBox::isSelected).map(Labeled::getText).map(this::findTag).toList();
 
         if (tags.isEmpty()){
-            showErrorLabel("Please select at least one tag or create one!");
+            NotificationHelper notificationHelper = new NotificationHelper();
+            String warningMessage = """
+                    You have not selected any tags
+                    please create a tag.
+                    Or select a pre-existing one.
+                    """;
+            notificationHelper.showError("Warning", warningMessage);
             return;
         }
 
@@ -204,10 +242,5 @@ public class AddExpenseCtrl implements Initializable {
             }
         }
         return t;
-    }
-
-    public void showErrorLabel(String error){
-        errorLabel.setText(error);
-        errorLabel.setVisible(true);
     }
 }

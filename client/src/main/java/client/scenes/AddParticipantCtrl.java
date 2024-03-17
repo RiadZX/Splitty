@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.services.NotificationHelper;
 import commons.Event;
 import commons.Participant;
 import javafx.fxml.FXML;
@@ -39,23 +40,52 @@ public class AddParticipantCtrl {
     }
 
     public void addParticipantButton() {
-        Participant toAdd = new Participant();
+        //Participant toAdd = new Participant();
         String participantName = name.getText();
         String participantEmail = email.getText();
         String participantIban = iban.getText();
         String participantBic = bic.getText();
-        // TODO Add an alert prompt if the user tries to add a participant without
-        // filling in all fields
         if (participantName.isEmpty() || participantEmail.isEmpty() || participantIban.isEmpty()
                 || participantBic.isEmpty()) {
+            NotificationHelper notificationHelper = new NotificationHelper();
+            String warningMessage = "You haven't filled in the following fields: ( ";
+            if (participantName.isEmpty()){
+                warningMessage += "name ";
+            }
+            if (participantEmail.isEmpty()){
+                warningMessage += "email ";
+            }
+            if (participantIban.isEmpty()){
+                warningMessage += "iban ";
+            }
+            if (participantBic.isEmpty()){
+                warningMessage += "bic";
+            }
+            warningMessage += ")";
+            notificationHelper.showError("Warning!", warningMessage);
             return;
         }
-        if (!participantEmail.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+
+        if (!participantEmail.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            String warningMessage = """
+                    The email address you have filled in is not valid,
+                    please type in an email address with the correct format
+                    (i.e john.smith@emailprovide.com)
+                    """;
+            NotificationHelper notificationHelper = new NotificationHelper();
+            notificationHelper.showError("Warning!", warningMessage);
             return;
         }
-//        if (participantIban.length() != 34) {
-//            return;
-//        }
+        if (participantIban.length() != 34) {
+            String warningMessage = """
+                    The IBAN address you have filled in is not valid,
+                    please type in an Iban with the correct format
+                    (i.e format with length 34)
+                    """;
+            NotificationHelper notificationHelper = new NotificationHelper();
+            notificationHelper.showError("Warning!", warningMessage);
+            return;
+        }
         server.addParticipant(
                 event.getId(),
                 new Participant(
