@@ -18,6 +18,7 @@ package client.scenes;
 import client.utils.Config;
 import client.utils.User;
 import commons.Event;
+import commons.Participant;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -40,6 +41,10 @@ public class MainCtrl {
     private AddParticipantCtrl addParticipantCtrl;
     private Scene addParticipant;
 
+
+    private EditParticipantCtrl editParticipantCtrl;
+    private Scene editParticipant;
+
     private StartCtrl startCtrl;
     private Scene start;
 
@@ -48,7 +53,14 @@ public class MainCtrl {
     private Scene inviteView;
     private InviteViewCtrl inviteViewCtrl;
 
-    public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime, Pair<EventOverviewCtrl, Parent> eventOverview, Pair<AddParticipantCtrl, Parent> addParticipant, Pair<StartCtrl, Parent> start, Pair<AddExpenseCtrl, Parent> addExpense, Pair<InviteViewCtrl, Parent> inviteView) {
+    public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime,
+                           Pair<EventOverviewCtrl, Parent> eventOverview,
+                           Pair<AddParticipantCtrl, Parent> addParticipant,
+                           Pair<StartCtrl, Parent> start,
+                           Pair<AddExpenseCtrl, Parent> addExpense,
+                           Pair<InviteViewCtrl, Parent> inviteView,
+                           Pair<EditParticipantCtrl, Parent> editParticipant
+    ) {
 
         this.primaryStage = primaryStage;
 
@@ -70,6 +82,9 @@ public class MainCtrl {
         //primaryStage.show();
         this.addParticipantCtrl = addParticipant.getKey();
         this.addParticipant = new Scene(addParticipant.getValue());
+
+        this.editParticipantCtrl = editParticipant.getKey();
+        this.editParticipant = new Scene(editParticipant.getValue());
 
         this.inviteViewCtrl=inviteView.getKey();
         this.inviteView=new Scene(inviteView.getValue());
@@ -94,7 +109,7 @@ public class MainCtrl {
             primaryStage.show();
         }
     }
-    public  void showFirstTimeScene(){
+    public void showFirstTimeScene(){
         primaryStage.setTitle("Splitty: Setup");
         primaryStage.setScene(this.firstTime);
     }
@@ -104,7 +119,9 @@ public class MainCtrl {
         startCtrl.addRecentEvents();
         primaryStage.setScene(start);
     }
-    public  void showEventOverviewScene(Event newEvent){
+
+    // TODO Both setEvent and refresh call the setEvent function
+    public void showEventOverviewScene(Event newEvent){
         primaryStage.setTitle("Splitty: Event Overview");
         eventOverviewCtrl.setEvent(newEvent);
         eventOverviewCtrl.refresh();
@@ -114,6 +131,14 @@ public class MainCtrl {
         primaryStage.setTitle("Splitty: Add Participant");
         addParticipantCtrl.setEvent(event);
         primaryStage.setScene(addParticipant);
+    }
+
+    public void showEditParticipantScene(Event event, Participant p) {
+        primaryStage.setTitle("Splitty: Edit Participant");
+        editParticipantCtrl.setEvent(event);
+        editParticipantCtrl.setParticipant(p);
+        editParticipantCtrl.refresh();
+        primaryStage.setScene(editParticipant);
     }
     public User getUser(){
         return this.user;

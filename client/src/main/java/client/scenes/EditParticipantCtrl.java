@@ -6,9 +6,10 @@ import javafx.fxml.FXML;
 import client.utils.ServerUtils;
 
 import javax.inject.Inject;
+
 import javafx.scene.control.TextField;
 
-public class AddParticipantCtrl {
+public class EditParticipantCtrl {
     private final MainCtrl mainCtrl;
 
     private final ServerUtils server;
@@ -26,11 +27,13 @@ public class AddParticipantCtrl {
     private TextField bic;
 
     private Event event;
+    private Participant p;
 
     @Inject
-    public AddParticipantCtrl(MainCtrl mainCtrl, Event event, ServerUtils server) {
+    public EditParticipantCtrl(MainCtrl mainCtrl, Event event, Participant p, ServerUtils server) {
         this.mainCtrl = mainCtrl;
         this.event = event;
+        this.p = p;
         this.server = server;
     }
 
@@ -38,43 +41,41 @@ public class AddParticipantCtrl {
         this.event = event;
     }
 
-    public void addParticipantButton() {
-        Participant toAdd = new Participant();
-        String participantName = name.getText();
-        String participantEmail = email.getText();
-        String participantIban = iban.getText();
-        String participantBic = bic.getText();
+    public void setParticipant(Participant p) {
+        this.p = p;
+    }
+
+    public void editParticipantButton() {
         // TODO Add an alert prompt if the user tries to add a participant without
         // filling in all fields
-        if (participantName.isEmpty() || participantEmail.isEmpty() || participantIban.isEmpty()
-                || participantBic.isEmpty()) {
+        if (name.getText().isEmpty()) {
             return;
         }
-        if (!participantEmail.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+        if (!email.getText().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
             return;
         }
 //        if (participantIban.length() != 34) {
 //            return;
 //        }
-        server.addParticipant(
-                event.getId(),
-                new Participant(
-                        participantName,
-                        this.event,
-                        participantIban,
-                        participantEmail,
-                        participantBic
-                )
+        p.setName(name.getText());
+        p.setEmail(email.getText());
+        p.setIban(iban.getText());
+        p.setBic(bic.getText());
+        server.updateParticipant(
+                event,
+                p
         );
-        name.clear();
-        email.clear();
-        iban.clear();
-        bic.clear();
         returnToOverview();
     }
 
-
     public void returnToOverview() {
         mainCtrl.showEventOverviewScene(event);
+    }
+
+    public void refresh() {
+        this.email.setText(p.getEmail());
+        this.name.setText(p.getName());
+        this.iban.setText(p.getIban());
+        this.bic.setText(p.getBic());
     }
 }

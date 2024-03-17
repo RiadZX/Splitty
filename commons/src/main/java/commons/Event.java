@@ -36,15 +36,19 @@ public class Event {
         this.id = id;
     }
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JsonManagedReference ("event-participants")
     private List<Participant> participants;
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @OneToMany(mappedBy = "event", orphanRemoval = true)
     @JsonManagedReference("event-expenses")
     private List<Expense> expenses;
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "event")
     private List<Tag> tags;
+    public Event(UUID id) {
+        this.id = id;
+    }
     public Event() {
         this.participants=new ArrayList<>();
         this.expenses = new ArrayList<>();

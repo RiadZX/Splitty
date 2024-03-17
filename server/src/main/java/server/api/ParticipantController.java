@@ -80,8 +80,9 @@ public class ParticipantController {
      * @return - updated participant
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Participant> update(@PathVariable("id") UUID id, @RequestBody Participant participant) {
+    public ResponseEntity<Participant> update(@PathVariable("eventId") UUID eventId, @PathVariable("id") UUID id, @RequestBody Participant participant) {
         if (repo.existsById(id)) {
+            participant.setEventPartOf(new Event(eventId));
             participant.setId(id);
             return ResponseEntity.ok(repo.save(participant));
         }
