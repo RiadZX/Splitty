@@ -2,13 +2,12 @@ package server.api;
 
 import commons.Event;
 import commons.Participant;
+import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import server.database.ParticipantRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -21,23 +20,25 @@ public class ParticipantController {
         this.repo = repo;
     }
     /**
-     * Get all participants
+     * Get all participants from an event
+     * @param eventId - id of the event
      * @return - list of all participants
      */
     @GetMapping(path = { "", "/" })
-    public ResponseEntity<List<Participant>> getAll() {
-        return ResponseEntity.ok(repo.findAll());
+    public ResponseEntity<List<Participant>> getAll(@PathVariable("eventId") String eventId) {
+        return ResponseEntity.ok(repo.getParticipantsFromEvent(UUID.fromString(eventId)));
     }
 
     /**
      * Get participant by id
      * @param id - id of participant
+     * @param eventId - id of the event
      * @return - participant with id
      */
     @GetMapping("/{id}")
     public ResponseEntity<Participant> getById(@PathVariable("id") UUID id, @PathVariable("eventId") UUID eventId) {
-        Optional<Participant> participant = repo.findById(id);
-        return ResponseEntity.ok(participant.orElse(null));
+        Participant participant = repo.findParticipantInEvent(eventId, id);
+        return ResponseEntity.ok(participant);
     }
 
     /**
@@ -60,10 +61,12 @@ public class ParticipantController {
         return ResponseEntity.ok(saved);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Participant> remove(@PathVariable("id") UUID id) {
-        if (repo.findById(id).isPresent()) {
-            ResponseEntity<Participant> removedParticipant = ResponseEntity.ok(repo.findById(id).get());
-            repo.deleteById(id);
+    @Transactional
+    public ResponseEntity<Participant> remove(@PathVariable("id") String id, @PathVariable String eventId) {
+        Participant participant= repo.findParticipantInEvent(UUID.fromString(eventId), UUID.fromString(id));
+        if (participant != null) {
+            ResponseEntity<Participant> removedParticipant = ResponseEntity.ok(participant);
+            repo.deleteParticipantFromEvent(UUID.fromString(eventId), UUID.fromString(id));
             return removedParticipant;
         }
         return ResponseEntity.badRequest().build();
@@ -80,12 +83,17 @@ public class ParticipantController {
      * @return - updated participant
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Participant> update(@PathVariable("eventId") UUID eventId, @PathVariable("id") UUID id, @RequestBody Participant participant) {
-        if (repo.existsById(id)) {
+    public ResponseEntity<Participant> update(@PathVariable("eventId") String eventId, @PathVariable("id") String id, @RequestBody Participant participant) {
+        if (participantExists(eventId, id)) {
             participant.setEventPartOf(new Event(eventId));
-            participant.setId(id);
+            participant.setId(UUID.fromString(id));
             return ResponseEntity.ok(repo.save(participant));
         }
         return ResponseEntity.badRequest().build();
+    }
+
+
+    private boolean participantExists(String eventId, String id){
+        return repo.findParticipantInEvent(UUID.fromString(eventId), UUID.fromString(id)) != null;
     }
 }
