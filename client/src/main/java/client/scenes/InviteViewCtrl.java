@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -19,6 +20,7 @@ public class InviteViewCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private final NotificationService notificationService;
     @FXML
     public Text eventTitle;
     @FXML
@@ -35,9 +37,10 @@ public class InviteViewCtrl implements Initializable {
 
 
     @Inject
-    public InviteViewCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public InviteViewCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.notificationService = notificationService;
         this.event=new Event();
     }
     @Override
@@ -48,9 +51,11 @@ public class InviteViewCtrl implements Initializable {
     }
 
     private void sendInvite() {
-        System.out.println("Sending invite");
+        if (textArea.getText().isEmpty()) {
+            notificationService.showError("No addresses", "Please enter at least one address");
+            return;
+        }
         List<String> addresses = List.of(textArea.getText().split("\n"));
-        System.out.println(addresses);
         backToEvent();
     }
 
