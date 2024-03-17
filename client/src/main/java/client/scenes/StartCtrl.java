@@ -1,17 +1,16 @@
 package client.scenes;
 
+import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import commons.Event;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Modality;
 
 import java.net.URL;
 import java.util.List;
@@ -22,6 +21,7 @@ public class StartCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private final NotificationService notificationService;
     @FXML
     private TextField createEventField;
     @FXML
@@ -30,9 +30,10 @@ public class StartCtrl implements Initializable {
     @FXML
     private GridPane recentEventsGrid;
     @Inject
-    public StartCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public StartCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -57,15 +58,17 @@ public class StartCtrl implements Initializable {
 
     public void createEvent(){
         String title=createEventField.getText();
+        if (title.isBlank()){
+            notificationService.showError("Error creating event", "Title cannot be empty");
+            return;
+        }
+
         Participant creator=new Participant(this.mainCtrl.getUser().getName());
         Event newEvent= new Event(title, creator);
         try {
             newEvent=server.addEvent(newEvent);
         } catch (WebApplicationException e) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
+            notificationService.showError("Error creating event", e.getMessage());
             return;
         }
         UUID participantId=newEvent.getParticipants().getFirst().getId();
@@ -87,7 +90,7 @@ public class StartCtrl implements Initializable {
                 newEventLink.setOnMouseClicked(event -> joinRecentEvent(currentEvent.getId())
                 );
                 this.recentEventsGrid.add(newEventLink, 0, i++);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
 
         }
@@ -95,6 +98,10 @@ public class StartCtrl implements Initializable {
 
     public void joinEventAction(){
         String inviteCode=this.joinEventField.getText();
+        if (inviteCode.isBlank()){
+            notificationService.showError("Error joining event", "Invite code cannot be empty");
+            return;
+        }
         try {
             Event joined = server.joinEvent(inviteCode);
             Participant participant=this.mainCtrl.getUser().createParticipant();
@@ -103,11 +110,8 @@ public class StartCtrl implements Initializable {
             mainCtrl.showEventOverviewScene(joined);
             clearFields();
         }catch (WebApplicationException e) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("Wrong Invite Code...");
-            alert.showAndWait();
-            return;
+            System.out.println(e.getMessage());
+            notificationService.showError("Error joining event", "Wrong invite code");
         }
     }
 

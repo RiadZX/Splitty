@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -7,11 +8,9 @@ import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.stage.Modality;
 
 import java.net.URL;
 import java.util.List;
@@ -21,6 +20,7 @@ import java.util.ResourceBundle;
 public class EventOverviewCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private final NotificationService notificationService;
     @FXML
     public Button sendInviteButton;
 
@@ -34,9 +34,10 @@ public class EventOverviewCtrl implements Initializable {
 
 
     @Inject
-    public EventOverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public EventOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.notificationService = notificationService;
         this.event=new Event();
     }
 
@@ -80,10 +81,7 @@ public class EventOverviewCtrl implements Initializable {
             this.server.updateEvent(this.event);
         }
         catch (WebApplicationException e){
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("Could not change page name");
-            alert.showAndWait();
+            notificationService.showError("Error updating event", "Could not update event title");
         }
     }
     public void sendInvite(){
@@ -110,10 +108,7 @@ public class EventOverviewCtrl implements Initializable {
             * - refresh all data related to the event
             * - add functionality to the expense list and filtering*/
         }catch (WebApplicationException e) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("Could not load page...");
-            alert.showAndWait();
+            notificationService.showError("Error refreshing event", "Could not refresh event data");
         }
     }
 }
