@@ -18,6 +18,7 @@ package client.scenes;
 import client.utils.Config;
 import client.utils.User;
 import commons.Event;
+import commons.Participant;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -108,7 +109,7 @@ public class MainCtrl {
             primaryStage.show();
         }
     }
-    public  void showFirstTimeScene(){
+    public void showFirstTimeScene(){
         primaryStage.setTitle("Splitty: Setup");
         primaryStage.setScene(this.firstTime);
     }
@@ -118,7 +119,9 @@ public class MainCtrl {
         startCtrl.addRecentEvents();
         primaryStage.setScene(start);
     }
-    public  void showEventOverviewScene(Event newEvent){
+
+    // TODO: Both setEvent and refresh call the setEvent function
+    public void showEventOverviewScene(Event newEvent){
         primaryStage.setTitle("Splitty: Event Overview");
         eventOverviewCtrl.setEvent(newEvent);
         eventOverviewCtrl.refresh();
@@ -130,9 +133,10 @@ public class MainCtrl {
         primaryStage.setScene(addParticipant);
     }
 
-    public void showEditParticipantScene(Event event) {
+    public void showEditParticipantScene(Event event, Participant p) {
         primaryStage.setTitle("Splitty: Edit Participant");
         editParticipantCtrl.setEvent(event);
+        editParticipantCtrl.setParticipant(p);
         primaryStage.setScene(editParticipant);
     }
     public User getUser(){

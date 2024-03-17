@@ -5,12 +5,13 @@ import com.google.inject.Inject;
 import commons.Event;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 
 import java.net.URL;
@@ -24,8 +25,11 @@ public class EventOverviewCtrl implements Initializable {
     @FXML
     public Button sendInviteButton;
 
+//    @FXML
+//    private Label participantsLabel;
+
     @FXML
-    private Label participantsLabel;
+    public TextFlow textFlow;
 
     @FXML
     private TextField eventTitle;
@@ -64,14 +68,21 @@ public class EventOverviewCtrl implements Initializable {
     }
 
     public void reassignParticipants(List<Participant> participantList){
-        StringBuilder labelText=new StringBuilder();
-        for (Participant p:participantList){
-            labelText.append(p.getName());
-            labelText.append(", ");
+        System.out.println(participantList.stream().map(x -> x.getName()).toList());
+        textFlow.getChildren().clear();
+        if (participantList.isEmpty()) {
+            textFlow.getChildren().add(new Label("No participants, yet"));
+            return;
         }
-        if (!labelText.isEmpty()){
-            participantsLabel.setText(labelText.substring(0, labelText.length()-2));
+        for (Participant p : participantList.subList(0, participantList.size() - 1)) {
+            Label label = new Label(p.getName());
+            label.setOnMouseClicked(e -> editParticipant(p));
+            textFlow.getChildren().add(label);
+            textFlow.getChildren().add(new Label(", "));
         }
+        Label lastLabel = new Label(participantList.get(participantList.size() - 1).getName());
+        lastLabel.setOnMouseClicked(e -> editParticipant(participantList.get(participantList.size() - 1)));
+        textFlow.getChildren().add(lastLabel);
     }
 
     public void changeTitle(){
@@ -86,6 +97,7 @@ public class EventOverviewCtrl implements Initializable {
             alert.showAndWait();
         }
     }
+
     public void sendInvite(){
         mainCtrl.showInviteView(this.event);
     }
@@ -96,6 +108,10 @@ public class EventOverviewCtrl implements Initializable {
 
     public void addParticipant(){
         mainCtrl.showAddParticipantScene(event);
+    }
+
+    public void editParticipant(Participant p){
+        mainCtrl.showEditParticipantScene(event, p);
     }
 
     public void addExpense(){

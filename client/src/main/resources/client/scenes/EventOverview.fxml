@@ -10,6 +10,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="462.0" prefWidth="394.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EventOverviewCtrl">
    <children>
@@ -39,12 +40,12 @@
          </columns>
       </TableView>
       <Button layoutX="289.0" layoutY="415.0" mnemonicParsing="false" text="Settle Debts" />
-      <Label fx:id="participantsLabel" layoutX="40.0" layoutY="132.0" text="No participants, yet" />
       <Button fx:id="backButton" layoutX="-3.0" layoutY="1.0" mnemonicParsing="false" onAction="#backToStart" prefHeight="27.0" prefWidth="57.0" text="Back" />
       <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="111.0" layoutY="103.0" onMouseClicked="#addParticipant" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../icons/user.png" />
          </image>
       </ImageView>
+      <TextFlow fx:id="textFlow" layoutX="17.0" layoutY="123.0" prefHeight="23.0" prefWidth="360.0" />
    </children>
 </AnchorPane>

@@ -6,9 +6,14 @@ import javafx.fxml.FXML;
 import client.utils.ServerUtils;
 
 import javax.inject.Inject;
+
+import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 
-public class EditParticipantCtrl {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class EditParticipantCtrl implements Initializable {
     private final MainCtrl mainCtrl;
 
     private final ServerUtils server;
@@ -26,11 +31,13 @@ public class EditParticipantCtrl {
     private TextField bic;
 
     private Event event;
+    private Participant p;
 
     @Inject
-    public EditParticipantCtrl(MainCtrl mainCtrl, Event event, ServerUtils server) {
+    public EditParticipantCtrl(MainCtrl mainCtrl, Event event, Participant p, ServerUtils server) {
         this.mainCtrl = mainCtrl;
         this.event = event;
+        this.p = p;
         this.server = server;
     }
 
@@ -38,8 +45,11 @@ public class EditParticipantCtrl {
         this.event = event;
     }
 
-    public void addParticipantButton() {
-        Participant toAdd = new Participant();
+    public void setParticipant(Participant p) {
+        this.p = p;
+    }
+
+    public void editParticipantButton() {
         String participantName = name.getText();
         String participantEmail = email.getText();
         String participantIban = iban.getText();
@@ -53,11 +63,10 @@ public class EditParticipantCtrl {
         if (!participantEmail.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
             return;
         }
-        if (participantIban.length() != 34) {
-            return;
-        }
-        server.addParticipant(
-                event.getId(),
+//        if (participantIban.length() != 34) {
+//            return;
+//        }
+        server.updateParticipant(
                 new Participant(
                         participantName,
                         this.event,
@@ -69,8 +78,15 @@ public class EditParticipantCtrl {
         returnToOverview();
     }
 
-
     public void returnToOverview() {
         mainCtrl.showEventOverviewScene(event);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        this.email.setText(p.getEmail());
+        this.name.setText(p.getName());
+        this.iban.setText(p.getIban());
+        this.bic.setText(p.getBic());
     }
 }
