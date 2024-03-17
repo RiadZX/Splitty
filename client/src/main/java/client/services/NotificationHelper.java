@@ -4,6 +4,11 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Modality;
 
 public class NotificationHelper implements NotificationService {
+    /**
+     * Show an error message, in a new window.
+     * @param title title of the error message
+     * @param message message of the error
+     */
     @Override
     public void showError(String title, String message) {
         Alert errorAlert = new Alert(AlertType.ERROR);
@@ -11,6 +16,6 @@ public class NotificationHelper implements NotificationService {
         errorAlert.setTitle("Error");
         errorAlert.setHeaderText(title);
         errorAlert.setContentText(message);
-        errorAlert.show();
+        errorAlert.showAndWait();
     }
 }
