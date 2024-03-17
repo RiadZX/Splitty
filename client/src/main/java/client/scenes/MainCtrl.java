@@ -120,7 +120,7 @@ public class MainCtrl {
         primaryStage.setScene(start);
     }
 
-    // TODO: Both setEvent and refresh call the setEvent function
+    // TODO Both setEvent and refresh call the setEvent function
     public void showEventOverviewScene(Event newEvent){
         primaryStage.setTitle("Splitty: Event Overview");
         eventOverviewCtrl.setEvent(newEvent);
@@ -137,6 +137,7 @@ public class MainCtrl {
         primaryStage.setTitle("Splitty: Edit Participant");
         editParticipantCtrl.setEvent(event);
         editParticipantCtrl.setParticipant(p);
+        editParticipantCtrl.refresh();
         primaryStage.setScene(editParticipant);
     }
     public User getUser(){

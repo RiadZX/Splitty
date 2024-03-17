@@ -7,13 +7,9 @@ import client.utils.ServerUtils;
 
 import javax.inject.Inject;
 
-import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class EditParticipantCtrl implements Initializable {
+public class EditParticipantCtrl {
     private final MainCtrl mainCtrl;
 
     private final ServerUtils server;
@@ -50,30 +46,24 @@ public class EditParticipantCtrl implements Initializable {
     }
 
     public void editParticipantButton() {
-        String participantName = name.getText();
-        String participantEmail = email.getText();
-        String participantIban = iban.getText();
-        String participantBic = bic.getText();
         // TODO Add an alert prompt if the user tries to add a participant without
         // filling in all fields
-        if (participantName.isEmpty() || participantEmail.isEmpty() || participantIban.isEmpty()
-                || participantBic.isEmpty()) {
+        if (name.getText().isEmpty()) {
             return;
         }
-        if (!participantEmail.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+        if (!email.getText().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
             return;
         }
 //        if (participantIban.length() != 34) {
 //            return;
 //        }
+        p.setName(name.getText());
+        p.setEmail(email.getText());
+        p.setIban(iban.getText());
+        p.setBic(bic.getText());
         server.updateParticipant(
-                new Participant(
-                        participantName,
-                        this.event,
-                        participantIban,
-                        participantEmail,
-                        participantBic
-                )
+                event,
+                p
         );
         returnToOverview();
     }
@@ -82,8 +72,7 @@ public class EditParticipantCtrl implements Initializable {
         mainCtrl.showEventOverviewScene(event);
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void refresh() {
         this.email.setText(p.getEmail());
         this.name.setText(p.getName());
         this.iban.setText(p.getIban());

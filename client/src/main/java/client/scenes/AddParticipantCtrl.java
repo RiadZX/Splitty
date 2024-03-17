@@ -66,6 +66,10 @@ public class AddParticipantCtrl {
                         participantBic
                 )
         );
+        name.clear();
+        email.clear();
+        iban.clear();
+        bic.clear();
         returnToOverview();
     }
 
