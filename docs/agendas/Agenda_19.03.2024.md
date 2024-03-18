@@ -17,7 +17,7 @@
 # Talking Points:
 - Talk about the assignments feedback received (3 min)
     - How we can improve based off of the feedback
-- Discuss Our plans for the coming week (attempting to finish the basic functionality) ():
+- Discuss Our plans for the coming week (attempting to finish the basic functionality) (Total: 12 min):
     - Create the administrator page and functionalities (3 min)
     - Making the user interface more fletched out (3 min)
     - Making the language switch feature (3 min)
