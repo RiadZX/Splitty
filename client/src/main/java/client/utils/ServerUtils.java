@@ -40,7 +40,7 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 public class ServerUtils {
 
     private static final String SERVER = "http://localhost:8080/";
-    private ExecutorService EXEC;
+    private ExecutorService exec;
     private boolean listening = false;
 
     public void getQuotesTheHardWay() throws IOException, URISyntaxException {
@@ -126,8 +126,8 @@ public class ServerUtils {
      * Listen for updates for a specified event id
      */
     private void listenEvents(UUID eventId, Consumer<Event> eventConsumer) {
-        EXEC = Executors.newSingleThreadExecutor();
-        EXEC.submit(() -> {
+        exec = Executors.newSingleThreadExecutor();
+        exec.submit(() -> {
             System.out.println("Listening for updates");
             while (listening || !Thread.currentThread().isInterrupted()) {
                 System.out.println("Polling for: " + eventId.toString());
@@ -142,12 +142,16 @@ public class ServerUtils {
                     System.out.println("No content");
 					continue;
 				}
+                if (res.getStatus() != 200){
+                    System.out.println("Error: " + res.getStatus());
+                    continue;
+                }
 				var event = res.readEntity(Event.class);
 				if (event == null) {
                     System.out.println("No event");
 					continue;
 				}
-                System.out.println("Got event: " + event.toString());
+
                 eventConsumer.accept(event);
             }
             System.out.println("Stopped listening for updates");
@@ -160,8 +164,8 @@ public class ServerUtils {
 	 */
 	public void stopThread(){
         listening = false;
-        if (EXEC != null) {
-            EXEC.shutdownNow();
+        if (exec != null) {
+            exec.shutdownNow();
         }
 	}
 

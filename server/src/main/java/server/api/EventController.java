@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 @RestController
 @RequestMapping("/api/events")
@@ -24,7 +25,7 @@ public class EventController {
      * These will be added to the map when a user subscribes to an event
      * And the result will be completed when the event is updated in the updateEvent method.
      */
-    private Map<UUID, DeferredResult<ResponseEntity<Event>>> deferredResults = new ConcurrentHashMap<>();
+    private Map<UUID, Consumer<Event>> deferredResults = new ConcurrentHashMap<>();
 
     public EventController(EventRepository repo) {
         this.repo = repo;
@@ -102,10 +103,13 @@ public class EventController {
             return ResponseEntity.badRequest().build();
         }
         Event saved = repo.save(event);
-        DeferredResult<ResponseEntity<Event>> deferredResult = deferredResults.get(id);
-        if (deferredResult != null) { //null check because maybe no one is listening tho this event. edge case
-            deferredResult.setResult(ResponseEntity.ok(saved));
-        }
+        deferredResults.forEach((uuid, consumer) -> {
+            System.out.println("Checking: " + uuid + " " + id);
+            if (uuid.equals(id)) {
+                System.out.println("accepted");
+                consumer.accept(saved);
+            }
+        });
         return ResponseEntity.ok(saved);
     }
 
@@ -118,12 +122,15 @@ public class EventController {
     public DeferredResult<ResponseEntity<Event>> subscribe(@PathVariable("id") UUID id) {
         var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         DeferredResult<ResponseEntity<Event>> deferredResult = new DeferredResult<>(// deferred result is a result that is not completed yet.
-                55000L, //If within 5 seconds the result is not set, the request will be timed out
+                5000L, //If within 5 seconds the result is not set, the request will be timed out
                 noContent//if not found then this code will be returned
         );
-        deferredResults.put(id, deferredResult);
+        deferredResults.put(id, e -> {
+            deferredResult.setResult(ResponseEntity.ok(e));
+        });
         deferredResult.onCompletion(
                 () -> {
+                    System.out.println("Completed");
                     deferredResults.remove(id);
                 });
         deferredResult.onError(
