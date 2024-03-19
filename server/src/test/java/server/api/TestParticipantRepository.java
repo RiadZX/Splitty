@@ -8,10 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 import server.database.ParticipantRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 
 public class TestParticipantRepository implements ParticipantRepository {
@@ -184,5 +181,20 @@ public class TestParticipantRepository implements ParticipantRepository {
     public <S extends Participant, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public List<Participant> getParticipantsFromEvent(UUID eventID) {
+        return null;
+    }
+
+    @Override
+    public Participant findParticipantInEvent(UUID eventID, UUID participantID) {
+        return null;
+    }
+
+    @Override
+    public void deleteParticipantFromEvent(UUID eventID, UUID participantID) {
+
     }
 }
