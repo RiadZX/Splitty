@@ -142,12 +142,16 @@ public class ServerUtils {
                     System.out.println("No content");
 					continue;
 				}
+                if (res.getStatus() != 200){
+                    System.out.println("Error: " + res.getStatus());
+                    continue;
+                }
 				var event = res.readEntity(Event.class);
 				if (event == null) {
                     System.out.println("No event");
 					continue;
 				}
-                System.out.println("Got event: " + event.toString());
+
                 eventConsumer.accept(event);
             }
             System.out.println("Stopped listening for updates");
