@@ -4,16 +4,27 @@ import commons.Event;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.context.request.async.DeferredResult;
 import server.database.EventRepository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
 
     private final EventRepository repo;
+    /**
+     * Map of deferred results, here we store the results of the requests that are not yet completed
+     * The key is the id of the event and the value is the deferred result
+     * These will be added to the map when a user subscribes to an event
+     * And the result will be completed when the event is updated in the updateEvent method.
+     */
+    private Map<UUID, DeferredResult<Event>> deferredResults = new ConcurrentHashMap<>();
+
     public EventController(EventRepository repo) {
         this.repo = repo;
     }
@@ -90,7 +101,38 @@ public class EventController {
             return ResponseEntity.badRequest().build();
         }
         Event saved = repo.save(event);
+        DeferredResult<Event> deferredResult = deferredResults.get(id);
+        if (deferredResult != null) { //null check because maybe no one is listening tho this event. edge case
+            deferredResult.setResult(saved); //set it to notify that a change has been made
+        }
         return ResponseEntity.ok(saved);
+    }
+
+    /**
+     * Subscribe to event to listen for changes
+     * @param id - id of event
+     * @return - changed event
+     */
+    @GetMapping("/subscribe/{id}")
+    public DeferredResult<Event> subscribe(@PathVariable("id") UUID id) {
+        DeferredResult<Event> deferredResult = new DeferredResult<>(// deferred result is a result that is not completed yet.
+                5000L, //If within 5 seconds the result is not set, the request will be timed out
+                ResponseEntity.notFound().build() //if not found then this code will be returned
+        );
+        deferredResults.put(id, deferredResult);
+        deferredResult.onCompletion(
+                () -> {
+                    deferredResults.remove(id);
+                });
+        deferredResult.onError(
+                (Throwable t) -> { // Throwable is the error
+                    deferredResults.remove(id);
+                });
+        deferredResult.onTimeout(
+                () -> {
+                    deferredResults.remove(id);
+                });
+        return deferredResult;
     }
 
 }
