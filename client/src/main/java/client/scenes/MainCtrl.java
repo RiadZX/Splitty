@@ -50,8 +50,14 @@ public class MainCtrl {
 
     private AddExpenseCtrl addExpenseCtrl;
     private Scene addExpense;
-    private Scene inviteView;
     private InviteViewCtrl inviteViewCtrl;
+    private Scene inviteView;
+
+    private UserSettingsCtrl userSettingsCtrl;
+    private Scene userSettings;
+
+    private SettingsCtrl settingsCtrl;
+    private Scene settings;
 
     public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime,
                            Pair<EventOverviewCtrl, Parent> eventOverview,
@@ -59,9 +65,11 @@ public class MainCtrl {
                            Pair<StartCtrl, Parent> start,
                            Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<InviteViewCtrl, Parent> inviteView,
-                           Pair<EditParticipantCtrl, Parent> editParticipant
+                           Pair<EditParticipantCtrl, Parent> editParticipant,
+                           Pair<UserSettingsCtrl, Parent> userSettings,
+                           Pair<SettingsCtrl, Parent> settings
     ) {
-
+        this.user = new User();
         this.primaryStage = primaryStage;
 
         this.firstTimeCtrl=firstTime.getKey();
@@ -76,10 +84,6 @@ public class MainCtrl {
         this.addExpenseCtrl = addExpense.getKey();
         this.addExpense = new Scene(addExpense.getValue());
 
-        this.user = new User();
-
-        //showStartScene();
-        //primaryStage.show();
         this.addParticipantCtrl = addParticipant.getKey();
         this.addParticipant = new Scene(addParticipant.getValue());
 
@@ -88,6 +92,12 @@ public class MainCtrl {
 
         this.inviteViewCtrl=inviteView.getKey();
         this.inviteView=new Scene(inviteView.getValue());
+
+        this.userSettingsCtrl=userSettings.getKey();
+        this.userSettings=new Scene(userSettings.getValue());
+
+        this.settingsCtrl=settings.getKey();
+        this.settings=new Scene(settings.getValue());
 
         chooseFirstPage();
     }
@@ -118,6 +128,17 @@ public class MainCtrl {
         primaryStage.setTitle("Splitty: Start");
         startCtrl.addRecentEvents();
         primaryStage.setScene(start);
+    }
+
+    public  void showSettings(){
+        primaryStage.setTitle("Splitty: Settings");
+        primaryStage.setScene(settings);
+    }
+    public  void showUserSettings(){
+        primaryStage.setTitle("Splitty: Profile Settings");
+        userSettingsCtrl.refreshFields();
+        primaryStage.setScene(userSettings);
+
     }
 
     // TODO Both setEvent and refresh call the setEvent function

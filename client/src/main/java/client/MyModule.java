@@ -31,6 +31,11 @@ public class MyModule implements Module {
         binder.bind(EventOverviewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(StartCtrl.class).in(Scopes.SINGLETON);
         binder.bind(FirstTimeCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(InviteViewCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(EditParticipantCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(AddParticipantCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(AddExpenseCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(SettingsCtrl.class).in(Scopes.SINGLETON);
         //bind notification service to the notification service implementation
         binder.bind(NotificationService.class).to(NotificationHelper.class);
     }

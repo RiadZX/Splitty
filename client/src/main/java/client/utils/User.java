@@ -31,6 +31,12 @@ public class User implements Serializable {
         this.iban="GB12ABCD10203012345678";
         this.bic="AAAABBCCDD";
     }
+    public User(String name, String email, String iban, String bic){
+        this.name=name;
+        this.email=email;
+        this.iban=iban;
+        this.bic=bic;
+    }
 
     public Participant createParticipant(){
         return new Participant(name, null, iban, email, bic);
@@ -38,6 +44,18 @@ public class User implements Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public String getEmail(){
+        return email;
+    }
+
+    public String getIban() {
+        return iban;
+    }
+
+    public String getBic() {
+        return bic;
     }
 
     public void setName(String name) {
