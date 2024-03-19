@@ -43,48 +43,49 @@ public class ServerUtils {
     private ExecutorService exec;
     private boolean listening = false;
 
-	public void getQuotesTheHardWay() throws IOException, URISyntaxException {
-		var url = new URI("http://localhost:8080/api/quotes").toURL();
-		var is = url.openConnection().getInputStream();
-		var br = new BufferedReader(new InputStreamReader(is));
-		String line;
-		while ((line = br.readLine()) != null) {
-			System.out.println(line);
-		}
-	}
+    public void getQuotesTheHardWay() throws IOException, URISyntaxException {
+        var url = new URI("http://localhost:8080/api/quotes").toURL();
+        var is = url.openConnection().getInputStream();
+        var br = new BufferedReader(new InputStreamReader(is));
+        String line;
+        while ((line = br.readLine()) != null) {
+            System.out.println(line);
+        }
+    }
 
-	public List<Quote> getQuotes() {
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/quotes")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-                .get(new GenericType<List<Quote>>() {});
-	}
+    public List<Quote> getQuotes() {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/quotes")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Quote>>() {
+                });
+    }
 
-	public Participant addParticipant(UUID eventId, Participant participant){
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events/" + eventId + "/participants")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.post(Entity.entity(participant, APPLICATION_JSON), Participant.class);
-	}
+    public Participant addParticipant(UUID eventId, Participant participant) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/events/" + eventId + "/participants")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(participant, APPLICATION_JSON), Participant.class);
+    }
 
-	public  Participant updateParticipant(Event event, Participant participant){
-		participant.setEventPartOf(event);
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events/" + event.getId() + "/participants/" + participant.getId())
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.put(Entity.entity(participant, APPLICATION_JSON), Participant.class);
-	}
+    public Participant updateParticipant(Event event, Participant participant) {
+        participant.setEventPartOf(event);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/events/" + event.getId() + "/participants/" + participant.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(participant, APPLICATION_JSON), Participant.class);
+    }
 
-	public Event addEvent(Event event){
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.post(Entity.entity(event, APPLICATION_JSON), Event.class);
-	}
+    public Event addEvent(Event event) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/events")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(event, APPLICATION_JSON), Event.class);
+    }
 
     public Event updateEvent(Event event) {
         return ClientBuilder.newClient(new ClientConfig())
@@ -112,15 +113,7 @@ public class ServerUtils {
                 });
     }
 
-    public Event removeEvent(UUID id) {
-		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(SERVER).path("api/events/"+id) //
-				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON) //
-				.delete(new GenericType<Event>() {});
-	}
-
-	public Event joinEvent(String inviteCode) {
+    public Event joinEvent(String inviteCode) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/events/join/" + inviteCode) //
                 .request(APPLICATION_JSON) //
@@ -145,15 +138,15 @@ public class ServerUtils {
                         .get(Response.class);
                 System.out.println("Got response");
                 System.out.println(res.toString());
-                if (res.getStatus() == 204){
+				if (res.getStatus() == 204){
                     System.out.println("No content");
-                    continue;
-                }
-                var event = res.readEntity(Event.class);
-                if (event == null) {
+					continue;
+				}
+				var event = res.readEntity(Event.class);
+				if (event == null) {
                     System.out.println("No event");
-                    continue;
-                }
+					continue;
+				}
                 System.out.println("Got event: " + event.toString());
                 eventConsumer.accept(event);
             }
@@ -162,19 +155,21 @@ public class ServerUtils {
         System.out.println("Stopped listening for updates 2");
     }
 
-    /**
-     * This is used to safely stop the thread that listens for updates
-     */
-    public void stopThread(){
+	/**
+	 * This is used to safely stop the thread that listens for updates
+	 */
+	public void stopThread(){
         listening = false;
         if (exec != null) {
             exec.shutdownNow();
         }
-    }
+	}
 
     public void registerEventUpdates(UUID eventId, Consumer<Event> eventConsumer){
         stopThread();
         listening = true;
         listenEvents(eventId, eventConsumer);
     }
+
+
 }
