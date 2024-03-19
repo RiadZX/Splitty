@@ -56,6 +56,7 @@ public class EventOverviewCtrl implements Initializable {
             }
         }));
         this.sendInviteButton.setOnAction(event -> sendInvite());
+        System.out.println("EventOverviewCtrl initialized");
     }
 
     public Event getEvent(){
@@ -120,11 +121,19 @@ public class EventOverviewCtrl implements Initializable {
         try {
             Event refreshed = server.getEvent(event.getId());
             this.setEvent(refreshed);
+            //here start the listener for the event
+            server.registerEventUpdates(event.getId(), (event1 -> {
+                System.out.println("Event updated:" + event1);
+//                this.setEvent(event1);
+            })); //this will update the event when the server sends an update
             /* TO DO:
             * - refresh all data related to the event
             * - add functionality to the expense list and filtering*/
         }catch (WebApplicationException e) {
             notificationService.showError("Error refreshing event", "Could not refresh event data");
         }
+    }
+    public void stop(){
+        server.stopThread();
     }
 }
