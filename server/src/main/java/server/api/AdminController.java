@@ -13,6 +13,7 @@ public class AdminController {
 
     public AdminController() {
         password = UUID.randomUUID().toString().substring(0, 8);
+        System.out.println("Password is: " + password);
     }
 
     @GetMapping(path = {"", "/"})
