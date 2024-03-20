@@ -25,7 +25,7 @@ public class EventController {
      * These will be added to the map when a user subscribes to an event
      * And the result will be completed when the event is updated in the updateEvent method.
      */
-    private Map<UUID, Consumer<Event>> deferredResults = new ConcurrentHashMap<>();
+    private Map<String, Consumer<Event>> deferredResults = new ConcurrentHashMap<>();
 
     public EventController(EventRepository repo) {
         this.repo = repo;
@@ -49,8 +49,6 @@ public class EventController {
         Event saved = repo.save(event);
         return ResponseEntity.ok(saved);
     }
-
-
     /**
      * Join an event
      * @param inviteCode - invite code for the event
@@ -103,23 +101,23 @@ public class EventController {
             return ResponseEntity.badRequest().build();
         }
         Event saved = repo.save(event);
-        deferredResults.forEach((uuid, consumer) -> {
-            System.out.println("Checking: " + uuid + " " + id);
-            if (uuid.equals(id)) {
-                System.out.println("accepted");
-                deferredResults.get(uuid).accept(saved);
+        for (var entry : deferredResults.entrySet()) {
+            if (entry.getKey().startsWith(id.toString())) {
+                entry.getValue().accept(saved);
+                break;
             }
-        });
+        }
+
         return ResponseEntity.ok(saved);
     }
 
     /**
      * Subscribe to event to listen for changes
-     * @param id - id of event
+     * @param id - id of event + id of participant in a string format
      * @return - changed event
      */
     @GetMapping("/subscribe/{id}")
-    public DeferredResult<ResponseEntity<Event>> subscribe(@PathVariable("id") UUID id) {
+    public DeferredResult<ResponseEntity<Event>> subscribe(@PathVariable("id") String id) {
         var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         DeferredResult<ResponseEntity<Event>> deferredResult = new DeferredResult<>(// deferred result is a result that is not completed yet.
                 5000L, //If within 5 seconds the result is not set, the request will be timed out
