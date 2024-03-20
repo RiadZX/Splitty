@@ -88,11 +88,19 @@ public class ServerUtils {
     }
 
     public Event updateEvent(Event event) {
-        return ClientBuilder.newClient(new ClientConfig())
+        try {
+            Event e = ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("api/events/" + event.getId())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .put(Entity.entity(event, APPLICATION_JSON), Event.class);
+            return e;
+        }
+        catch (Exception e){
+            System.out.println("Error: "+e);
+            System.out.println("Retrying...");
+            return updateEvent(event);
+        }
     }
 
     public List<Event> getEvents() {

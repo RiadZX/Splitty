@@ -71,6 +71,7 @@ public class EventOverviewCtrl implements Initializable {
         this.event=newEvent;
         eventTitle.setText(this.event.getTitle());
         reassignParticipants(this.event.getParticipants());
+        server.registerEventUpdates(this.event.getId().toString()+session.toString(), this::setEvent);
     }
 
     public void reassignParticipants(List<Participant> participantList){
@@ -130,10 +131,6 @@ public class EventOverviewCtrl implements Initializable {
         try {
             Event refreshed = server.getEvent(event.getId());
             this.setEvent(refreshed);
-            //here start the listener for the event
-            System.out.println("Event refreshed 1");
-            server.registerEventUpdates(this.event.getId().toString()+session.toString(), this::setEvent); //this will update the event when the server sends an update
-            System.out.println("Event refreshed 2");
 
             /* TO DO:
             * - refresh all data related to the event

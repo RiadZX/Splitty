@@ -24,7 +24,7 @@ public class EventController {
      * These will be added to the map when a user subscribes to an event
      * And the result will be completed when the event is updated in the updateEvent method.
      */
-    private Map<String, Consumer<Event>> deferredResults = new ConcurrentHashMap<>();
+    private Map<String, DeferredResult<ResponseEntity<Event>>> deferredResults = new ConcurrentHashMap<>();
 
     public EventController(EventRepository repo) {
         this.repo = repo;
@@ -101,10 +101,17 @@ public class EventController {
         }
 
         Event saved = repo.save(event);
-        for (Map.Entry<String, Consumer<Event>> entry : deferredResults.entrySet()) {
-            if (entry.getKey().startsWith(id.toString())) {
-                entry.getValue().accept(saved);
-            }
+        //THIS IS CAUSING AN ERROR. WHEN UPDATING EVENT.....
+        try {
+            deferredResults.forEach((k, v) -> {
+                boolean x = k.startsWith(saved.getId().toString());
+                if (x) {
+                    v.setResult(ResponseEntity.ok(saved));
+                }
+            });
+
+        } catch (Exception e){
+            System.out.println("Error: "+e);
         }
         return ResponseEntity.ok(saved);
     }
@@ -121,27 +128,21 @@ public class EventController {
                 5000L, //If within 5 seconds the result is not set, the request will be timed out
                 noContent//if not found then this code will be returned
         );
-        deferredResults.put(id, e -> {
-            deferredResult.setResult(ResponseEntity.ok(e));
-        });
+        deferredResults.put(id, deferredResult);
         deferredResult.onCompletion(
                 () -> {
-                    System.out.println("Completed");
                     deferredResults.remove(id);
                     if (!deferredResult.hasResult()) {
-                        System.out.println("No result x");
                         deferredResult.setErrorResult(noContent);
                     }
                 });
         deferredResult.onError(
                 (Throwable t) -> { // Throwable is the error
-                    System.out.println("Error 135");
                     deferredResults.remove(id);
                     deferredResult.setErrorResult(t);
                 });
         deferredResult.onTimeout(
                 () -> {
-                    System.out.println("Timeout");
                     deferredResults.remove(id);
                     deferredResult.setErrorResult(noContent);
                 });
