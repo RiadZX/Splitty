@@ -16,6 +16,7 @@ import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 
 public class EventOverviewCtrl implements Initializable {
@@ -36,6 +37,8 @@ public class EventOverviewCtrl implements Initializable {
 
     private Event event;
 
+    private UUID session;
+
 
     @Inject
     public EventOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
@@ -43,6 +46,7 @@ public class EventOverviewCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
         this.notificationService = notificationService;
         this.event=new Event();
+        this.session = UUID.randomUUID();
     }
 
     @Override
@@ -94,6 +98,11 @@ public class EventOverviewCtrl implements Initializable {
         }
         catch (WebApplicationException e){
             notificationService.showError("Error updating event", "Could not update event title");
+            System.out.println("Error updating event title");
+            System.out.println(e.getMessage());
+            System.out.println(e.getResponse().toString());
+            System.out.println(this.event.getName());
+            changeTitle();
         }
     }
 
@@ -122,7 +131,10 @@ public class EventOverviewCtrl implements Initializable {
             Event refreshed = server.getEvent(event.getId());
             this.setEvent(refreshed);
             //here start the listener for the event
-            server.registerEventUpdates(event.getId(), (this::setEvent)); //this will update the event when the server sends an update
+            System.out.println("Event refreshed 1");
+            server.registerEventUpdates(this.event.getId().toString()+session.toString(), this::setEvent); //this will update the event when the server sends an update
+            System.out.println("Event refreshed 2");
+
             /* TO DO:
             * - refresh all data related to the event
             * - add functionality to the expense list and filtering*/
