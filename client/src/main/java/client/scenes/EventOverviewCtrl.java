@@ -97,7 +97,7 @@ public class EventOverviewCtrl implements Initializable {
             this.server.updateEvent(this.event);
         }
         catch (WebApplicationException e){
-            //notificationService.showError("Error updating event", "Could not update event title");
+            notificationService.showError("Error updating event", "Could not update event title");
             System.out.println("Error updating event title");
             System.out.println(e.getMessage());
             System.out.println(e.getResponse().toString());
