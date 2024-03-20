@@ -31,6 +31,20 @@ public class Expense {
     @ManyToMany
     private List<Tag> tags;
 
+    @Override
+    public String toString() {
+        return "Expense{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", amount=" + amount +
+                ", date=" + date +
+                ", paidBy=" + paidBy +
+                ", event=" + event +
+                ", tags=" + tags +
+                ", debts=" + debts +
+                '}';
+    }
+
     @OneToMany(mappedBy = "expense", orphanRemoval = true)
     @JsonManagedReference ("expense-debts")
     private List<Debt> debts;

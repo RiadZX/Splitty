@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="532.0" prefWidth="776.0" stylesheets="@../stylesheets/general.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminEventsCtrl">
+   <children>
+      <ScrollPane layoutX="217.0" layoutY="109.0" prefHeight="301.0" prefWidth="342.0">
+         <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="338.0">
+               <children>
+                  <ListView fx:id="myListView" editable="true" layoutX="-2.0" prefHeight="300.0" prefWidth="342.0" />
+               </children>
+            </AnchorPane>
+         </content>
+      </ScrollPane>
+      <Label layoutX="319.0" layoutY="68.0" text="Event Dashboard">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Label>
+   </children>
+</Pane>
