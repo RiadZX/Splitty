@@ -39,7 +39,7 @@
       </GridPane>
       <ImageView fitHeight="33.0" fitWidth="31.0" layoutX="355.0" layoutY="14.0" onMouseClicked="#moveToSettings" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../icons/settings.png" />
+            <Image url="@/client/icons/settings.png" />
          </image>
       </ImageView>
    </children>
