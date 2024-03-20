@@ -24,12 +24,23 @@ public class User implements Serializable {
         eventParticipant=new LinkedHashMap<UUID, UUID>();
     }
 
+    /**
+     * Only use this for testing
+     * @param name name of the user
+     */
     public User(String name){
         this();
         this.name=name;
         this.email="test@test.com";
         this.iban="GB12ABCD10203012345678";
         this.bic="AAAABBCCDD";
+    }
+    public User(String name, String email, String iban, String bic){
+        this();
+        this.name=name;
+        this.email=email;
+        this.iban=iban;
+        this.bic=bic;
     }
 
     public Participant createParticipant(){
@@ -38,6 +49,18 @@ public class User implements Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public String getEmail(){
+        return email;
+    }
+
+    public String getIban() {
+        return iban;
+    }
+
+    public String getBic() {
+        return bic;
     }
 
     public void setName(String name) {
