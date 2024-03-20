@@ -29,6 +29,7 @@ import java.util.UUID;
 public class MainCtrl {
 
     private  User user;
+    public boolean admin;
 
     private Stage primaryStage;
     private FirstTimeCtrl firstTimeCtrl;
@@ -69,6 +70,7 @@ public class MainCtrl {
                            Pair<UserSettingsCtrl, Parent> userSettings,
                            Pair<SettingsCtrl, Parent> settings
     ) {
+        this.admin=false;
         this.user = new User();
         this.primaryStage = primaryStage;
 
@@ -185,6 +187,12 @@ public class MainCtrl {
     public void deleteAllData(){
         Config.deleteUserConfigFile();
         this.chooseFirstPage();
+    }
+
+    public void loginAdmin(){
+        admin=true;
+        primaryStage.setTitle("Splitty: Admin Overview");
+
     }
 
     //hardcoded temporary exchange rates
