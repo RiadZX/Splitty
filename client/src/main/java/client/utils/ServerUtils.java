@@ -101,6 +101,14 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON) //
 				.get(new GenericType<Event>() {});
 	}
+	public Event removeEvent(UUID id) {
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("api/events/"+id) //
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.delete(new GenericType<Event>() {});
+	}
+
 	public Event joinEvent(String inviteCode){
 		return ClientBuilder.newClient(new ClientConfig()) //
 				.target(SERVER).path("api/events/join/"+inviteCode) //

@@ -124,7 +124,9 @@ public class MainCtrl {
             primaryStage.show();
         }
         else {
-            this.showStartScene();
+//            this.showStartScene();
+//            primaryStage.show();
+            this.showAdminEventsScene();
             primaryStage.show();
         }
     }
