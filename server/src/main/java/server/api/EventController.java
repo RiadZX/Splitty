@@ -17,7 +17,6 @@ import java.util.function.Consumer;
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
-
     private final EventRepository repo;
     /**
      * Map of deferred results, here we store the results of the requests that are not yet completed
@@ -100,14 +99,13 @@ public class EventController {
         if (!repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
+
         Event saved = repo.save(event);
-        for (var entry : deferredResults.entrySet()) {
+        for (Map.Entry<String, Consumer<Event>> entry : deferredResults.entrySet()) {
             if (entry.getKey().startsWith(id.toString())) {
                 entry.getValue().accept(saved);
-                break;
             }
         }
-
         return ResponseEntity.ok(saved);
     }
 
@@ -137,11 +135,13 @@ public class EventController {
                 });
         deferredResult.onError(
                 (Throwable t) -> { // Throwable is the error
+                    System.out.println("Error 135");
                     deferredResults.remove(id);
                     deferredResult.setErrorResult(t);
                 });
         deferredResult.onTimeout(
                 () -> {
+                    System.out.println("Timeout");
                     deferredResults.remove(id);
                     deferredResult.setErrorResult(noContent);
                 });
