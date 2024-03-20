@@ -107,7 +107,7 @@ public class EventController {
             System.out.println("Checking: " + uuid + " " + id);
             if (uuid.equals(id)) {
                 System.out.println("accepted");
-                consumer.accept(saved);
+                deferredResults.get(uuid).accept(saved);
             }
         });
         return ResponseEntity.ok(saved);
@@ -136,10 +136,12 @@ public class EventController {
         deferredResult.onError(
                 (Throwable t) -> { // Throwable is the error
                     deferredResults.remove(id);
+                    deferredResult.setErrorResult(t);
                 });
         deferredResult.onTimeout(
                 () -> {
                     deferredResults.remove(id);
+                    deferredResult.setErrorResult(noContent);
                 });
         return deferredResult;
     }
