@@ -39,4 +39,11 @@ public class Config {
         } catch (IOException | ClassNotFoundException ignored) {}
         return  user;
     }
+
+    public static boolean deleteUserConfigFile(){
+        String projectDir = new File("").getAbsolutePath();
+        projectDir=projectDir.substring(0, projectDir.indexOf("oopp-team-35"))+"oopp-team-35/";
+        File file=new File(projectDir+"client/build/resources/main", USER_FILENAME);
+        return file.delete();
+    }
 }
