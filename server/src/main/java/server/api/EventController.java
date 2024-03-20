@@ -98,21 +98,24 @@ public class EventController {
         if (!repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-
-        Event saved = repo.save(event);
-        //THIS IS CAUSING AN ERROR. WHEN UPDATING EVENT.....
         try {
-            deferredResults.forEach((k, v) -> {
-                boolean x = k.startsWith(saved.getId().toString());
-                if (x) {
-                    v.setResult(ResponseEntity.ok(saved));
-                }
-            });
-
+            Event saved = repo.saveAndFlush(event);
+            try {
+                // THIS IS CAUSING THE ERROR (i think) , help please :(
+                deferredResults.forEach((k, v) -> {
+                    boolean x = k.startsWith(saved.getId().toString());
+                    if (x) {
+                        v.setResult(ResponseEntity.ok(saved));
+                    }
+                });
+            } catch (Exception e){
+                System.out.println("Error 1: "+e);
+            }
+            return ResponseEntity.ok(saved);
         } catch (Exception e){
-            System.out.println("Error: "+e);
+            System.out.println("Error 2: "+e);
         }
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.badRequest().build();
     }
 
     /**
