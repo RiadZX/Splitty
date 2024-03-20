@@ -21,7 +21,6 @@ import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
-import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import java.io.BufferedReader;
@@ -74,11 +73,11 @@ public class ServerUtils {
 	}
 
 	public void removeParticipant(Event event, Participant participant) {
-			ClientBuilder.newClient(new ClientConfig())
-					.target(SERVER).path("api/events/" + event.getId() + "/participants/" +  participant.getId())
-					.request(APPLICATION_JSON)
-					.accept(APPLICATION_JSON)
-					.delete();
+		ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/events/" + event.getId() + "/participants/" +  participant.getId())
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.delete();
 	}
 
 	public Event addEvent(Event event){
