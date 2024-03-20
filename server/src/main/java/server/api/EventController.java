@@ -130,6 +130,10 @@ public class EventController {
                 () -> {
                     System.out.println("Completed");
                     deferredResults.remove(id);
+                    if (!deferredResult.hasResult()) {
+                        System.out.println("No result x");
+                        deferredResult.setErrorResult(noContent);
+                    }
                 });
         deferredResult.onError(
                 (Throwable t) -> { // Throwable is the error

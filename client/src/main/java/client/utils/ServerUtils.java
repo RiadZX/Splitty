@@ -125,14 +125,14 @@ public class ServerUtils {
     /**
      * Listen for updates for a specified event id
      */
-    private void listenEvents(UUID eventId, Consumer<Event> eventConsumer) {
+    private void listenEvents(String id, Consumer<Event> eventConsumer) {
         exec = Executors.newSingleThreadExecutor();
         exec.submit(() -> {
             System.out.println("Listening for updates");
             while (listening || !Thread.currentThread().isInterrupted()) {
-                System.out.println("Polling for: " + eventId.toString());
+                System.out.println("Polling for: " + id);
                 var res = ClientBuilder.newClient(new ClientConfig()) //
-                        .target(SERVER).path("/api/events/subscribe/" + eventId) //
+                        .target(SERVER).path("/api/events/subscribe/" + id) //
                         .request(APPLICATION_JSON) //
                         .accept(APPLICATION_JSON) //
                         .get(Response.class);
@@ -169,10 +169,10 @@ public class ServerUtils {
         }
 	}
 
-    public void registerEventUpdates(UUID eventId, Consumer<Event> eventConsumer){
+    public void registerEventUpdates(String id, Consumer<Event> eventConsumer){
         stopThread();
         listening = true;
-        listenEvents(eventId, eventConsumer);
+        listenEvents(id, eventConsumer);
     }
 
 
