@@ -7,6 +7,9 @@ import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
+import java.util.LinkedHashMap;
+import java.util.UUID;
+
 
 public class UserSettingsCtrl{
     private final ServerUtils server;
@@ -44,6 +47,8 @@ public class UserSettingsCtrl{
 
     public void save(){
         User newUser=new User(nameField.getText(), emailField.getText(), ibanField.getText(), bicField.getText());
+        LinkedHashMap<UUID, UUID> tmp =(LinkedHashMap<UUID, UUID>) this.mainCtrl.getUser().getEventParticipant();
+        newUser.setEventParticipant(tmp);
         this.mainCtrl.setUser(newUser);
         back();
     }
