@@ -18,7 +18,7 @@ public class AdminController {
     @GetMapping(path = {"", "/"})
     public ResponseEntity<String> generatePassword() {
         System.out.println("Password is: " + password);
-        return ResponseEntity.ok(password);
+        return ResponseEntity.ok("You can check the server console");
     }
 
     @PostMapping(path = "/login")
