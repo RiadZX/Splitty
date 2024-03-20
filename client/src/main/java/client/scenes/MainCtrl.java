@@ -60,6 +60,9 @@ public class MainCtrl {
     private SettingsCtrl settingsCtrl;
     private Scene settings;
 
+    private AdminEventsCtrl adminEventsCtrl;
+    private Scene adminEvents;
+
     public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime,
                            Pair<EventOverviewCtrl, Parent> eventOverview,
                            Pair<AddParticipantCtrl, Parent> addParticipant,
@@ -68,7 +71,8 @@ public class MainCtrl {
                            Pair<InviteViewCtrl, Parent> inviteView,
                            Pair<EditParticipantCtrl, Parent> editParticipant,
                            Pair<UserSettingsCtrl, Parent> userSettings,
-                           Pair<SettingsCtrl, Parent> settings
+                           Pair<SettingsCtrl, Parent> settings,
+                           Pair<AdminEventsCtrl, Parent> adminEvents
     ) {
         this.admin=false;
         this.user = new User();
@@ -101,6 +105,9 @@ public class MainCtrl {
         this.settingsCtrl=settings.getKey();
         this.settings=new Scene(settings.getValue());
 
+        this.adminEventsCtrl = adminEvents.getKey();
+        this.adminEvents = new Scene(adminEvents.getValue());
+
         chooseFirstPage();
     }
 
@@ -113,7 +120,9 @@ public class MainCtrl {
     public void chooseFirstPage(){
         this.user=Config.readUserConfigFile();
         if (user == null) {
-            this.showFirstTimeScene();
+//            this.showFirstTimeScene();
+//            primaryStage.show();
+            this.showAdminEventsScene();
             primaryStage.show();
         }
         else {
@@ -150,6 +159,7 @@ public class MainCtrl {
         eventOverviewCtrl.refresh();
         primaryStage.setScene(eventOverview);
     }
+
     public void showAddParticipantScene(Event event) {
         primaryStage.setTitle("Splitty: Add Participant");
         addParticipantCtrl.setEvent(event);
@@ -163,6 +173,13 @@ public class MainCtrl {
         editParticipantCtrl.refresh();
         primaryStage.setScene(editParticipant);
     }
+
+    public void showAdminEventsScene() {
+        primaryStage.setTitle("Splitty: Admin Events");
+        adminEventsCtrl.populateList();
+        primaryStage.setScene(adminEvents);
+    }
+
     public User getUser(){
         return this.user;
     }
