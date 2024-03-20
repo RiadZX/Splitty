@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextInputDialog;
 
 import java.net.URL;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -58,6 +59,15 @@ public class SettingsCtrl implements Initializable {
             notificationHelper.showError("Warning!", "Password cannot be blank...");
             return;
         }
-
+        try {
+            String x=this.server.checkPassword(password);
+            if (Objects.equals(x, password)){
+                this.mainCtrl.loginAdmin();
+            }
+        }
+        catch (Exception E){
+            NotificationHelper notificationHelper = new NotificationHelper();
+            notificationHelper.showError("Error!", "Wrong Password...");
+        }
     }
 }

@@ -22,8 +22,9 @@ public class AdminController {
         return ResponseEntity.ok("You can check the server console");
     }
 
-    @PostMapping(path = "/login")
+    @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody String password) {
+        System.out.println(password);
         if (password.equals(this.password)) {
             return ResponseEntity.ok(password);
         }
