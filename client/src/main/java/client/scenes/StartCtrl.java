@@ -139,6 +139,13 @@ public class StartCtrl implements Initializable {
     }
 
     /**
+     * Move to the Settings scene when the icon is pressed
+     */
+    public void moveToSettings(){
+        mainCtrl.showUserSettings();
+    }
+
+    /**
      * Clear the text fields
      */
     public  void clearFields(){
