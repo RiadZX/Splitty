@@ -122,7 +122,13 @@ public class EventOverviewCtrl implements Initializable {
             Event refreshed = server.getEvent(event.getId());
             this.setEvent(refreshed);
             //here start the listener for the event
-            server.registerEventUpdates(event.getId(), (this::setEvent)); //this will update the event when the server sends an update
+            System.out.println("Event refreshed 1");
+            server.registerEventUpdates(event.getId(), (e) -> {
+                System.out.println("Got event update");
+                this.eventTitle.setText(e.getTitle());
+            }); //this will update the event when the server sends an update
+            System.out.println("Event refreshed 2");
+
             /* TO DO:
             * - refresh all data related to the event
             * - add functionality to the expense list and filtering*/
