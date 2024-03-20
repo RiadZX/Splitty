@@ -15,4 +15,14 @@ public class SettingsCtrl {
         this.mainCtrl = mainCtrl;
         this.notificationService = notificationService;
     }
+
+    public void editProfileAction(){
+        this.mainCtrl.showUserSettings();
+    }
+    public void deleteDataAction(){
+        this.mainCtrl.deleteAllData();
+    }
+    public void backAction(){
+        this.mainCtrl.showStartScene();
+    }
 }

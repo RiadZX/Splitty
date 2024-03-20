@@ -182,6 +182,11 @@ public class MainCtrl {
         primaryStage.setScene(addExpense);
     }
 
+    public void deleteAllData(){
+        Config.deleteUserConfigFile();
+        this.chooseFirstPage();
+    }
+
     //hardcoded temporary exchange rates
     public double getUsdToEur(){
         return 0.92;
