@@ -11,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import server.database.ExpenseRepository;
+import server.service.ExpenseService;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,7 +22,7 @@ import static org.mockito.Mockito.*;
 
 public class ExpenseControllerTest {
     @Mock
-    private ExpenseRepository expenseRepository;
+    private ExpenseService expenseService;
     @InjectMocks
     ExpenseController expenseController;
 
@@ -35,8 +36,9 @@ public class ExpenseControllerTest {
         expense.setTitle("Test");
         expense.setAmount(100);
         expense.setId(UUID.randomUUID());
-        when(expenseRepository.save(any(Expense.class))).thenReturn(expense);
-        when(expenseRepository.findById(any(UUID.class))).thenReturn(java.util.Optional.of(expense));
+//        when(expenseRepository.save(any(Expense.class))).thenReturn(expense);
+//        when(expenseRepository.findById(any(UUID.class))).thenReturn(java.util.Optional.of(expense));
+        when(expenseService.addExpense(any(Expense.class))).thenReturn(expense);
 
         ResponseEntity<Expense> responseEntity = expenseController.add(expense);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -51,8 +53,8 @@ public class ExpenseControllerTest {
         UUID id = UUID.randomUUID();
         expense.setId(id);
 
-        when(expenseRepository.findById(any(UUID.class))).thenReturn(java.util.Optional.of(expense));
-
+//        when(expenseRepository.findById(any(UUID.class))).thenReturn(java.util.Optional.of(expense));
+        when(expenseService.getExpenseById(any(UUID.class))).thenReturn(expense);
         ResponseEntity<Expense> responseEntity = expenseController.getById(id);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(expense, responseEntity.getBody());
@@ -67,12 +69,13 @@ public class ExpenseControllerTest {
         UUID id = UUID.randomUUID();
         expense.setId(id);
 
-        when(expenseRepository.findById(any(UUID.class))).thenReturn(java.util.Optional.of(expense));
+        //when(expenseRepository.findById(any(UUID.class))).thenReturn(java.util.Optional.of(expense));
+        when(expenseService.deleteExpense(any(UUID.class))).thenReturn(expense);
         ResponseEntity<Expense> responseEntity = expenseController.remove(id);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(expense, responseEntity.getBody());
 
-        verify(expenseRepository, times(1)).deleteById(any(UUID.class));
+        verify(expenseService, times(1)).deleteExpense(any(UUID.class));
     }
 
     @Test
@@ -85,14 +88,16 @@ public class ExpenseControllerTest {
         UUID id = UUID.randomUUID();
         expense.setId(id);
 
-        when(expenseRepository.save(any(Expense.class))).thenReturn(expense);
-        when(expenseRepository.findById(any(UUID.class))).thenReturn(java.util.Optional.of(expense));
+//        when(expenseRepository.save(any(Expense.class))).thenReturn(expense);
+//        when(expenseRepository.findById(any(UUID.class))).thenReturn(java.util.Optional.of(expense));
+
+        when(expenseService.updateExpense(any(Expense.class))).thenReturn(expense);
 
         ResponseEntity<Expense> responseEntity = expenseController.update(id, expense);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(expense, responseEntity.getBody());
 
-        verify(expenseRepository, times(1)).deleteById(any(UUID.class));
+        verify(expenseService, times(0)).deleteExpense(any(UUID.class));
 
     }
 
@@ -104,7 +109,7 @@ public class ExpenseControllerTest {
         expenses.get(0).setId(UUID.randomUUID());
         expenses.get(1).setId(UUID.randomUUID());
 
-        when(expenseRepository.findAll()).thenReturn(expenses);
+        when(expenseService.getAllExpenses()).thenReturn(expenses);
 
         ResponseEntity<List<Expense>> responseEntity = expenseController.getAll();
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -116,20 +121,20 @@ public class ExpenseControllerTest {
 
         UUID id = UUID.randomUUID();
 
-        when(expenseRepository.findById(any(UUID.class))).thenReturn(java.util.Optional.empty());
+        when(expenseService.deleteExpense(any(UUID.class))).thenReturn(null);
 
         ResponseEntity<Expense> responseEntity = expenseController.remove(id);
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertNull(responseEntity.getBody());
 
-        verify(expenseRepository, times(0)).deleteById(any(UUID.class));
+        verify(expenseService, times(1)).deleteExpense(any(UUID.class));
     }
 
     @Test
     public void getExpenseFail(){
         UUID id = UUID.randomUUID();
 
-        when(expenseRepository.findById(any(UUID.class))).thenReturn(java.util.Optional.empty());
+        when(expenseService.getExpenseById(any(UUID.class))).thenReturn(null);
 
         ResponseEntity<Expense> responseEntity = expenseController.getById(id);
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -142,12 +147,13 @@ public class ExpenseControllerTest {
 
         UUID id = UUID.randomUUID();
 
-        when(expenseRepository.existsById(any(UUID.class))).thenReturn(false);
+        when(expenseService.updateExpense(any(Expense.class))).thenReturn(null);
 
         ResponseEntity<Expense> responseEntity = expenseController.update(id, new Expense());
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertNull(responseEntity.getBody());
 
-        verify(expenseRepository, times(0)).deleteById(any(UUID.class));
+        verify(expenseService, times(0)).deleteExpense(any(UUID.class));
+        verify(expenseService, times(0)).updateExpense(any(Expense.class));
     }
 }
