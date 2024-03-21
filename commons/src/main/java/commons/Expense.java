@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -19,7 +19,7 @@ public class Expense {
     private UUID id;
     private String title;
     private double amount;
-    private LocalDateTime date;
+    private Instant date;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "participant_id")
     @JsonBackReference ("participant-expenses")
@@ -53,7 +53,7 @@ public class Expense {
         // For JPA
     }
 
-    public Expense(String title, double amount, LocalDateTime date,
+    public Expense(String title, double amount, Instant date,
                    Participant paidBy, Event event, List<Debt> debts, List<Tag> tags) {
         this.title = title;
         this.amount = amount;
@@ -88,7 +88,7 @@ public class Expense {
         this.amount = amount;
     }
 
-    public LocalDateTime getDate() {
+    public Instant getDate() {
         return date;
     }
 
@@ -140,7 +140,7 @@ public class Expense {
         return Objects.hash(id, title, amount, date, paidBy, event, debts, tags);
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(Instant date) {
         this.date = date;
     }
 
