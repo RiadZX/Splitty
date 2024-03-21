@@ -3,6 +3,7 @@ package client.scenes;
 import client.services.Gson_InstantTypeAdapter;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
+import com.google.gson.ExclusionStrategy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import commons.Event;
@@ -20,9 +21,11 @@ import javax.inject.Inject;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.lang.management.OperatingSystemMXBean;
 import java.text.DateFormat;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class AdminEventsCtrl {
@@ -60,13 +63,17 @@ public class AdminEventsCtrl {
         File selectedDirectory = getDirectory();
         String path = selectedDirectory.getAbsolutePath() +
                 (System.getProperty("os.name").startsWith("Windows") ? "\\" : "/") +
-                e.getName() + ".txt";
+                e.getName() + "-" + LocalDateTime.now() + ".txt";
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
+                .excludeFieldsWithoutExposeAnnotation()
                 .registerTypeAdapter(Instant.class, new Gson_InstantTypeAdapter())
                 .create();
         try {
-            gson.toJson(e, new FileWriter(path));
+            Writer writer = new FileWriter(path);
+            gson.toJson(e, writer);
+            writer.flush();
+            writer.close();
         } catch (IOException exception) {
             notificationService.showError("Write error", "Unable to write to specified directory\n" + exception);
         }
