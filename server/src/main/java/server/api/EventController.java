@@ -2,8 +2,9 @@ package server.api;
 
 import commons.Event;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
-
 import server.database.EventRepository;
 
 import java.util.List;
@@ -91,6 +92,13 @@ public class EventController {
         }
         Event saved = repo.save(event);
         return ResponseEntity.ok(saved);
+    }
+
+    @MessageMapping("/events")
+    @SendTo("topic/events")
+    public Event addMessage(Event event){
+        System.out.println("TJ Miles " + update(event.getId(), event).getBody().getTitle());
+        return event;
     }
 
 }
