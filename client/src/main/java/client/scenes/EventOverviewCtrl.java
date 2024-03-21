@@ -8,6 +8,7 @@ import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.TextFlow;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -24,12 +25,10 @@ public class EventOverviewCtrl implements Initializable {
     private final NotificationService notificationService;
     @FXML
     public Button sendInviteButton;
-
-//    @FXML
-//    private Label participantsLabel;
-
     @FXML
     public TextFlow textFlow;
+    @FXML
+    public Pane backButton;
 
     @FXML
     private TextField eventTitle;
@@ -54,8 +53,8 @@ public class EventOverviewCtrl implements Initializable {
                 }
             }
         }));
+
         this.sendInviteButton.setOnAction(event -> sendInvite());
-        System.out.println("EventOverviewCtrl initialized");
     }
 
     public Event getEvent(){
