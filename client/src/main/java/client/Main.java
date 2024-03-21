@@ -52,5 +52,9 @@ public class Main extends Application {
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, firstTime, eventOverview, addParticipant, start, addExpense, inviteView, editParticipant, userSettings, settings, adminEvents, admin);
+        // calls the stop method to stop the listener thread, otherwise it will keep on running.
+        primaryStage.setOnCloseRequest(e -> {
+            adminEvents.getKey().stop();
+        });
     }
 }

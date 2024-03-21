@@ -56,16 +56,40 @@ public class AdminEventsCtrl implements Initializable {
             }
         });
         */
+        //register for event updates
+        server.listenEvents(event -> {
+            System.out.println("Event received");
+            addItem(event);
+        });
     }
-
     private void removeEvent(Event item) {
         server.removeEvent(item.getId());
-        populateList();
+        events.remove(item);
+        render();
     }
-
+    public void addItem(Event e){
+        events.add(e);
+        render();
+    }
     public void populateList() {
         myListView.getItems().clear();
         this.events = server.getEvents();
+        render();
+//        myListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Event>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Event> observable, Event oldValue, Event newValue) {
+//                Event e = myListView.getSelectionModel().getSelectedItem();
+//            }
+//        });
+    }
+
+    /**
+     * Uses the local events list to render the list
+     * Better than calling the server every time.
+     */
+    public void render(){
+        //uses the events list to rerender the list
+        myListView.getItems().clear();
         List<BorderPane> contents = events.stream().map(e -> {
             BorderPane bp = new BorderPane();
             bp.setLeft(new Text(e.getName()));
@@ -80,11 +104,12 @@ public class AdminEventsCtrl implements Initializable {
             return bp;
         }).toList();
         myListView.getItems().addAll(contents);
-//        myListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Event>() {
-//            @Override
-//            public void changed(ObservableValue<? extends Event> observable, Event oldValue, Event newValue) {
-//                Event e = myListView.getSelectionModel().getSelectedItem();
-//            }
-//        });
+    }
+
+    /**
+     * Stops the listening thread to be able to close the application
+     */
+    public void stop(){
+        server.stopThread();
     }
 }

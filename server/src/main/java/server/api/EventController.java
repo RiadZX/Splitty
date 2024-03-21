@@ -1,24 +1,29 @@
 package server.api;
 
 import commons.Event;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.context.request.async.DeferredResult;
 import server.database.EventRepository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
     private final EventRepository repo;
+
     /**
-     * Map of deferred results, here we store the results of the requests that are not yet completed
-     * The key is the id of the event and the value is the deferred result
-     * These will be added to the map when a user subscribes to an event
-     * And the result will be completed when the event is updated in the updateEvent method.
+     * TODO EDIT JAVADOC.
      */
+    private Map<Object, Consumer<Event>> listeners = new ConcurrentHashMap<>();
+
     public EventController(EventRepository repo) {
         this.repo = repo;
     }
@@ -38,7 +43,11 @@ public class EventController {
      */
     @PostMapping(path = { "", "/" })
     public ResponseEntity<Event> add(@RequestBody Event event) {
+        if (event==null){
+            return ResponseEntity.badRequest().build();
+        }
         Event saved = repo.save(event);
+        listeners.values().forEach(listener -> listener.accept(saved)); // notify all listeners of a new event
         return ResponseEntity.ok(saved);
     }
     /**
@@ -96,39 +105,32 @@ public class EventController {
         return ResponseEntity.ok(saved);
     }
 
-//    /**
-//     * Subscribe to event to listen for changes
-//     * @param id - id of event + id of participant in a string format
-//     * @return - changed event
-//     */
-//    @GetMapping("/subscribe/{id}")
-//    public DeferredResult<ResponseEntity<Event>> subscribe(@PathVariable("id") String id) {
-//        var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-//        DeferredResult<ResponseEntity<Event>> deferredResult = new DeferredResult<>(// deferred result is a result that is not completed yet.
-//                5000L, //If within 5 seconds the result is not set, the request will be timed out
-//                noContent//if not found then this code will be returned
-//        );
-//        deferredResults.put(id, e -> {
-//            deferredResult.setResult(ResponseEntity.ok(e));
-//        });
-//        deferredResult.onCompletion(
-//                () -> {
-//                    System.out.println("Completed");
-//                    deferredResults.remove(id);
-//                });
-//        deferredResult.onError(
-//                (Throwable t) -> { // Throwable is the error
-//                    System.out.println("Error 135");
-//                    deferredResults.remove(id);
-//                    deferredResult.setErrorResult(t);
-//                });
-//        deferredResult.onTimeout(
-//                () -> {
-//                    System.out.println("Timeout");
-//                    deferredResults.remove(id);
-//                    deferredResult.setErrorResult(noContent);
-//                });
-//        return deferredResult;
-//    }
+    /**
+     * Subscribe to listen for new events
+     * @return - new event.
+     */
+    @GetMapping("/subscribe")
+    public DeferredResult<ResponseEntity<Event>> subscribe() {
+        var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        DeferredResult<ResponseEntity<Event>> deferredResult = new DeferredResult<>(// deferred result is a result that is not completed yet.
+                30000L, //If within 30 seconds the result is not set, the request will be timed out
+                noContent//if not found then this code will be returned
+        );
+        Object key = new Object();
+        listeners.put(key, event -> {
+            deferredResult.setResult(ResponseEntity.ok(event));
+        });
+        deferredResult.onCompletion(() -> {
+            listeners.remove(key);
+        });
+        deferredResult.onError((Throwable t) -> {
+            System.out.println("Error deferredResult : " + t.getMessage());
+            listeners.remove(key);
+        });
+        deferredResult.onTimeout(() -> {
+            deferredResult.setErrorResult(noContent);
+        });
+        return deferredResult;
+    }
 
 }
