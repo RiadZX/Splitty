@@ -1,30 +1,34 @@
 package client.scenes;
 
+import client.services.Gson_InstantTypeAdapter;
+import client.services.NotificationService;
 import client.utils.ServerUtils;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import commons.Event;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
 
 import javax.inject.Inject;
-import java.awt.*;
-import java.net.URL;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.management.OperatingSystemMXBean;
+import java.text.DateFormat;
+import java.time.Instant;
 import java.util.List;
-import java.util.ResourceBundle;
-import java.util.concurrent.BrokenBarrierException;
 
 public class AdminEventsCtrl {
     private final MainCtrl mainCtrl;
+
+    private final NotificationService notificationService;
 
     private final ServerUtils server;
 
@@ -34,9 +38,10 @@ public class AdminEventsCtrl {
     private List<Event> events;
 
     @Inject
-    public AdminEventsCtrl(MainCtrl mainCtrl, ServerUtils server) {
+    public AdminEventsCtrl(MainCtrl mainCtrl, ServerUtils server, NotificationService notificationService) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.notificationService = notificationService;
     }
 
     private void removeEvent(Event e) {
@@ -44,8 +49,27 @@ public class AdminEventsCtrl {
         populateList();
     }
 
+    private File getDirectory() {
+        DirectoryChooser chooser = new DirectoryChooser();
+        chooser.setTitle("Download Event Data");
+        File dir = chooser.showDialog(mainCtrl.getPrimaryStage());
+        return dir;
+    }
+
     private void downloadEvent(Event e) {
-        System.out.println(e.getName());
+        File selectedDirectory = getDirectory();
+        String path = selectedDirectory.getAbsolutePath() +
+                (System.getProperty("os.name").startsWith("Windows") ? "\\" : "/") +
+                e.getName() + ".txt";
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .registerTypeAdapter(Instant.class, new Gson_InstantTypeAdapter())
+                .create();
+        try {
+            gson.toJson(e, new FileWriter(path));
+        } catch (IOException exception) {
+            notificationService.showError("Write error", "Unable to write to specified directory\n" + exception);
+        }
     }
 
     public void back(){
