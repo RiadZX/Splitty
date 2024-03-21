@@ -28,12 +28,12 @@ import java.util.UUID;
 
 public class MainCtrl {
 
-    private  User user;
+    private User user;
 
     private Stage primaryStage;
     private FirstTimeCtrl firstTimeCtrl;
 
-    private  Scene firstTime;
+    private Scene firstTime;
 
     private EventOverviewCtrl eventOverviewCtrl;
     private Scene eventOverview;
@@ -59,6 +59,9 @@ public class MainCtrl {
     private SettingsCtrl settingsCtrl;
     private Scene settings;
 
+    private AdminEventsCtrl adminEventsCtrl;
+    private Scene adminEvents;
+
     public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime,
                            Pair<EventOverviewCtrl, Parent> eventOverview,
                            Pair<AddParticipantCtrl, Parent> addParticipant,
@@ -67,19 +70,21 @@ public class MainCtrl {
                            Pair<InviteViewCtrl, Parent> inviteView,
                            Pair<EditParticipantCtrl, Parent> editParticipant,
                            Pair<UserSettingsCtrl, Parent> userSettings,
-                           Pair<SettingsCtrl, Parent> settings
+                           Pair<SettingsCtrl, Parent> settings,
+                           Pair<AdminEventsCtrl, Parent> adminEvents,
+                           boolean adminMode
     ) {
         this.user = new User();
         this.primaryStage = primaryStage;
 
-        this.firstTimeCtrl=firstTime.getKey();
-        this.firstTime=new Scene(firstTime.getValue());
+        this.firstTimeCtrl = firstTime.getKey();
+        this.firstTime = new Scene(firstTime.getValue());
 
-        this.eventOverviewCtrl=eventOverview.getKey();
-        this.eventOverview= new Scene(eventOverview.getValue());
+        this.eventOverviewCtrl = eventOverview.getKey();
+        this.eventOverview = new Scene(eventOverview.getValue());
 
-        this.startCtrl=start.getKey();
-        this.start= new Scene(start.getValue());
+        this.startCtrl = start.getKey();
+        this.start = new Scene(start.getValue());
 
         this.addExpenseCtrl = addExpense.getKey();
         this.addExpense = new Scene(addExpense.getValue());
@@ -90,36 +95,50 @@ public class MainCtrl {
         this.editParticipantCtrl = editParticipant.getKey();
         this.editParticipant = new Scene(editParticipant.getValue());
 
-        this.inviteViewCtrl=inviteView.getKey();
-        this.inviteView=new Scene(inviteView.getValue());
+        this.inviteViewCtrl = inviteView.getKey();
+        this.inviteView = new Scene(inviteView.getValue());
 
-        this.userSettingsCtrl=userSettings.getKey();
-        this.userSettings=new Scene(userSettings.getValue());
+        this.userSettingsCtrl = userSettings.getKey();
+        this.userSettings = new Scene(userSettings.getValue());
 
-        this.settingsCtrl=settings.getKey();
-        this.settings=new Scene(settings.getValue());
+        this.settingsCtrl = settings.getKey();
+        this.settings = new Scene(settings.getValue());
 
-        chooseFirstPage();
+        this.adminEventsCtrl = adminEvents.getKey();
+        this.adminEvents = new Scene(adminEvents.getValue());
+
+        chooseFirstPage(adminMode);
     }
 
-    public void showInviteView(Event event){
+    public void showInviteView(Event event) {
         primaryStage.setTitle("Splitty: Invite View");
         inviteViewCtrl.setEvent(event);
         primaryStage.setScene(inviteView);
     }
 
-    public void chooseFirstPage(){
-        this.user=Config.readUserConfigFile();
-        if (user == null) {
-            this.showFirstTimeScene();
+    /**
+     * Choose the first page to show
+     *
+     * @param adminMode - if adminMode is true, directly show admin page and skip normal user page
+     */
+    public void chooseFirstPage(boolean adminMode) {
+        this.user = Config.readUserConfigFile();
+        if (adminMode) {
+            this.showAdminEventsScene();
             primaryStage.show();
-        }
-        else {
-            this.showStartScene();
-            primaryStage.show();
+        } else {
+            if (user == null) {
+                this.showFirstTimeScene();
+                primaryStage.show();
+
+            } else {
+                this.showStartScene();
+                primaryStage.show();
+            }
         }
     }
-    public void showFirstTimeScene(){
+
+    public void showFirstTimeScene() {
         primaryStage.setTitle("Splitty: Setup");
         primaryStage.setScene(this.firstTime);
     }
@@ -130,11 +149,12 @@ public class MainCtrl {
         primaryStage.setScene(start);
     }
 
-    public  void showSettings(){
+    public void showSettings() {
         primaryStage.setTitle("Splitty: Settings");
         primaryStage.setScene(settings);
     }
-    public  void showUserSettings(){
+
+    public void showUserSettings() {
         primaryStage.setTitle("Splitty: Profile Settings");
         userSettingsCtrl.refreshFields();
         primaryStage.setScene(userSettings);
@@ -142,12 +162,13 @@ public class MainCtrl {
     }
 
     // TODO Both setEvent and refresh call the setEvent function
-    public void showEventOverviewScene(Event newEvent){
+    public void showEventOverviewScene(Event newEvent) {
         primaryStage.setTitle("Splitty: Event Overview");
         eventOverviewCtrl.setEvent(newEvent);
         eventOverviewCtrl.refresh();
         primaryStage.setScene(eventOverview);
     }
+
     public void showAddParticipantScene(Event event) {
         primaryStage.setTitle("Splitty: Add Participant");
         addParticipantCtrl.setEvent(event);
@@ -161,34 +182,41 @@ public class MainCtrl {
         editParticipantCtrl.refresh();
         primaryStage.setScene(editParticipant);
     }
-    public User getUser(){
+
+    public void showAdminEventsScene() {
+        primaryStage.setTitle("Splitty: Admin Events");
+        adminEventsCtrl.populateList();
+        primaryStage.setScene(adminEvents);
+    }
+
+    public User getUser() {
         return this.user;
     }
 
-    public  void setUser(User user){
-        this.user=user;
+    public void setUser(User user) {
+        this.user = user;
         Config.writeUserConfigFile(user);
     }
 
-    public void addUserEvent(UUID event, UUID participant){
+    public void addUserEvent(UUID event, UUID participant) {
         this.user.addEventParticipant(event, participant);
         Config.writeUserConfigFile(user);
         System.out.println(Config.readUserConfigFile());
     }
 
-    public void showAddExpense(){
+    public void showAddExpense() {
         primaryStage.setTitle("Splitty: Add/Edit Expense");
         addExpenseCtrl.setup(eventOverviewCtrl.getEvent());
         primaryStage.setScene(addExpense);
     }
 
-    public void deleteAllData(){
+    public void deleteAllData() {
         Config.deleteUserConfigFile();
-        this.chooseFirstPage();
+        this.chooseFirstPage(false);
     }
 
     //hardcoded temporary exchange rates
-    public double getUsdToEur(){
+    public double getUsdToEur() {
         return 0.92;
     }
 

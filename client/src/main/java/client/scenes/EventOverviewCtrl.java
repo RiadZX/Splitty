@@ -36,7 +36,6 @@ public class EventOverviewCtrl implements Initializable {
 
     private Event event;
 
-
     @Inject
     public EventOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
         this.server = server;
@@ -56,6 +55,7 @@ public class EventOverviewCtrl implements Initializable {
             }
         }));
         this.sendInviteButton.setOnAction(event -> sendInvite());
+        System.out.println("EventOverviewCtrl initialized");
     }
 
     public Event getEvent(){
@@ -120,6 +120,7 @@ public class EventOverviewCtrl implements Initializable {
         try {
             Event refreshed = server.getEvent(event.getId());
             this.setEvent(refreshed);
+
             /* TO DO:
             * - refresh all data related to the event
             * - add functionality to the expense list and filtering*/
