@@ -86,6 +86,14 @@ public class ServerUtils {
                 .post(Entity.entity(event, APPLICATION_JSON), Event.class);
     }
 
+	public void removeParticipant(Event event, Participant participant) {
+		ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/events/" + event.getId() + "/participants/" +  participant.getId())
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.delete();
+	}
+    
     public Event updateEvent(Event event) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("api/events/" + event.getId())
