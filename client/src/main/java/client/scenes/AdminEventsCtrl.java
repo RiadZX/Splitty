@@ -1,9 +1,8 @@
 package client.scenes;
 
-import client.services.Gson_InstantTypeAdapter;
+import client.services.GsonInstantTypeAdapter;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
-import com.google.gson.ExclusionStrategy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import commons.Event;
@@ -22,8 +21,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.lang.management.OperatingSystemMXBean;
-import java.text.DateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -61,13 +58,15 @@ public class AdminEventsCtrl {
 
     private void downloadEvent(Event e) {
         File selectedDirectory = getDirectory();
-        String path = selectedDirectory.getAbsolutePath() +
-                (System.getProperty("os.name").startsWith("Windows") ? "\\" : "/") +
-                e.getName() + "-" + LocalDateTime.now() + ".txt";
+        String path = selectedDirectory.getAbsolutePath()
+                + (System.getProperty("os.name").startsWith("Windows") ? "\\" : "/")
+                + e.getName() + "-"
+                + LocalDateTime.now()
+                + ".txt";
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .excludeFieldsWithoutExposeAnnotation()
-                .registerTypeAdapter(Instant.class, new Gson_InstantTypeAdapter())
+                .registerTypeAdapter(Instant.class, new GsonInstantTypeAdapter())
                 .create();
         try {
             Writer writer = new FileWriter(path);

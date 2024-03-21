@@ -62,7 +62,6 @@ public class Expense {
                 '}';
     }
 
-
     public Expense() {
         // For JPA
     }
