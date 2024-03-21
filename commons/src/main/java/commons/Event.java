@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ValueGenerationType;
@@ -24,17 +25,6 @@ public class Event {
     @Column(nullable = false, unique = true)
     @INVITECODE String inviteCode;
     private String title; //fix response issue for now
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JsonManagedReference ("event-participants")
@@ -45,6 +35,7 @@ public class Event {
     private List<Expense> expenses;
 
     @OneToMany(mappedBy = "event")
+    @JsonManagedReference("event-tags")
     private List<Tag> tags;
     public Event(UUID id) {
         this.id = id;
@@ -65,6 +56,18 @@ public class Event {
     public Event(String name, List<Participant> participants) {
         this(name);
         this.participants = participants;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
     /**
      * Sets all participants,

@@ -21,6 +21,30 @@ public class Participant {
 
     private String email;
 
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn(name = "event_id")
+    @JsonBackReference ("event-participants")
+    private Event event; //event part of field does not actually work
+
+    @OneToMany(mappedBy = "participant", orphanRemoval = true)
+    @JsonManagedReference ("participant-debts")
+    private List<Debt> debts;
+
+    private String iban;
+
+    private String bic;
+
+    public Participant() {
+    }
+
+    public Participant(String name, Event event, String iban, String email, String bic) {
+        this.name = name;
+        this.event = event;
+        this.iban = iban;
+        this.email = email;
+        this.bic = bic;
+    }
+
     public String getIban() {
         return iban;
     }
@@ -44,21 +68,6 @@ public class Participant {
 
     public void setIban(String iban) {
         this.iban = iban;
-    }
-
-    private String iban;
-
-    private String bic;
-
-    public Participant() {
-    }
-
-    public Participant(String name, Event event, String iban, String email, String bic) {
-        this.name = name;
-        this.event = event;
-        this.iban = iban;
-        this.email = email;
-        this.bic = bic;
     }
 
     public String getEmail() {
@@ -100,14 +109,6 @@ public class Participant {
     }
 
 
-    @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id")
-    @JsonBackReference ("event-participants")
-    private Event event; //event part of field does not actually work
-
-    @OneToMany(mappedBy = "participant", orphanRemoval = true)
-    @JsonManagedReference ("participant-debts")
-    private List<Debt> debts;
 
     public UUID getId() {
         return id;
