@@ -20,7 +20,9 @@ public class EventController {
     private final EventRepository repo;
 
     /**
-     * TODO EDIT JAVADOC.
+     * This is a hashmap that stores all the listeners for new events.
+     * The key is a randomly created object to identify the listener.
+     * The value is a consumer that accepts an event, it is the deferredresult that will be accepted with a new event.
      */
     private Map<Object, Consumer<Event>> listeners = new ConcurrentHashMap<>();
 
