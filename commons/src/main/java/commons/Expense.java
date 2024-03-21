@@ -1,5 +1,6 @@
 package commons;
 
+import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -16,20 +17,36 @@ public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "expense_id")
+    @Expose
     private UUID id;
+
+    @Expose
     private String title;
+
+    @Expose
     private double amount;
+
+    @Expose
     private Instant date;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "participant_id")
     @JsonBackReference ("participant-expenses")
     private Participant paidBy;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     @JsonBackReference("event-expenses")
     private Event event;
+
     @ManyToMany
+    @Expose
     private List<Tag> tags;
+
+    @OneToMany(mappedBy = "expense", orphanRemoval = true)
+    @JsonManagedReference ("expense-debts")
+    @Expose
+    private List<Debt> debts;
 
     @Override
     public String toString() {
@@ -45,9 +62,6 @@ public class Expense {
                 '}';
     }
 
-    @OneToMany(mappedBy = "expense", orphanRemoval = true)
-    @JsonManagedReference ("expense-debts")
-    private List<Debt> debts;
 
     public Expense() {
         // For JPA
