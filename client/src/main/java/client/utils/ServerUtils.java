@@ -93,8 +93,7 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.delete();
 	}
-    
-    public Event updateEvent(Event event) {
+    public Event updateEvent(Event event){
         return ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("api/events/" + event.getId())
                 .request(APPLICATION_JSON)
