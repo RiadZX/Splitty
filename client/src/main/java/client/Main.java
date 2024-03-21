@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 import static com.google.inject.Guice.createInjector;
 
@@ -31,12 +32,13 @@ public class Main extends Application {
     private static final MyFXML FXML = new MyFXML(INJECTOR);
 
     public static void main(String[] args) throws URISyntaxException, IOException {
-        launch();
+        launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-
+        Parameters parameters = getParameters();
+        boolean admin = Objects.equals(parameters.getNamed().get("admin"), "1"); // CHECK LAUNCH DIRECTLY AS ADMIN MODE, TO USE ADD --admin=1 TO CLI ARGS.
         var eventOverview = FXML.load(EventOverviewCtrl.class, "client", "scenes", "EventOverview.fxml");
         var start=FXML.load(StartCtrl.class, "client", "scenes", "Start.fxml");
         var firstTime=FXML.load(FirstTimeCtrl.class, "client", "scenes", "FirstTime.fxml");
@@ -49,6 +51,6 @@ public class Main extends Application {
         var adminEvents = FXML.load(AdminEventsCtrl.class, "client", "scenes", "AdminEvents.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, firstTime, eventOverview, addParticipant, start, addExpense, inviteView, editParticipant, userSettings, settings, adminEvents);
+        mainCtrl.initialize(primaryStage, firstTime, eventOverview, addParticipant, start, addExpense, inviteView, editParticipant, userSettings, settings, adminEvents, admin);
     }
 }

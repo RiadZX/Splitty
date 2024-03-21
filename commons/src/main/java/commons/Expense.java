@@ -20,33 +20,32 @@ public class Expense {
     private String title;
     private double amount;
     private LocalDateTime date;
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "participant_id")
-    @JsonBackReference ("participant-expenses")
+    @JsonBackReference("participant-expenses")
     private Participant paidBy;
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
-    @JsonBackReference ("event-expenses")
+    @JsonBackReference("event-expenses")
     private Event event;
     @ManyToMany
     private List<Tag> tags;
 
     @Override
     public String toString() {
-        return "Expense{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", amount=" + amount +
-                ", date=" + date +
-                ", paidBy=" + paidBy +
-                ", event=" + event +
-                ", tags=" + tags +
-                ", debts=" + debts +
-                '}';
+        return "Expense{"
+                + "id=" + id
+                + ", amount=" + amount
+                + ", date=" + date
+                + ", paidBy=" + paidBy
+                + ", event=" + event
+                + ", tags=" + tags
+                + ", debts=" + debts
+                + '}';
     }
 
     @OneToMany(mappedBy = "expense", orphanRemoval = true)
-    @JsonManagedReference ("expense-debts")
+    @JsonManagedReference("expense-debts")
     private List<Debt> debts;
 
     public Expense() {
