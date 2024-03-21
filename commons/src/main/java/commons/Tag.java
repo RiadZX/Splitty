@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -13,6 +14,7 @@ public class Tag {
     private String tag;
 
     @ManyToOne
+    @JsonBackReference("event-tags")
     private Event event;
 
     public Tag(String tag, Event event) {

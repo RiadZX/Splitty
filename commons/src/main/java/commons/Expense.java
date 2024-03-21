@@ -20,13 +20,13 @@ public class Expense {
     private String title;
     private double amount;
     private LocalDateTime date;
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "participant_id")
     @JsonBackReference ("participant-expenses")
     private Participant paidBy;
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
-    @JsonBackReference ("event-expenses")
+    @JsonBackReference("event-expenses")
     private Event event;
     @ManyToMany
     private List<Tag> tags;
