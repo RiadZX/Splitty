@@ -101,12 +101,12 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON) //
 				.get(new GenericType<Event>() {});
 	}
-	public Event removeEvent(UUID id) {
-		return ClientBuilder.newClient(new ClientConfig()) //
+	public void removeEvent(UUID id) {
+		ClientBuilder.newClient(new ClientConfig()) //
 				.target(SERVER).path("api/events/"+id) //
 				.request(APPLICATION_JSON) //
 				.accept(APPLICATION_JSON) //
-				.delete(new GenericType<Event>() {});
+				.delete();
 	}
 
 	public Event joinEvent(String inviteCode){
