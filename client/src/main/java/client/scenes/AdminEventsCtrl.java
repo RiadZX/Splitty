@@ -40,6 +40,11 @@ public class AdminEventsCtrl {
         populateList();
     }
 
+    public void back(){
+        mainCtrl.showSettings();
+    }
+
+
     public void populateList() {
         myListView.getItems().clear();
         this.events = server.getEvents();
