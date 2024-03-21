@@ -16,7 +16,6 @@ import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.UUID;
 
 
 public class EventOverviewCtrl implements Initializable {
