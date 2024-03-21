@@ -120,15 +120,11 @@ public class MainCtrl {
     public void chooseFirstPage(){
         this.user=Config.readUserConfigFile();
         if (user == null) {
-//            this.showFirstTimeScene();
-//            primaryStage.show();
-            this.showAdminEventsScene();
+            this.showFirstTimeScene();
             primaryStage.show();
         }
         else {
-//            this.showStartScene();
-//            primaryStage.show();
-            this.showAdminEventsScene();
+            this.showStartScene();
             primaryStage.show();
         }
     }
@@ -210,8 +206,7 @@ public class MainCtrl {
 
     public void loginAdmin(){
         admin=true;
-        primaryStage.setTitle("Splitty: Admin Overview");
-
+        showAdminEventsScene();
     }
 
     //hardcoded temporary exchange rates
