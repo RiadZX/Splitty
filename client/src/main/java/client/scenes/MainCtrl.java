@@ -112,7 +112,28 @@ public class MainCtrl {
 
         chooseFirstPage(adminMode);
 
+        // in eventoverview, press alt+1 to go back to start
         eventOverview.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.isAltDown() && event.getCode() == KeyCode.DIGIT1) {
+                    showStartScene();
+                }
+            }
+        });
+
+        // in start, press alt+s to go to settings
+        start.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.isAltDown() && event.getCode() == KeyCode.S) {
+                    showSettings();
+                }
+            }
+        });
+
+        // in settings, press alt+1 to go back to start
+        settings.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 if (event.isAltDown() && event.getCode() == KeyCode.DIGIT1) {
