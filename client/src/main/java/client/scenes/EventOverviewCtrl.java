@@ -37,7 +37,6 @@ public class EventOverviewCtrl implements Initializable {
 
     private Event event;
 
-    private UUID session;
 
 
     @Inject
@@ -46,7 +45,6 @@ public class EventOverviewCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
         this.notificationService = notificationService;
         this.event=new Event();
-        this.session = UUID.randomUUID();
     }
 
     @Override
@@ -130,19 +128,11 @@ public class EventOverviewCtrl implements Initializable {
         try {
             Event refreshed = server.getEvent(event.getId());
             this.setEvent(refreshed);
-            //here start the listener for the event
-            System.out.println("Event refreshed 1");
-            server.registerEventUpdates(this.event.getId().toString()+session.toString(), this::setEvent); //this will update the event when the server sends an update
-            System.out.println("Event refreshed 2");
-
             /* TO DO:
             * - refresh all data related to the event
             * - add functionality to the expense list and filtering*/
         }catch (WebApplicationException e) {
             notificationService.showError("Error refreshing event", "Could not refresh event data");
         }
-    }
-    public void stop(){
-        server.stopThread();
     }
 }

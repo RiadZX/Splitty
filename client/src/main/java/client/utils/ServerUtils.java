@@ -122,6 +122,15 @@ public class ServerUtils {
                 });
     }
 
+    public Event removeEvent(UUID id) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/events/"+id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete(new GenericType<Event>() {});
+    }
+
+
     /**
      * Listen for updates for a specified event id
      */
