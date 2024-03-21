@@ -122,7 +122,7 @@ public class EventControllerTest {
         Event event = new Event("Event 1");
         event.setId(eventId);
         when(eventRepository.existsById(eventId)).thenReturn(true);
-        when(eventRepository.saveAndFlush(any(Event.class))).thenReturn(event);
+        when(eventRepository.save(any(Event.class))).thenReturn(event);
 
         ResponseEntity<Event> responseEntity = eventController.update(eventId, event);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());

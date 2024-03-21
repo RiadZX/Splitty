@@ -144,7 +144,6 @@ public class MainCtrl {
     }
 
     public void showStartScene() {
-        eventOverviewCtrl.stop(); //This stops the thread that listens for updates
         primaryStage.setTitle("Splitty: Start");
         startCtrl.addRecentEvents();
         primaryStage.setScene(start);

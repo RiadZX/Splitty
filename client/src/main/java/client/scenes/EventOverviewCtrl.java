@@ -16,7 +16,6 @@ import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.UUID;
 
 
 public class EventOverviewCtrl implements Initializable {
@@ -37,17 +36,12 @@ public class EventOverviewCtrl implements Initializable {
 
     private Event event;
 
-    private UUID session;
-
-
-
     @Inject
     public EventOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.notificationService = notificationService;
         this.event=new Event();
-        this.session = UUID.randomUUID();
     }
 
     @Override
@@ -72,7 +66,6 @@ public class EventOverviewCtrl implements Initializable {
         this.event=newEvent;
         eventTitle.setText(this.event.getTitle());
         reassignParticipants(this.event.getParticipants());
-        server.registerEventUpdates(this.event.getId().toString()+session.toString(), this::setEvent);
     }
 
     public void reassignParticipants(List<Participant> participantList){
@@ -100,11 +93,6 @@ public class EventOverviewCtrl implements Initializable {
         }
         catch (WebApplicationException e){
             notificationService.showError("Error updating event", "Could not update event title");
-            System.out.println("Error updating event title");
-            System.out.println(e.getMessage());
-            System.out.println(e.getResponse().toString());
-            System.out.println(this.event.getName());
-            changeTitle();
         }
     }
 
@@ -139,8 +127,5 @@ public class EventOverviewCtrl implements Initializable {
         }catch (WebApplicationException e) {
             notificationService.showError("Error refreshing event", "Could not refresh event data");
         }
-    }
-    public void stop(){
-        server.stopThread();
     }
 }

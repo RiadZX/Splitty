@@ -1,18 +1,13 @@
 package server.api;
 
 import commons.Event;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.context.request.async.DeferredResult;
 import server.database.EventRepository;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 
 @RestController
 @RequestMapping("/api/events")
@@ -24,8 +19,6 @@ public class EventController {
      * These will be added to the map when a user subscribes to an event
      * And the result will be completed when the event is updated in the updateEvent method.
      */
-    private Map<String, Consumer<Event>> deferredResults = new ConcurrentHashMap<>();
-
     public EventController(EventRepository repo) {
         this.repo = repo;
     }
@@ -99,49 +92,43 @@ public class EventController {
         if (!repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-
         Event saved = repo.save(event);
-        for (Map.Entry<String, Consumer<Event>> entry : deferredResults.entrySet()) {
-            if (entry.getKey().startsWith(id.toString())) {
-                entry.getValue().accept(saved);
-            }
-        }
         return ResponseEntity.ok(saved);
     }
 
-    /**
-     * Subscribe to event to listen for changes
-     * @param id - id of event + id of participant in a string format
-     * @return - changed event
-     */
-    @GetMapping("/subscribe/{id}")
-    public DeferredResult<ResponseEntity<Event>> subscribe(@PathVariable("id") String id) {
-        var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        DeferredResult<ResponseEntity<Event>> deferredResult = new DeferredResult<>(// deferred result is a result that is not completed yet.
-                5000L, //If within 5 seconds the result is not set, the request will be timed out
-                noContent//if not found then this code will be returned
-        );
-        deferredResults.put(id, e -> {
-            deferredResult.setResult(ResponseEntity.ok(e));
-        });
-        deferredResult.onCompletion(
-                () -> {
-                    System.out.println("Completed");
-                    deferredResults.remove(id);
-                });
-        deferredResult.onError(
-                (Throwable t) -> { // Throwable is the error
-                    System.out.println("Error 135");
-                    deferredResults.remove(id);
-                    deferredResult.setErrorResult(t);
-                });
-        deferredResult.onTimeout(
-                () -> {
-                    System.out.println("Timeout");
-                    deferredResults.remove(id);
-                    deferredResult.setErrorResult(noContent);
-                });
-        return deferredResult;
-    }
+//    /**
+//     * Subscribe to event to listen for changes
+//     * @param id - id of event + id of participant in a string format
+//     * @return - changed event
+//     */
+//    @GetMapping("/subscribe/{id}")
+//    public DeferredResult<ResponseEntity<Event>> subscribe(@PathVariable("id") String id) {
+//        var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+//        DeferredResult<ResponseEntity<Event>> deferredResult = new DeferredResult<>(// deferred result is a result that is not completed yet.
+//                5000L, //If within 5 seconds the result is not set, the request will be timed out
+//                noContent//if not found then this code will be returned
+//        );
+//        deferredResults.put(id, e -> {
+//            deferredResult.setResult(ResponseEntity.ok(e));
+//        });
+//        deferredResult.onCompletion(
+//                () -> {
+//                    System.out.println("Completed");
+//                    deferredResults.remove(id);
+//                });
+//        deferredResult.onError(
+//                (Throwable t) -> { // Throwable is the error
+//                    System.out.println("Error 135");
+//                    deferredResults.remove(id);
+//                    deferredResult.setErrorResult(t);
+//                });
+//        deferredResult.onTimeout(
+//                () -> {
+//                    System.out.println("Timeout");
+//                    deferredResults.remove(id);
+//                    deferredResult.setErrorResult(noContent);
+//                });
+//        return deferredResult;
+//    }
 
 }
