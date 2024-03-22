@@ -36,7 +36,7 @@ public class Participant {
     @Expose
     private List<Debt> debts;
 
-    @OneToMany(mappedBy = "participant", orphanRemoval = true)
+    @OneToMany(mappedBy = "paidBy", orphanRemoval = true)
     @JsonManagedReference("participant-expenses")
     @Expose
     private List<Expense> paidFor;
