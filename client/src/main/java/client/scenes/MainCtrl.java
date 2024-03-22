@@ -60,6 +60,9 @@ public class MainCtrl {
     private SettingsCtrl settingsCtrl;
     private Scene settings;
 
+    private LanguageCtrl languageCtrl;
+    private Scene languages;
+
     private AdminEventsCtrl adminEventsCtrl;
     private Scene adminEvents;
 
@@ -72,7 +75,8 @@ public class MainCtrl {
                            Pair<EditParticipantCtrl, Parent> editParticipant,
                            Pair<UserSettingsCtrl, Parent> userSettings,
                            Pair<SettingsCtrl, Parent> settings,
-                           Pair<AdminEventsCtrl, Parent> adminEvents
+                           Pair<AdminEventsCtrl, Parent> adminEvents,
+                           Pair<LanguageCtrl, Parent> languages
     ) {
         this.admin=false;
         this.user = new User();
@@ -104,6 +108,9 @@ public class MainCtrl {
 
         this.settingsCtrl=settings.getKey();
         this.settings=new Scene(settings.getValue());
+
+        this.languageCtrl = languages.getKey();
+        this.languages=new Scene(languages.getValue());
 
         this.adminEventsCtrl = adminEvents.getKey();
         this.adminEvents = new Scene(adminEvents.getValue());
@@ -142,6 +149,10 @@ public class MainCtrl {
     public  void showSettings(){
         primaryStage.setTitle("Splitty: Settings");
         primaryStage.setScene(settings);
+    }
+    public void showLanguageOptions() {
+        primaryStage.setTitle("Splitty: Languages");
+        primaryStage.setScene(languages);
     }
     public  void showUserSettings(){
         primaryStage.setTitle("Splitty: Profile Settings");

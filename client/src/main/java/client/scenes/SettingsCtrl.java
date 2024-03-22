@@ -33,6 +33,9 @@ public class SettingsCtrl implements Initializable {
     public void editProfileAction(){
         this.mainCtrl.showUserSettings();
     }
+    public void language() {
+        this.mainCtrl.showLanguageOptions();
+    }
     public void deleteDataAction(){
         this.mainCtrl.deleteAllData();
     }

@@ -13,7 +13,7 @@
          </font>
       </Label>
       <Button layoutX="118.0" layoutY="122.0" mnemonicParsing="false" onAction="#editProfileAction" prefHeight="31.0" prefWidth="122.0" text="Edit Profile" />
-      <Button layoutX="118.0" layoutY="175.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="122.0" text="Language" />
+      <Button layoutX="118.0" layoutY="175.0" mnemonicParsing="false" onAction="#language" prefHeight="27.0" prefWidth="122.0" text="Language" />
       <Button layoutX="118.0" layoutY="283.0" mnemonicParsing="false" onAction="#adminAction" prefHeight="27.0" prefWidth="122.0" text="Admin Mode" />
       <Button layoutX="118.0" layoutY="231.0" mnemonicParsing="false" onAction="#deleteDataAction" prefHeight="27.0" prefWidth="122.0" text="Delete All Data" />
       <Pane layoutX="7.0" layoutY="10.0" onMouseClicked="#backAction" prefHeight="27.0" prefWidth="75.0">
