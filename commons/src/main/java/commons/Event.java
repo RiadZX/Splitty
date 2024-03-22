@@ -20,7 +20,6 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "event_id")
-    @Expose
     private UUID id;
 
     @Expose
