@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.services.I18N;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -8,6 +9,7 @@ import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import commons.Event;
 import javafx.scene.layout.GridPane;
@@ -29,6 +31,9 @@ public class StartCtrl implements Initializable {
 
     @FXML
     private GridPane recentEventsGrid;
+
+    @FXML
+    private Label newEventLabel;
     @Inject
     public StartCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
         this.server = server;
@@ -38,6 +43,7 @@ public class StartCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        I18N.update(newEventLabel);
         createEventField.setOnKeyPressed((event -> {
             switch (event.getCode()) {
                 case ENTER -> createEvent();

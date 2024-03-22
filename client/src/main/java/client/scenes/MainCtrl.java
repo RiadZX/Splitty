@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import client.services.I18N;
 import client.utils.Config;
 import client.utils.User;
 import commons.Event;
@@ -119,7 +120,7 @@ public class MainCtrl {
     }
 
     public void showInviteView(Event event){
-        primaryStage.setTitle("Splitty: Invite View");
+        primaryStage.setTitle(I18N.get("window.invite"));
         inviteViewCtrl.setEvent(event);
         primaryStage.setScene(inviteView);
     }
@@ -136,18 +137,18 @@ public class MainCtrl {
         }
     }
     public void showFirstTimeScene(){
-        primaryStage.setTitle("Splitty: Setup");
+        primaryStage.setTitle(I18N.get("window.setup"));
         primaryStage.setScene(this.firstTime);
     }
 
     public void showStartScene() {
-        primaryStage.setTitle("Splitty: Start");
+        primaryStage.setTitle(I18N.get("window.start"));
         startCtrl.addRecentEvents();
         primaryStage.setScene(start);
     }
 
     public  void showSettings(){
-        primaryStage.setTitle("Splitty: Settings");
+        primaryStage.setTitle(I18N.get("window.settings"));
         primaryStage.setScene(settings);
     }
     public void showLanguageOptions() {
@@ -155,7 +156,7 @@ public class MainCtrl {
         primaryStage.setScene(languages);
     }
     public  void showUserSettings(){
-        primaryStage.setTitle("Splitty: Profile Settings");
+        primaryStage.setTitle(I18N.get("window.settings.profile"));
         userSettingsCtrl.refreshFields();
         primaryStage.setScene(userSettings);
 
@@ -163,20 +164,20 @@ public class MainCtrl {
 
     // TODO Both setEvent and refresh call the setEvent function
     public void showEventOverviewScene(Event newEvent){
-        primaryStage.setTitle("Splitty: Event Overview");
+        primaryStage.setTitle(I18N.get("window.event.overview"));
         eventOverviewCtrl.setEvent(newEvent);
         eventOverviewCtrl.refresh();
         primaryStage.setScene(eventOverview);
     }
 
     public void showAddParticipantScene(Event event) {
-        primaryStage.setTitle("Splitty: Add Participant");
+        primaryStage.setTitle(I18N.get("window.event.participant.add"));
         addParticipantCtrl.setEvent(event);
         primaryStage.setScene(addParticipant);
     }
 
     public void showEditParticipantScene(Event event, Participant p) {
-        primaryStage.setTitle("Splitty: Edit Participant");
+        primaryStage.setTitle(I18N.get("window.event.participant.edit"));
         editParticipantCtrl.setEvent(event);
         editParticipantCtrl.setParticipant(p);
         editParticipantCtrl.refresh();
@@ -184,7 +185,7 @@ public class MainCtrl {
     }
 
     public void showAdminEventsScene() {
-        primaryStage.setTitle("Splitty: Admin Events");
+        primaryStage.setTitle(I18N.get("window.event.admin"));
         adminEventsCtrl.populateList();
         primaryStage.setScene(adminEvents);
     }
@@ -205,7 +206,7 @@ public class MainCtrl {
     }
 
     public void showAddExpense(){
-        primaryStage.setTitle("Splitty: Add/Edit Expense");
+        primaryStage.setTitle(I18N.get("window.expense"));
         addExpenseCtrl.setup(eventOverviewCtrl.getEvent());
         primaryStage.setScene(addExpense);
     }
