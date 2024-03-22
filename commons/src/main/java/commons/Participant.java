@@ -3,8 +3,10 @@ package commons;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -15,10 +17,13 @@ public class Participant {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "participant_id")
+    @Expose
     private UUID id;
 
+    @Expose
     private String name;
 
+    @Expose
     private String email;
 
     @ManyToOne (fetch = FetchType.LAZY)
@@ -28,10 +33,18 @@ public class Participant {
 
     @OneToMany(mappedBy = "participant", orphanRemoval = true)
     @JsonManagedReference ("participant-debts")
+    @Expose
     private List<Debt> debts;
 
+    @OneToMany(mappedBy = "paidBy", orphanRemoval = true)
+    @JsonManagedReference("participant-expenses")
+    @Expose
+    private List<Expense> paidFor;
+
+    @Expose
     private String iban;
 
+    @Expose
     private String bic;
 
     public Participant() {
@@ -43,6 +56,7 @@ public class Participant {
         this.iban = iban;
         this.email = email;
         this.bic = bic;
+        this.paidFor = new ArrayList<>();
     }
 
     public String getIban() {
@@ -112,6 +126,10 @@ public class Participant {
 
     public UUID getId() {
         return id;
+    }
+
+    public void payFor(Expense e) {
+        this.paidFor.add(e);
     }
 
     public void setId(UUID id) {

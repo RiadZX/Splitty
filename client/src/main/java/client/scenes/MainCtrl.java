@@ -178,6 +178,10 @@ public class MainCtrl {
         primaryStage.setScene(adminEvents);
     }
 
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
     public User getUser(){
         return this.user;
     }
