@@ -12,11 +12,11 @@ import java.util.*;
 import java.util.concurrent.Callable;
 
 public class I18N {
-    private static final ObjectProperty<Locale> locale;
+    private static final ObjectProperty<Locale> LOCALE;
 
     static {
-        locale = new SimpleObjectProperty<>(getDefaultLocale());
-        locale.addListener((observable, oldVal, newVal) -> Locale.setDefault(newVal));
+        LOCALE = new SimpleObjectProperty<>(getDefaultLocale());
+        LOCALE.addListener((observable, oldVal, newVal) -> Locale.setDefault(newVal));
     }
 
     /**
@@ -45,7 +45,7 @@ public class I18N {
     }
 
     public static Locale getLocale() {
-        return locale.get();
+        return LOCALE.get();
     }
 
     public static void setLocale(Locale locale) {
@@ -54,7 +54,7 @@ public class I18N {
     }
 
     public static ObjectProperty<Locale> localeProperty() {
-        return locale;
+        return LOCALE;
     }
 
 
@@ -82,7 +82,7 @@ public class I18N {
      * @return StringBinding
      */
     public static StringBinding createStringBinding(Callable<String> func) {
-        return Bindings.createStringBinding(func, locale);
+        return Bindings.createStringBinding(func, LOCALE);
     }
 
     /**
@@ -93,7 +93,7 @@ public class I18N {
      * @return String binding
      */
     public static StringBinding createStringBinding(final String key, Object... args) {
-        return Bindings.createStringBinding(() -> get(key, args), locale);
+        return Bindings.createStringBinding(() -> get(key, args), LOCALE);
     }
 
     public static void update(Labeled entity) {
