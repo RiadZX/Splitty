@@ -29,7 +29,7 @@ public class I18N {
                 Locale.ENGLISH,
                 new Locale.Builder()
                     .setLanguage("nl")
-                    .setScript("Latin")
+                    .setScript("Latn")
                     .setRegion("nl").build()
         ));
     }
@@ -69,7 +69,8 @@ public class I18N {
      * @return localized formatted string
      */
     public static String get(final String key, final Object... args) {
-        ResourceBundle bundle = ResourceBundle.getBundle("messages", getLocale());
+        System.out.println(getLocale());
+        ResourceBundle bundle = ResourceBundle.getBundle("client/languages", getLocale());
         return MessageFormat.format(bundle.getString(key), args);
     }
 
