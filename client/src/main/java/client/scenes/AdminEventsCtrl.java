@@ -3,24 +3,25 @@ package client.scenes;
 import client.services.GsonInstantTypeAdapter;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import commons.Event;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 
 import javax.inject.Inject;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,6 +35,9 @@ public class AdminEventsCtrl {
 
     @FXML
     private ListView<BorderPane> myListView;
+
+    @FXML
+    private Button addButton;
 
     private List<Event> events;
 
@@ -82,7 +86,6 @@ public class AdminEventsCtrl {
         mainCtrl.showSettings();
     }
 
-
     public void populateList() {
         myListView.getItems().clear();
         this.events = server.getEvents();
@@ -121,5 +124,33 @@ public class AdminEventsCtrl {
             return bp;
         }).toList();
         myListView.getItems().addAll(contents);
+    }
+
+    public void importEvent() {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Instant.class, new GsonInstantTypeAdapter())
+                .create();
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+        File selectedFile = fileChooser.showOpenDialog(mainCtrl.getPrimaryStage());
+        if (selectedFile == null) {
+            notificationService.showError("No file chosen", "Make sure to select an adequate event json dump.");
+        }
+        Event e = null;
+        try {
+            String contents = Files.asCharSource(selectedFile, Charsets.UTF_8).read();
+            e = gson.fromJson(contents, Event.class);
+        } catch (IOException x) {
+            notificationService.showError("Unable to read file", x.toString());
+        }
+        if (e != null) {
+            server.addEvent(e);
+        } else {
+            notificationService.showError("Failed to process an event", "Make sure to select an adequate event json dump.");
+        }
+        populateList();
     }
 }

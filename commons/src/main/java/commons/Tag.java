@@ -10,8 +10,7 @@ import java.util.Objects;
 @Table(name = "tags")
 public class Tag {
     @Id
-    @GeneratedValue
-    @Expose
+    @GeneratedValue(strategy = GenerationType.UUID)
     private long id;
 
     @Expose
