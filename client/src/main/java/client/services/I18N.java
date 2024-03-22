@@ -23,7 +23,7 @@ public class I18N {
      * @return List of all locales supported by the application.
      */
     public static List<Locale> getSupportedLocales() {
-        return new ArrayList<>(Arrays.asList(Locale.ENGLISH, Locale.GERMAN));
+        return new ArrayList<>(Arrays.asList(Locale.ENGLISH, new Locale.Builder().setLanguage("nl").setScript("Latn").setRegion("nl").build()));
     }
 
     /**
