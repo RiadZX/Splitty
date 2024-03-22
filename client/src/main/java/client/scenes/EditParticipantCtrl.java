@@ -3,6 +3,7 @@ package client.scenes;
 import client.services.NotificationHelper;
 import commons.Event;
 import commons.Participant;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import client.utils.ServerUtils;
 
@@ -100,6 +101,21 @@ public class EditParticipantCtrl {
 
     public void returnToOverview() {
         mainCtrl.showEventOverviewScene(event);
+    }
+
+    public void removeParticipant() {
+        try {
+            server.removeParticipant(event, p);
+        } catch (WebApplicationException e) {
+            String warningMessage = """
+                    Unable to delete the participant.
+                    """;
+            NotificationHelper notificationHelper = new NotificationHelper();
+            notificationHelper.showError("Warning!", warningMessage);
+
+        } finally {
+            returnToOverview();
+        }
     }
 
     public void refresh() {

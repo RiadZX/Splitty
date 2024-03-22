@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import commons.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.ListView;
@@ -21,16 +22,17 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class AdminEventsCtrl {
+public class AdminEventsCtrl implements Initializable {
     private final MainCtrl mainCtrl;
 
-    private final NotificationService notificationService;
-
     private final ServerUtils server;
+    private final NotificationService notificationService;
 
     @FXML
     private ListView<BorderPane> myListView;
@@ -42,6 +44,41 @@ public class AdminEventsCtrl {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.notificationService = notificationService;
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        /*
+        myListView.setCellFactory(param -> new ListCell<Event>() {
+            @Override
+            protected void updateItem(Event item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    BorderPane parent = new BorderPane();
+                    getChildren().add(parent);
+                    setText(item.getName());
+                    Image image = new Image("client/icons/bin.png");
+                    ImageView remove = new ImageView();
+                    remove.setImage(image);
+                    remove.setOnMouseClicked(e -> removeEvent(item));
+                    remove.cursorProperty().set(Cursor.CLOSED_HAND);
+                    remove.setFitHeight(12.0);
+                    remove.setFitWidth(12.0);
+                }
+            }
+        });
+        */
+        //register for event updates
+        server.listenEvents(event -> {
+            System.out.println("Event received");
+            addItem(event);
+        });
+    }
+    private void addItem(Event e){
+        this.events.add(e);
+        myListView.getItems().add(createRow(e));
     }
 
     private void removeEvent(Event e) {
@@ -86,40 +123,54 @@ public class AdminEventsCtrl {
     public void populateList() {
         myListView.getItems().clear();
         this.events = server.getEvents();
-        List<BorderPane> contents = events.stream().map(e -> {
-            Insets insets = new Insets(0.0, 5.0, 0.0, 5.0);
-            BorderPane bp = new BorderPane();
-            bp.setLeft(new Text(e.getName()));
-
-            BorderPane innerBp = new BorderPane();
-            innerBp.setMaxWidth(40.0);
-            innerBp.setMaxHeight(15.0);
-
-            Image removeImage = new Image("client/icons/bin.png");
-            ImageView remove = new ImageView();
-            remove.setImage(removeImage);
-            remove.setOnMouseClicked(x -> removeEvent(e));
-            remove.cursorProperty().set(Cursor.HAND);
-            remove.setFitHeight(12.0);
-            remove.setPickOnBounds(true);
-            remove.setFitWidth(12.0);
-            innerBp.setRight(remove);
-            BorderPane.setMargin(remove, insets);
-
-            Image downloadImage = new Image("client/icons/downloads.png");
-            ImageView download = new ImageView();
-            download.setImage(downloadImage);
-            download.setOnMouseClicked(x -> downloadEvent(e));
-            download.cursorProperty().set(Cursor.HAND);
-            download.setFitHeight(12.0);
-            download.setPickOnBounds(true);
-            download.setFitWidth(12.0);
-            innerBp.setLeft(download);
-            BorderPane.setMargin(download, insets);
-
-            bp.setRight(innerBp);
-            return bp;
-        }).toList();
+        List<BorderPane> contents = events.stream().map(e -> createRow(e)).toList();
         myListView.getItems().addAll(contents);
+    }
+
+    /**
+     * Creates a row for the list view
+     * @param e Event
+     * @return Row for the list view
+     */
+    private BorderPane createRow(Event e) {
+        Insets insets = new Insets(0.0, 5.0, 0.0, 5.0);
+        BorderPane bp = new BorderPane();
+        bp.setLeft(new Text(e.getName()));
+
+        BorderPane innerBp = new BorderPane();
+        innerBp.setMaxWidth(40.0);
+        innerBp.setMaxHeight(15.0);
+
+        Image removeImage = new Image("client/icons/bin.png");
+        ImageView remove = new ImageView();
+        remove.setImage(removeImage);
+        remove.setOnMouseClicked(x -> removeEvent(e));
+        remove.cursorProperty().set(Cursor.HAND);
+        remove.setFitHeight(12.0);
+        remove.setPickOnBounds(true);
+        remove.setFitWidth(12.0);
+        innerBp.setRight(remove);
+        BorderPane.setMargin(remove, insets);
+
+        Image downloadImage = new Image("client/icons/downloads.png");
+        ImageView download = new ImageView();
+        download.setImage(downloadImage);
+        download.setOnMouseClicked(x -> downloadEvent(e));
+        download.cursorProperty().set(Cursor.HAND);
+        download.setFitHeight(12.0);
+        download.setPickOnBounds(true);
+        download.setFitWidth(12.0);
+        innerBp.setLeft(download);
+        BorderPane.setMargin(download, insets);
+
+        bp.setRight(innerBp);
+        return bp;
+    }
+
+    /**
+     * Stops the listening thread to be able to close the application
+     */
+    public void stop(){
+        server.stopThread();
     }
 }

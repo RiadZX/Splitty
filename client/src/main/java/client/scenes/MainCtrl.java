@@ -28,13 +28,13 @@ import java.util.UUID;
 
 public class MainCtrl {
 
-    private  User user;
+    private User user;
     public boolean admin;
 
     private Stage primaryStage;
     private FirstTimeCtrl firstTimeCtrl;
 
-    private  Scene firstTime;
+    private Scene firstTime;
 
     private EventOverviewCtrl eventOverviewCtrl;
     private Scene eventOverview;
@@ -72,20 +72,21 @@ public class MainCtrl {
                            Pair<EditParticipantCtrl, Parent> editParticipant,
                            Pair<UserSettingsCtrl, Parent> userSettings,
                            Pair<SettingsCtrl, Parent> settings,
-                           Pair<AdminEventsCtrl, Parent> adminEvents
+                           Pair<AdminEventsCtrl, Parent> adminEvents,
+                           boolean adminMode
     ) {
         this.admin=false;
         this.user = new User();
         this.primaryStage = primaryStage;
 
-        this.firstTimeCtrl=firstTime.getKey();
-        this.firstTime=new Scene(firstTime.getValue());
+        this.firstTimeCtrl = firstTime.getKey();
+        this.firstTime = new Scene(firstTime.getValue());
 
-        this.eventOverviewCtrl=eventOverview.getKey();
-        this.eventOverview= new Scene(eventOverview.getValue());
+        this.eventOverviewCtrl = eventOverview.getKey();
+        this.eventOverview = new Scene(eventOverview.getValue());
 
-        this.startCtrl=start.getKey();
-        this.start= new Scene(start.getValue());
+        this.startCtrl = start.getKey();
+        this.start = new Scene(start.getValue());
 
         this.addExpenseCtrl = addExpense.getKey();
         this.addExpense = new Scene(addExpense.getValue());
@@ -96,36 +97,46 @@ public class MainCtrl {
         this.editParticipantCtrl = editParticipant.getKey();
         this.editParticipant = new Scene(editParticipant.getValue());
 
-        this.inviteViewCtrl=inviteView.getKey();
-        this.inviteView=new Scene(inviteView.getValue());
+        this.inviteViewCtrl = inviteView.getKey();
+        this.inviteView = new Scene(inviteView.getValue());
 
-        this.userSettingsCtrl=userSettings.getKey();
-        this.userSettings=new Scene(userSettings.getValue());
+        this.userSettingsCtrl = userSettings.getKey();
+        this.userSettings = new Scene(userSettings.getValue());
 
-        this.settingsCtrl=settings.getKey();
-        this.settings=new Scene(settings.getValue());
+        this.settingsCtrl = settings.getKey();
+        this.settings = new Scene(settings.getValue());
 
         this.adminEventsCtrl = adminEvents.getKey();
         this.adminEvents = new Scene(adminEvents.getValue());
 
-        chooseFirstPage();
+        chooseFirstPage(adminMode);
     }
 
-    public void showInviteView(Event event){
+    public void showInviteView(Event event) {
         primaryStage.setTitle("Splitty: Invite View");
         inviteViewCtrl.setEvent(event);
         primaryStage.setScene(inviteView);
     }
 
-    public void chooseFirstPage(){
-        this.user=Config.readUserConfigFile();
-        if (user == null) {
-            this.showFirstTimeScene();
+    /**
+     * Choose the first page to show
+     *
+     * @param adminMode - if adminMode is true, directly show admin page and skip normal user page
+     */
+    public void chooseFirstPage(boolean adminMode) {
+        this.user = Config.readUserConfigFile();
+        if (adminMode) {
+            this.showAdminEventsScene();
             primaryStage.show();
-        }
-        else {
-            this.showStartScene();
-            primaryStage.show();
+        } else {
+            if (user == null) {
+                this.showFirstTimeScene();
+                primaryStage.show();
+
+            } else {
+                this.showStartScene();
+                primaryStage.show();
+            }
         }
     }
     public void showFirstTimeScene(){
@@ -157,7 +168,6 @@ public class MainCtrl {
         eventOverviewCtrl.refresh();
         primaryStage.setScene(eventOverview);
     }
-
     public void showAddParticipantScene(Event event) {
         primaryStage.setTitle("Splitty: Add Participant");
         addParticipantCtrl.setEvent(event);
@@ -205,7 +215,7 @@ public class MainCtrl {
 
     public void deleteAllData(){
         Config.deleteUserConfigFile();
-        this.chooseFirstPage();
+        this.chooseFirstPage(false);
     }
 
     public void loginAdmin(){
