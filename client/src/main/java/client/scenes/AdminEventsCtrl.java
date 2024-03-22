@@ -61,7 +61,7 @@ public class AdminEventsCtrl {
         String path = selectedDirectory.getAbsolutePath()
                 + (System.getProperty("os.name").startsWith("Windows") ? "\\" : "/")
                 + e.getName() + "-"
-                + LocalDateTime.now()
+                + LocalDateTime.now().toString().replaceAll(":", "-")
                 + ".json";
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
