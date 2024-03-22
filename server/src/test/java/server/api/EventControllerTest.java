@@ -94,7 +94,7 @@ public class EventControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
-    //TODO: Adapt the test to reflect the new return value of the remove Event endpoint
+    //TODO Adapt the test to reflect the new return value of the remove Event endpoint
 //    @Test
 //    void testRemoveExistingEvent() {
 //        UUID eventId = UUID.randomUUID();

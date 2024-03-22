@@ -52,6 +52,7 @@ public class MainCtrl {
 
     private AddExpenseCtrl addExpenseCtrl;
     private Scene addExpense;
+    private Scene inviteView;
     private InviteViewCtrl inviteViewCtrl;
     private Scene inviteView;
 
@@ -95,6 +96,10 @@ public class MainCtrl {
         this.addExpenseCtrl = addExpense.getKey();
         this.addExpense = new Scene(addExpense.getValue());
 
+        this.user = new User();
+
+        //showStartScene();
+        //primaryStage.show();
         this.addParticipantCtrl = addParticipant.getKey();
         this.addParticipant = new Scene(addParticipant.getValue());
 
@@ -169,7 +174,6 @@ public class MainCtrl {
         eventOverviewCtrl.refresh();
         primaryStage.setScene(eventOverview);
     }
-
     public void showAddParticipantScene(Event event) {
         primaryStage.setTitle(I18N.get("window.event.participant.add"));
         addParticipantCtrl.setEvent(event);
@@ -188,6 +192,9 @@ public class MainCtrl {
         primaryStage.setTitle(I18N.get("window.event.admin"));
         adminEventsCtrl.populateList();
         primaryStage.setScene(adminEvents);
+    }
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
 
     public User getUser(){

@@ -1,10 +1,11 @@
 package commons;
 
+import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -16,20 +17,36 @@ public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "expense_id")
+    @Expose
     private UUID id;
+
+    @Expose
     private String title;
+
+    @Expose
     private double amount;
-    private LocalDateTime date;
+
+    @Expose
+    private Instant date;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "participant_id")
     @JsonBackReference ("participant-expenses")
     private Participant paidBy;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     @JsonBackReference("event-expenses")
     private Event event;
+
     @ManyToMany
+    @Expose
     private List<Tag> tags;
+
+    @OneToMany(mappedBy = "expense", orphanRemoval = true)
+    @JsonManagedReference ("expense-debts")
+    @Expose
+    private List<Debt> debts;
 
     @Override
     public String toString() {
@@ -45,15 +62,11 @@ public class Expense {
                 '}';
     }
 
-    @OneToMany(mappedBy = "expense", orphanRemoval = true)
-    @JsonManagedReference ("expense-debts")
-    private List<Debt> debts;
-
     public Expense() {
         // For JPA
     }
 
-    public Expense(String title, double amount, LocalDateTime date,
+    public Expense(String title, double amount, Instant date,
                    Participant paidBy, Event event, List<Debt> debts, List<Tag> tags) {
         this.title = title;
         this.amount = amount;
@@ -88,7 +101,7 @@ public class Expense {
         this.amount = amount;
     }
 
-    public LocalDateTime getDate() {
+    public Instant getDate() {
         return date;
     }
 
@@ -140,7 +153,7 @@ public class Expense {
         return Objects.hash(id, title, amount, date, paidBy, event, debts, tags);
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(Instant date) {
         this.date = date;
     }
 

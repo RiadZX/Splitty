@@ -1,6 +1,7 @@
 package commons;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -12,18 +13,23 @@ import java.util.UUID;
 public class Debt {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Expose
     private UUID id;
 
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "expense_id")
     @JsonBackReference ("expense-debts")
     private Expense expense;
+
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "participant_id")
     @JsonBackReference ("participant-debts")
     private Participant participant;
+
+    @Expose
     private double amount;
 
+    @Expose
     private boolean paid;
 
     public Debt() {}

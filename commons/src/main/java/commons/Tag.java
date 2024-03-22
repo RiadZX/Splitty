@@ -1,6 +1,7 @@
 package commons;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -10,7 +11,10 @@ import java.util.Objects;
 public class Tag {
     @Id
     @GeneratedValue
+    @Expose
     private long id;
+
+    @Expose
     private String tag;
 
     @ManyToOne

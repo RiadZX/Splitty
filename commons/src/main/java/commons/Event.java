@@ -1,7 +1,7 @@
 package commons;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ValueGenerationType;
 
@@ -20,39 +20,52 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "event_id")
+    @Expose
     private UUID id;
+
+    @Expose
     private String name;
+
     @Column(nullable = false, unique = true)
     @INVITECODE String inviteCode;
+    @Expose
     private String title; //fix response issue for now
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JsonManagedReference ("event-participants")
+    @Expose
     private List<Participant> participants;
 
     @OneToMany(mappedBy = "event", orphanRemoval = true)
     @JsonManagedReference("event-expenses")
+    @Expose
     private List<Expense> expenses;
 
     @OneToMany(mappedBy = "event")
     @JsonManagedReference("event-tags")
+    @Expose
     private List<Tag> tags;
+
     public Event(UUID id) {
         this.id = id;
     }
+
     public Event() {
         this.participants=new ArrayList<>();
         this.expenses = new ArrayList<>();
         this.tags = new ArrayList<>();
     }
+
     public Event(String name){
         this();
         this.name = name;
     }
+
     public Event(String name, Participant creator){
         this(name);
         this.participants.add(creator);
     }
+
     public Event(String name, List<Participant> participants) {
         this(name);
         this.participants = participants;
