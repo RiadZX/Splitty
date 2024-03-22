@@ -83,13 +83,23 @@ public class AdminEventsCtrl implements Initializable {
             addItem(event);
         });
     }
+
+    /**
+     * Adds a single event to the table
+     * @param e Event to be added
+     */
     private void addItem(Event e){
         this.events.add(e);
         populateList();
     }
 
+    /**
+     * Removes event from db and table.
+     * @param e Event to be removed
+     */
     private void removeEvent(Event e) {
         server.removeEvent(e.getId());
+        this.events.remove(e);
         populateList();
     }
 
@@ -195,11 +205,20 @@ public class AdminEventsCtrl implements Initializable {
         } catch (IOException x) {
             notificationService.showError("Unable to read file", x.toString());
         }
+        Event saved = null;
         if (e != null) {
-            server.addEvent(e);
+            saved = server.addEvent(e);
         } else {
             notificationService.showError("Failed to process an event", "Make sure to select an adequate event json dump.");
         }
+        this.events.add(saved);
         populateList();
+    }
+
+    /**
+     * Shuts down the server listener thread.
+     */
+    public void stop(){
+        server.stopThread();
     }
 }
