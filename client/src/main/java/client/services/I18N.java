@@ -1,11 +1,15 @@
 // strongly inspired by https://www.sothawo.com/2016/09/how-to-implement-a-javafx-ui-where-the-language-can-be-changed-dynamically/
 package client.services;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.control.Labeled;
 
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.concurrent.Callable;
 
 public class I18N {
     private static final ObjectProperty<Locale> locale;
@@ -67,5 +71,31 @@ public class I18N {
     public static String get(final String key, final Object... args) {
         ResourceBundle bundle = ResourceBundle.getBundle("messages", getLocale());
         return MessageFormat.format(bundle.getString(key), args);
+    }
+
+    /**
+     * creates a String Binding to a localized String that is computed by calling the given func
+     *
+     * @param func
+     *         function called on every change
+     * @return StringBinding
+     */
+    public static StringBinding createStringBinding(Callable<String> func) {
+        return Bindings.createStringBinding(func, locale);
+    }
+
+    /**
+     * creates a String binding to a localized String for the given message bundle key
+     *
+     * @param key
+     *         key
+     * @return String binding
+     */
+    public static StringBinding createStringBinding(final String key, Object... args) {
+        return Bindings.createStringBinding(() -> get(key, args), locale);
+    }
+
+    public static void update(Labeled entity) {
+        entity.textProperty().bind(createStringBinding(entity.getText()));
     }
 }
