@@ -157,8 +157,8 @@ public class ServerUtils {
 		});
 	}
 
-	public void send(String dest, Object o){
-		System.out.println("I send message to " + dest + " for " + o.getClass());
-		session.send(dest, o);
+	public void send(String dest, Event e){
+		System.out.println("I send message to " + dest + " for " + e.getTitle());
+		session.send(dest, e);
 	}
 }

@@ -12,12 +12,15 @@ import javafx.scene.text.TextFlow;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.stereotype.Controller;
 
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-
+@Controller
+@EnableScheduling
 public class EventOverviewCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -93,7 +96,7 @@ public class EventOverviewCtrl implements Initializable {
     public void changeTitle(){
         this.event.setName(this.eventTitle.getText());
         System.out.println("title change");
-        server.send("/app/events", this.event);
+        server.send("/topic/events", this.event);
         /*
         try {
             this.server.updateEvent(this.event);

@@ -79,6 +79,12 @@ public class EventController {
         }
         return ResponseEntity.badRequest().build();
     }
+    @MessageMapping("/events")
+    @SendTo("/topic/events")
+    public Event addMessage(Event event){
+        System.out.println("It works! " + update(event.getId(), event).getBody().getTitle());
+        return event;
+    }
     /**
      * Update event
      * @param id - id of event
@@ -93,12 +99,4 @@ public class EventController {
         Event saved = repo.save(event);
         return ResponseEntity.ok(saved);
     }
-
-    @MessageMapping("/events")
-    @SendTo("topic/events")
-    public Event addMessage(Event event){
-        System.out.println("TJ Miles " + update(event.getId(), event).getBody().getTitle());
-        return event;
-    }
-
 }
