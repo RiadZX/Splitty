@@ -54,8 +54,6 @@ public class MainCtrl {
     private Scene addExpense;
     private Scene inviteView;
     private InviteViewCtrl inviteViewCtrl;
-    private Scene inviteView;
-
     private UserSettingsCtrl userSettingsCtrl;
     private Scene userSettings;
 
