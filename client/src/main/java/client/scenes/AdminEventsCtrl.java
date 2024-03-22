@@ -70,6 +70,9 @@ public class AdminEventsCtrl implements Initializable {
             }
         });
         */
+        myListView.getItems().clear();
+        this.events = server.getEvents();
+        populateList();
         //register for event updates
         server.listenEvents(event -> {
             System.out.println("Event received");
@@ -78,7 +81,7 @@ public class AdminEventsCtrl implements Initializable {
     }
     private void addItem(Event e){
         this.events.add(e);
-        myListView.getItems().add(createRow(e));
+        populateList();
     }
 
     private void removeEvent(Event e) {
@@ -119,10 +122,11 @@ public class AdminEventsCtrl implements Initializable {
         mainCtrl.showSettings();
     }
 
-
+    /**
+     * Uses the locally stored list of events to render the table.
+     */
     public void populateList() {
         myListView.getItems().clear();
-        this.events = server.getEvents();
         List<BorderPane> contents = events.stream().map(e -> createRow(e)).toList();
         myListView.getItems().addAll(contents);
     }
