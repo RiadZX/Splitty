@@ -19,8 +19,11 @@ import client.utils.Config;
 import client.utils.User;
 import commons.Event;
 import commons.Participant;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -108,6 +111,36 @@ public class MainCtrl {
         this.adminEvents = new Scene(adminEvents.getValue());
 
         chooseFirstPage(adminMode);
+
+        // in eventoverview, press alt+1 to go back to start
+        eventOverview.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.isAltDown() && event.getCode() == KeyCode.DIGIT1) {
+                    showStartScene();
+                }
+            }
+        });
+
+        // in start, press alt+s to go to settings
+        start.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.isAltDown() && event.getCode() == KeyCode.S) {
+                    showSettings();
+                }
+            }
+        });
+
+        // in settings, press alt+1 to go back to start
+        settings.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.isAltDown() && event.getCode() == KeyCode.DIGIT1) {
+                    showStartScene();
+                }
+            }
+        });
     }
 
     public void showInviteView(Event event) {
