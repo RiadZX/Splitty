@@ -38,7 +38,6 @@ public class Expense {
                 + ", amount=" + amount
                 + ", date=" + date
                 + ", paidBy=" + paidBy
-                + ", event=" + event
                 + ", tags=" + tags
                 + ", debts=" + debts
                 + '}';

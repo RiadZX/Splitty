@@ -176,6 +176,19 @@ public class Event {
         }
         return codeBuilder.toString();
     }
+
+    @Override
+    public String toString() {
+        return "Event{"
+                + "id=" + id
+                + ", name='" + name + '\''
+                + ", inviteCode='" + inviteCode + '\''
+                + ", title='" + title + '\''
+                + ", participants=" + participants
+                + ", expenses=" + expenses
+                + ", tags=" + tags
+                + '}';
+    }
 }
 @ValueGenerationType(generatedBy =InviteCodeGenerator.class)
 @Retention(RUNTIME)
