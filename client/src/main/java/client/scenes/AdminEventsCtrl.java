@@ -46,6 +46,8 @@ public class AdminEventsCtrl implements Initializable {
 
     private List<Event> events;
     private Dialog<String> dlg;
+    private int sortCol;
+    private int sortType;
 
     @Inject
     public AdminEventsCtrl(MainCtrl mainCtrl, ServerUtils server, NotificationService notificationService) {
@@ -78,6 +80,8 @@ public class AdminEventsCtrl implements Initializable {
             }
         });
         */
+        sortCol=-1;
+        sortType=-1;
         myListView.getItems().clear();
         this.events = server.getEvents();
         dlg=setupDialog();
@@ -202,6 +206,7 @@ public class AdminEventsCtrl implements Initializable {
         File selectedFile = fileChooser.showOpenDialog(mainCtrl.getPrimaryStage());
         if (selectedFile == null) {
             notificationService.showError("No file chosen", "Make sure to select an adequate event json dump.");
+            return;
         }
         Event e = null;
         try {
@@ -209,12 +214,14 @@ public class AdminEventsCtrl implements Initializable {
             e = gson.fromJson(contents, Event.class);
         } catch (IOException x) {
             notificationService.showError("Unable to read file", x.toString());
+            return;
         }
         Event saved = null;
         if (e != null) {
             saved = server.addEvent(e);
         } else {
             notificationService.showError("Failed to process an event", "Make sure to select an adequate event json dump.");
+            return;
         }
         //this.events.add(saved);
         //populateList();
@@ -225,8 +232,10 @@ public class AdminEventsCtrl implements Initializable {
         if (t.isPresent()){
             String col=t.get().split("-")[0];
             String type=t.get().split("-")[1];
-            System.out.println(col);
-            System.out.println(type);
+            sortType=List.of("ASC", "DESC").indexOf(type);
+            sortCol=List.of("Title", "Last Created", "Last Activity").indexOf(col);
+            System.out.println(sortCol);
+            System.out.println(sortType);
         }
     }
 
