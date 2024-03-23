@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.time.Instant;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -45,6 +46,9 @@ public class Event {
     @Expose
     private List<Tag> tags;
 
+    @Expose
+    private Instant creationDate;
+
     public Event(UUID id) {
         this.id = id;
     }
@@ -53,6 +57,7 @@ public class Event {
         this.participants=new ArrayList<>();
         this.expenses = new ArrayList<>();
         this.tags = new ArrayList<>();
+        this.creationDate= Instant.now();
     }
 
     public Event(String name){

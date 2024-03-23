@@ -8,15 +8,17 @@ import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import commons.Event;
+import javafx.collections.FXCollections;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -27,6 +29,7 @@ import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AdminEventsCtrl implements Initializable {
@@ -42,6 +45,7 @@ public class AdminEventsCtrl implements Initializable {
     private Button addButton;
 
     private List<Event> events;
+    private Dialog<String> dlg;
 
     @Inject
     public AdminEventsCtrl(MainCtrl mainCtrl, ServerUtils server, NotificationService notificationService) {
@@ -76,6 +80,7 @@ public class AdminEventsCtrl implements Initializable {
         */
         myListView.getItems().clear();
         this.events = server.getEvents();
+        dlg=setupDialog();
         populateList();
         //register for event updates
         server.listenEvents(event -> {
@@ -215,6 +220,53 @@ public class AdminEventsCtrl implements Initializable {
         //populateList();
     }
 
+    public void sortAction(){
+        Optional<String> t=dlg.showAndWait();
+        if (t.isPresent()){
+            String col=t.get().split("-")[0];
+            String type=t.get().split("-")[1];
+            System.out.println(col);
+            System.out.println(type);
+        }
+    }
+
+    public Dialog<String> setupDialog(){
+        Dialog<String> dlg=new Dialog<>();
+        dlg.setTitle("Sorting");
+        dlg.setHeaderText("");
+        dlg.setGraphic(null);
+
+        ButtonType sortButtonType = new ButtonType("Sort", ButtonData.OK_DONE);
+        dlg.getDialogPane().getButtonTypes().addAll(sortButtonType, ButtonType.CANCEL);
+
+        ChoiceBox<String> columnChoiceBox = new ChoiceBox<>();
+        columnChoiceBox.setItems(FXCollections.observableArrayList("Title", "Last Created", "Last Activity"));
+        columnChoiceBox.getSelectionModel().selectFirst();
+
+        ChoiceBox<String> typeChoiceBox = new ChoiceBox<>();
+        typeChoiceBox.setItems(FXCollections.observableArrayList("ASC", "DESC"));
+        typeChoiceBox.getSelectionModel().selectFirst();
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        grid.add(new Label("Sort by:"), 0, 0);
+        grid.add(columnChoiceBox, 1, 0);
+        grid.add(new Label("Type:"), 0, 1);
+        grid.add(typeChoiceBox, 1, 1);
+
+        dlg.getDialogPane().setContent(grid);
+
+        dlg.setResultConverter(dialogButton-> {
+            if (dialogButton==sortButtonType){
+                return columnChoiceBox.getValue()+"-"+typeChoiceBox.getValue();
+            }
+            return null;
+        });
+        return dlg;
+    }
     /**
      * Shuts down the server listener thread.
      */
