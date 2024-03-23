@@ -164,7 +164,9 @@ public class AddExpenseCtrl implements Initializable {
         //create the list of tags (God bless the creator of stream() :) )
         List<Tag> tags = tagSelector.getChildren().stream().filter(n -> n.getClass() == CheckBox.class).map(n -> ((CheckBox) n)).filter(CheckBox::isSelected).map(Labeled::getText).map(this::findTag).toList();
 
-        if (tags.isEmpty()){
+        // TODO we leave tag implementation for next week
+
+        /*if (tags.isEmpty()){
             NotificationHelper notificationHelper = new NotificationHelper();
             String warningMessage = """
                     You have not selected any tags
@@ -174,15 +176,16 @@ public class AddExpenseCtrl implements Initializable {
             notificationHelper.showError("Warning", warningMessage);
             return;
         }
+         */
 
         //create the expense
-        Expense newExpense = new Expense(paidBy.getName() + " paid for " + tags.get(0).getTag(), Double.parseDouble(howMuchField.getText()), date.atStartOfDay(), paidBy, event, debts, tags);
+        Expense newExpense = new Expense(paidBy.getName() + " paid for ", Double.parseDouble(howMuchField.getText()), date.atStartOfDay(), paidBy, event, debts, new ArrayList<>());
         for (Debt d : newExpense.getDebts()){
             d.setExpense(newExpense); //setup each debt's expense pointer
         }
+        newExpense.setEvent(event);
         event.addExpense(newExpense);
-        //server.updateEvent(event);
-        //the line above yields a HTTP 500 error
+        server.addExpense(event.getId(), newExpense);
         mainCtrl.showEventOverviewScene(event);
     }
 
