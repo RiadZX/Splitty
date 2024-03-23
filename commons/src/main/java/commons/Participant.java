@@ -137,7 +137,6 @@ public class Participant {
                +"id=" + id
                +", name='" + name + '\''
                +", iban='" + iban + '\''
-               +", eventPartOf=" + event
                +'}';
     }
 }
