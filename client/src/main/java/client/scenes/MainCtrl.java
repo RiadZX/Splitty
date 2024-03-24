@@ -26,6 +26,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.Locale;
 import java.util.UUID;
 
 public class MainCtrl {
@@ -162,6 +163,7 @@ public class MainCtrl {
 
     // TODO Make the actual switch to the languages once button is pressed
     public void switchToEnglish() {
+        I18N.setLocale(Locale.ENGLISH);
         String switchLanguageHeader = I18N.get("language.infoLanguages");
         String switchLanguageTitle = I18N.get("language.switchTitle");
         String switchLanguageMessage = I18N.get("language.switchMessage");
@@ -170,6 +172,8 @@ public class MainCtrl {
     }
 
     public void switchToDutch() {
+        Locale dutch = I18N.getSupportedLocales().get(1);
+        I18N.setLocale(dutch);
         String switchLanguageHeader = I18N.get("language.infoLanguages");
         String switchLanguageTitle = I18N.get("language.switchTitle");
         String switchLanguageMessage = I18N.get("language.switchMessage");
