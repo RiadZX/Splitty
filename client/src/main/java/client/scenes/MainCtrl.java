@@ -188,6 +188,7 @@ public class MainCtrl {
     }
     public void showFirstTimeScene(){
         primaryStage.setTitle(I18N.get("window.setup"));
+        firstTimeCtrl.refresh();
         primaryStage.setScene(this.firstTime);
     }
 
