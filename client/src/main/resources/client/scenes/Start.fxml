@@ -13,15 +13,15 @@
          </font>
       </Label>
       <TextField fx:id="createEventField" layoutX="58.0" layoutY="77.0" prefHeight="27.0" prefWidth="179.0" />
-      <Button layoutX="255.0" layoutY="77.0" mnemonicParsing="false" onAction="#createEvent" text="Create" />
-      <Label layoutX="58.0" layoutY="121.0" text="Join New Event">
+      <Button fx:id="buttonCreate" layoutX="255.0" layoutY="77.0" mnemonicParsing="false" onAction="#createEvent" text="start.button_new" />
+      <Label fx:id="joinEvent" layoutX="58.0" layoutY="121.0" text="start.join_event">
          <font>
             <Font size="17.0" />
          </font>
       </Label>
       <TextField fx:id="joinEventField" layoutX="58.0" layoutY="153.0" prefHeight="27.0" prefWidth="179.0" />
-      <Button layoutX="255.0" layoutY="153.0" mnemonicParsing="false" onAction="#joinEventAction" prefHeight="27.0" prefWidth="58.0" text="Join" />
-      <Label layoutX="58.0" layoutY="200.0" text="Recently viewed events">
+      <Button layoutX="255.0" layoutY="153.0" mnemonicParsing="false" onAction="#joinEventAction" prefHeight="27.0" text="start.join_event" fx:id="joinButton" />
+      <Label layoutX="58.0" layoutY="200.0" text="start.recent_l21abel" fx:id="recent">
          <font>
             <Font size="16.0" />
          </font>

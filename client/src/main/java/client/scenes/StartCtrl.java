@@ -8,9 +8,7 @@ import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import commons.Event;
 import javafx.scene.layout.GridPane;
 
@@ -34,6 +32,15 @@ public class StartCtrl implements Initializable {
 
     @FXML
     private Label newEventLabel;
+
+    @FXML
+    private Button buttonCreate;
+    @FXML
+    private Labeled joinEvent;
+    @FXML
+    private Labeled joinButton;
+    @FXML
+    private Labeled recent;
     @Inject
     public StartCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
         this.server = server;
@@ -44,6 +51,10 @@ public class StartCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         I18N.update(newEventLabel);
+        I18N.update(buttonCreate);
+        I18N.update(joinEvent);
+        I18N.update(joinButton);
+        I18N.update(recent);
         createEventField.setOnKeyPressed((event -> {
             switch (event.getCode()) {
                 case ENTER -> createEvent();
