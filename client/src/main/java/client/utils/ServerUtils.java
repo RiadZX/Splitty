@@ -145,6 +145,11 @@ public class ServerUtils {
                 .post(Entity.entity(exp, APPLICATION_JSON), Expense.class);
     }
 
+    public Expense updateExpense(UUID evenId, Expense exp){
+        // TODO implement an updateExpense method for editing the expenses
+        return exp;
+    }
+
     /**
      * Listen for new events
      */

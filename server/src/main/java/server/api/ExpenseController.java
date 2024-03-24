@@ -28,7 +28,7 @@ public class ExpenseController {
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Expense> add(@RequestBody Expense expense) {
         Expense saved = repo.save(expense);
-        System.out.println(expense);
+        System.out.println("Saved expense: " + expense);
         if (repo.findById(saved.getId()).isPresent()) {
             return ResponseEntity.ok(saved);
         }

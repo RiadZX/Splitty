@@ -18,6 +18,7 @@ package client.scenes;
 import client.utils.Config;
 import client.utils.User;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -238,8 +239,14 @@ public class MainCtrl {
     }
 
     public void showAddExpense() {
-        primaryStage.setTitle("Splitty: Add/Edit Expense");
-        addExpenseCtrl.setup(eventOverviewCtrl.getEvent());
+        primaryStage.setTitle("Splitty: Add Expense");
+        addExpenseCtrl.setup(eventOverviewCtrl.getEvent(), null);
+        primaryStage.setScene(addExpense);
+    }
+
+    public void showEditExpense(Expense e){
+        primaryStage.setTitle("Splitty: Edit Expense");
+        addExpenseCtrl.setup(eventOverviewCtrl.getEvent(), e);
         primaryStage.setScene(addExpense);
     }
 

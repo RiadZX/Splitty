@@ -4,15 +4,16 @@ import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.Pane;
-import javafx.scene.text.TextFlow;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.TextFlow;
 
 import java.net.URL;
 import java.util.List;
@@ -65,7 +66,7 @@ public class EventOverviewCtrl implements Initializable {
         this.event=newEvent;
         eventTitle.setText(this.event.getTitle());
         reassignParticipants(this.event.getParticipants());
-        System.out.println(event);
+        System.out.println("Set event: " + event);
     }
 
     public void reassignParticipants(List<Participant> participantList){
@@ -114,6 +115,10 @@ public class EventOverviewCtrl implements Initializable {
 
     public void addExpense(){
         mainCtrl.showAddExpense();
+    }
+
+    public void editExpense(Expense e){
+
     }
 
     public void refresh(){
