@@ -1,6 +1,7 @@
 package commons;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ValueGenerationType;
 
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.time.Instant;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -20,10 +22,63 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "event_id")
     private UUID id;
+
+    @Expose
     private String name;
-    @Column(nullable = false, unique = true)
+
+    @Column(nullable = false)
     @INVITECODE String inviteCode;
+    @Expose
     private String title; //fix response issue for now
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @JsonManagedReference ("event-participants")
+    @Expose
+    private List<Participant> participants;
+
+    @OneToMany(mappedBy = "event", orphanRemoval = true)
+    @JsonManagedReference("event-expenses")
+    @Expose
+    private List<Expense> expenses;
+
+    @OneToMany(mappedBy = "event")
+    @JsonManagedReference("event-tags")
+    @Expose
+    private List<Tag> tags;
+
+    @Expose
+    private Instant creationTime;
+
+    @Expose
+    private Instant lastActivityTime;
+
+    public Event(UUID id) {
+        this.id = id;
+    }
+
+    public Event() {
+        this.participants=new ArrayList<>();
+        this.expenses = new ArrayList<>();
+        this.tags = new ArrayList<>();
+        this.creationTime= Instant.now();
+        this.lastActivityTime=Instant.now();
+    }
+
+    public Event(String name){
+        this();
+        this.name = name;
+    }
+
+    public Event(String name, Participant creator){
+        this(name);
+        this.participants.add(creator);
+    }
+
+    public Event(String name, List<Participant> participants) {
+        this(name);
+        this.participants = participants;
+    }
+
     public String getName() {
         return name;
     }
@@ -32,39 +87,12 @@ public class Event {
         this.name = name;
     }
 
+    public UUID getId(){
+        return this.id;
+    }
+
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    @JsonManagedReference ("event-participants")
-    private List<Participant> participants;
-
-    @OneToMany(mappedBy = "event", orphanRemoval = true)
-    @JsonManagedReference("event-expenses")
-    private List<Expense> expenses;
-
-    @OneToMany(mappedBy = "event")
-    private List<Tag> tags;
-    public Event(UUID id) {
-        this.id = id;
-    }
-    public Event() {
-        this.participants=new ArrayList<>();
-        this.expenses = new ArrayList<>();
-        this.tags = new ArrayList<>();
-    }
-    public Event(String name){
-        this();
-        this.name = name;
-    }
-    public Event(String name, Participant creator){
-        this(name);
-        this.participants.add(creator);
-    }
-    public Event(String name, List<Participant> participants) {
-        this(name);
-        this.participants = participants;
     }
     /**
      * Sets all participants,
@@ -96,6 +124,10 @@ public class Event {
         this.tags = tags;
     }
 
+    public void addTag(Tag tag){
+        tags.add(tag);
+    }
+
     /**
      * Sets list of expenses.
      * May be used by creator while event is being created
@@ -118,16 +150,12 @@ public class Event {
         return this.expenses;
     }
 
-    public void setTitle(String name){
-        this.name = name;
-    }
-
     public String getTitle(){
         return this.name;
     }
 
-    public UUID getId(){
-        return this.id;
+    public void setTitle(String name){
+        this.name = name;
     }
 
     public String getInviteCode() {
@@ -136,6 +164,22 @@ public class Event {
 
     public void setInviteCode(String inviteCode) {
         this.inviteCode = inviteCode;
+    }
+
+    public Instant getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(Instant creationDate) {
+        this.creationTime = creationDate;
+    }
+
+    public Instant getLastActivityTime() {
+        return lastActivityTime;
+    }
+
+    public void setLastActivityTime(Instant lastActivityTime) {
+        this.lastActivityTime = lastActivityTime;
     }
 
     @Override
@@ -161,10 +205,6 @@ public class Event {
                 getExpenses(),
                 getTags());
     }
-    public void addTag(Tag tag){
-        tags.add(tag);
-    }
-
 
     public static String generateInviteCode(){
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

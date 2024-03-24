@@ -182,4 +182,22 @@ public class ServerUtils {
     public void stopThread(){
         exec.shutdownNow();
     }
+
+
+
+    public String checkPassword(String password){
+        return ClientBuilder.newClient(new ClientConfig())//
+                .target(SERVER).path("admin/login")//
+                .request(APPLICATION_JSON)//
+                .accept(APPLICATION_JSON)//
+                .post(Entity.entity(password, APPLICATION_JSON), String.class);
+    }
+
+    public String getAdmin(){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("admin/") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<String>() {});
+    }
 }

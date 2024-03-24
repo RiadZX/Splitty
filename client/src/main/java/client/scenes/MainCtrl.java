@@ -32,6 +32,7 @@ import java.util.UUID;
 public class MainCtrl {
 
     private User user;
+    public boolean admin;
 
     private Stage primaryStage;
     private FirstTimeCtrl firstTimeCtrl;
@@ -77,6 +78,7 @@ public class MainCtrl {
                            Pair<AdminEventsCtrl, Parent> adminEvents,
                            boolean adminMode
     ) {
+        this.admin=false;
         this.user = new User();
         this.primaryStage = primaryStage;
 
@@ -170,8 +172,7 @@ public class MainCtrl {
             }
         }
     }
-
-    public void showFirstTimeScene() {
+    public void showFirstTimeScene(){
         primaryStage.setTitle("Splitty: Setup");
         primaryStage.setScene(this.firstTime);
     }
@@ -182,12 +183,11 @@ public class MainCtrl {
         primaryStage.setScene(start);
     }
 
-    public void showSettings() {
+    public  void showSettings(){
         primaryStage.setTitle("Splitty: Settings");
         primaryStage.setScene(settings);
     }
-
-    public void showUserSettings() {
+    public  void showUserSettings(){
         primaryStage.setTitle("Splitty: Profile Settings");
         userSettingsCtrl.refreshFields();
         primaryStage.setScene(userSettings);
@@ -195,13 +195,12 @@ public class MainCtrl {
     }
 
     // TODO Both setEvent and refresh call the setEvent function
-    public void showEventOverviewScene(Event newEvent) {
+    public void showEventOverviewScene(Event newEvent){
         primaryStage.setTitle("Splitty: Event Overview");
         eventOverviewCtrl.setEvent(newEvent);
         eventOverviewCtrl.refresh();
         primaryStage.setScene(eventOverview);
     }
-
     public void showAddParticipantScene(Event event) {
         primaryStage.setTitle("Splitty: Add Participant");
         addParticipantCtrl.setEvent(event);
@@ -222,34 +221,43 @@ public class MainCtrl {
         primaryStage.setScene(adminEvents);
     }
 
-    public User getUser() {
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    public User getUser(){
         return this.user;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public  void setUser(User user){
+        this.user=user;
         Config.writeUserConfigFile(user);
     }
 
-    public void addUserEvent(UUID event, UUID participant) {
+    public void addUserEvent(UUID event, UUID participant){
         this.user.addEventParticipant(event, participant);
         Config.writeUserConfigFile(user);
         System.out.println(Config.readUserConfigFile());
     }
 
-    public void showAddExpense() {
+    public void showAddExpense(){
         primaryStage.setTitle("Splitty: Add/Edit Expense");
         addExpenseCtrl.setup(eventOverviewCtrl.getEvent());
         primaryStage.setScene(addExpense);
     }
 
-    public void deleteAllData() {
+    public void deleteAllData(){
         Config.deleteUserConfigFile();
         this.chooseFirstPage(false);
     }
 
+    public void loginAdmin(){
+        admin=true;
+        showAdminEventsScene();
+    }
+
     //hardcoded temporary exchange rates
-    public double getUsdToEur() {
+    public double getUsdToEur(){
         return 0.92;
     }
 

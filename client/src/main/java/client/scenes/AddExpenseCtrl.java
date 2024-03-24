@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -179,7 +180,7 @@ public class AddExpenseCtrl implements Initializable {
          */
 
         //create the expense
-        Expense newExpense = new Expense(paidBy.getName() + " paid for ", Double.parseDouble(howMuchField.getText()), date.atStartOfDay(), paidBy, event, debts, new ArrayList<>());
+        Expense newExpense = new Expense(paidBy.getName() + " paid for " + tags.get(0).getTag(), Double.parseDouble(howMuchField.getText()), Instant.from(date.atStartOfDay()), paidBy, event, debts, new ArrayList<>());
         for (Debt d : newExpense.getDebts()){
             d.setExpense(newExpense); //setup each debt's expense pointer
         }
