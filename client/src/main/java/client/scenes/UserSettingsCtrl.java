@@ -7,14 +7,17 @@ import client.utils.ServerUtils;
 import client.utils.User;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.TextField;
 
+import java.net.URL;
 import java.util.LinkedHashMap;
+import java.util.ResourceBundle;
 import java.util.UUID;
 
 
-public class UserSettingsCtrl{
+public class UserSettingsCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private final NotificationService notificationService;
@@ -59,7 +62,8 @@ public class UserSettingsCtrl{
         bicField.setText(user.getBic());
     }
 
-    public void refresh() {
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         I18N.update(profileSettings);
         I18N.update(nameLabel);
         I18N.update(emailLabel);
@@ -105,5 +109,4 @@ public class UserSettingsCtrl{
         this.mainCtrl.setUser(newUser);
         back();
     }
-
 }

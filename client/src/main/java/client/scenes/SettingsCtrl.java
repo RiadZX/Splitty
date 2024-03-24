@@ -43,6 +43,12 @@ public class SettingsCtrl implements Initializable {
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        I18N.update(settings);
+        I18N.update(edit);
+        I18N.update(language);
+        I18N.update(adminMode);
+        I18N.update(nukeEmData);
+        I18N.update(back);
         this.prepareAdminLogin();
     }
 
@@ -57,15 +63,6 @@ public class SettingsCtrl implements Initializable {
     }
     public void backAction(){
         this.mainCtrl.showStartScene();
-    }
-
-    public void refresh() {
-        I18N.update(settings);
-        I18N.update(edit);
-        I18N.update(language);
-        I18N.update(adminMode);
-        I18N.update(nukeEmData);
-        I18N.update(back);
     }
 
     private void prepareAdminLogin(){

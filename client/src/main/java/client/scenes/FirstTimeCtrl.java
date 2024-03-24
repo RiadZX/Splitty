@@ -31,13 +31,9 @@ public class FirstTimeCtrl implements Initializable{
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
-
-    public void refresh() {
+    public void initialize(URL location, ResourceBundle resources) {
         I18N.update(start);
         I18N.update(setup);
-    }
-
-    public void initialize(URL location, ResourceBundle resources) {
         this.nameField.setOnKeyPressed((event -> {
             switch (event.getCode()) {
                 case ENTER -> moveToStart();

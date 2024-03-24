@@ -161,7 +161,6 @@ public class MainCtrl {
     public void showInviteView(Event event){
         primaryStage.setTitle(I18N.get("window.invite"));
         inviteViewCtrl.setEvent(event);
-        inviteViewCtrl.refresh();
         primaryStage.setScene(inviteView);
     }
 
@@ -188,7 +187,6 @@ public class MainCtrl {
     }
     public void showFirstTimeScene(){
         primaryStage.setTitle(I18N.get("window.setup"));
-        firstTimeCtrl.refresh();
         primaryStage.setScene(this.firstTime);
     }
 
@@ -200,7 +198,6 @@ public class MainCtrl {
 
     public  void showSettings(){
         primaryStage.setTitle(I18N.get("window.settings"));
-        settingsCtrl.refresh();
         primaryStage.setScene(settings);
     }
 
@@ -232,7 +229,6 @@ public class MainCtrl {
     public  void showUserSettings(){
         primaryStage.setTitle(I18N.get("window.settings.profile"));
         userSettingsCtrl.refreshFields();
-        userSettingsCtrl.refresh();
         primaryStage.setScene(userSettings);
 
     }

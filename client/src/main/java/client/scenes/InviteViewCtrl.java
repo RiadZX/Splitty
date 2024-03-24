@@ -51,17 +51,14 @@ public class InviteViewCtrl implements Initializable {
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.copyToClipboardBtn.setOnAction(event -> copyToClipboard());
-        this.sendInviteBtn.setOnAction(event -> sendInvite());
-        this.cancelBtn.setOnAction(event -> backToEvent());
-    }
-
-    public void refresh() {
         I18N.update(copyToClipboardBtn);
         I18N.update(inviteInstr);
         I18N.update(emailLabel);
         I18N.update(sendInviteBtn);
         I18N.update(cancelBtn);
+        this.copyToClipboardBtn.setOnAction(event -> copyToClipboard());
+        this.sendInviteBtn.setOnAction(event -> sendInvite());
+        this.cancelBtn.setOnAction(event -> backToEvent());
     }
 
     private void sendInvite() {
