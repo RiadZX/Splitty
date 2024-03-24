@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import server.database.EventRepository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -102,6 +103,7 @@ public class EventController {
         if (!repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
+        event.setLastActivityTime(Instant.now()); //update last activity time
         Event saved = repo.save(event);
         return ResponseEntity.ok(saved);
     }

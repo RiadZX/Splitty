@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.ParticipantRepository;
+import server.services.EventService;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,8 +17,11 @@ public class ParticipantController {
 
     private final ParticipantRepository repo;
 
-    public ParticipantController(ParticipantRepository repo) {
+    private final EventService eventService;
+
+    public ParticipantController(ParticipantRepository repo, EventService eventService) {
         this.repo = repo;
+        this.eventService=eventService;
     }
     /**
      * Get all participants from an event
@@ -55,9 +59,11 @@ public class ParticipantController {
         }
         //set event part of based on id
         Event event=new Event();
-        event.setId(UUID.fromString(eventId));
+        UUID eventUUID=UUID.fromString(eventId);
+        event.setId(eventUUID);
         participant.setEventPartOf(event);
         Participant saved=repo.save(participant);
+        eventService.newEventLastActivity(eventUUID);
         return ResponseEntity.ok(saved);
     }
     @DeleteMapping("/{id}")
@@ -66,7 +72,9 @@ public class ParticipantController {
         Participant participant= repo.findParticipantInEvent(UUID.fromString(eventId), UUID.fromString(id));
         if (participant != null) {
             ResponseEntity<Participant> removedParticipant = ResponseEntity.ok(participant);
-            repo.deleteParticipantFromEvent(UUID.fromString(eventId), UUID.fromString(id));
+            UUID eventUUID=UUID.fromString(eventId);
+            repo.deleteParticipantFromEvent(eventUUID, UUID.fromString(id));
+            eventService.newEventLastActivity(eventUUID);
             return removedParticipant;
         }
         return ResponseEntity.badRequest().build();
@@ -86,8 +94,11 @@ public class ParticipantController {
     public ResponseEntity<Participant> update(@PathVariable("eventId") String eventId, @PathVariable("id") String id, @RequestBody Participant participant) {
         if (participantExists(eventId, id)) {
             participant.setEventPartOf(new Event(eventId));
-            participant.setId(UUID.fromString(id));
-            return ResponseEntity.ok(repo.save(participant));
+            UUID eventUUID=UUID.fromString(eventId);
+            participant.setId(eventUUID);
+            var saved=repo.save(participant);
+            eventService.newEventLastActivity(eventUUID);
+            return ResponseEntity.ok(saved);
         }
         return ResponseEntity.badRequest().build();
     }

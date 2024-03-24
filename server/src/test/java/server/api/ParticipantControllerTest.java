@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 
 import server.database.ParticipantRepository;
 import commons.Participant;
+import server.services.EventService;
 
 public class ParticipantControllerTest {
 
@@ -23,7 +24,8 @@ public class ParticipantControllerTest {
     @BeforeEach
     public void setUp() {
         participantRepository = mock(ParticipantRepository.class);
-        participantController = new ParticipantController(participantRepository);
+        EventService eventService=mock(EventService.class);
+        participantController = new ParticipantController(participantRepository, eventService);
     }
 
     @Test

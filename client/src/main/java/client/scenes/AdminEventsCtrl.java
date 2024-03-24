@@ -225,7 +225,6 @@ public class AdminEventsCtrl implements Initializable {
             saved = server.addEvent(e);
         } else {
             notificationService.showError("Failed to process an event", "Make sure to select an adequate event json dump.");
-            return;
         }
         //this.events.add(saved);
         //populateList();
