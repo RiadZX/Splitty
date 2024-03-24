@@ -47,7 +47,10 @@ public class Event {
     private List<Tag> tags;
 
     @Expose
-    private Instant creationDate;
+    private Instant creationTime;
+
+    @Expose
+    private Instant lastActivityTime;
 
     public Event(UUID id) {
         this.id = id;
@@ -57,7 +60,8 @@ public class Event {
         this.participants=new ArrayList<>();
         this.expenses = new ArrayList<>();
         this.tags = new ArrayList<>();
-        this.creationDate= Instant.now();
+        this.creationTime= Instant.now();
+        this.lastActivityTime=Instant.now();
     }
 
     public Event(String name){
@@ -162,12 +166,20 @@ public class Event {
         this.inviteCode = inviteCode;
     }
 
-    public Instant getCreationDate() {
-        return creationDate;
+    public Instant getCreationTime() {
+        return creationTime;
     }
 
-    public void setCreationDate(Instant creationDate) {
-        this.creationDate = creationDate;
+    public void setCreationTime(Instant creationDate) {
+        this.creationTime = creationDate;
+    }
+
+    public Instant getLastActivityTime() {
+        return lastActivityTime;
+    }
+
+    public void setLastActivityTime(Instant lastActivityTime) {
+        this.lastActivityTime = lastActivityTime;
     }
 
     @Override

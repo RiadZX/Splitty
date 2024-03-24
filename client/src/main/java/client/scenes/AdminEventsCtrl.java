@@ -254,10 +254,18 @@ public class AdminEventsCtrl implements Initializable {
                 break;
             case "Creation Time":
                 if (sortType==0) {
-                    events.sort(Comparator.comparing(Event::getCreationDate));
+                    events.sort(Comparator.comparing(Event::getCreationTime));
                 }
                 else {
-                    events.sort(Comparator.comparing(Event::getCreationDate).reversed());
+                    events.sort(Comparator.comparing(Event::getCreationTime).reversed());
+                }
+                break;
+            case "Last Activity":
+                if (sortType==0) {
+                    events.sort(Comparator.comparing(Event::getLastActivityTime));
+                }
+                else {
+                    events.sort(Comparator.comparing(Event::getLastActivityTime).reversed());
                 }
                 break;
             default:
