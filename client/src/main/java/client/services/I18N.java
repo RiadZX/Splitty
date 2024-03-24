@@ -70,14 +70,14 @@ public class I18N {
      */
     public static String get(final String key, final Object... args) {
         System.out.println(getLocale());
-        ResourceBundle bundle = ResourceBundle.getBundle("client/languages", getLocale());
+        ResourceBundle bundle = ResourceBundle.getBundle("languages", getLocale());
         String retStr;
         try {
             retStr = bundle.getString(key);
         }
         catch (MissingResourceException e) {
             try {
-                ResourceBundle bundle2 = ResourceBundle.getBundle("client/languages", Locale.ENGLISH);
+                ResourceBundle bundle2 = ResourceBundle.getBundle("languages", Locale.ENGLISH);
                 retStr = bundle2.getString(key);
             }
             catch (MissingResourceException e2) {
