@@ -9,7 +9,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
-    private String password;
+    private final String password;
 
     public AdminController() {
         password = UUID.randomUUID().toString().substring(0, 8);
@@ -24,7 +24,7 @@ public class AdminController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody String password) {
-        System.out.println(password);
+        System.out.println("Tried password:"+password);
         if (password.equals(this.password)) {
             return ResponseEntity.ok(password);
         }
