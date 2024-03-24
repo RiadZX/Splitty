@@ -16,6 +16,7 @@
 package client.scenes;
 
 import client.services.I18N;
+import client.services.NotificationHelper;
 import client.utils.Config;
 import client.utils.User;
 import commons.Event;
@@ -158,6 +159,24 @@ public class MainCtrl {
         primaryStage.setTitle("Splitty: Languages");
         primaryStage.setScene(languages);
     }
+
+    // TODO Make the actual switch to the languages once button is pressed
+    public void switchToEnglish() {
+        String switchLanguageHeader = I18N.get("language.infoLanguages");
+        String switchLanguageTitle = I18N.get("language.switchTitle");
+        String switchLanguageMessage = I18N.get("language.switchMessage");
+        NotificationHelper notificationHelper = new NotificationHelper();
+        notificationHelper.informUser(switchLanguageTitle, switchLanguageMessage, switchLanguageHeader);
+    }
+
+    public void switchToDutch() {
+        String switchLanguageHeader = I18N.get("language.infoLanguages");
+        String switchLanguageTitle = I18N.get("language.switchTitle");
+        String switchLanguageMessage = I18N.get("language.switchMessage");
+        NotificationHelper notificationHelper = new NotificationHelper();
+        notificationHelper.informUser(switchLanguageTitle, switchLanguageMessage, switchLanguageHeader);
+    }
+
     public  void showUserSettings(){
         primaryStage.setTitle(I18N.get("window.settings.profile"));
         userSettingsCtrl.refreshFields();

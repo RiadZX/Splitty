@@ -16,8 +16,8 @@
                 <Font name="Comfortaa Medium" size="33.0" />
             </font>
         </Label>
-        <Button layoutX="118.0" layoutY="122.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="122.0" text="English" />
-        <Button layoutX="118.0" layoutY="175.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="122.0" text="Dutch" />
+        <Button layoutX="118.0" layoutY="122.0" onAction="#switchToDutch" mnemonicParsing="false" prefHeight="31.0" prefWidth="122.0" text="English" />
+        <Button layoutX="118.0" layoutY="175.0" onAction="#switchToEnglish" mnemonicParsing="false" prefHeight="27.0" prefWidth="122.0" text="Dutch" />
         <Pane layoutX="7.0" layoutY="10.0" onMouseClicked="#backAction" prefHeight="27.0" prefWidth="75.0">
             <children>
                 <ImageView fitHeight="21.0" fitWidth="17.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">

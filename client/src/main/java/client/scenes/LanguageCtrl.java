@@ -26,4 +26,12 @@ public class LanguageCtrl implements Initializable {
     public void backAction(){
         this.mainCtrl.showSettings();
     }
+
+    public void switchToEnglish(){
+        this.mainCtrl.switchToEnglish();
+    }
+
+    public void switchToDutch(){
+        this.mainCtrl.switchToDutch();
+    }
 }
