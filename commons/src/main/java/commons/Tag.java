@@ -5,14 +5,14 @@ import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "tags")
 public class Tag {
     @Id
-    @GeneratedValue
-    @Expose
-    private long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Expose
     private String tag;

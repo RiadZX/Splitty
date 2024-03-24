@@ -8,6 +8,7 @@ import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.TextFlow;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -24,18 +25,15 @@ public class EventOverviewCtrl implements Initializable {
     private final NotificationService notificationService;
     @FXML
     public Button sendInviteButton;
-
-//    @FXML
-//    private Label participantsLabel;
-
     @FXML
     public TextFlow textFlow;
+    @FXML
+    public Pane backButton;
 
     @FXML
     private TextField eventTitle;
 
     private Event event;
-
 
     @Inject
     public EventOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
@@ -55,6 +53,7 @@ public class EventOverviewCtrl implements Initializable {
                 }
             }
         }));
+
         this.sendInviteButton.setOnAction(event -> sendInvite());
     }
 
@@ -66,6 +65,7 @@ public class EventOverviewCtrl implements Initializable {
         this.event=newEvent;
         eventTitle.setText(this.event.getTitle());
         reassignParticipants(this.event.getParticipants());
+        System.out.println(event);
     }
 
     public void reassignParticipants(List<Participant> participantList){
@@ -120,6 +120,7 @@ public class EventOverviewCtrl implements Initializable {
         try {
             Event refreshed = server.getEvent(event.getId());
             this.setEvent(refreshed);
+
             /* TO DO:
             * - refresh all data related to the event
             * - add functionality to the expense list and filtering*/

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.time.Instant;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -20,13 +21,12 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "event_id")
-    @Expose
     private UUID id;
 
     @Expose
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @INVITECODE String inviteCode;
     @Expose
     private String title; //fix response issue for now
@@ -46,6 +46,12 @@ public class Event {
     @Expose
     private List<Tag> tags;
 
+    @Expose
+    private Instant creationTime;
+
+    @Expose
+    private Instant lastActivityTime;
+
     public Event(UUID id) {
         this.id = id;
     }
@@ -54,6 +60,8 @@ public class Event {
         this.participants=new ArrayList<>();
         this.expenses = new ArrayList<>();
         this.tags = new ArrayList<>();
+        this.creationTime= Instant.now();
+        this.lastActivityTime=Instant.now();
     }
 
     public Event(String name){
@@ -77,6 +85,10 @@ public class Event {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public UUID getId(){
+        return this.id;
     }
 
     public void setId(UUID id) {
@@ -112,6 +124,10 @@ public class Event {
         this.tags = tags;
     }
 
+    public void addTag(Tag tag){
+        tags.add(tag);
+    }
+
     /**
      * Sets list of expenses.
      * May be used by creator while event is being created
@@ -134,16 +150,12 @@ public class Event {
         return this.expenses;
     }
 
-    public void setTitle(String name){
-        this.name = name;
-    }
-
     public String getTitle(){
         return this.name;
     }
 
-    public UUID getId(){
-        return this.id;
+    public void setTitle(String name){
+        this.name = name;
     }
 
     public String getInviteCode() {
@@ -152,6 +164,22 @@ public class Event {
 
     public void setInviteCode(String inviteCode) {
         this.inviteCode = inviteCode;
+    }
+
+    public Instant getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(Instant creationDate) {
+        this.creationTime = creationDate;
+    }
+
+    public Instant getLastActivityTime() {
+        return lastActivityTime;
+    }
+
+    public void setLastActivityTime(Instant lastActivityTime) {
+        this.lastActivityTime = lastActivityTime;
     }
 
     @Override
@@ -177,10 +205,6 @@ public class Event {
                 getExpenses(),
                 getTags());
     }
-    public void addTag(Tag tag){
-        tags.add(tag);
-    }
-
 
     public static String generateInviteCode(){
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -191,6 +215,19 @@ public class Event {
             codeBuilder.append(characters.charAt(randomIndex));
         }
         return codeBuilder.toString();
+    }
+
+    @Override
+    public String toString() {
+        return "Event{"
+                + "id=" + id
+                + ", name='" + name + '\''
+                + ", inviteCode='" + inviteCode + '\''
+                + ", title='" + title + '\''
+                + ", participants=" + participants
+                + ", expenses=" + expenses
+                + ", tags=" + tags
+                + '}';
     }
 }
 @ValueGenerationType(generatedBy =InviteCodeGenerator.class)

@@ -21,8 +21,11 @@ import client.utils.Config;
 import client.utils.User;
 import commons.Event;
 import commons.Participant;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -31,13 +34,13 @@ import java.util.UUID;
 
 public class MainCtrl {
 
-    private  User user;
+    private User user;
     public boolean admin;
 
     private Stage primaryStage;
     private FirstTimeCtrl firstTimeCtrl;
 
-    private  Scene firstTime;
+    private Scene firstTime;
 
     private EventOverviewCtrl eventOverviewCtrl;
     private Scene eventOverview;
@@ -79,19 +82,20 @@ public class MainCtrl {
                            Pair<SettingsCtrl, Parent> settings,
                            Pair<AdminEventsCtrl, Parent> adminEvents,
                            Pair<LanguageCtrl, Parent> languages
+                           boolean adminMode
     ) {
         this.admin=false;
         this.user = new User();
         this.primaryStage = primaryStage;
 
-        this.firstTimeCtrl=firstTime.getKey();
-        this.firstTime=new Scene(firstTime.getValue());
+        this.firstTimeCtrl = firstTime.getKey();
+        this.firstTime = new Scene(firstTime.getValue());
 
-        this.eventOverviewCtrl=eventOverview.getKey();
-        this.eventOverview= new Scene(eventOverview.getValue());
+        this.eventOverviewCtrl = eventOverview.getKey();
+        this.eventOverview = new Scene(eventOverview.getValue());
 
-        this.startCtrl=start.getKey();
-        this.start= new Scene(start.getValue());
+        this.startCtrl = start.getKey();
+        this.start = new Scene(start.getValue());
 
         this.addExpenseCtrl = addExpense.getKey();
         this.addExpense = new Scene(addExpense.getValue());
@@ -106,14 +110,14 @@ public class MainCtrl {
         this.editParticipantCtrl = editParticipant.getKey();
         this.editParticipant = new Scene(editParticipant.getValue());
 
-        this.inviteViewCtrl=inviteView.getKey();
-        this.inviteView=new Scene(inviteView.getValue());
+        this.inviteViewCtrl = inviteView.getKey();
+        this.inviteView = new Scene(inviteView.getValue());
 
-        this.userSettingsCtrl=userSettings.getKey();
-        this.userSettings=new Scene(userSettings.getValue());
+        this.userSettingsCtrl = userSettings.getKey();
+        this.userSettings = new Scene(userSettings.getValue());
 
-        this.settingsCtrl=settings.getKey();
-        this.settings=new Scene(settings.getValue());
+        this.settingsCtrl = settings.getKey();
+        this.settings = new Scene(settings.getValue());
 
         this.languageCtrl = languages.getKey();
         this.languages=new Scene(languages.getValue());
@@ -121,7 +125,37 @@ public class MainCtrl {
         this.adminEventsCtrl = adminEvents.getKey();
         this.adminEvents = new Scene(adminEvents.getValue());
 
-        chooseFirstPage();
+        chooseFirstPage(adminMode);
+
+        // in eventoverview, press alt+1 to go back to start
+        eventOverview.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.isAltDown() && event.getCode() == KeyCode.DIGIT1) {
+                    showStartScene();
+                }
+            }
+        });
+
+        // in start, press alt+s to go to settings
+        start.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.isAltDown() && event.getCode() == KeyCode.S) {
+                    showSettings();
+                }
+            }
+        });
+
+        // in settings, press alt+1 to go back to start
+        settings.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.isAltDown() && event.getCode() == KeyCode.DIGIT1) {
+                    showStartScene();
+                }
+            }
+        });
     }
 
     public void showInviteView(Event event){
@@ -130,15 +164,25 @@ public class MainCtrl {
         primaryStage.setScene(inviteView);
     }
 
-    public void chooseFirstPage(){
-        this.user=Config.readUserConfigFile();
-        if (user == null) {
-            this.showFirstTimeScene();
+    /**
+     * Choose the first page to show
+     *
+     * @param adminMode - if adminMode is true, directly show admin page and skip normal user page
+     */
+    public void chooseFirstPage(boolean adminMode) {
+        this.user = Config.readUserConfigFile();
+        if (adminMode) {
+            this.showAdminEventsScene();
             primaryStage.show();
-        }
-        else {
-            this.showStartScene();
-            primaryStage.show();
+        } else {
+            if (user == null) {
+                this.showFirstTimeScene();
+                primaryStage.show();
+
+            } else {
+                this.showStartScene();
+                primaryStage.show();
+            }
         }
     }
     public void showFirstTimeScene(){
@@ -241,7 +285,7 @@ public class MainCtrl {
 
     public void deleteAllData(){
         Config.deleteUserConfigFile();
-        this.chooseFirstPage();
+        this.chooseFirstPage(false);
     }
 
     public void loginAdmin(){

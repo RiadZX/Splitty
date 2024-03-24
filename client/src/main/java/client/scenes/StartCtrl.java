@@ -112,6 +112,7 @@ public class StartCtrl implements Initializable {
                 Hyperlink newEventLink=new Hyperlink(currentEvent.getName());
                 newEventLink.setOnMouseClicked(event -> joinRecentEvent(currentEvent.getId())
                 );
+                newEventLink.setOnAction(event -> joinRecentEvent(currentEvent.getId()));
                 this.recentEventsGrid.add(newEventLink, 0, i++);
             } catch (Exception ignored) {
             }

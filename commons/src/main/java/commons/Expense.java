@@ -17,7 +17,6 @@ public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "expense_id")
-    @Expose
     private UUID id;
 
     @Expose
@@ -43,24 +42,22 @@ public class Expense {
     @Expose
     private List<Tag> tags;
 
+    @Override
+    public String toString() {
+        return "Expense{"
+                + "id=" + id
+                + ", amount=" + amount
+                + ", date=" + date
+                + ", paidBy=" + paidBy
+                + ", tags=" + tags
+                + ", debts=" + debts
+                + '}';
+    }
+
     @OneToMany(mappedBy = "expense", orphanRemoval = true)
     @JsonManagedReference ("expense-debts")
     @Expose
     private List<Debt> debts;
-
-    @Override
-    public String toString() {
-        return "Expense{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", amount=" + amount +
-                ", date=" + date +
-                ", paidBy=" + paidBy +
-                ", event=" + event +
-                ", tags=" + tags +
-                ", debts=" + debts +
-                '}';
-    }
 
     public Expense() {
         // For JPA
