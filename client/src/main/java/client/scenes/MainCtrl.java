@@ -81,7 +81,7 @@ public class MainCtrl {
                            Pair<UserSettingsCtrl, Parent> userSettings,
                            Pair<SettingsCtrl, Parent> settings,
                            Pair<AdminEventsCtrl, Parent> adminEvents,
-                           Pair<LanguageCtrl, Parent> languages
+                           Pair<LanguageCtrl, Parent> languages,
                            boolean adminMode
     ) {
         this.admin=false;
