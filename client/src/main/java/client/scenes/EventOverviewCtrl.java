@@ -59,7 +59,7 @@ public class EventOverviewCtrl implements Initializable {
             }
         }));
         this.sendInviteButton.setOnAction(event -> sendInvite());
-        server.registerForMessages("topic/events", e -> {
+        server.registerForMessages("/topic/events", e -> {
             System.out.println("Am primit " + e.getTitle());
             setEvent(e);
         });
@@ -96,7 +96,7 @@ public class EventOverviewCtrl implements Initializable {
     public void changeTitle(){
         this.event.setName(this.eventTitle.getText());
         System.out.println("title change");
-        server.send("/topic/events", this.event);
+        server.send("/app/events", this.event);
         /*
         try {
             this.server.updateEvent(this.event);
