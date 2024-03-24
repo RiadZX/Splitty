@@ -28,6 +28,7 @@ import java.io.*;
 import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -46,7 +47,7 @@ public class AdminEventsCtrl implements Initializable {
 
     private List<Event> events;
     private Dialog<String> dlg;
-    private int sortCol;
+    private String sortCol;
     private int sortType;
 
     @Inject
@@ -80,11 +81,11 @@ public class AdminEventsCtrl implements Initializable {
             }
         });
         */
-        sortCol=-1;
+        sortCol=null;
         sortType=-1;
         myListView.getItems().clear();
         this.events = server.getEvents();
-        dlg=setupDialog();
+        dlg=setupSortDialog();
         populateList();
         //register for event updates
         server.listenEvents(event -> {
@@ -150,6 +151,9 @@ public class AdminEventsCtrl implements Initializable {
      */
     public void populateList() {
         myListView.getItems().clear();
+        if (sortCol!=null){
+            sortEvents();
+        }
         List<BorderPane> contents = events.stream().map(e -> createRow(e)).toList();
         myListView.getItems().addAll(contents);
     }
@@ -233,13 +237,35 @@ public class AdminEventsCtrl implements Initializable {
             String col=t.get().split("-")[0];
             String type=t.get().split("-")[1];
             sortType=List.of("ASC", "DESC").indexOf(type);
-            sortCol=List.of("Title", "Last Created", "Last Activity").indexOf(col);
-            System.out.println(sortCol);
-            System.out.println(sortType);
+            sortCol=col;
+        }
+        populateList();
+    }
+
+    public void sortEvents(){
+        switch (sortCol){
+            case "Title":
+                if (sortType==0) {
+                    events.sort(Comparator.comparing(Event::getName));
+                }
+                else {
+                    events.sort(Comparator.comparing(Event::getName).reversed());
+                }
+                break;
+            case "Creation Time":
+                if (sortType==0) {
+                    events.sort(Comparator.comparing(Event::getCreationDate));
+                }
+                else {
+                    events.sort(Comparator.comparing(Event::getCreationDate).reversed());
+                }
+                break;
+            default:
+                break;
         }
     }
 
-    public Dialog<String> setupDialog(){
+    public Dialog<String> setupSortDialog(){
         Dialog<String> dlg=new Dialog<>();
         dlg.setTitle("Sorting");
         dlg.setHeaderText("");
@@ -249,7 +275,7 @@ public class AdminEventsCtrl implements Initializable {
         dlg.getDialogPane().getButtonTypes().addAll(sortButtonType, ButtonType.CANCEL);
 
         ChoiceBox<String> columnChoiceBox = new ChoiceBox<>();
-        columnChoiceBox.setItems(FXCollections.observableArrayList("Title", "Last Created", "Last Activity"));
+        columnChoiceBox.setItems(FXCollections.observableArrayList("Title", "Creation Time", "Last Activity"));
         columnChoiceBox.getSelectionModel().selectFirst();
 
         ChoiceBox<String> typeChoiceBox = new ChoiceBox<>();

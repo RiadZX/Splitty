@@ -26,7 +26,7 @@ public class Event {
     @Expose
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @INVITECODE String inviteCode;
     @Expose
     private String title; //fix response issue for now
@@ -83,6 +83,10 @@ public class Event {
         this.name = name;
     }
 
+    public UUID getId(){
+        return this.id;
+    }
+
     public void setId(UUID id) {
         this.id = id;
     }
@@ -116,6 +120,10 @@ public class Event {
         this.tags = tags;
     }
 
+    public void addTag(Tag tag){
+        tags.add(tag);
+    }
+
     /**
      * Sets list of expenses.
      * May be used by creator while event is being created
@@ -138,16 +146,12 @@ public class Event {
         return this.expenses;
     }
 
-    public void setTitle(String name){
-        this.name = name;
-    }
-
     public String getTitle(){
         return this.name;
     }
 
-    public UUID getId(){
-        return this.id;
+    public void setTitle(String name){
+        this.name = name;
     }
 
     public String getInviteCode() {
@@ -156,6 +160,14 @@ public class Event {
 
     public void setInviteCode(String inviteCode) {
         this.inviteCode = inviteCode;
+    }
+
+    public Instant getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Instant creationDate) {
+        this.creationDate = creationDate;
     }
 
     @Override
@@ -181,10 +193,6 @@ public class Event {
                 getExpenses(),
                 getTags());
     }
-    public void addTag(Tag tag){
-        tags.add(tag);
-    }
-
 
     public static String generateInviteCode(){
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
