@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.services.I18N;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -7,6 +8,7 @@ import commons.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 import javafx.scene.input.Clipboard;
@@ -33,6 +35,10 @@ public class InviteViewCtrl implements Initializable {
     public Button sendInviteBtn;
     @FXML
     public Button cancelBtn;
+    @FXML
+    public Labeled inviteInstr;
+    @FXML
+    public Labeled emailLabel;
     private Event event;
 
 
@@ -48,6 +54,12 @@ public class InviteViewCtrl implements Initializable {
         this.copyToClipboardBtn.setOnAction(event -> copyToClipboard());
         this.sendInviteBtn.setOnAction(event -> sendInvite());
         this.cancelBtn.setOnAction(event -> backToEvent());
+    }
+
+    public void refresh() {
+        I18N.update(copyToClipboardBtn);
+        I18N.update(inviteInstr);
+        I18N.update(emailLabel);
     }
 
     private void sendInvite() {

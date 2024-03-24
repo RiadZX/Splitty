@@ -161,6 +161,7 @@ public class MainCtrl {
     public void showInviteView(Event event){
         primaryStage.setTitle(I18N.get("window.invite"));
         inviteViewCtrl.setEvent(event);
+        inviteViewCtrl.refresh();
         primaryStage.setScene(inviteView);
     }
 
