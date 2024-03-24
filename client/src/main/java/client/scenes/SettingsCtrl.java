@@ -1,10 +1,13 @@
 package client.scenes;
 
+import client.services.I18N;
 import client.services.NotificationHelper;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.TextInputDialog;
 
 import java.net.URL;
@@ -19,6 +22,19 @@ public class SettingsCtrl implements Initializable {
 
     private TextInputDialog passwordPrompt;
 
+    @FXML
+    private Labeled settings;
+    @FXML
+    private Labeled edit;
+    @FXML
+    private Labeled language;
+    @FXML
+    private Labeled adminMode;
+    @FXML
+    private Labeled nukeEmData;
+    @FXML
+    private Labeled back;
+
     @Inject
     public SettingsCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
         this.server = server;
@@ -27,11 +43,20 @@ public class SettingsCtrl implements Initializable {
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        I18N.update(settings);
+        I18N.update(edit);
+        I18N.update(language);
+        I18N.update(adminMode);
+        I18N.update(nukeEmData);
+        I18N.update(back);
         this.prepareAdminLogin();
     }
 
     public void editProfileAction(){
         this.mainCtrl.showUserSettings();
+    }
+    public void language() {
+        this.mainCtrl.showLanguageOptions();
     }
     public void deleteDataAction(){
         this.mainCtrl.deleteAllData();

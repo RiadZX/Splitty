@@ -15,6 +15,8 @@
  */
 package client.scenes;
 
+import client.services.I18N;
+import client.services.NotificationHelper;
 import client.utils.Config;
 import client.utils.User;
 import commons.Event;
@@ -27,6 +29,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.Locale;
 import java.util.UUID;
 
 public class MainCtrl {
@@ -54,14 +57,16 @@ public class MainCtrl {
 
     private AddExpenseCtrl addExpenseCtrl;
     private Scene addExpense;
-    private InviteViewCtrl inviteViewCtrl;
     private Scene inviteView;
-
+    private InviteViewCtrl inviteViewCtrl;
     private UserSettingsCtrl userSettingsCtrl;
     private Scene userSettings;
 
     private SettingsCtrl settingsCtrl;
     private Scene settings;
+
+    private LanguageCtrl languageCtrl;
+    private Scene languages;
 
     private AdminEventsCtrl adminEventsCtrl;
     private Scene adminEvents;
@@ -76,6 +81,7 @@ public class MainCtrl {
                            Pair<UserSettingsCtrl, Parent> userSettings,
                            Pair<SettingsCtrl, Parent> settings,
                            Pair<AdminEventsCtrl, Parent> adminEvents,
+                           Pair<LanguageCtrl, Parent> languages,
                            boolean adminMode
     ) {
         this.admin=false;
@@ -94,6 +100,10 @@ public class MainCtrl {
         this.addExpenseCtrl = addExpense.getKey();
         this.addExpense = new Scene(addExpense.getValue());
 
+        this.user = new User();
+
+        //showStartScene();
+        //primaryStage.show();
         this.addParticipantCtrl = addParticipant.getKey();
         this.addParticipant = new Scene(addParticipant.getValue());
 
@@ -108,6 +118,9 @@ public class MainCtrl {
 
         this.settingsCtrl = settings.getKey();
         this.settings = new Scene(settings.getValue());
+
+        this.languageCtrl = languages.getKey();
+        this.languages=new Scene(languages.getValue());
 
         this.adminEventsCtrl = adminEvents.getKey();
         this.adminEvents = new Scene(adminEvents.getValue());
@@ -145,8 +158,8 @@ public class MainCtrl {
         });
     }
 
-    public void showInviteView(Event event) {
-        primaryStage.setTitle("Splitty: Invite View");
+    public void showInviteView(Event event){
+        primaryStage.setTitle(I18N.get("window.invite"));
         inviteViewCtrl.setEvent(event);
         primaryStage.setScene(inviteView);
     }
@@ -173,22 +186,48 @@ public class MainCtrl {
         }
     }
     public void showFirstTimeScene(){
-        primaryStage.setTitle("Splitty: Setup");
+        primaryStage.setTitle(I18N.get("window.setup"));
         primaryStage.setScene(this.firstTime);
     }
 
     public void showStartScene() {
-        primaryStage.setTitle("Splitty: Start");
+        primaryStage.setTitle(I18N.get("window.start"));
         startCtrl.addRecentEvents();
         primaryStage.setScene(start);
     }
 
     public  void showSettings(){
-        primaryStage.setTitle("Splitty: Settings");
+        primaryStage.setTitle(I18N.get("window.settings"));
         primaryStage.setScene(settings);
     }
+
+    public void showLanguageOptions() {
+        primaryStage.setTitle("Splitty: Languages");
+        primaryStage.setScene(languages);
+    }
+
+    // TODO Make the actual switch to the languages once button is pressed
+    public void switchToEnglish() {
+        I18N.setLocale(Locale.ENGLISH);
+        String switchLanguageHeader = I18N.get("language.infoLanguages");
+        String switchLanguageTitle = I18N.get("language.switchTitle");
+        String switchLanguageMessage = I18N.get("language.switchMessage");
+        NotificationHelper notificationHelper = new NotificationHelper();
+        notificationHelper.informUser(switchLanguageTitle, switchLanguageMessage, switchLanguageHeader);
+    }
+
+    public void switchToDutch() {
+        Locale dutch = I18N.getSupportedLocales().get(1);
+        I18N.setLocale(dutch);
+        String switchLanguageHeader = I18N.get("language.infoLanguages");
+        String switchLanguageTitle = I18N.get("language.switchTitle");
+        String switchLanguageMessage = I18N.get("language.switchMessage");
+        NotificationHelper notificationHelper = new NotificationHelper();
+        notificationHelper.informUser(switchLanguageTitle, switchLanguageMessage, switchLanguageHeader);
+    }
+
     public  void showUserSettings(){
-        primaryStage.setTitle("Splitty: Profile Settings");
+        primaryStage.setTitle(I18N.get("window.settings.profile"));
         userSettingsCtrl.refreshFields();
         primaryStage.setScene(userSettings);
 
@@ -196,19 +235,19 @@ public class MainCtrl {
 
     // TODO Both setEvent and refresh call the setEvent function
     public void showEventOverviewScene(Event newEvent){
-        primaryStage.setTitle("Splitty: Event Overview");
+        primaryStage.setTitle(I18N.get("window.event.overview"));
         eventOverviewCtrl.setEvent(newEvent);
         eventOverviewCtrl.refresh();
         primaryStage.setScene(eventOverview);
     }
     public void showAddParticipantScene(Event event) {
-        primaryStage.setTitle("Splitty: Add Participant");
+        primaryStage.setTitle(I18N.get("window.event.participant.add"));
         addParticipantCtrl.setEvent(event);
         primaryStage.setScene(addParticipant);
     }
 
     public void showEditParticipantScene(Event event, Participant p) {
-        primaryStage.setTitle("Splitty: Edit Participant");
+        primaryStage.setTitle(I18N.get("window.event.participant.edit"));
         editParticipantCtrl.setEvent(event);
         editParticipantCtrl.setParticipant(p);
         editParticipantCtrl.refresh();
@@ -216,11 +255,10 @@ public class MainCtrl {
     }
 
     public void showAdminEventsScene() {
-        primaryStage.setTitle("Splitty: Admin Events");
+        primaryStage.setTitle(I18N.get("window.event.admin"));
         adminEventsCtrl.populateList();
         primaryStage.setScene(adminEvents);
     }
-
     public Stage getPrimaryStage() {
         return primaryStage;
     }
@@ -241,7 +279,7 @@ public class MainCtrl {
     }
 
     public void showAddExpense(){
-        primaryStage.setTitle("Splitty: Add/Edit Expense");
+        primaryStage.setTitle(I18N.get("window.expense"));
         addExpenseCtrl.setup(eventOverviewCtrl.getEvent());
         primaryStage.setScene(addExpense);
     }

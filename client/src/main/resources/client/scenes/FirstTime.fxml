@@ -7,18 +7,19 @@
 
 <AnchorPane stylesheets="@/client/stylesheets/general.css" prefHeight="341.0" prefWidth="330.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.FirstTimeCtrl">
    <children>
+      <!-- not making the text for this one language controlled because the app name stays the same -->
       <Label layoutX="107.0" layoutY="30.0" text="Splitty" textAlignment="CENTER">
          <font>
             <Font name="Comfortaa Bold" size="35.0" />
          </font>
       </Label>
-      <Label layoutX="118.0" layoutY="81.0" text="First time setup" textFill="#000000ca" />
+      <Label layoutX="118.0" layoutY="81.0" text="first_time.setup" textFill="#000000ca" fx:id="setup" />
       <TextField fx:id="nameField" layoutX="85.0" layoutY="144.0" promptText="Enter your name">
          <font>
             <Font size="14.0" />
          </font>
       </TextField>
-      <Button layoutX="144.0" layoutY="193.0" mnemonicParsing="false" onAction="#moveToStart" text="Start">
+      <Button layoutX="144.0" layoutY="193.0" mnemonicParsing="false" onAction="#moveToStart" text="first_time.start" fx:id="start">
          <font>
             <Font size="15.0" />
          </font>
