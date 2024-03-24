@@ -198,8 +198,10 @@ public class MainCtrl {
 
     public  void showSettings(){
         primaryStage.setTitle(I18N.get("window.settings"));
+        settingsCtrl.refresh();
         primaryStage.setScene(settings);
     }
+
     public void showLanguageOptions() {
         primaryStage.setTitle("Splitty: Languages");
         primaryStage.setScene(languages);
@@ -228,6 +230,7 @@ public class MainCtrl {
     public  void showUserSettings(){
         primaryStage.setTitle(I18N.get("window.settings.profile"));
         userSettingsCtrl.refreshFields();
+        userSettingsCtrl.refresh();
         primaryStage.setScene(userSettings);
 
     }
