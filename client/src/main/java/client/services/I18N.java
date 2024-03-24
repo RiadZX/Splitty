@@ -71,21 +71,20 @@ public class I18N {
     public static String get(final String key, final Object... args) {
         System.out.println(getLocale());
         ResourceBundle bundle = ResourceBundle.getBundle("client/languages", getLocale());
-        String ret_str;
+        String retStr;
         try {
-            ret_str = bundle.getString(key);
+            retStr = bundle.getString(key);
         }
         catch (MissingResourceException e) {
             try {
                 ResourceBundle bundle2 = ResourceBundle.getBundle("client/languages", Locale.ENGLISH);
-                ret_str = bundle2.getString(key);
+                retStr = bundle2.getString(key);
             }
             catch (MissingResourceException e2) {
-                ret_str = "missing";
+                retStr = "missing";
             }
         }
-
-        return MessageFormat.format(ret_str, args);
+        return MessageFormat.format(retStr, args);
     }
 
     /**
