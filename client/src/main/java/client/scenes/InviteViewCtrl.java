@@ -60,6 +60,8 @@ public class InviteViewCtrl implements Initializable {
         I18N.update(copyToClipboardBtn);
         I18N.update(inviteInstr);
         I18N.update(emailLabel);
+        I18N.update(sendInviteBtn);
+        I18N.update(cancelBtn);
     }
 
     private void sendInvite() {

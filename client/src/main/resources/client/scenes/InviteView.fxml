@@ -31,7 +31,7 @@
          </font>
       </Label>
       <TextArea fx:id="textArea" layoutX="13.0" layoutY="217.0" prefHeight="270.0" prefWidth="569.0" />
-      <Button fx:id="sendInviteBtn" layoutX="480.0" layoutY="495.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="98.0" text="Send invites" />
-      <Button fx:id="cancelBtn" layoutX="23.0" layoutY="495.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="98.0" text="Cancel" />
+      <Button fx:id="sendInviteBtn" layoutX="480.0" layoutY="495.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="98.0" text="invite.send" />
+      <Button fx:id="cancelBtn" layoutX="23.0" layoutY="495.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="98.0" text="invite.cancel" />
    </children>
 </AnchorPane>
