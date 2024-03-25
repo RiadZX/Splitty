@@ -44,7 +44,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Consumer;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
