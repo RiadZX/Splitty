@@ -1,20 +1,35 @@
 package server.api;
 
 import commons.Event;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
+
+import org.springframework.web.context.request.async.DeferredResult;
 import server.database.EventRepository;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
 
     private final EventRepository repo;
+
+    /**
+     * This is a hashmap that stores all the listeners for new events.
+     * The key is a randomly created object to identify the listener.
+     * The value is a consumer that accepts an event, it is the deferredresult that will be accepted with a new event.
+     */
+    private Map<Object, Consumer<Event>> listeners = new ConcurrentHashMap<>();
+
     public EventController(EventRepository repo) {
         this.repo = repo;
     }
@@ -34,7 +49,11 @@ public class EventController {
      */
     @PostMapping(path = { "", "/" })
     public ResponseEntity<Event> add(@RequestBody Event event) {
+        if (event==null){
+            return ResponseEntity.badRequest().build();
+        }
         Event saved = repo.save(event);
+        listeners.values().forEach(listener -> listener.accept(saved)); // notify all listeners of a new event
         return ResponseEntity.ok(saved);
     }
 
@@ -71,11 +90,10 @@ public class EventController {
         }
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Event> remove(@PathVariable("id") UUID id) {
+    public ResponseEntity<Void> remove(@PathVariable("id") UUID id) {
         if (repo.findById(id).isPresent()) {
-            ResponseEntity<Event> removedEvent = ResponseEntity.ok(repo.findById(id).get());
             repo.deleteById(id);
-            return removedEvent;
+            return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
     }
@@ -96,7 +114,37 @@ public class EventController {
         if (!repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
+        event.setLastActivityTime(Instant.now()); //update last activity time
         Event saved = repo.save(event);
         return ResponseEntity.ok(saved);
     }
+
+    /**
+     * Subscribe to listen for new events
+     * @return - new event.
+     */
+    @GetMapping("/subscribe")
+    public DeferredResult<ResponseEntity<Event>> subscribe() {
+        var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        DeferredResult<ResponseEntity<Event>> deferredResult = new DeferredResult<>(// deferred result is a result that is not completed yet.
+                30000L, //If within 30 seconds the result is not set, the request will be timed out
+                noContent//if not found then this code will be returned
+        );
+        Object key = new Object();
+        listeners.put(key, event -> {
+            deferredResult.setResult(ResponseEntity.ok(event));
+        });
+        deferredResult.onCompletion(() -> {
+            listeners.remove(key);
+        });
+        deferredResult.onError((Throwable t) -> {
+            System.out.println("Error deferredResult : " + t.getMessage());
+            listeners.remove(key);
+        });
+        deferredResult.onTimeout(() -> {
+            deferredResult.setErrorResult(noContent);
+        });
+        return deferredResult;
+    }
+
 }

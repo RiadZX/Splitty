@@ -1,18 +1,23 @@
 package client.scenes;
 
+import client.services.I18N;
 import client.services.NotificationHelper;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
 import client.utils.User;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.TextField;
 
+import java.net.URL;
 import java.util.LinkedHashMap;
+import java.util.ResourceBundle;
 import java.util.UUID;
 
 
-public class UserSettingsCtrl{
+public class UserSettingsCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private final NotificationService notificationService;
@@ -26,7 +31,22 @@ public class UserSettingsCtrl{
     @FXML
     private TextField bicField;
 
-
+    @FXML
+    private Labeled profileSettings;
+    @FXML
+    private Labeled nameLabel;
+    @FXML
+    private Labeled emailLabel;
+    @FXML
+    private Labeled ibanLabel;
+    @FXML
+    private Labeled bicLabel;
+    @FXML
+    private Labeled sneButton;
+    @FXML
+    private Labeled cancelButton;
+    @FXML
+    private Labeled currencyOption;
     @Inject
     public UserSettingsCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
         this.server = server;
@@ -40,6 +60,18 @@ public class UserSettingsCtrl{
         emailField.setText(user.getEmail());
         ibanField.setText(user.getIban());
         bicField.setText(user.getBic());
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        I18N.update(profileSettings);
+        I18N.update(nameLabel);
+        I18N.update(emailLabel);
+        I18N.update(ibanLabel);
+        I18N.update(bicLabel);
+        I18N.update(sneButton);
+        I18N.update(cancelButton);
+        I18N.update(currencyOption);
     }
 
     public void back(){
@@ -77,5 +109,4 @@ public class UserSettingsCtrl{
         this.mainCtrl.setUser(newUser);
         back();
     }
-
 }
