@@ -1,7 +1,6 @@
 package server.api;
 
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,6 @@ public class EmailController {
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Void> sendEmail(@RequestBody String contents) {
         JsonObject body = JsonParser.parseString(contents).getAsJsonObject();
-        System.out.println(body);
-        System.out.println(body.get("toEmail"));
 
         emailSender.sendEmail(body.get("toEmail").toString(), body.get("inviteCode").toString(), body.get("creator").toString());
         return ResponseEntity.ok().build();

@@ -67,14 +67,14 @@ public class InviteViewCtrl implements Initializable {
             return;
         }
         List<String> addresses = List.of(textArea.getText().split("\n|\r\n"));
-        for(String email : addresses) {
+        for (String email : addresses) {
             if (!validateEmail(email)) {
                 notificationService.showError("Invalid addresses",
                         "Please make sure that all of the entered email addresses are valid.");
                 return;
             }
         }
-        for(String email : addresses) {
+        for (String email : addresses) {
             server.sendEmail(email, eventCode.getText(), mainCtrl.getUser().getName());
         }
         backToEvent();
