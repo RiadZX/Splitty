@@ -66,8 +66,22 @@ public class InviteViewCtrl implements Initializable {
             notificationService.showError("No addresses", "Please enter at least one address");
             return;
         }
-        List<String> addresses = List.of(textArea.getText().split("\n"));
+        List<String> addresses = List.of(textArea.getText().split("\n|\r\n"));
+        for (String email : addresses) {
+            if (!validateEmail(email)) {
+                notificationService.showError("Invalid addresses",
+                        "Please make sure that all of the entered email addresses are valid.");
+                return;
+            }
+        }
+        for (String email : addresses) {
+            server.sendEmail(email, eventCode.getText(), mainCtrl.getUser().getName());
+        }
         backToEvent();
+    }
+
+    public static boolean validateEmail(String email) {
+        return email.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
     }
 
     private void copyToClipboard() {
