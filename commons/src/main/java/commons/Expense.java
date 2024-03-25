@@ -45,7 +45,8 @@ public class Expense {
         this.eventIdX = eventId;
     }
 
-    //set by the server in the backend, when creating a new expense.
+    //THIS IS A HACK TO GET THE EVENT ID, WITHOUT OVERFLOWING THE STACK.
+    // This is used to know the event id of the expense
     private UUID eventIdX;
 
     @ManyToMany
@@ -72,6 +73,18 @@ public class Expense {
 
     public Expense() {
         // For JPA
+    }
+
+    public Expense(String title, double amount, Instant date,
+                   Participant paidBy, Event event, List<Debt> debts, List<Tag> tags) {
+        this.title = title;
+        this.amount = amount;
+        this.date = date;
+        this.paidBy = paidBy;
+        this.event = event;
+        this.eventIdX = event.getId();
+        this.debts = debts;
+        this.tags = tags;
     }
 
     public Expense(String title, double amount, Instant date,

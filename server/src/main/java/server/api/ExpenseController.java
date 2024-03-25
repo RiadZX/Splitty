@@ -28,7 +28,11 @@ public class ExpenseController {
     public  ResponseEntity<List<Expense>> getAll(@PathVariable String eventId) {
         try {
             List<Expense> expenses = repo.findAll();
-            expenses.removeIf(expense -> !expense.getEventIdX().equals(UUID.fromString(eventId)));
+            for (Expense expense : expenses) {
+                if (!expense.getEventIdX().equals(UUID.fromString(eventId))) {
+                    expenses.remove(expense);
+                }
+            }
             return ResponseEntity.ok(expenses);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
