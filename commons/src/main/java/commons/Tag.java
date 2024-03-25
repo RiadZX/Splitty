@@ -1,18 +1,24 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "tags")
 public class Tag {
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    @Expose
     private String tag;
 
     @ManyToOne
+    @JsonBackReference("event-tags")
     private Event event;
 
     public Tag(String tag, Event event) {

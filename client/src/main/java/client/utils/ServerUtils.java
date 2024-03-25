@@ -16,6 +16,7 @@
 package client.utils;
 
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -136,6 +137,13 @@ public class ServerUtils {
                 .delete(new GenericType<Event>() {});
     }
 
+    public Expense addExpense(UUID eventId, Expense exp){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("/api/events/" + eventId + "/expenses")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(exp, APPLICATION_JSON), Expense.class);
+    }
 
     /**
      * Listen for new events
@@ -173,5 +181,23 @@ public class ServerUtils {
     }
     public void stopThread(){
         exec.shutdownNow();
+    }
+
+
+
+    public String checkPassword(String password){
+        return ClientBuilder.newClient(new ClientConfig())//
+                .target(SERVER).path("admin/login")//
+                .request(APPLICATION_JSON)//
+                .accept(APPLICATION_JSON)//
+                .post(Entity.entity(password, APPLICATION_JSON), String.class);
+    }
+
+    public String getAdmin(){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("admin/") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<String>() {});
     }
 }
