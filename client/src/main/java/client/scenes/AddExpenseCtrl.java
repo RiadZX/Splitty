@@ -179,13 +179,20 @@ public class AddExpenseCtrl implements Initializable {
         }
          */
 
-        //create the expense
-        Expense newExpense = new Expense(paidBy.getName() + " paid for " + tags.get(0).getTag(), Double.parseDouble(howMuchField.getText()), Instant.from(date.atStartOfDay()), paidBy, event, debts, new ArrayList<>());
+        //create the expense, TODO : changed the name of event because event tags are not implemented yet
+        Expense newExpense = new Expense(paidBy.getName() + " paid for " + "EXPENSE TEMPLATE",
+                Double.parseDouble(howMuchField.getText()),
+                Instant.from(date.atStartOfDay(
+                        java.time.ZoneId.systemDefault()
+                )),
+                paidBy,
+                event,
+                event.getId(),
+                debts,
+                new ArrayList<>());
         for (Debt d : newExpense.getDebts()){
             d.setExpense(newExpense); //setup each debt's expense pointer
         }
-        newExpense.setEvent(event);
-        event.addExpense(newExpense);
         server.addExpense(event.getId(), newExpense);
         mainCtrl.showEventOverviewScene(event);
     }
