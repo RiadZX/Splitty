@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.services.I18N;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -7,6 +8,7 @@ import commons.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 import javafx.scene.input.Clipboard;
@@ -33,6 +35,10 @@ public class InviteViewCtrl implements Initializable {
     public Button sendInviteBtn;
     @FXML
     public Button cancelBtn;
+    @FXML
+    public Labeled inviteInstr;
+    @FXML
+    public Labeled emailLabel;
     private Event event;
 
 
@@ -45,6 +51,11 @@ public class InviteViewCtrl implements Initializable {
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        I18N.update(copyToClipboardBtn);
+        I18N.update(inviteInstr);
+        I18N.update(emailLabel);
+        I18N.update(sendInviteBtn);
+        I18N.update(cancelBtn);
         this.copyToClipboardBtn.setOnAction(event -> copyToClipboard());
         this.sendInviteBtn.setOnAction(event -> sendInvite());
         this.cancelBtn.setOnAction(event -> backToEvent());
@@ -55,8 +66,22 @@ public class InviteViewCtrl implements Initializable {
             notificationService.showError("No addresses", "Please enter at least one address");
             return;
         }
-        List<String> addresses = List.of(textArea.getText().split("\n"));
+        List<String> addresses = List.of(textArea.getText().split("\n|\r\n"));
+        for (String email : addresses) {
+            if (!validateEmail(email)) {
+                notificationService.showError("Invalid addresses",
+                        "Please make sure that all of the entered email addresses are valid.");
+                return;
+            }
+        }
+        for (String email : addresses) {
+            server.sendEmail(email, eventCode.getText(), mainCtrl.getUser().getName());
+        }
         backToEvent();
+    }
+
+    public static boolean validateEmail(String email) {
+        return email.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
     }
 
     private void copyToClipboard() {
