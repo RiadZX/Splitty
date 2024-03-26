@@ -51,7 +51,7 @@
   - Tijmen
     - implement the settle debts functionality (n-1 debts)
     - add missing paragraph in code of conduct
-  - Raid Zaid
+  - Riad Zaid
     - implement tag statistics with Codrin
   - Georges
     - currency with Calin
