@@ -111,8 +111,8 @@ public class MainCtrl {
         this.editParticipantCtrl = editParticipant.getKey();
         this.editParticipant = new Scene(editParticipant.getValue());
 
-        this.inviteViewCtrl = inviteView.getKey();
         this.inviteView = new Scene(inviteView.getValue());
+        this.inviteViewCtrl = inviteView.getKey();
 
         this.userSettingsCtrl = userSettings.getKey();
         this.userSettings = new Scene(userSettings.getValue());

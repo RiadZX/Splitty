@@ -263,8 +263,10 @@ public class AddExpenseCtrl implements Initializable {
         }
          */
 
-        //create the expense
-        return new Expense(paidBy.getName() + " paid for ", Double.parseDouble(howMuchField.getText()), date.atStartOfDay(), paidBy, event, debts, new ArrayList<>());
+        //create the expense TODO : changed the name of event because event tags are not implemented yet
+        return new Expense(paidBy.getName() + " paid for " + "EXPENSE TEMPLATE", Double.parseDouble(howMuchField.getText()), Instant.from(date.atStartOfDay(
+                java.time.ZoneId.systemDefault()
+        )), paidBy, event, event.getId(), debts, new ArrayList<>());
     }
 
     private List<Debt> createDebts(double amount, List<Participant> participants){
