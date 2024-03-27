@@ -169,9 +169,6 @@ public class EventOverviewCtrl implements Initializable {
         mainCtrl.showAddExpense();
     }
 
-    public void editExpense(Expense e){
-
-    }
 
     public void refresh(){
         try {
