@@ -1,6 +1,7 @@
 package server.api;
 
 
+import commons.Event;
 import commons.Expense;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -96,15 +97,22 @@ public class ExpenseControllerTest {
 
     @Test
     public void getAllExpenses(){
+        Event e = new Event();
+        e.setId(UUID.randomUUID());
+
         List<Expense> expenses = List.of(new Expense(), new Expense());
         expenses.get(0).setTitle("Test1");
         expenses.get(1).setTitle("Test2");
         expenses.get(0).setId(UUID.randomUUID());
         expenses.get(1).setId(UUID.randomUUID());
+        expenses.get(0).setEvent(e);
+        expenses.get(1).setEvent(e);
+        expenses.get(0).setEventIdX(e.getId());
+        expenses.get(1).setEventIdX(e.getId());
 
         when(expenseRepository.findAll()).thenReturn(expenses);
 
-        ResponseEntity<List<Expense>> responseEntity = expenseController.getAll();
+        ResponseEntity<List<Expense>> responseEntity = expenseController.getAll(e.getId().toString());
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(expenses, responseEntity.getBody());
     }

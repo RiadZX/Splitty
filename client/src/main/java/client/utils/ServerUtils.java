@@ -157,6 +157,15 @@ public class ServerUtils {
                 .post(Entity.entity(exp, APPLICATION_JSON), Expense.class);
     }
 
+    public List<Expense> getExpensesByEvent(UUID eventId) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("/api/events/" + eventId + "/expenses")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Expense>>() {
+                });
+    }
+
     /**
      * Listen for new events
      */

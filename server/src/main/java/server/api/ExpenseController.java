@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/events/{event_id}/expenses")
+@RequestMapping("/api/events/{eventId}/expenses")
 public class ExpenseController {
     private final ExpenseRepository repo;
     private final EventService eventService;
@@ -21,10 +21,19 @@ public class ExpenseController {
         this.eventService=eventService;
     }
 
+    /*
+        Get expenses for an event by event id
+     */
     @GetMapping(path = {"", "/"})
-    public  ResponseEntity<List<Expense>> getAll() {
+    public  ResponseEntity<List<Expense>> getAll(@PathVariable String eventId) {
         try {
-            return ResponseEntity.ok(repo.findAll());
+            List<Expense> expenses = repo.findAll();
+            for (Expense expense : expenses) {
+                if (!expense.getEventIdX().equals(UUID.fromString(eventId))) {
+                    expenses.remove(expense);
+                }
+            }
+            return ResponseEntity.ok(expenses);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
@@ -32,9 +41,8 @@ public class ExpenseController {
 
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Expense> add(@PathVariable("eventId") String eventId, @RequestBody Expense expense) {
-        Expense saved = repo.save(expense);
         UUID eventUUID=UUID.fromString(eventId);
-        System.out.println(expense);
+        Expense saved = repo.save(expense);
         if (repo.findById(saved.getId()).isPresent()) {
             eventService.newEventLastActivity(eventUUID);
             return ResponseEntity.ok(saved);
