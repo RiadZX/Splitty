@@ -15,21 +15,19 @@
  */
 package client.scenes;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class MainCtrlTest {
-
-    private MainCtrl sut;
-
-    @BeforeEach
-    public void setup() {
-        sut = new MainCtrl();
+public class InviteViewCtrlTest {
+    @Test
+    public void testInvalidEmailValidator() {
+        String email = "calin.com";
+        Assertions.assertFalse(InviteViewCtrl.validateEmail(email));
     }
 
     @Test
-    public void writeSomeTests() {
-        // TODO create replacement objects and write some tests
-        // sut.initialize(null, null, null);
+    public void testValidEmailValidator() {
+        String email = "calin@radoi.dev";
+        Assertions.assertTrue(InviteViewCtrl.validateEmail(email));
     }
 }

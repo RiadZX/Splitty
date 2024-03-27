@@ -17,9 +17,11 @@ package client.scenes;
 
 import client.services.I18N;
 import client.services.NotificationHelper;
+import client.services.NotificationService;
 import client.utils.Config;
 import client.utils.User;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -70,6 +72,7 @@ public class MainCtrl {
 
     private AdminEventsCtrl adminEventsCtrl;
     private Scene adminEvents;
+    private NotificationService notificationService;
 
     public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime,
                            Pair<EventOverviewCtrl, Parent> eventOverview,
@@ -156,6 +159,7 @@ public class MainCtrl {
                 }
             }
         });
+        this.notificationService = new NotificationHelper();
     }
 
     public void showInviteView(Event event){
@@ -280,11 +284,20 @@ public class MainCtrl {
 
     public void showAddExpense(){
         primaryStage.setTitle(I18N.get("window.expense"));
-        addExpenseCtrl.setup(eventOverviewCtrl.getEvent());
+        addExpenseCtrl.setup(eventOverviewCtrl.getEvent(), null);
+        primaryStage.setScene(addExpense);
+    }
+
+    public void showEditExpense(Expense e){
+        primaryStage.setTitle("Splitty: Edit Expense");
+        addExpenseCtrl.setup(eventOverviewCtrl.getEvent(), e);
         primaryStage.setScene(addExpense);
     }
 
     public void deleteAllData(){
+        if (!notificationService.showConfirmation("Delete data", "Are you sure you want to delete your data? This action cannot be undone.")){
+            return;
+        }
         Config.deleteUserConfigFile();
         this.chooseFirstPage(false);
     }

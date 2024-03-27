@@ -22,7 +22,9 @@ public class ExpenseController {
         this.service = service;
         this.eventService = eventService;
     }
-
+    /*
+       Get expenses for an event by event id
+    */
     @GetMapping(path = {"", "/"})
     public  ResponseEntity<List<Expense>> getAll(@PathVariable("eventId") UUID eventId){
         List<Expense> e = service.getAllExpenses();

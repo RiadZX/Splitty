@@ -32,6 +32,7 @@ public class Expense {
     @JoinColumn(name = "participant_id")
     @JsonBackReference ("participant-expenses")
     private Participant paidBy;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     @JsonBackReference("event-expenses")
@@ -53,7 +54,6 @@ public class Expense {
     public String toString() {
         return "Expense{"
                 + "id=" + id
-                + ", event_id=" + eventIdX
                 + ", amount=" + amount
                 + ", date=" + date
                 + ", paidBy=" + paidBy
