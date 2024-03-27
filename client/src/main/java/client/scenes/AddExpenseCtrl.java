@@ -69,7 +69,7 @@ public class AddExpenseCtrl implements Initializable {
         partialPaidSelector.setVisible(true);
     }
 
-    public void setup(Event event, Expense expense){
+    public void setup(Event event){
         this.event = event;
         this.expense = expense;
 

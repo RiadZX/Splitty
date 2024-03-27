@@ -284,13 +284,13 @@ public class MainCtrl {
 
     public void showAddExpense(){
         primaryStage.setTitle(I18N.get("window.expense"));
-        addExpenseCtrl.setup(eventOverviewCtrl.getEvent(), null);
+        addExpenseCtrl.setup(eventOverviewCtrl.getEvent());
         primaryStage.setScene(addExpense);
     }
 
     public void showEditExpense(Expense e){
         primaryStage.setTitle("Splitty: Edit Expense");
-        addExpenseCtrl.setup(eventOverviewCtrl.getEvent(), e);
+        addExpenseCtrl.setup(eventOverviewCtrl.getEvent());
         primaryStage.setScene(addExpense);
     }
 
