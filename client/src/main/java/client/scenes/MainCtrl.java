@@ -20,6 +20,7 @@ import client.services.NotificationHelper;
 import client.utils.Config;
 import client.utils.User;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -280,7 +281,13 @@ public class MainCtrl {
 
     public void showAddExpense(){
         primaryStage.setTitle(I18N.get("window.expense"));
-        addExpenseCtrl.setup(eventOverviewCtrl.getEvent());
+        addExpenseCtrl.setup(eventOverviewCtrl.getEvent(), null);
+        primaryStage.setScene(addExpense);
+    }
+
+    public void showEditExpense(Expense e){
+        primaryStage.setTitle("Splitty: Edit Expense");
+        addExpenseCtrl.setup(eventOverviewCtrl.getEvent(), e);
         primaryStage.setScene(addExpense);
     }
 
