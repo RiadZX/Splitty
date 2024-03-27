@@ -217,7 +217,7 @@ public class EventOverviewCtrl implements Initializable {
     private BorderPane createRow(Expense e) {
         Insets insets = new Insets(0.0, 5.0, 0.0, 5.0);
         BorderPane bp = new BorderPane();
-        bp.setLeft(new Text("Expense paid by " + (e.getPaidBy() == null ? "NULL" : e.getPaidBy().getName())));
+        bp.setLeft(new Text("Expense paid by " + (e.getPaidByIdx() == null ? "NULL" : server.getParticipant(event.getId(), e.getPaidByIdx()).getName())));
 
         Image editImage = new Image("client/icons/pencil.png");
         ImageView edit = new ImageView();

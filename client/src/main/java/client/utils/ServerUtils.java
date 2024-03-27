@@ -71,6 +71,14 @@ public class ServerUtils {
                 .post(Entity.entity(participant, APPLICATION_JSON), Participant.class);
     }
 
+    public Participant getParticipant(UUID eventId, UUID participantId) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/events/" + eventId + "/participants/" + participantId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<Participant>(){});
+    }
+
     public Participant updateParticipant(Event event, Participant participant) {
         participant.setEventPartOf(event);
         return ClientBuilder.newClient(new ClientConfig())
@@ -141,6 +149,7 @@ public class ServerUtils {
     }
 
     public Expense addExpense(UUID eventId, Expense exp) {
+        System.out.println("ServerUtils: " + exp.getPaidBy());
         return ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("/api/events/" + eventId + "/expenses")
                 .request(APPLICATION_JSON)

@@ -28,11 +28,7 @@ public class ExpenseController {
     @GetMapping(path = {"", "/"})
     public  ResponseEntity<List<Expense>> getAll(@PathVariable("eventId") UUID eventId){
         List<Expense> e = service.getAllExpenses();
-        for (Expense expense : e) {
-            if (!expense.getEventIdX().equals(eventId)) {
-                e.remove(expense);
-            }
-        }
+        e.removeIf(expense -> !expense.getEventIdX().equals(eventId));
         return ResponseEntity.ok(e);
 
     }
@@ -40,6 +36,7 @@ public class ExpenseController {
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Expense> add(@PathVariable("eventId") UUID eventId, @RequestBody Expense expense) {
         Expense saved = service.addExpense(expense);
+        System.out.println("Server method: " + saved.getPaidByIdx());
         if (saved != null) {
             eventService.newEventLastActivity(eventId);
             return ResponseEntity.ok(saved);

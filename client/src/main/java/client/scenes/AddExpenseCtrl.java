@@ -69,7 +69,7 @@ public class AddExpenseCtrl implements Initializable {
         partialPaidSelector.setVisible(true);
     }
 
-    public void setup(Event event){
+    public void setup(Event event, Expense expense){
         this.event = event;
         this.expense = expense;
 
@@ -103,15 +103,17 @@ public class AddExpenseCtrl implements Initializable {
     private void setupExistingExpense(Expense expense){
         submitButton.setText("Save");
 
-        paidBySelector.setValue(expense.getPaidBy().getName());
+        paidBySelector.setValue(server.getParticipant(event.getId(), expense.getPaidByIdx()).getName());
         howMuchField.setText(String.valueOf(expense.getAmount()));
         whenField.setValue(expense.getDate().atZone(ZoneId.systemDefault()).toLocalDate());
 
         //check partial debtors if any
         boolean partialPay = false;
+        Participant whoPaid = server.getParticipant(expense.getEventIdX(), expense.getPaidByIdx());
         List<Participant> debtors = expense.getDebts().stream().map(Debt::getParticipant).toList();
         for (Participant p : event.getParticipants()){
-            if (!p.equals(expense.getPaidBy()) && !debtors.contains(p)){
+            if (!p.getId().equals(whoPaid.getId()) && !debtors.contains(p)){
+                System.out.println("This happens " + p.getEvent() + " " + whoPaid.getEvent());
                 checkSome();
                 partialPay = true;
             }
