@@ -41,10 +41,6 @@ public class Expense {
         return eventIdX;
     }
 
-    public void setEventIdX(UUID eventId) {
-        this.eventIdX = eventId;
-    }
-
     //THIS IS A HACK TO GET THE EVENT ID, WITHOUT OVERFLOWING THE STACK.
     // This is used to know the event id of the expense
     private UUID eventIdX;
