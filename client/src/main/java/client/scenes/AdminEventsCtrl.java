@@ -86,6 +86,9 @@ public class AdminEventsCtrl implements Initializable {
      * @param e Event to be removed
      */
     private void removeEvent(Event e) {
+        if (!notificationService.showConfirmation("Delete event", "Are you sure you want to delete this event?")) {
+            return;
+        }
         server.removeEvent(e.getId());
         this.events.remove(e);
         populateList();
