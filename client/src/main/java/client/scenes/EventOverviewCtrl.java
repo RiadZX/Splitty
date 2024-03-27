@@ -9,7 +9,14 @@ import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.Cursor;
+import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -33,6 +40,9 @@ public class EventOverviewCtrl implements Initializable {
 
     @FXML
     private TextField eventTitle;
+
+    @FXML
+    private ListView<BorderPane> expensesList;
 
     private Event event;
 
@@ -126,13 +136,43 @@ public class EventOverviewCtrl implements Initializable {
             Event refreshed = server.getEvent(event.getId());
             System.out.println("refreshing");
             this.setEvent(refreshed);
+            populateList();
             System.out.println("refreshed");
-
             /* TO DO:
             * - refresh all data related to the event
             * - add functionality to the expense list and filtering*/
         }catch (WebApplicationException e) {
             notificationService.showError("Error refreshing event", "Could not refresh event data");
         }
+    }
+
+    public void populateList() {
+        expensesList.getItems().clear();
+        List<BorderPane> contents = expenses.stream().map(this::createRow).toList();
+        expensesList.getItems().addAll(contents);
+    }
+    
+    public void editExpense(Expense e) {
+        System.out.println("TODO: Create page for editing expenses");
+    }
+
+
+    private BorderPane createRow(Expense e) {
+        Insets insets = new Insets(0.0, 5.0, 0.0, 5.0);
+        BorderPane bp = new BorderPane();
+        bp.setLeft(new Text(e.getId().toString()));
+
+        Image editImage = new Image("client/icons/pencil.png");
+        ImageView edit = new ImageView();
+        edit.setImage(editImage);
+        edit.setOnMouseClicked(x -> editExpense(e));
+        edit.cursorProperty().set(Cursor.HAND);
+        edit.setFitHeight(12.0);
+        edit.setPickOnBounds(true);
+        edit.setFitWidth(12.0);
+        BorderPane.setMargin(edit, insets);
+
+        bp.setRight(edit);
+        return bp;
     }
 }
