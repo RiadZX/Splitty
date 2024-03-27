@@ -1,9 +1,11 @@
 package commons;
 
-import com.google.gson.annotations.Expose;
-import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
+import com.google.gson.annotations.Expose;
+import jakarta.persistence.*;
 
 import java.time.Instant;
 import java.util.List;
@@ -26,6 +28,7 @@ public class Expense {
     private double amount;
 
     @Expose
+    @JsonSerialize(using = InstantSerializer.class)
     private Instant date;
 
     @ManyToOne(fetch = FetchType.LAZY)
