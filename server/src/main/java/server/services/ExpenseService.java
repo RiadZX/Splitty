@@ -11,9 +11,6 @@ import java.util.UUID;
 @Service
 public class ExpenseService {
     private final ExpenseRepository expenseRepository;
-
-
-
     @Autowired
     public ExpenseService(ExpenseRepository expenseRepository) {
         this.expenseRepository = expenseRepository;
