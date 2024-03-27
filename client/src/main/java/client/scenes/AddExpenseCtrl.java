@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -175,15 +176,23 @@ public class AddExpenseCtrl implements Initializable {
             return;
         }
 
-        //create the expense
-        Expense newExpense = new Expense(paidBy.getName() + " paid for " + tags.get(0).getTag(), Double.parseDouble(howMuchField.getText()), date.atStartOfDay(), paidBy, event, debts, tags);
+        //create the expense, TODO : changed the name of event because event tags are not implemented yet
+        Expense newExpense = new Expense(paidBy.getName() + " paid for " + "EXPENSE TEMPLATE",
+                Double.parseDouble(howMuchField.getText()),
+                Instant.from(date.atStartOfDay(
+                        java.time.ZoneId.systemDefault()
+                )),
+                paidBy,
+                event,
+                event.getId(),
+                debts,
+                new ArrayList<>());
         for (Debt d : newExpense.getDebts()){
             d.setExpense(newExpense); //setup each debt's expense pointer
         }
-        event.addExpense(newExpense);
-        //server.updateEvent(event);
-        //the line above yields a HTTP 500 error
+        server.addExpense(event.getId(), newExpense);
         mainCtrl.showEventOverviewScene(event);
+
     }
 
     private List<Debt> createDebts(double amount, List<Participant> participants){
