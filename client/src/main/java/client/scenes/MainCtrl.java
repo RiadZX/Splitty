@@ -17,6 +17,7 @@ package client.scenes;
 
 import client.services.I18N;
 import client.services.NotificationHelper;
+import client.services.NotificationService;
 import client.utils.Config;
 import client.utils.User;
 import commons.Event;
@@ -70,6 +71,7 @@ public class MainCtrl {
 
     private AdminEventsCtrl adminEventsCtrl;
     private Scene adminEvents;
+    private NotificationService notificationService;
 
     public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime,
                            Pair<EventOverviewCtrl, Parent> eventOverview,
@@ -156,6 +158,7 @@ public class MainCtrl {
                 }
             }
         });
+        this.notificationService = new NotificationHelper();
     }
 
     public void showInviteView(Event event){
@@ -285,6 +288,9 @@ public class MainCtrl {
     }
 
     public void deleteAllData(){
+        if (!notificationService.showConfirmation("Delete data", "Are you sure you want to delete your data? This action cannot be undone.")){
+            return;
+        }
         Config.deleteUserConfigFile();
         this.chooseFirstPage(false);
     }
