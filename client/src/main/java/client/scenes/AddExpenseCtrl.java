@@ -165,16 +165,16 @@ public class AddExpenseCtrl implements Initializable {
         //create the list of tags (God bless the creator of stream() :) )
         List<Tag> tags = tagSelector.getChildren().stream().filter(n -> n.getClass() == CheckBox.class).map(n -> ((CheckBox) n)).filter(CheckBox::isSelected).map(Labeled::getText).map(this::findTag).toList();
 
-        if (tags.isEmpty()){
-            NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = """
-                    You have not selected any tags
-                    please create a tag.
-                    Or select a pre-existing one.
-                    """;
-            notificationHelper.showError("Warning", warningMessage);
-            return;
-        }
+//        if (tags.isEmpty()){
+//            NotificationHelper notificationHelper = new NotificationHelper();
+//            String warningMessage = """
+//                    You have not selected any tags
+//                    please create a tag.
+//                    Or select a pre-existing one.
+//                    """;
+//            notificationHelper.showError("Warning", warningMessage);
+//            return;
+//        }
 
         //create the expense, TODO : changed the name of event because event tags are not implemented yet
         Expense newExpense = new Expense(paidBy.getName() + " paid for " + "EXPENSE TEMPLATE",
