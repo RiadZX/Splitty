@@ -2,6 +2,7 @@ package commons;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
@@ -36,7 +37,6 @@ public class Participant {
     private List<Debt> debts;
 
     @OneToMany(mappedBy = "paidBy", orphanRemoval = true)
-    @JsonManagedReference("participant-expenses")
     @Expose
     private List<Expense> paidFor;
 

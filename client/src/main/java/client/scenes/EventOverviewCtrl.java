@@ -7,20 +7,18 @@ import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.List;
@@ -43,6 +41,9 @@ public class EventOverviewCtrl implements Initializable {
 
     @FXML
     private ListView<BorderPane> expensesList;
+
+    @FXML
+    private ComboBox<BorderPane> payerSelector;
 
     private Event event;
 
@@ -137,6 +138,8 @@ public class EventOverviewCtrl implements Initializable {
             System.out.println("refreshing");
             this.setEvent(refreshed);
             populateList();
+            payerSelector.setItems(FXCollections.observableArrayList(event.getParticipants().stream().map(this::createComboBoxEntry).toList()));
+            payerSelector.setVisible(true);
             System.out.println("refreshed");
             /* TO DO:
             * - refresh all data related to the event
@@ -144,6 +147,12 @@ public class EventOverviewCtrl implements Initializable {
         }catch (WebApplicationException e) {
             notificationService.showError("Error refreshing event", "Could not refresh event data");
         }
+    }
+
+    public BorderPane createComboBoxEntry(Participant p) {
+        BorderPane bp = new BorderPane();
+        bp.setLeft(new Text(p.getName()));
+        return bp;
     }
 
     public void populateList() {
@@ -160,7 +169,7 @@ public class EventOverviewCtrl implements Initializable {
     private BorderPane createRow(Expense e) {
         Insets insets = new Insets(0.0, 5.0, 0.0, 5.0);
         BorderPane bp = new BorderPane();
-        bp.setLeft(new Text(e.getId().toString()));
+        bp.setLeft(new Text("Expense paid by " + (e.getPaidBy() == null ? "NULL" : e.getPaidBy().getName())));
 
         Image editImage = new Image("client/icons/pencil.png");
         ImageView edit = new ImageView();

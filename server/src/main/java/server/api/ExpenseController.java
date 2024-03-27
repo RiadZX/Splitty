@@ -1,5 +1,6 @@
 package server.api;
 
+import commons.Event;
 import commons.Expense;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import server.services.EventService;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/events/{eventId}/expenses")
@@ -27,13 +29,10 @@ public class ExpenseController {
     @GetMapping(path = {"", "/"})
     public  ResponseEntity<List<Expense>> getAll(@PathVariable String eventId) {
         try {
-            List<Expense> expenses = repo.findAll();
-            for (Expense expense : expenses) {
-                if (!expense.getEventIdX().equals(UUID.fromString(eventId))) {
-                    expenses.remove(expense);
-                }
-            }
-            return ResponseEntity.ok(expenses);
+            return ResponseEntity.ok(repo.findAll().stream()
+                    .filter(e -> e.getEvent().getId()
+                            .equals(UUID.fromString((eventId))))
+                    .collect(Collectors.toList()));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
@@ -42,7 +41,10 @@ public class ExpenseController {
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Expense> add(@PathVariable("eventId") String eventId, @RequestBody Expense expense) {
         UUID eventUUID=UUID.fromString(eventId);
-        Expense saved = repo.save(expense);
+        Event event = new Event();
+        event.setId(eventUUID);
+        expense.setEvent(event);
+        Expense saved = repo.saveAndFlush(expense);
         if (repo.findById(saved.getId()).isPresent()) {
             eventService.newEventLastActivity(eventUUID);
             return ResponseEntity.ok(saved);
