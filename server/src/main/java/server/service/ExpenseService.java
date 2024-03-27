@@ -36,7 +36,7 @@ public class ExpenseService {
         return expense;
     }
     public Expense updateExpense(Expense expense) {
-        return expenseRepository.save(expense);
+        return this.addExpense(expense);
     }
 
 }

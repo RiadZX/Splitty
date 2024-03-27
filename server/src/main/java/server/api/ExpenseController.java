@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/events/{event_id}/expenses")
+@RequestMapping("/api/events/{eventId}/expenses")
 public class ExpenseController {
 
     //use service instead of repository
@@ -21,16 +21,22 @@ public class ExpenseController {
     }
 
     @GetMapping(path = {"", "/"})
-    public  ResponseEntity<List<Expense>> getAll() {
+    public  ResponseEntity<List<Expense>> getAll(@PathVariable("eventId") UUID eventId){
         try {
-            return ResponseEntity.ok(service.getAllExpenses());
+            List<Expense> e = service.getAllExpenses();
+            for (Expense expense : e) {
+                if (!expense.getEventIdX().equals(eventId)) {
+                    e.remove(expense);
+                }
+            }
+            return ResponseEntity.ok(e);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
     }
 
     @PostMapping(path = {"", "/"})
-    public ResponseEntity<Expense> add(@RequestBody Expense expense) {
+    public ResponseEntity<Expense> add(@PathVariable("eventId") UUID eventId, @RequestBody Expense expense) {
         Expense saved = service.addExpense(expense);
         if (saved != null) {
             return ResponseEntity.ok(saved);
@@ -39,7 +45,7 @@ public class ExpenseController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Expense> getById(@PathVariable("id") UUID id) {
+    public ResponseEntity<Expense> getById(@PathVariable("eventId") UUID eventId, @PathVariable("id") UUID id) {
         Expense expense = service.getExpenseById(id);
         if (expense != null) {
             return ResponseEntity.ok(expense);
@@ -49,7 +55,7 @@ public class ExpenseController {
 
     // TODO Handle who can delete an expense and who can't
     @DeleteMapping("/{id}")
-    public ResponseEntity<Expense> remove(@PathVariable("id") UUID id) {
+    public ResponseEntity<Expense> remove(@PathVariable("eventId") UUID eventId, @PathVariable("id") UUID id) {
         Expense expense = service.deleteExpense(id);
         if (expense != null) {
             return ResponseEntity.ok(expense);
@@ -58,7 +64,7 @@ public class ExpenseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Expense> update(@PathVariable("id") UUID id, @RequestBody Expense expense) {
+    public ResponseEntity<Expense> update(@PathVariable("eventId") UUID eventId, @PathVariable("id") UUID id, @RequestBody Expense expense) {
         if (id.equals(expense.getId())) {
             Expense updated = service.updateExpense(expense);
             if (updated != null) {
