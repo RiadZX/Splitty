@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -105,7 +106,7 @@ public class AddExpenseCtrl implements Initializable {
 
         paidBySelector.setValue(expense.getPaidBy().getName());
         howMuchField.setText(String.valueOf(expense.getAmount()));
-        whenField.setValue(LocalDate.from(expense.getDate()));
+        whenField.setValue(expense.getDate().atZone(ZoneId.systemDefault()).toLocalDate());
 
         //check partial debtors if any
         boolean partialPay = false;

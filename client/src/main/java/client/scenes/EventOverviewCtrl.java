@@ -169,10 +169,6 @@ public class EventOverviewCtrl implements Initializable {
         mainCtrl.showAddExpense();
     }
 
-    public void editExpense(Expense e){
-
-    }
-
     public void refresh(){
         try {
             Event refreshed = server.getEvent(event.getId());
@@ -214,7 +210,7 @@ public class EventOverviewCtrl implements Initializable {
 //    }
 //
     public void editExpense(Expense e) {
-        System.out.println("TODO: Create page for editing expenses");
+        mainCtrl.showEditExpense(e);
     }
 
 
