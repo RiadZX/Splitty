@@ -10,7 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import server.service.ExpenseService;
+import server.services.ExpenseService;
 
 import java.util.List;
 import java.util.UUID;

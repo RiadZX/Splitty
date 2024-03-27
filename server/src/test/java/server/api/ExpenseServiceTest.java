@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import server.database.ExpenseRepository;
-import server.service.ExpenseService;
+import server.services.ExpenseService;
 
 import java.util.UUID;
 

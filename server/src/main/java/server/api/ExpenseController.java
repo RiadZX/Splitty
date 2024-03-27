@@ -4,7 +4,8 @@ import commons.Expense;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.service.ExpenseService;
+import server.services.EventService;
+import server.services.ExpenseService;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,9 +16,11 @@ public class ExpenseController {
 
     //use service instead of repository
     private final ExpenseService service;
+    private final EventService eventService;
     @Autowired
-    public ExpenseController(ExpenseService service) {
+    public ExpenseController(ExpenseService service, EventService eventService) {
         this.service = service;
+        this.eventService = eventService;
     }
 
     @GetMapping(path = {"", "/"})
@@ -39,6 +42,7 @@ public class ExpenseController {
     public ResponseEntity<Expense> add(@PathVariable("eventId") UUID eventId, @RequestBody Expense expense) {
         Expense saved = service.addExpense(expense);
         if (saved != null) {
+            eventService.newEventLastActivity(eventId);
             return ResponseEntity.ok(saved);
         }
         return ResponseEntity.internalServerError().build();
@@ -48,6 +52,7 @@ public class ExpenseController {
     public ResponseEntity<Expense> getById(@PathVariable("eventId") UUID eventId, @PathVariable("id") UUID id) {
         Expense expense = service.getExpenseById(id);
         if (expense != null) {
+            eventService.newEventLastActivity(eventId);
             return ResponseEntity.ok(expense);
         }
         return ResponseEntity.badRequest().build();
@@ -58,6 +63,7 @@ public class ExpenseController {
     public ResponseEntity<Expense> remove(@PathVariable("eventId") UUID eventId, @PathVariable("id") UUID id) {
         Expense expense = service.deleteExpense(id);
         if (expense != null) {
+            eventService.newEventLastActivity(eventId);
             return ResponseEntity.ok(expense);
         }
         return ResponseEntity.badRequest().build();
@@ -68,6 +74,7 @@ public class ExpenseController {
         if (id.equals(expense.getId())) {
             Expense updated = service.updateExpense(expense);
             if (updated != null) {
+                eventService.newEventLastActivity(eventId);
                 return ResponseEntity.ok(updated);
             }
         }
