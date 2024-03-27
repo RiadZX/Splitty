@@ -97,13 +97,13 @@ public class EventOverviewCtrl implements Initializable {
         return new ListCell<>() {
             @Override
             protected void updateItem(Participant item, boolean empty) {
-                 super.updateItem(item, empty);
-                 if (empty || item == null) {
-                     setGraphic(null);
-                     setText("ALL");
-                 } else {
-                     setText(item.getName());
-                 }
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                    setText("ALL");
+                } else {
+                    setText(item.getName());
+                }
             }
         };
     }
