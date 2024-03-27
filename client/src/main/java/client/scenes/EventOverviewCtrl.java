@@ -40,14 +40,16 @@ public class EventOverviewCtrl implements Initializable {
     private TextField eventTitle;
 
     @FXML
-    private ListView<BorderPane> expensesList;
+    private ListView<Expense> expensesList;
 
     @FXML
-    private ComboBox<BorderPane> payerSelector;
+    private ComboBox<Participant> payerSelector;
 
     private Event event;
 
     private List<Expense> expenses;
+
+    private Participant payer;
 
     @Inject
     public EventOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
@@ -69,6 +71,41 @@ public class EventOverviewCtrl implements Initializable {
         }));
 
         this.sendInviteButton.setOnAction(event -> sendInvite());
+
+        payerSelector.setCellFactory(param -> getPayerListCell());
+        payerSelector.setButtonCell(getPayerListCell());
+
+        expensesList.setCellFactory(param -> getExpenseListCell());
+
+    }
+
+    public ListCell<Expense> getExpenseListCell() {
+        return new ListCell<>() {
+            @Override
+            protected void updateItem(Expense item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null || (payer != null && !item.getPaidBy().getId().equals(payer.getId()))) {
+                    setGraphic(null);
+                    setText(null);
+                } else {
+                    setGraphic(createRow(item));
+                }
+            }
+        };
+    }
+    public ListCell<Participant> getPayerListCell() {
+        return new ListCell<>() {
+            @Override
+            protected void updateItem(Participant item, boolean empty) {
+                 super.updateItem(item, empty);
+                 if (empty || item == null) {
+                     setGraphic(null);
+                     setText("ALL");
+                 } else {
+                     setText(item.getName());
+                 }
+            }
+        };
     }
 
     public Event getEvent(){
@@ -137,9 +174,16 @@ public class EventOverviewCtrl implements Initializable {
             Event refreshed = server.getEvent(event.getId());
             System.out.println("refreshing");
             this.setEvent(refreshed);
-            populateList();
-            payerSelector.setItems(FXCollections.observableArrayList(event.getParticipants().stream().map(this::createComboBoxEntry).toList()));
-            payerSelector.setVisible(true);
+            payerSelector.setItems(FXCollections.observableArrayList(event.getParticipants()));
+            payerSelector.getItems().add(0, null);
+            payerSelector.getSelectionModel().selectFirst();
+            payerSelector.setOnAction(e -> {
+                payer = payerSelector.getValue();
+                expensesList.getItems().clear();
+                expensesList.getItems().addAll(expenses);
+            });
+            expensesList.getItems().clear();
+            expensesList.getItems().addAll(expenses);
             System.out.println("refreshed");
             /* TO DO:
             * - refresh all data related to the event
@@ -149,18 +193,22 @@ public class EventOverviewCtrl implements Initializable {
         }
     }
 
-    public BorderPane createComboBoxEntry(Participant p) {
-        BorderPane bp = new BorderPane();
-        bp.setLeft(new Text(p.getName()));
-        return bp;
-    }
+//    public BorderPane createComboBoxEntry(Participant p) {
+//        BorderPane bp = new BorderPane();
+////        bp.setOnKeyPressed(x -> {
+////            payer = p;
+////            populateList();
+////        });
+//        bp.setLeft(new Text(p.getName()));
+//        return bp;
+//    }
 
-    public void populateList() {
-        expensesList.getItems().clear();
-        List<BorderPane> contents = expenses.stream().map(this::createRow).toList();
-        expensesList.getItems().addAll(contents);
-    }
-    
+//    public void populateList() {
+//        expensesList.getItems().clear();
+//        List<BorderPane> contents = expenses.stream().map(this::createRow).toList();
+//        expensesList.getItems().addAll(contents);
+//    }
+//
     public void editExpense(Expense e) {
         System.out.println("TODO: Create page for editing expenses");
     }
