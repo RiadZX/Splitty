@@ -41,7 +41,7 @@ public class ParticipantTest {
         assertNotEquals(p1, null);
         assertEquals(p1, p2);
         assertNotEquals(p1, p3);
-        assertNotEquals(p1,p4);
+        assertNotEquals(p1, p4);
         assertNotEquals(p4, null);
     }
 
@@ -55,32 +55,32 @@ public class ParticipantTest {
     @Test
     public void setEmail(){
         p1.setEmail("aerrq@yahoo.com");
-        assertEquals(p1.getEmail(),"aerrq@yahoo.com");
+        assertEquals(p1.getEmail(), "aerrq@yahoo.com");
     }
 
     @Test
     public void setBic(){
         p1.setBic("TMBQBHDGXYY");
-        assertEquals(p1.getBic(),"TMBQBHDGXYY");
+        assertEquals(p1.getBic(), "TMBQBHDGXYY");
     }
 
     @Test
     public void setIban(){
         p1.setIban("NL32RABB5907152752");
-        assertEquals(p1.getIban(),"NL32RABB5907152752");
+        assertEquals(p1.getIban(), "NL32RABB5907152752");
     }
 
     @Test
     public void setName(){
         p6.setName("tessssst");
-        assertEquals(p6.getName(),"tessssst");
+        assertEquals(p6.getName(), "tessssst");
     }
 
     @Test
     public void setID(){
         UUID tmp=UUID.randomUUID();
         p6.setId(tmp);
-        assertEquals(p6.getId(),tmp);
+        assertEquals(p6.getId(), tmp);
     }
 
     @Test
@@ -88,20 +88,20 @@ public class ParticipantTest {
         Event tmp=new Event("test");
         assertNull(p6.getEvent());
         p6.setEventPartOf(tmp);
-        assertEquals(p6.getEvent(),tmp);
+        assertEquals(p6.getEvent(), tmp);
     }
 
     @Test
     public void setDebts(){
-        List<Debt> tmp=List.of(new Debt(),new Debt());
+        List<Debt> tmp=List.of(new Debt(), new Debt());
         assertNull(p6.getDebts());
         p6.setDebts(tmp);
-        assertEquals(p6.getDebts(),tmp);
+        assertEquals(p6.getDebts(), tmp);
     }
 
     @Test void payFor(){
         List<Expense> temp=new ArrayList<>();
-        assertEquals(p6.getPaidFor(),temp);
+        assertEquals(p6.getPaidFor(), temp);
         p6.payFor(new Expense());
         temp.add(new Expense());
         assertEquals(p6.getPaidFor(), temp);
