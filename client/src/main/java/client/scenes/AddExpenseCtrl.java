@@ -65,7 +65,6 @@ public class AddExpenseCtrl implements Initializable {
 
     @FXML
     public void checkSome(){
-        System.out.println(paidBySelector.getValue());
         allBox.setSelected(false);
         partialPaidSelector.setVisible(true);
     }
@@ -127,8 +126,11 @@ public class AddExpenseCtrl implements Initializable {
                     }
                 }
             }
+            someBox.setSelected(true);
+            checkSome();
         }
         else {
+            allBox.setSelected(true);
             checkAll();
         }
 
@@ -170,8 +172,18 @@ public class AddExpenseCtrl implements Initializable {
                 event.addExpense(newExpense);
                 server.addExpense(event.getId(), newExpense);
             } else {
+                /*UUID oldId = expense.getId();
                 expense = newExpense;
+                expense.setId(oldId);
+                 */
+                expense.setPaidBy(newExpense.getPaidBy());
+                expense.setDate(newExpense.getDate());
+                expense.setAmount(newExpense.getAmount());
+                expense.setTags(newExpense.getTags());
+                expense.setDebts(newExpense.getDebts());
+                expense.setTitle(newExpense.getTitle());
                 server.updateExpense(event.getId(), expense);
+                System.out.println("Updated expense's amount to " + server.getExpensesByEvent(event.getId()).get(0).getAmount());
             }
             mainCtrl.showEventOverviewScene(event);
         }
@@ -235,7 +247,7 @@ public class AddExpenseCtrl implements Initializable {
             return null;
         }
 
-        if (Integer.parseInt(howMuchField.getText()) < 0){
+        if (Double.parseDouble(howMuchField.getText()) < 0){
             NotificationHelper notificationHelper = new NotificationHelper();
             String warningMessage = """
                     You cannot select a negative amount

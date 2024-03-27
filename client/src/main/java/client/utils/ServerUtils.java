@@ -148,9 +148,12 @@ public class ServerUtils {
                 .post(Entity.entity(exp, APPLICATION_JSON), Expense.class);
     }
 
-    public Expense updateExpense(UUID evenId, Expense exp){
-        // TODO implement an updateExpense method for editing the expenses
-        return exp;
+    public Expense updateExpense(UUID eventId, Expense exp){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("/api/events/" + eventId + "/expenses/" + exp.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(exp, APPLICATION_JSON), Expense.class);
     }
 
     public List<Expense> getExpensesByEvent(UUID eventId) {
