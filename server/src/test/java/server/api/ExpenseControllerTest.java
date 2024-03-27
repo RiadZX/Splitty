@@ -107,8 +107,6 @@ public class ExpenseControllerTest {
         expenses.get(1).setId(UUID.randomUUID());
         expenses.get(0).setEvent(e);
         expenses.get(1).setEvent(e);
-        expenses.get(0).setEventIdX(e.getId());
-        expenses.get(1).setEventIdX(e.getId());
 
         when(expenseRepository.findAll()).thenReturn(expenses);
 
