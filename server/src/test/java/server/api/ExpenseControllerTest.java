@@ -10,7 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import server.database.ExpenseRepository;
+import server.services.ExpenseService;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 
 public class ExpenseControllerTest {
     @Mock
-    private ExpenseRepository expenseRepository;
+    private ExpenseService expenseService;
     @InjectMocks
     ExpenseController expenseController;
 
@@ -107,12 +107,10 @@ public class ExpenseControllerTest {
         expenses.get(1).setId(UUID.randomUUID());
         expenses.get(0).setEvent(e);
         expenses.get(1).setEvent(e);
-        expenses.get(0).setEventIdX(e.getId());
-        expenses.get(1).setEventIdX(e.getId());
 
-        when(expenseRepository.findAll()).thenReturn(expenses);
+        when(expenseService.getAllExpenses()).thenReturn(expenses);
 
-        ResponseEntity<List<Expense>> responseEntity = expenseController.getAll(e.getId().toString());
+        ResponseEntity<List<Expense>> responseEntity = expenseController.getAll(e.getId());
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(expenses, responseEntity.getBody());
     }

@@ -25,17 +25,14 @@ public class ExpenseController {
 
     @GetMapping(path = {"", "/"})
     public  ResponseEntity<List<Expense>> getAll(@PathVariable("eventId") UUID eventId){
-        try {
-            List<Expense> e = service.getAllExpenses();
-            for (Expense expense : e) {
-                if (!expense.getEventIdX().equals(eventId)) {
-                    e.remove(expense);
-                }
+        List<Expense> e = service.getAllExpenses();
+        for (Expense expense : e) {
+            if (!expense.getEventIdX().equals(eventId)) {
+                e.remove(expense);
             }
-            return ResponseEntity.ok(e);
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
         }
+        return ResponseEntity.ok(e);
+
     }
 
     @PostMapping(path = {"", "/"})

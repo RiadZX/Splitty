@@ -141,6 +141,7 @@ public class Expense {
 
     public void setEvent(Event event) {
         this.event = event;
+        this.eventIdX = event.getId();
     }
 
     public List<Debt> getDebts() {
