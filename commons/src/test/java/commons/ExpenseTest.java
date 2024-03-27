@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-import java.time.Month;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,13 +19,13 @@ public class ExpenseTest {
         Event event = new Event();
         List<Debt> debts = new ArrayList<>();
         debts.add(new Debt());
-        tester = new Expense("Food", 10.0, LocalDateTime.of(2024, Month.FEBRUARY, 24, 15, 0, 0), participant, event, debts, new ArrayList<>());
-        tester2 = new Expense("Food", 10.0, LocalDateTime.of(2024, Month.FEBRUARY, 24, 15, 0, 0), participant, event, debts, new ArrayList<>());
-        tester3 = new Expense("Drinks", 10.0, LocalDateTime.of(2024, Month.FEBRUARY, 24, 15, 0, 0), participant, event, debts, new ArrayList<>());
+        tester = new Expense("Food", 10.0, Instant.MIN, participant, event, debts, new ArrayList<>());
+        tester2 = new Expense("Food", 10.0, Instant.MIN, participant, event, debts, new ArrayList<>());
+        tester3 = new Expense("Drinks", 10.0, Instant.MIN, participant, event, debts, new ArrayList<>());
         List<Debt> debts2 = new ArrayList<>();
         debts2.add(new Debt());
         debts2.add(new Debt());
-        tester4 = new Expense("Food", 10.0, LocalDateTime.of(2024, Month.FEBRUARY, 24, 15, 0, 0), participant, event, debts2, new ArrayList<>());
+        tester4 = new Expense("Food", 10.0, Instant.MIN, participant, event, debts2, new ArrayList<>());
     }
 
     @Test
@@ -34,7 +33,7 @@ public class ExpenseTest {
         Assertions.assertNotNull(tester);
         assertEquals(tester.getTitle(), "Food");
         assertEquals(tester.getAmount(), 10.0);
-        assertEquals(tester.getDate().getDayOfMonth(), 24);
+        assertEquals(tester.getDate(), Instant.MIN);
         assertEquals(tester.getPaidBy(), new Participant());
         assertEquals(tester.getEvent(), new Event());
         assertTrue(tester.getDebts().size() == 1);

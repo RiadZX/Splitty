@@ -15,7 +15,9 @@
  */
 package client.utils;
 
+import com.google.gson.JsonObject;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -86,14 +88,15 @@ public class ServerUtils {
                 .post(Entity.entity(event, APPLICATION_JSON), Event.class);
     }
 
-	public void removeParticipant(Event event, Participant participant) {
-		ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events/" + event.getId() + "/participants/" +  participant.getId())
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.delete();
-	}
-    public Event updateEvent(Event event){
+    public void removeParticipant(Event event, Participant participant) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/events/" + event.getId() + "/participants/" + participant.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
+
+    public Event updateEvent(Event event) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("api/events/" + event.getId())
                 .request(APPLICATION_JSON)
@@ -130,12 +133,29 @@ public class ServerUtils {
 
     public Event removeEvent(UUID id) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/events/"+id) //
+                .target(SERVER).path("api/events/" + id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .delete(new GenericType<Event>() {});
+                .delete(new GenericType<Event>() {
+                });
     }
 
+    public Expense addExpense(UUID eventId, Expense exp) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("/api/events/" + eventId + "/expenses")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(exp, APPLICATION_JSON), Expense.class);
+    }
+
+    public List<Expense> getExpensesByEvent(UUID eventId) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("/api/events/" + eventId + "/expenses")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Expense>>() {
+                });
+    }
 
     /**
      * Listen for new events
@@ -151,19 +171,19 @@ public class ServerUtils {
                         .get(Response.class);
                 System.out.println("Got response");
                 System.out.println(res.toString());
-				if (res.getStatus() == 204){
+                if (res.getStatus() == 204) {
                     System.out.println("No content");
-					continue;
-				}
-                if (res.getStatus() != 200){
+                    continue;
+                }
+                if (res.getStatus() != 200) {
                     System.out.println("Error: " + res.getStatus());
                     continue;
                 }
-				var event = res.readEntity(Event.class);
-				if (event == null) {
+                var event = res.readEntity(Event.class);
+                if (event == null) {
                     System.out.println("No event");
-					continue;
-				}
+                    continue;
+                }
 
                 eventConsumer.accept(event);
             }
@@ -171,7 +191,39 @@ public class ServerUtils {
         });
         System.out.println("Stopped listening for updates 2");
     }
-    public void stopThread(){
+
+    public void stopThread() {
         exec.shutdownNow();
+    }
+
+
+    public String checkPassword(String password) {
+        return ClientBuilder.newClient(new ClientConfig())//
+                .target(SERVER).path("admin/login")//
+                .request(APPLICATION_JSON)//
+                .accept(APPLICATION_JSON)//
+                .post(Entity.entity(password, APPLICATION_JSON), String.class);
+    }
+
+    public String getAdmin() {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("admin/") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<String>() {
+                });
+    }
+
+    public void sendEmail(String toEmail, String inviteCode, String creator) {
+        JsonObject body = new JsonObject();
+        body.addProperty("toEmail", toEmail);
+        body.addProperty("inviteCode", inviteCode);
+        body.addProperty("creator", creator);
+        System.out.println(body);
+        ClientBuilder.newClient(new ClientConfig())//
+                .target(SERVER).path("api/mail")//
+                .request(APPLICATION_JSON)//
+                .accept(APPLICATION_JSON)//
+                .post(Entity.entity(body.toString(), APPLICATION_JSON), String.class);
     }
 }

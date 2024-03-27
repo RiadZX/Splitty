@@ -4,10 +4,12 @@ import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.TextFlow;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -24,17 +26,17 @@ public class EventOverviewCtrl implements Initializable {
     private final NotificationService notificationService;
     @FXML
     public Button sendInviteButton;
-
-//    @FXML
-//    private Label participantsLabel;
-
     @FXML
     public TextFlow textFlow;
+    @FXML
+    public Pane backButton;
 
     @FXML
     private TextField eventTitle;
 
     private Event event;
+
+    private List<Expense> expenses;
 
     @Inject
     public EventOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
@@ -54,8 +56,8 @@ public class EventOverviewCtrl implements Initializable {
                 }
             }
         }));
+
         this.sendInviteButton.setOnAction(event -> sendInvite());
-        System.out.println("EventOverviewCtrl initialized");
     }
 
     public Event getEvent(){
@@ -66,6 +68,9 @@ public class EventOverviewCtrl implements Initializable {
         this.event=newEvent;
         eventTitle.setText(this.event.getTitle());
         reassignParticipants(this.event.getParticipants());
+        System.out.println("set event: "+ event);
+        this.expenses = server.getExpensesByEvent(this.event.getId());
+        System.out.println("expenses: "+ expenses);
     }
 
     public void reassignParticipants(List<Participant> participantList){
@@ -119,7 +124,9 @@ public class EventOverviewCtrl implements Initializable {
     public void refresh(){
         try {
             Event refreshed = server.getEvent(event.getId());
+            System.out.println("refreshing");
             this.setEvent(refreshed);
+            System.out.println("refreshed");
 
             /* TO DO:
             * - refresh all data related to the event

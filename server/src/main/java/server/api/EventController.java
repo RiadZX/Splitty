@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import server.database.EventRepository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -84,11 +85,10 @@ public class EventController {
         }
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Event> remove(@PathVariable("id") UUID id) {
+    public ResponseEntity<Void> remove(@PathVariable("id") UUID id) {
         if (repo.findById(id).isPresent()) {
-            ResponseEntity<Event> removedEvent = ResponseEntity.ok(repo.findById(id).get());
             repo.deleteById(id);
-            return removedEvent;
+            return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
     }
@@ -103,6 +103,7 @@ public class EventController {
         if (!repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
+        event.setLastActivityTime(Instant.now()); //update last activity time
         Event saved = repo.save(event);
         return ResponseEntity.ok(saved);
     }
