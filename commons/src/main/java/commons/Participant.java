@@ -46,15 +46,16 @@ public class Participant {
     private String bic;
 
     public Participant() {
+        this.paidFor = new ArrayList<>();
     }
 
     public Participant(String name, Event event, String iban, String email, String bic) {
+        this();
         this.name = name;
         this.event = event;
         this.iban = iban;
         this.email = email;
         this.bic = bic;
-        this.paidFor = new ArrayList<>();
     }
 
     public String getIban() {
@@ -99,10 +100,12 @@ public class Participant {
     }
 
     public Participant(String name) {
+        this();
         this.name = name;
     }
 
     public Participant(String name, Event event) {
+        this();
         this.name = name;
         this.event = event;
     }
@@ -130,6 +133,10 @@ public class Participant {
         this.paidFor.add(e);
     }
 
+    public List<Expense> getPaidFor() {
+        return paidFor;
+    }
+
     public void setId(UUID id) {
         this.id = id;
     }
@@ -151,9 +158,11 @@ public class Participant {
     @Override
     public String toString() {
         return "Participant{"
-               +"id=" + id
-               +", name='" + name + '\''
-               +", iban='" + iban + '\''
-               +'}';
+                +"id=" + id
+                +", name='" + name + '\''
+                +", iban='" + iban + '\''
+                +", bic='" + bic + '\''
+                +", email='" + email + '\''
+                +'}';
     }
 }
