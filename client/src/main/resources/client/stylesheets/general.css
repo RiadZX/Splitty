@@ -17,3 +17,27 @@
     -fx-background-color: #161616;
     -fx-text-fill: #eaeaea;
 }
+
+.default-color0.chart-legend-item-symbol{
+    -fx-text-fill: #000000;
+
+}
+.default-color1.chart-legend-item-symbol{
+    -fx-text-fill: #000000;
+}
+.default-color2.chart-legend-item-symbol{
+    -fx-text-fill: #000000;
+}
+
+.chart-legend{
+    -fx-background-color: #000000;
+    -fx-text-fill: #ffffff;
+}
+.chart-pie-label{
+    -fx-text-fill: #000000;
+    -fx-fill: #000000;
+}
+
+#piechart{
+    -fx-text-fill: #000000;
+}
