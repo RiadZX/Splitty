@@ -25,7 +25,7 @@ public class Participant {
     @Expose
     private String email;
 
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne (fetch = FetchType.EAGER)
     @JoinColumn(name = "event_id")
     @JsonBackReference ("event-participants")
     private Event event; //event part of field does not actually work
@@ -71,6 +71,10 @@ public class Participant {
             return false;
         }
         Participant that = (Participant) o;
+        System.out.println(Objects.equals(id, that.id));
+        System.out.println(Objects.equals(name, that.name));
+        System.out.println(Objects.equals(iban, that.iban));
+        System.out.println(Objects.equals(event, that.event));
         return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(iban, that.iban) && Objects.equals(event, that.event);
     }
 

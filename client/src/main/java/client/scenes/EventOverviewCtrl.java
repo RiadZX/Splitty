@@ -169,7 +169,6 @@ public class EventOverviewCtrl implements Initializable {
         mainCtrl.showAddExpense();
     }
 
-
     public void refresh(){
         try {
             Event refreshed = server.getEvent(event.getId());
@@ -211,14 +210,14 @@ public class EventOverviewCtrl implements Initializable {
 //    }
 //
     public void editExpense(Expense e) {
-        System.out.println("TODO: Create page for editing expenses");
+        mainCtrl.showEditExpense(e);
     }
 
 
     private BorderPane createRow(Expense e) {
         Insets insets = new Insets(0.0, 5.0, 0.0, 5.0);
         BorderPane bp = new BorderPane();
-        bp.setLeft(new Text("Expense paid by " + (e.getPaidBy() == null ? "NULL" : e.getPaidBy().getName())));
+        bp.setLeft(new Text("Expense paid by " + (e.getPaidByIdx() == null ? "NULL" : server.getParticipant(event.getId(), e.getPaidByIdx()).getName())));
 
         Image editImage = new Image("client/icons/pencil.png");
         ImageView edit = new ImageView();
