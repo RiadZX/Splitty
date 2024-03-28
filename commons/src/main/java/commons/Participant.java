@@ -25,7 +25,7 @@ public class Participant {
     @Expose
     private String email;
 
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne (fetch = FetchType.EAGER)
     @JoinColumn(name = "event_id")
     @JsonBackReference ("event-participants")
     private Event event; //event part of field does not actually work
@@ -36,7 +36,6 @@ public class Participant {
     private List<Debt> debts;
 
     @OneToMany(mappedBy = "paidBy", orphanRemoval = true)
-    @JsonManagedReference("participant-expenses")
     @Expose
     private List<Expense> paidFor;
 
@@ -47,15 +46,16 @@ public class Participant {
     private String bic;
 
     public Participant() {
+        this.paidFor = new ArrayList<>();
     }
 
     public Participant(String name, Event event, String iban, String email, String bic) {
+        this();
         this.name = name;
         this.event = event;
         this.iban = iban;
         this.email = email;
         this.bic = bic;
-        this.paidFor = new ArrayList<>();
     }
 
     public String getIban() {
@@ -71,6 +71,10 @@ public class Participant {
             return false;
         }
         Participant that = (Participant) o;
+        System.out.println(Objects.equals(id, that.id));
+        System.out.println(Objects.equals(name, that.name));
+        System.out.println(Objects.equals(iban, that.iban));
+        System.out.println(Objects.equals(event, that.event));
         return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(iban, that.iban) && Objects.equals(event, that.event);
     }
 
@@ -100,10 +104,12 @@ public class Participant {
     }
 
     public Participant(String name) {
+        this();
         this.name = name;
     }
 
     public Participant(String name, Event event) {
+        this();
         this.name = name;
         this.event = event;
     }
@@ -131,6 +137,10 @@ public class Participant {
         this.paidFor.add(e);
     }
 
+    public List<Expense> getPaidFor() {
+        return paidFor;
+    }
+
     public void setId(UUID id) {
         this.id = id;
     }
@@ -152,9 +162,11 @@ public class Participant {
     @Override
     public String toString() {
         return "Participant{"
-               +"id=" + id
-               +", name='" + name + '\''
-               +", iban='" + iban + '\''
-               +'}';
+                +"id=" + id
+                +", name='" + name + '\''
+                +", iban='" + iban + '\''
+                +", bic='" + bic + '\''
+                +", email='" + email + '\''
+                +'}';
     }
 }

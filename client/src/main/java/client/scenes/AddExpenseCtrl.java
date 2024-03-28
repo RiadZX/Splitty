@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -64,7 +65,6 @@ public class AddExpenseCtrl implements Initializable {
 
     @FXML
     public void checkSome(){
-        System.out.println(paidBySelector.getValue());
         allBox.setSelected(false);
         partialPaidSelector.setVisible(true);
     }
@@ -103,15 +103,17 @@ public class AddExpenseCtrl implements Initializable {
     private void setupExistingExpense(Expense expense){
         submitButton.setText("Save");
 
-        paidBySelector.setValue(expense.getPaidBy().getName());
+        paidBySelector.setValue(server.getParticipant(event.getId(), expense.getPaidByIdx()).getName());
         howMuchField.setText(String.valueOf(expense.getAmount()));
-        whenField.setValue(LocalDate.from(expense.getDate()));
+        whenField.setValue(expense.getDate().atZone(ZoneId.systemDefault()).toLocalDate());
 
         //check partial debtors if any
         boolean partialPay = false;
+        Participant whoPaid = server.getParticipant(expense.getEventIdX(), expense.getPaidByIdx());
         List<Participant> debtors = expense.getDebts().stream().map(Debt::getParticipant).toList();
         for (Participant p : event.getParticipants()){
-            if (!p.equals(expense.getPaidBy()) && !debtors.contains(p)){
+            if (!p.getId().equals(whoPaid.getId()) && !debtors.contains(p)){
+                System.out.println("This happens " + p.getEvent() + " " + whoPaid.getEvent());
                 checkSome();
                 partialPay = true;
             }
@@ -126,8 +128,11 @@ public class AddExpenseCtrl implements Initializable {
                     }
                 }
             }
+            someBox.setSelected(true);
+            checkSome();
         }
         else {
+            allBox.setSelected(true);
             checkAll();
         }
 
@@ -169,8 +174,18 @@ public class AddExpenseCtrl implements Initializable {
                 event.addExpense(newExpense);
                 server.addExpense(event.getId(), newExpense);
             } else {
+                /*UUID oldId = expense.getId();
                 expense = newExpense;
+                expense.setId(oldId);
+                 */
+                expense.setPaidBy(newExpense.getPaidBy());
+                expense.setDate(newExpense.getDate());
+                expense.setAmount(newExpense.getAmount());
+                expense.setTags(newExpense.getTags());
+                expense.setDebts(newExpense.getDebts());
+                expense.setTitle(newExpense.getTitle());
                 server.updateExpense(event.getId(), expense);
+                System.out.println("Updated expense's amount to " + server.getExpensesByEvent(event.getId()).get(0).getAmount());
             }
             mainCtrl.showEventOverviewScene(event);
         }
@@ -234,7 +249,7 @@ public class AddExpenseCtrl implements Initializable {
             return null;
         }
 
-        if (Integer.parseInt(howMuchField.getText()) < 0){
+        if (Double.parseDouble(howMuchField.getText()) < 0){
             NotificationHelper notificationHelper = new NotificationHelper();
             String warningMessage = """
                     You cannot select a negative amount
