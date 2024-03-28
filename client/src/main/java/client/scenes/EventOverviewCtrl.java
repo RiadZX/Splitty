@@ -7,13 +7,20 @@ import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.geometry.Insets;
+import javafx.scene.Cursor;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.stereotype.Controller;
 
 import java.net.URL;
 import java.util.List;
@@ -73,6 +80,11 @@ public class EventOverviewCtrl implements Initializable {
 
         expensesList.setCellFactory(param -> getExpenseListCell());
 
+        server.registerForMessages("/topic/events", e -> {
+            System.out.println("Am primit " + e.getTitle());
+            setEvent(e);
+        });
+
     }
 
     public ListCell<Expense> getExpenseListCell() {
@@ -102,10 +114,6 @@ public class EventOverviewCtrl implements Initializable {
                 }
             }
         };
-        server.registerForMessages("/topic/events", e -> {
-            System.out.println("Am primit " + e.getTitle());
-            setEvent(e);
-        });
     }
 
     public Event getEvent(){
