@@ -6,12 +6,15 @@ import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import commons.Tag;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -21,7 +24,9 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 
@@ -35,6 +40,8 @@ public class EventOverviewCtrl implements Initializable {
     public TextFlow textFlow;
     @FXML
     public Pane backButton;
+    @FXML
+    public PieChart pieStats;
 
     @FXML
     private TextField eventTitle;
@@ -76,7 +83,6 @@ public class EventOverviewCtrl implements Initializable {
         payerSelector.setButtonCell(getPayerListCell());
 
         expensesList.setCellFactory(param -> getExpenseListCell());
-
     }
 
     public ListCell<Expense> getExpenseListCell() {
@@ -119,6 +125,7 @@ public class EventOverviewCtrl implements Initializable {
         System.out.println("set event: "+ event);
         this.expenses = server.getExpensesByEvent(this.event.getId());
         System.out.println("expenses: "+ expenses);
+        updatePieChart();
     }
 
     public void reassignParticipants(List<Participant> participantList){
@@ -169,6 +176,22 @@ public class EventOverviewCtrl implements Initializable {
         mainCtrl.showAddExpense();
     }
 
+    public void updatePieChart(){
+        pieStats.getData().clear();
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+        Map<String, Double> stats = new HashMap<>();
+        //for each expense get the tags and add the amount to the corresponding tag
+        for (Expense e : expenses){
+            for (Tag t : e.getTags()){
+                stats.put(t.getTag(), stats.getOrDefault(t.getTag(), 0.0) + e.getAmount());
+            }
+        }
+        for (Map.Entry<String, Double> entry : stats.entrySet()){
+            pieChartData.add(new PieChart.Data(entry.getKey(), entry.getValue()));
+        }
+        pieStats.setData(pieChartData);
+    }
+
     public void refresh(){
         try {
             Event refreshed = server.getEvent(event.getId());
@@ -185,6 +208,7 @@ public class EventOverviewCtrl implements Initializable {
             expensesList.getItems().clear();
             expensesList.getItems().addAll(expenses);
             System.out.println("refreshed");
+            updatePieChart();
             /* TO DO:
             * - refresh all data related to the event
             * - add functionality to the expense list and filtering*/
