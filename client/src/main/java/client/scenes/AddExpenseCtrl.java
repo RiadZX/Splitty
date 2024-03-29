@@ -108,13 +108,13 @@ public class AddExpenseCtrl implements Initializable {
     private void setupExistingExpense(Expense expense){
         submitButton.setText("Save");
 
-        paidBySelector.setValue(server.getParticipant(event.getId(), expense.getPaidBy().getId()).getName());
+        paidBySelector.setValue(expense.getPaidBy().getName());
         howMuchField.setText(String.valueOf(expense.getAmount()));
         whenField.setValue(expense.getDate().atZone(ZoneId.systemDefault()).toLocalDate());
 
         //check partial debtors if any
         boolean partialPay = false;
-        Participant whoPaid = server.getParticipant(expense.getEvent().getId(), expense.getPaidBy().getId());
+        Participant whoPaid = expense.getPaidBy();
         List<Participant> debtors = expense.getDebts().stream().map(Debt::getParticipant).toList();
         for (Participant p : event.getParticipants()){
             if (!p.getId().equals(whoPaid.getId()) && !debtors.contains(p)){
@@ -254,7 +254,11 @@ public class AddExpenseCtrl implements Initializable {
         for (Debt d : newExpense.getDebts()){
             d.setExpense(newExpense); //setup each debt's expense pointer
         }
-        server.addExpense(event.getId(), newExpense);
+        if (expense == null) {
+            server.addExpense(event.getId(), newExpense);
+        } else {
+            server.updateExpense(event.getId(), expense.getId(), newExpense);
+        }
         mainCtrl.showEventOverviewScene(event);
     }
 
