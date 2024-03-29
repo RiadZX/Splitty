@@ -1,5 +1,6 @@
 package server.api;
 
+import commons.Event;
 import commons.Expense;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import server.services.ExpenseService;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/events/{eventId}/expenses")
@@ -27,16 +29,23 @@ public class ExpenseController {
     */
     @GetMapping(path = {"", "/"})
     public  ResponseEntity<List<Expense>> getAll(@PathVariable("eventId") UUID eventId){
-        List<Expense> e = service.getAllExpenses();
-        e.removeIf(expense -> !expense.getEventIdX().equals(eventId));
-        return ResponseEntity.ok(e);
-
+        try {
+            return ResponseEntity.ok(service.getAllExpenses().stream()
+                    .filter(e -> e.getEvent().getId()
+                            .equals(eventId))
+                    .collect(Collectors.toList()));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Expense> add(@PathVariable("eventId") UUID eventId, @RequestBody Expense expense) {
+        Event event = new Event();
+        event.setId(eventId);
+        expense.setEvent(event);
         Expense saved = service.addExpense(expense);
-        System.out.println("Server method: " + saved.getPaidByIdx());
+//        System.out.println("Server method: " + saved.getPaidBy().getId());
         if (saved != null) {
             eventService.newEventLastActivity(eventId);
             return ResponseEntity.ok(saved);

@@ -16,7 +16,7 @@ public class ExpenseService {
         this.expenseRepository = expenseRepository;
     }
     public Expense addExpense(Expense expense) {
-        Expense saved = expenseRepository.save(expense);
+        Expense saved = expenseRepository.saveAndFlush(expense);
         if (expenseRepository.findById(saved.getId()).isPresent()) {
             return saved;
         }
