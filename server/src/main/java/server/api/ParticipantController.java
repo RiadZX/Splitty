@@ -1,13 +1,10 @@
 package server.api;
 
-import commons.Event;
 import commons.Participant;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import server.database.ParticipantRepository;
-import server.services.EventService;
 import server.services.ParticipantService;
 
 import java.util.List;
@@ -71,21 +68,12 @@ public class ParticipantController {
     @DeleteMapping("/{id}")
     @Transactional
     public @ResponseBody ResponseEntity<Participant> remove(@PathVariable("id") String id, @PathVariable String eventId) {
-        Participant participant = repo.findParticipantInEvent(UUID.fromString(eventId), UUID.fromString(id));
-        if (participant != null) {
-            ResponseEntity<Participant> removedParticipant = ResponseEntity.ok(participant);
-            UUID eventUUID = UUID.fromString(eventId);
-            repo.deleteParticipantFromEvent(eventUUID, UUID.fromString(id));
-            eventService.newEventLastActivity(eventUUID);
-            return removedParticipant;
+        Participant p = service.remove(UUID.fromString(id), UUID.fromString(eventId));
+        if (p==null){
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(p);
     }
-
-    private static boolean isNullOrEmpty(String s) {
-        return s == null || s.isEmpty();
-    }
-
     /**
      * Update participant by id
      *
@@ -95,19 +83,13 @@ public class ParticipantController {
      */
     @PutMapping("/{id}")
     public @ResponseBody ResponseEntity<Participant> update(@PathVariable("eventId") String eventId, @PathVariable("id") String id, @RequestBody Participant participant) {
-        if (participantExists(eventId, id)) {
-            participant.setEventPartOf(new Event(eventId));
-            UUID eventUUID = UUID.fromString(eventId);
-            participant.setId(eventUUID);
-            var saved = repo.save(participant);
-            eventService.newEventLastActivity(eventUUID);
-            return ResponseEntity.ok(saved);
+        Participant p = service.update(
+                UUID.fromString(id),
+                UUID.fromString(eventId),
+                participant);
+        if (p!=null){
+            return ResponseEntity.ok(p);
         }
         return ResponseEntity.badRequest().build();
-    }
-
-
-    private boolean participantExists(String eventId, String id) {
-        return repo.findParticipantInEvent(UUID.fromString(eventId), UUID.fromString(id)) != null;
     }
 }

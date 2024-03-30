@@ -3,7 +3,6 @@ package server.services;
 import commons.Event;
 import commons.Participant;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import server.database.ParticipantRepository;
 
@@ -42,10 +41,33 @@ public class ParticipantService {
         eventService.newEventLastActivity(eventID);
         return saved;
     }
+    public Participant remove(UUID pID, UUID eID){
+        Participant participant = repo.findParticipantInEvent(eID, pID);
+        if (participant != null) {
+            repo.deleteParticipantFromEvent(eID, pID);
+            eventService.newEventLastActivity(eID);
+            return participant;
+        }
+        return null;
+    }
+
+    public Participant update(UUID pID, UUID eID, Participant participant){
+        if (participantExists(eID, pID)) {
+            participant.setEventPartOf(new Event(eID));
+            Participant saved = repo.save(participant);
+            eventService.newEventLastActivity(eID);
+            return saved;
+        }
+        return null;
+    }
 
 
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
+    }
+
+    public boolean participantExists(UUID eventId, UUID id) {
+        return repo.findParticipantInEvent(eventId, id) != null;
     }
 }
 
