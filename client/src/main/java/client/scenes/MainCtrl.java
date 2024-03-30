@@ -202,11 +202,10 @@ public class MainCtrl {
     }
 
     public void showLanguageOptions() {
-        primaryStage.setTitle("Splitty: Languages");
+        primaryStage.setTitle(I18N.get("window.settings.language"));
         primaryStage.setScene(languages);
     }
 
-    // TODO Make the actual switch to the languages once button is pressed
     public void switchToEnglish() {
         I18N.setLocale(Locale.ENGLISH);
     }
@@ -216,8 +215,8 @@ public class MainCtrl {
         I18N.setLocale(dutch);
     }
 
-    public void switchLanguageNotification(){
-        primaryStage.setTitle(I18N.get("settings.language"));
+    public void uponLanguageSwitch(){
+        primaryStage.setTitle(I18N.get("window.settings.language"));
         String switchLanguageHeader = I18N.get("language.infoLanguages");
         String switchLanguageTitle = I18N.get("language.switchTitle");
         String switchLanguageMessage = I18N.get("language.switchMessage");

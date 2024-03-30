@@ -42,11 +42,11 @@ public class LanguageCtrl implements Initializable {
 
     public void switchToEnglish(){
         this.mainCtrl.switchToEnglish();
-        this.mainCtrl.switchLanguageNotification();
+        this.mainCtrl.uponLanguageSwitch();
     }
 
     public void switchToDutch(){
         this.mainCtrl.switchToDutch();
-        this.mainCtrl.switchLanguageNotification();
+        this.mainCtrl.uponLanguageSwitch();
     }
 }
