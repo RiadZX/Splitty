@@ -88,9 +88,9 @@ public class AdminEventsCtrl implements Initializable {
         dlg=setupSortDialog();
         populateList();
         //register for event updates
-        server.listenEvents(event -> {
+        server.listenEvents(wrapper -> {
             System.out.println("Event received");
-            addItem(event);
+            addItem(wrapper.getEvent());
         });
     }
 
