@@ -19,6 +19,8 @@ public class LanguageCtrl implements Initializable {
     private Button englishButton;
     @FXML
     private Button dutchButton;
+    @FXML
+    private Label languageLabel;
 
     @Inject
     public LanguageCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
@@ -31,6 +33,7 @@ public class LanguageCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         I18N.update(englishButton);
         I18N.update(dutchButton);
+        I18N.update(languageLabel);
     }
 
     public void backAction(){
@@ -39,9 +42,11 @@ public class LanguageCtrl implements Initializable {
 
     public void switchToEnglish(){
         this.mainCtrl.switchToEnglish();
+        this.mainCtrl.switchLanguageNotification();
     }
 
     public void switchToDutch(){
         this.mainCtrl.switchToDutch();
+        this.mainCtrl.switchLanguageNotification();
     }
 }

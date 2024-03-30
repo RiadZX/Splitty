@@ -209,16 +209,15 @@ public class MainCtrl {
     // TODO Make the actual switch to the languages once button is pressed
     public void switchToEnglish() {
         I18N.setLocale(Locale.ENGLISH);
-        String switchLanguageHeader = I18N.get("language.infoLanguages");
-        String switchLanguageTitle = I18N.get("language.switchTitle");
-        String switchLanguageMessage = I18N.get("language.switchMessage");
-        NotificationHelper notificationHelper = new NotificationHelper();
-        notificationHelper.informUser(switchLanguageTitle, switchLanguageMessage, switchLanguageHeader);
     }
 
     public void switchToDutch() {
         Locale dutch = I18N.getSupportedLocales().get(1);
         I18N.setLocale(dutch);
+    }
+
+    public void switchLanguageNotification(){
+        primaryStage.setTitle(I18N.get("settings.language"));
         String switchLanguageHeader = I18N.get("language.infoLanguages");
         String switchLanguageTitle = I18N.get("language.switchTitle");
         String switchLanguageMessage = I18N.get("language.switchMessage");
