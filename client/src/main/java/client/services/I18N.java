@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 
 import java.text.MessageFormat;
 import java.util.*;
@@ -116,6 +117,10 @@ public class I18N {
     }
 
     public static void update(TableColumn entity) {
+        entity.textProperty().bind(createStringBinding(entity.getText()));
+    }
+
+    public static void update(Text entity) {
         entity.textProperty().bind(createStringBinding(entity.getText()));
     }
 

@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.services.I18N;
 import client.services.NotificationHelper;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -10,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.time.Instant;
@@ -35,6 +37,23 @@ public class AddExpenseCtrl implements Initializable {
     private VBox tagSelector, createTagBox, partialPaidSelector;
     @FXML
     private Label tagErrorLabel, errorLabel;
+    @FXML
+    private Text paid;
+    @FXML
+    private Text when;
+    @FXML
+    private Text amount;
+    @FXML
+    private Text how;
+    @FXML
+    private Text what;
+    @FXML
+    private Button addButton;
+    @FXML
+    private Button abortButton;
+    @FXML
+    private Button createButton;
+
 
     @Inject
     public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl, Event event) {
@@ -45,6 +64,16 @@ public class AddExpenseCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        I18N.update(paid);
+        I18N.update(when);
+        I18N.update(amount);
+        I18N.update(how);
+        I18N.update(what);
+        I18N.update(addButton);
+        I18N.update(abortButton);
+        I18N.update(createButton);
+        I18N.update(allBox);
+        I18N.update(someBox);
     }
     @FXML
     public void backToOverview(){
