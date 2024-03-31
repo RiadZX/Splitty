@@ -224,7 +224,10 @@ public class AddExpenseCtrl implements Initializable {
         List<Debt> debts = createDebts(toEur(Double.parseDouble(howMuchField.getText()), currencySelector.getValue()), participantList);
 
         //create the list of tags (God bless the creator of stream() :) )
-        List<Tag> tags = tagSelector.getChildren().stream().filter(n -> n.getClass() == CheckBox.class).map(n -> ((CheckBox) n)).filter(CheckBox::isSelected).map(Labeled::getText).map(this::findTag).toList();
+        List<Tag> tags = tagSelector.getChildren().stream()
+                .filter(n -> n.getClass() == CheckBox.class)
+                .map(n -> ((CheckBox) n)).filter(CheckBox::isSelected)
+                .map(Labeled::getText).map(this::findTag).toList();
 
         // TODO we leave tag implementation for next week
 
@@ -251,7 +254,7 @@ public class AddExpenseCtrl implements Initializable {
                 event.getId(),
                 debts,
                 new ArrayList<>());
-        for (Debt d : newExpense.getDebts()){
+        for (Debt d : newExpense.getDebts()) {
             d.setExpense(newExpense); //setup each debt's expense pointer
         }
         if (expense == null) {
