@@ -321,6 +321,7 @@ public class MainCtrl {
     public void showSettleDebt(Event event) {
         primaryStage.setTitle(I18N.get("window.debt"));
         debtResolveCtrl.setEvent(event);
+        debtResolveCtrl.refresh();
         primaryStage.setScene(debtResolve);
     }
 
