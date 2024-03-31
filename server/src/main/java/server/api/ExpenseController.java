@@ -76,10 +76,10 @@ public class ExpenseController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable("eventId") UUID eventId, @PathVariable("id") UUID id, @RequestBody Expense expense) {
-            expense.setId(id);
-            expense.setEvent(new Event(eventId));
-            service.updateExpense(expense);
-            eventService.newEventLastActivity(eventId);
-            return ResponseEntity.ok().build();
+        expense.setId(id);
+        expense.setEvent(new Event(eventId));
+        service.updateExpense(expense);
+        eventService.newEventLastActivity(eventId);
+        return ResponseEntity.ok().build();
     }
 }

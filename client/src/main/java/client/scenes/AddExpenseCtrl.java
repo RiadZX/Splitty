@@ -94,7 +94,7 @@ public class AddExpenseCtrl implements Initializable {
         for (Participant p : event.getParticipants()){
             partialPaidSelector.getChildren().add(new CheckBox(p.getName()));
         }
-        if(expense == null) {
+        if (expense == null) {
             showNewExpense();
         } else {
             setupExistingExpense(expense);
