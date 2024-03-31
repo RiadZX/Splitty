@@ -11,7 +11,7 @@
             fx:controller="client.scenes.LanguageCtrl">
 
     <children>
-        <Label layoutX="108.0" layoutY="44.0" prefHeight="43.0" prefWidth="142.0" text="Language">
+        <Label layoutX="108.0" layoutY="44.0" prefHeight="43.0" prefWidth="142.0" text="settings.language" fx:id="languageLabel">
             <font>
                 <Font name="Comfortaa Medium" size="33.0" />
             </font>
