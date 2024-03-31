@@ -21,7 +21,7 @@ public class EventService {
         Event event = eventRepository.findById(eventID).orElse(null);
         if (event != null) {
             event.setLastActivityTime(Instant.now());
-            eventRepository.save(event);
+            eventRepository.saveAndFlush(event);
         }
     }
 }

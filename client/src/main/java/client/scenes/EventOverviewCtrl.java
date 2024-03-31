@@ -206,22 +206,6 @@ public class EventOverviewCtrl implements Initializable {
         }
     }
 
-//    public BorderPane createComboBoxEntry(Participant p) {
-//        BorderPane bp = new BorderPane();
-////        bp.setOnKeyPressed(x -> {
-////            payer = p;
-////            populateList();
-////        });
-//        bp.setLeft(new Text(p.getName()));
-//        return bp;
-//    }
-
-//    public void populateList() {
-//        expensesList.getItems().clear();
-//        List<BorderPane> contents = expenses.stream().map(this::createRow).toList();
-//        expensesList.getItems().addAll(contents);
-//    }
-//
     public void editExpense(Expense e) {
         mainCtrl.showEditExpense(e);
     }
@@ -230,7 +214,7 @@ public class EventOverviewCtrl implements Initializable {
     private BorderPane createRow(Expense e) {
         Insets insets = new Insets(0.0, 5.0, 0.0, 5.0);
         BorderPane bp = new BorderPane();
-        bp.setLeft(new Text("Expense paid by " + (e.getPaidByIdx() == null ? "NULL" : server.getParticipant(event.getId(), e.getPaidByIdx()).getName())));
+        bp.setLeft(new Text("Expense paid by " + (e.getPaidBy() == null ? "NULL" : e.getPaidBy().getName())));
 
         Image editImage = new Image("client/icons/pencil.png");
         ImageView edit = new ImageView();

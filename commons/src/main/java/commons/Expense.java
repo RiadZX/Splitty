@@ -31,23 +31,14 @@ public class Expense {
     @JsonSerialize(using = InstantSerializer.class)
     private Instant date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "participant_id")
-    @JsonBackReference ("participant-expenses")
     private Participant paidBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     @JsonBackReference("event-expenses")
     private Event event;
-
-    public UUID getEventIdX() {
-        return eventIdX;
-    }
-
-    //THIS IS A HACK TO GET THE EVENT ID, WITHOUT OVERFLOWING THE STACK.
-    // This is used to know the event id of the expense
-    private UUID eventIdX, paidByIdx;
 
     @ManyToMany
     @Expose
@@ -80,16 +71,11 @@ public class Expense {
         this.amount = amount;
         this.date = date;
         this.paidBy = paidBy;
-        this.paidByIdx = paidBy.getId();
         this.event = event;
-        this.eventIdX = event.getId();
         this.debts = debts;
         this.tags = tags;
     }
 
-    public UUID getPaidByIdx() {
-        return paidByIdx;
-    }
 
     public Expense(String title, double amount, Instant date,
                    Participant paidBy, Event event, UUID eventId, List<Debt> debts, List<Tag> tags) {
@@ -97,9 +83,7 @@ public class Expense {
         this.amount = amount;
         this.date = date;
         this.paidBy = paidBy;
-        this.paidByIdx = paidBy.getId();
         this.event = event;
-        this.eventIdX = eventId;
         this.debts = debts;
         this.tags = tags;
     }
@@ -138,7 +122,6 @@ public class Expense {
 
     public void setPaidBy(Participant paidBy) {
         this.paidBy = paidBy;
-        this.paidByIdx = paidBy.getId();
     }
 
     public Event getEvent() {
@@ -147,7 +130,6 @@ public class Expense {
 
     public void setEvent(Event event) {
         this.event = event;
-        this.eventIdX = event.getId();
     }
 
     public List<Debt> getDebts() {
