@@ -162,6 +162,10 @@ public class EventOverviewCtrl implements Initializable {
         System.out.println("expenses: "+ expenses);
     }
 
+    public void settleDebt(){
+        mainCtrl.showSettleDebt(this.event);
+    }
+
     public void reassignParticipants(List<Participant> participantList){
         System.out.println(participantList.stream().map(Participant::getName).toList());
         textFlow.getChildren().clear();
