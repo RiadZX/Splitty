@@ -73,7 +73,7 @@ public class AddExpenseCtrl implements Initializable {
         I18N.update(amount);
         I18N.update(how);
         I18N.update(what);
-        I18N.update(addButton);
+        I18N.update(submitButton);
         I18N.update(abortButton);
         I18N.update(createButton);
         I18N.update(allBox);
