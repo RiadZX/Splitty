@@ -32,7 +32,7 @@
       </Label>
       <ComboBox fx:id="payerSelector" layoutX="34.0" layoutY="243.0" prefWidth="150.0" />
       <Button layoutX="228.0" layoutY="243.0" mnemonicParsing="false" onAction="#addExpense" text="Add Expense" />
-      <Button layoutX="312.0" layoutY="456.0" mnemonicParsing="false" text="Settle Debts" />
+      <Button layoutX="312.0" layoutY="456.0" mnemonicParsing="false" onAction="#settleDebt" text="Settle Debts" />
       <ImageView fitHeight="22.0" fitWidth="22.0" layoutX="134.0" layoutY="125.0" onMouseClicked="#addParticipant" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@/client/icons/user.png" />

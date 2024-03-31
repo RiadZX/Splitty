@@ -70,6 +70,9 @@ public class MainCtrl {
     private LanguageCtrl languageCtrl;
     private Scene languages;
 
+    private DebtResolveCtrl debtResolveCtrl;
+    private Scene debtResolve;
+
     private AdminEventsCtrl adminEventsCtrl;
     private Scene adminEvents;
     private NotificationService notificationService;
@@ -85,6 +88,7 @@ public class MainCtrl {
                            Pair<SettingsCtrl, Parent> settings,
                            Pair<AdminEventsCtrl, Parent> adminEvents,
                            Pair<LanguageCtrl, Parent> languages,
+                           Pair<DebtResolveCtrl, Parent> debtResolve,
                            boolean adminMode
     ) {
         this.admin=false;
@@ -127,6 +131,9 @@ public class MainCtrl {
 
         this.adminEventsCtrl = adminEvents.getKey();
         this.adminEvents = new Scene(adminEvents.getValue());
+
+        this.debtResolveCtrl = debtResolve.getKey();
+        this.debtResolve = new Scene(debtResolve.getValue());
 
         chooseFirstPage(adminMode);
 
@@ -292,6 +299,12 @@ public class MainCtrl {
         primaryStage.setTitle("Splitty: Edit Expense");
         addExpenseCtrl.setup(eventOverviewCtrl.getEvent(), e);
         primaryStage.setScene(addExpense);
+    }
+
+    public void showSettleDebt(Event event) {
+        primaryStage.setTitle(I18N.get("window.debt"));
+        debtResolveCtrl.setEvent(event);
+        primaryStage.setScene(debtResolve);
     }
 
     public void deleteAllData(){
