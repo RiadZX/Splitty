@@ -2,6 +2,7 @@ package commons;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
@@ -25,7 +26,7 @@ public class Participant {
     @Expose
     private String email;
 
-    @ManyToOne (fetch = FetchType.EAGER)
+    @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     @JsonBackReference ("event-participants")
     private Event event; //event part of field does not actually work
@@ -36,6 +37,7 @@ public class Participant {
     private List<Debt> debts;
 
     @OneToMany(mappedBy = "paidBy", orphanRemoval = true)
+    @JsonIgnore
     @Expose
     private List<Expense> paidFor;
 

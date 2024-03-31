@@ -157,9 +157,10 @@ public class ServerUtils {
                 .post(Entity.entity(exp, APPLICATION_JSON), Expense.class);
     }
 
-    public Expense updateExpense(UUID eventId, Expense exp){
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("/api/events/" + eventId + "/expenses/" + exp.getId())
+    public void updateExpense(UUID eventId, UUID expenseId, Expense exp){
+        System.out.println(eventId);
+        ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("/api/events/" + eventId + "/expenses/" + expenseId)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .put(Entity.entity(exp, APPLICATION_JSON), Expense.class);
