@@ -75,7 +75,7 @@ public class DebtResolveCtrl implements Initializable {
 
         Participant max = null;
         // gotta get negative infinity
-        Double maxAmount = -1.0/0.0;
+        Double maxAmount = Double.NEGATIVE_INFINITY;
 
         for (Entry<Participant, Double> a : netAmounts.entrySet()) {
             if (a.getValue() > maxAmount) {
