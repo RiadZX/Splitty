@@ -16,11 +16,7 @@ public class ExpenseService {
         this.expenseRepository = expenseRepository;
     }
     public Expense addExpense(Expense expense) {
-        Expense saved = expenseRepository.saveAndFlush(expense);
-        if (expenseRepository.findById(saved.getId()).isPresent()) {
-            return saved;
-        }
-        return null;
+        return expenseRepository.saveAndFlush(expense);
     }
     public List<Expense> getAllExpenses() {
         return expenseRepository.findAll();
@@ -36,7 +32,9 @@ public class ExpenseService {
         return expense;
     }
     public Expense updateExpense(Expense expense) {
+        System.out.println(expense);
         Expense saved = expenseRepository.saveAndFlush(expense);
+        System.out.println(saved);
         if (expenseRepository.findById(saved.getId()).isPresent()) {
             return saved;
         }
