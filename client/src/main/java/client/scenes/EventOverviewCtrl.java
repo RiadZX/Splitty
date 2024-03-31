@@ -127,7 +127,7 @@ public class EventOverviewCtrl implements Initializable {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setGraphic(null);
-                    setText("ALL");
+                    setText(I18N.get("general.all"));
                 } else {
                     setText(item.getName());
                 }
