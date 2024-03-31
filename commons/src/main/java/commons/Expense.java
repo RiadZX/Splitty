@@ -28,9 +28,8 @@ public class Expense {
     @Expose
     private Instant date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "participant_id")
-    @JsonBackReference ("participant-expenses")
     private Participant paidBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -65,6 +64,18 @@ public class Expense {
 
     public Expense(String title, double amount, Instant date,
                    Participant paidBy, Event event, List<Debt> debts, List<Tag> tags) {
+        this.title = title;
+        this.amount = amount;
+        this.date = date;
+        this.paidBy = paidBy;
+        this.event = event;
+        this.debts = debts;
+        this.tags = tags;
+    }
+
+
+    public Expense(String title, double amount, Instant date,
+                   Participant paidBy, Event event, UUID eventId, List<Debt> debts, List<Tag> tags) {
         this.title = title;
         this.amount = amount;
         this.date = date;

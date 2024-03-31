@@ -13,4 +13,6 @@ public interface NotificationService {
     void showError(String title, String message);
 
     void informUser(String title, String message, String header);
+
+    boolean showConfirmation(String title, String message);
 }

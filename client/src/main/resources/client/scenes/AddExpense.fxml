@@ -51,7 +51,7 @@
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="629.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
       <children>
-            <Button layoutX="539.0" layoutY="316.0" mnemonicParsing="false" onAction="#createExpense" text="general.add" fx:id="addButton"/>
+            <Button layoutX="539.0" layoutY="316.0" mnemonicParsing="false" onAction="#createExpense" text="general.add" fx:id="submitButton"/>
             <Button layoutX="480.0" layoutY="316.0" mnemonicParsing="false" onAction="#backToOverview" text="expense.add.abort" fx:id="abortButton"/>
             <Text layoutX="418.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.what" textAlignment="CENTER" fx:id="what"/>
             <GridPane alignment="CENTER" layoutX="4.0" layoutY="20.0" prefHeight="169.0" prefWidth="302.0">
@@ -111,7 +111,6 @@
                </opaqueInsets>
             </VBox>
             <VBox fx:id="partialPaidSelector" layoutX="155.0" layoutY="189.0" prefHeight="200.0" prefWidth="153.0" spacing="3.0" />
-            <Label fx:id="errorLabel" alignment="CENTER" layoutX="335.0" layoutY="353.0" prefHeight="17.0" prefWidth="292.0" text="Label" textAlignment="CENTER" textFill="RED" />
       </children>
     </AnchorPane>
   </children>

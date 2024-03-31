@@ -59,28 +59,6 @@ public class AdminEventsCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        /*
-        myListView.setCellFactory(param -> new ListCell<Event>() {
-            @Override
-            protected void updateItem(Event item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    BorderPane parent = new BorderPane();
-                    getChildren().add(parent);
-                    setText(item.getName());
-                    Image image = new Image("client/icons/bin.png");
-                    ImageView remove = new ImageView();
-                    remove.setImage(image);
-                    remove.setOnMouseClicked(e -> removeEvent(item));
-                    remove.cursorProperty().set(Cursor.CLOSED_HAND);
-                    remove.setFitHeight(12.0);
-                    remove.setFitWidth(12.0);
-                }
-            }
-        });
-        */
         sortCol=null;
         sortType=-1;
         myListView.getItems().clear();
@@ -108,6 +86,9 @@ public class AdminEventsCtrl implements Initializable {
      * @param e Event to be removed
      */
     private void removeEvent(Event e) {
+        if (!notificationService.showConfirmation("Delete event", "Are you sure you want to delete this event?")) {
+            return;
+        }
         server.removeEvent(e.getId());
         this.events.remove(e);
         populateList();
