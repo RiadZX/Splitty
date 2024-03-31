@@ -131,11 +131,11 @@ public class AddExpenseCtrl implements Initializable {
     }
 
     private void showNewExpense() {
-        submitButton.setText("Add");
+        I18N.update(submitButton);
     }
 
     private void setupExistingExpense(Expense expense){
-        submitButton.setText("Save");
+        I18N.update(submitButton);
 
         paidBySelector.setValue(expense.getPaidBy().getName());
         howMuchField.setText(String.valueOf(expense.getAmount()));
