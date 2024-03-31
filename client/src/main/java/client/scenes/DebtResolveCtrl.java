@@ -15,6 +15,21 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
+import client.utils.ServerUtils;
+import com.google.inject.Inject;
+import commons.Event;
+import commons.Participant;
+import jakarta.ws.rs.WebApplicationException;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.TextFlow;
+
+import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 
@@ -51,7 +66,6 @@ public class DebtResolveCtrl implements Initializable {
     public void setEvent(Event event) {
         this.event = event;
     }
-
     public void refresh() {
 
         tableEntries.clear();
@@ -61,5 +75,4 @@ public class DebtResolveCtrl implements Initializable {
                 .forEach(tableEntries::add);
     }
 }
-
 
