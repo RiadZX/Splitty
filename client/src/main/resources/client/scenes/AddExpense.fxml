@@ -51,7 +51,7 @@
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="629.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
       <children>
-            <Button fx:id="submitButton" layoutX="539.0" layoutY="316.0" mnemonicParsing="false" onAction="#submitPressed" text="Add" />
+            <Button fx:id="submitButton" layoutX="539.0" layoutY="316.0" mnemonicParsing="false" onAction="#createExpense" text="Add" />
             <Button layoutX="480.0" layoutY="316.0" mnemonicParsing="false" onAction="#backToOverview" text="Abort" />
             <Text layoutX="418.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="WHAT FOR?" textAlignment="CENTER" />
             <GridPane alignment="CENTER" layoutX="4.0" layoutY="20.0" prefHeight="169.0" prefWidth="302.0">
