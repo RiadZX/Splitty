@@ -16,6 +16,7 @@
 package client.utils;
 
 import com.google.gson.JsonObject;
+import com.moandjiezana.toml.Toml;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
@@ -26,11 +27,10 @@ import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -41,17 +41,31 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
-    private static final String SERVER = "http://localhost:8080/";
+    private final String SERVER;
     private ExecutorService exec = Executors.newSingleThreadExecutor();
 
-    public void getQuotesTheHardWay() throws IOException, URISyntaxException {
-        var url = new URI("http://localhost:8080/api/quotes").toURL();
-        var is = url.openConnection().getInputStream();
-        var br = new BufferedReader(new InputStreamReader(is));
-        String line;
-        while ((line = br.readLine()) != null) {
-            System.out.println(line);
+    public ServerUtils() {
+        URL resource = getClass().getClassLoader().getResource("client/server_config.toml");
+
+        File config = null;
+
+        if (resource == null) {
+            throw new IllegalArgumentException("File not found!");
+        } else {
+            try {
+                config = new File(resource.toURI());
+            } catch (Exception e) {
+                throw new IllegalArgumentException("URI not parsable");
+            }
         }
+
+        Toml toml = new Toml().read(config);
+
+        String address = toml.getString("address");
+        long port = toml.getLong("port");
+
+        SERVER = address + ":" + port + "/";
+        System.out.println(SERVER);
     }
 
     public List<Quote> getQuotes() {
