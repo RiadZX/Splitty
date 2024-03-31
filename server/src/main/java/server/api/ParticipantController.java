@@ -29,8 +29,8 @@ public class ParticipantController {
      * @return - list of all participants
      */
     @GetMapping(path = {"", "/"})
-    public @ResponseBody ResponseEntity<List<Participant>> getAll(@PathVariable("eventId") String eventId) {
-        return ResponseEntity.ok(service.getAll(UUID.fromString(eventId)));
+    public @ResponseBody ResponseEntity<List<Participant>> getAll(@PathVariable("eventId") UUID eventId) {
+        return ResponseEntity.ok(service.getAll(eventId));
     }
 
     /**
@@ -57,8 +57,8 @@ public class ParticipantController {
      * @return - added participant
      */
     @PostMapping(path = {"", "/"})
-    public @ResponseBody ResponseEntity<Participant> add(@RequestBody Participant participant, @PathVariable String eventId) {
-        Participant p = service.add(participant, UUID.fromString(eventId));
+    public @ResponseBody ResponseEntity<Participant> add(@RequestBody Participant participant, @PathVariable("eventId") UUID eventId) {
+        Participant p = service.add(participant, eventId);
         if (p==null) {
             return ResponseEntity.badRequest().build();
         }
@@ -67,8 +67,8 @@ public class ParticipantController {
 
     @DeleteMapping("/{id}")
     @Transactional
-    public @ResponseBody ResponseEntity<Participant> remove(@PathVariable("id") String id, @PathVariable String eventId) {
-        Participant p = service.remove(UUID.fromString(id), UUID.fromString(eventId));
+    public @ResponseBody ResponseEntity<Participant> remove(@PathVariable("id") String id, @PathVariable("eventId") UUID eventId) {
+        Participant p = service.remove(UUID.fromString(id), eventId);
         if (p==null){
             return ResponseEntity.badRequest().build();
         }
@@ -82,10 +82,10 @@ public class ParticipantController {
      * @return - updated participant
      */
     @PutMapping("/{id}")
-    public @ResponseBody ResponseEntity<Participant> update(@PathVariable("eventId") String eventId, @PathVariable("id") String id, @RequestBody Participant participant) {
+    public @ResponseBody ResponseEntity<Participant> update(@PathVariable("eventId") UUID eventId, @PathVariable("id") UUID id, @RequestBody Participant participant) {
         Participant p = service.update(
-                UUID.fromString(id),
-                UUID.fromString(eventId),
+                id,
+                eventId,
                 participant);
         if (p!=null){
             return ResponseEntity.ok(p);

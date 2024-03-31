@@ -36,7 +36,7 @@ public class ParticipantControllerTest {
         // Mock the behavior of the repository
         when(service.getAll(any(UUID.class))).thenReturn(participants);
         UUID eventid=UUID.randomUUID();
-        ResponseEntity<List<Participant>> response = participantController.getAll(eventid.toString());
+        ResponseEntity<List<Participant>> response = participantController.getAll(eventid);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(participants.size(), response.getBody().size());
@@ -70,7 +70,7 @@ public class ParticipantControllerTest {
         // Mock the behavior of the repository
         when(service.add(any(Participant.class), any(UUID.class))).thenReturn(participantToAdd);
 
-        ResponseEntity<Participant> response = participantController.add(participantToAdd, eventId.toString());
+        ResponseEntity<Participant> response = participantController.add(participantToAdd, eventId);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(participantToAdd, response.getBody());
@@ -86,7 +86,7 @@ public class ParticipantControllerTest {
         // Mock the behavior of the repository
         when(service.remove(any(UUID.class), any(UUID.class))).thenReturn(participant);
 
-        ResponseEntity<Participant> response = participantController.remove(participantId.toString(), eventId.toString());
+        ResponseEntity<Participant> response = participantController.remove(participantId.toString(), eventId);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(participant, response.getBody());
@@ -103,7 +103,7 @@ public class ParticipantControllerTest {
         // Mock the behavior of the repository
         when(service.update(any(UUID.class), any(UUID.class), any(Participant.class))).thenReturn(participantToUpdate);
 
-        ResponseEntity<Participant> response = participantController.update(eventId.toString(), participantId.toString(), participantToUpdate);
+        ResponseEntity<Participant> response = participantController.update(eventId, participantId, participantToUpdate);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(participantToUpdate.getName(), response.getBody().getName());
