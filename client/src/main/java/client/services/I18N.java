@@ -72,7 +72,6 @@ public class I18N {
      * @return localized formatted string
      */
     public static String get(final String key, final Object... args) {
-        System.out.println(getLocale());
         ResourceBundle bundle = ResourceBundle.getBundle("languages", getLocale());
         String retStr;
         try {
