@@ -12,20 +12,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import server.database.ParticipantRepository;
 import commons.Participant;
-import server.services.EventService;
+import server.services.ParticipantService;
 
 public class ParticipantControllerTest {
 
     private ParticipantController participantController;
-    private ParticipantRepository participantRepository;
+    private ParticipantService service;
 
     @BeforeEach
     public void setUp() {
-        participantRepository = mock(ParticipantRepository.class);
-        EventService eventService=mock(EventService.class);
-        participantController = new ParticipantController(participantRepository, eventService);
+        service = mock(ParticipantService.class);
+        participantController = new ParticipantController(service);
     }
 
     @Test
@@ -36,9 +34,9 @@ public class ParticipantControllerTest {
         participants.add(new Participant());
 
         // Mock the behavior of the repository
-        when(participantRepository.getParticipantsFromEvent(any(UUID.class))).thenReturn(participants);
+        when(service.getAll(any(UUID.class))).thenReturn(participants);
         UUID eventid=UUID.randomUUID();
-        ResponseEntity<List<Participant>> response = participantController.getAll(eventid.toString());
+        ResponseEntity<List<Participant>> response = participantController.getAll(eventid);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(participants.size(), response.getBody().size());
@@ -51,7 +49,8 @@ public class ParticipantControllerTest {
         participant.setId(participantId);
 
         // Mock the behavior of the repository
-        when(participantRepository.findParticipantInEvent(any(UUID.class), any(UUID.class))).thenReturn(participant);
+        when(service.participantExists(any(UUID.class), any(UUID.class))).thenReturn(true);
+        when(service.getById(any(UUID.class), any(UUID.class))).thenReturn(participant);
 
         ResponseEntity<Participant> response = participantController.getById(participantId, UUID.randomUUID());
 
@@ -69,9 +68,9 @@ public class ParticipantControllerTest {
         UUID eventId = UUID.randomUUID();
 
         // Mock the behavior of the repository
-        when(participantRepository.save(any(Participant.class))).thenReturn(participantToAdd);
+        when(service.add(any(Participant.class), any(UUID.class))).thenReturn(participantToAdd);
 
-        ResponseEntity<Participant> response = participantController.add(participantToAdd, eventId.toString());
+        ResponseEntity<Participant> response = participantController.add(participantToAdd, eventId);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(participantToAdd, response.getBody());
@@ -85,13 +84,13 @@ public class ParticipantControllerTest {
         participant.setId(participantId);
 
         // Mock the behavior of the repository
-        when(participantRepository.findParticipantInEvent(any(UUID.class), any(UUID.class))).thenReturn(participant);
+        when(service.remove(any(UUID.class), any(UUID.class))).thenReturn(participant);
 
-        ResponseEntity<Participant> response = participantController.remove(participantId.toString(), eventId.toString());
+        ResponseEntity<Participant> response = participantController.remove(participantId.toString(), eventId);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(participant, response.getBody());
-        verify(participantRepository, times(1)).deleteParticipantFromEvent(any(UUID.class), any(UUID.class));
+        verify(service, times(1)).remove(any(UUID.class), any(UUID.class));
     }
 
     @Test
@@ -99,14 +98,12 @@ public class ParticipantControllerTest {
         UUID participantId = UUID.randomUUID();
         Participant participantToUpdate = new Participant();
         participantToUpdate.setName("Updated Name");
-
         UUID eventId = UUID.randomUUID();
 
         // Mock the behavior of the repository
-        when(participantRepository.findParticipantInEvent(any(UUID.class), any(UUID.class))).thenReturn(new Participant());
-        when(participantRepository.save(any(Participant.class))).thenReturn(participantToUpdate);
+        when(service.update(any(UUID.class), any(UUID.class), any(Participant.class))).thenReturn(participantToUpdate);
 
-        ResponseEntity<Participant> response = participantController.update(eventId.toString(), participantId.toString(), participantToUpdate);
+        ResponseEntity<Participant> response = participantController.update(eventId, participantId, participantToUpdate);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(participantToUpdate.getName(), response.getBody().getName());
