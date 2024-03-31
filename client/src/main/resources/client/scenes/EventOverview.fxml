@@ -7,32 +7,32 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="512.0" prefWidth="420.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EventOverviewCtrl">
    <children>
-      <TextField fx:id="eventTitle" layoutX="29.0" layoutY="72.0" prefHeight="31.0" prefWidth="211.0" promptText="Event Title">
+      <TextField fx:id="eventTitle" layoutX="29.0" layoutY="72.0" prefHeight="31.0" prefWidth="211.0" promptText="event.overview.eventTitle">
          <font>
             <Font size="15.0" />
          </font>
       </TextField>
-      <Button fx:id="sendInviteButton" layoutX="268.0" layoutY="72.0" mnemonicParsing="false" text="Send Invites" />
-      <Label layoutX="37.0" layoutY="125.0" text="Participants">
+      <Button fx:id="sendInvite" layoutX="268.0" layoutY="72.0" mnemonicParsing="false" text="event.overview.sendInvite" />
+      <Label layoutX="37.0" layoutY="125.0" text="event.overview.participant" fx:id="participantLabel">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Label layoutX="42.0" layoutY="203.0" text="Expenses">
+      <Label layoutX="42.0" layoutY="203.0" text="event.overview.expense" fx:id="expenseLabel">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
       <ComboBox layoutX="40.0" layoutY="243.0" prefWidth="150.0" />
-      <Button layoutX="228.0" layoutY="243.0" mnemonicParsing="false" onAction="#addExpense" text="Add Expense" />
+      <Button layoutX="228.0" layoutY="243.0" mnemonicParsing="false" onAction="#addExpense" text="event.overview.addExpense" fx:id="addExpense"/>
       <TableView layoutX="31.0" layoutY="304.0" prefHeight="145.0" prefWidth="308.0">
          <columns>
-            <TableColumn prefWidth="75.0" text="All" />
-            <TableColumn prefWidth="122.0" text="To" />
-            <TableColumn prefWidth="110.0" text="From" />
+            <TableColumn prefWidth="75.0" text="general.all" fx:id="all"/>
+            <TableColumn prefWidth="122.0" text="general.to" fx:id="to"/>
+            <TableColumn prefWidth="110.0" text="general.from" fx:id="from"/>
          </columns>
       </TableView>
-      <Button layoutX="315.0" layoutY="471.0" mnemonicParsing="false" text="Settle Debts" />
+      <Button layoutX="315.0" layoutY="471.0" mnemonicParsing="false" text="event.overview.settleDebt" fx:id="settleDebt"/>
       <ImageView fitHeight="22.0" fitWidth="22.0" layoutX="134.0" layoutY="125.0" onMouseClicked="#addParticipant" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@/client/icons/user.png" />

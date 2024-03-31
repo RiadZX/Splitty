@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.services.I18N;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -8,6 +9,7 @@ import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableColumn;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.TextFlow;
 import javafx.scene.control.Button;
@@ -24,11 +26,26 @@ public class EventOverviewCtrl implements Initializable {
     private final MainCtrl mainCtrl;
     private final NotificationService notificationService;
     @FXML
-    public Button sendInviteButton;
-    @FXML
     public TextFlow textFlow;
     @FXML
     public Pane backButton;
+    @FXML
+    public Button settleDebt;
+    @FXML
+    public Button sendInvite;
+    @FXML
+    public Button addExpense;
+    @FXML
+    public Label expenseLabel;
+    @FXML
+    public Label participantLabel;
+
+    @FXML
+    public TableColumn to;
+    @FXML
+    public TableColumn from;
+    @FXML
+    public TableColumn all;
 
     @FXML
     private TextField eventTitle;
@@ -54,7 +71,17 @@ public class EventOverviewCtrl implements Initializable {
             }
         }));
 
-        this.sendInviteButton.setOnAction(event -> sendInvite());
+        this.sendInvite.setOnAction(event -> sendInvite());
+        I18N.update(sendInvite);
+        I18N.update(addExpense);
+        I18N.update(settleDebt);
+        I18N.update(expenseLabel);
+        I18N.update(participantLabel);
+
+        I18N.update(to);
+        I18N.update(all);
+        I18N.update(from);
+        I18N.update(eventTitle);
     }
 
     public Event getEvent(){
