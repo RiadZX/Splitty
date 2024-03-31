@@ -7,7 +7,15 @@ import commons.Debt;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import org.glassfish.jersey.internal.guava.Table;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -25,6 +33,15 @@ public class DebtResolveCtrl implements Initializable {
     // the amounts that everyone is receiving
     private HashMap<Participant, Amounts> amounts;
 
+    @FXML
+    private TableView<TableEntry> debtTable;
+
+    @FXML
+    private TableColumn<TableEntry, String> personColumn;
+
+    @FXML
+    private TableColumn<TableEntry, Double> amountColumn;
+
     @Inject
     public DebtResolveCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
         this.server = server;
@@ -34,7 +51,12 @@ public class DebtResolveCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.amounts = new HashMap<>();
+        personColumn.setCellValueFactory(new PropertyValueFactory<>("person"));
+        amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        debtTable.setItems(tableEntries);
     }
+
+    private ObservableList<TableEntry> tableEntries = FXCollections.observableArrayList();
 
     public void setEvent(Event event) {
         this.event = event;
@@ -52,14 +74,16 @@ public class DebtResolveCtrl implements Initializable {
                     new Amounts(e.getAmount(), 0.),
                     (start, end) -> new Amounts(
                             start.giving() + end.giving(),
-                            start.getting() + end.getting())
+                            start.getting() + end.getting()
+                    )
             );
             for (Debt d : debts) {
                 amounts.merge(d.getParticipant(),
                         new Amounts(0., d.getAmount()),
                         (start, end) -> new Amounts(
                                 start.giving() + end.giving(),
-                                start.getting() + end.getting())
+                                start.getting() + end.getting()
+                        )
                 );
             }
         }
@@ -85,6 +109,7 @@ public class DebtResolveCtrl implements Initializable {
 
         for (Entry<Participant, Double> a : netAmounts.entrySet()) {
             netAmounts.put(a.getKey(), a.getValue() - maxAmount);
+            tableEntries.add(new TableEntry(a.getKey().getName(), a.getValue() - maxAmount));
         }
 
         System.out.println("calculated");
@@ -104,3 +129,5 @@ record Amounts(Double giving, Double getting) {
         return this.giving - this.getting;
     }
 }
+
+record TableEntry(String person, Double amount) {}
