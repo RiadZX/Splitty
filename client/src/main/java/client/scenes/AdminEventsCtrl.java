@@ -90,7 +90,13 @@ public class AdminEventsCtrl implements Initializable {
         //register for event updates
         server.listenEvents(wrapper -> {
             System.out.println("Event received");
-            addItem(wrapper.getEvent());
+            System.out.println(wrapper);
+            switch (wrapper.getAction()) {
+                case "POST" -> addItem(wrapper.getEvent());
+                //case "PUT" -> updateItem(wrapper.getEvent());
+                case "DELETE" -> removeEvent(wrapper.getEvent());
+                default -> System.out.println("Unknown action received");
+            }
         });
     }
 
@@ -107,10 +113,14 @@ public class AdminEventsCtrl implements Initializable {
      * Removes event from db and table.
      * @param e Event to be removed
      */
-    private void removeEvent(Event e) {
+    private void removeEventAction(Event e) {
         server.removeEvent(e.getId());
-        this.events.remove(e);
+        removeEvent(e);
         populateList();
+    }
+
+    private void removeEvent(Event e){
+        events.removeIf(tmp -> tmp.getId().equals(e.getId()));
     }
 
     private File getDirectory() {
@@ -175,7 +185,7 @@ public class AdminEventsCtrl implements Initializable {
         Image removeImage = new Image("client/icons/bin.png");
         ImageView remove = new ImageView();
         remove.setImage(removeImage);
-        remove.setOnMouseClicked(x -> removeEvent(e));
+        remove.setOnMouseClicked(x -> removeEventAction(e));
         remove.cursorProperty().set(Cursor.HAND);
         remove.setFitHeight(12.0);
         remove.setPickOnBounds(true);

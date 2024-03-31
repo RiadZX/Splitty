@@ -21,6 +21,7 @@ import commons.EventLongPollingWrapper;
 import commons.Expense;
 import commons.Participant;
 import commons.Quote;
+import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -185,14 +186,17 @@ public class ServerUtils {
                     System.out.println("Error: " + res.getStatus());
                     continue;
                 }
-                System.out.println("wrq");
-                EventLongPollingWrapper wrapper = res.readEntity(EventLongPollingWrapper.class);
-                System.out.println(wrapper);
+                EventLongPollingWrapper wrapper = null;
+                try {
+                    wrapper = res.readEntity(EventLongPollingWrapper.class);
+                }
+                catch (ProcessingException e){
+                    e.printStackTrace();
+                }
                 if (wrapper == null) {
                     System.out.println("No event");
                     continue;
                 }
-                System.out.println(wrapper.getAction());
                 eventConsumer.accept(wrapper);
             }
             System.out.println("Stopped listening for updates");

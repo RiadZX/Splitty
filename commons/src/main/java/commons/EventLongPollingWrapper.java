@@ -1,9 +1,14 @@
 package commons;
 
+import com.google.gson.annotations.Expose;
+
 public class EventLongPollingWrapper {
+    @Expose
     private String action;
+    @Expose
     private Event event;
 
+    public  EventLongPollingWrapper(){}
     public EventLongPollingWrapper(String action, Event event) {
         this.action = action;
         this.event = event;

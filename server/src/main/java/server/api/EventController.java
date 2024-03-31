@@ -90,6 +90,8 @@ public class EventController {
     public ResponseEntity<Void> remove(@PathVariable("id") UUID id) {
         if (repo.findById(id).isPresent()) {
             repo.deleteById(id);
+            EventLongPollingWrapper wrapper=new EventLongPollingWrapper("DELETE", new Event(id));
+            listeners.values().forEach(listener -> listener.accept(wrapper)); // notify all listeners of a new event
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
@@ -107,6 +109,8 @@ public class EventController {
         }
         event.setLastActivityTime(Instant.now()); //update last activity time
         Event saved = repo.save(event);
+        EventLongPollingWrapper wrapper=new EventLongPollingWrapper("PUT", event);
+        listeners.values().forEach(listener -> listener.accept(wrapper)); // notify all listeners of a new event
         return ResponseEntity.ok(saved);
     }
 
