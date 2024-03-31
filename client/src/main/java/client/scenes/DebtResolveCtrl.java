@@ -12,7 +12,6 @@ import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
@@ -47,7 +46,7 @@ public class DebtResolveCtrl implements Initializable {
 
         System.out.println(expenses);
 
-        for ( Expense e : expenses ) {
+        for (Expense e : expenses) {
             List<Debt> debts = e.getDebts();
             amounts.merge(e.getPaidBy(),
                     new Amounts(e.getAmount(), 0.),
