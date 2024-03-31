@@ -89,6 +89,12 @@ public class EventTest {
         assertEquals(e3.getParticipants(), x);
     }
 
+    @Test
+    public void setInviteCode(){
+        e3.setInviteCode("FQWE54EF");
+        assertEquals(e3.getInviteCode(), "FQWE54EF");
+    }
+
 
     @Test
     public void setId(){
