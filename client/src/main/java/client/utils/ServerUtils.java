@@ -29,6 +29,7 @@ import org.glassfish.jersey.client.ClientConfig;
 
 import java.io.*;
 import java.net.URL;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -259,6 +260,20 @@ public class ServerUtils {
         body.addProperty("toEmail", toEmail);
         body.addProperty("inviteCode", inviteCode);
         body.addProperty("creator", creator);
+        System.out.println(body);
+        ClientBuilder.newClient(new ClientConfig())//
+                .target(serverAddress).path("api/mail")//
+                .request(APPLICATION_JSON)//
+                .accept(APPLICATION_JSON)//
+                .post(Entity.entity(body.toString(), APPLICATION_JSON), String.class);
+    }
+
+    public void convert(double amount, String from, String to, Instant when) {
+        JsonObject body = new JsonObject();
+        body.addProperty("amount", amount);
+        body.addProperty("from", from);
+        body.addProperty("to", to);
+        body.addProperty("when", when.toString());
         System.out.println(body);
         ClientBuilder.newClient(new ClientConfig())//
                 .target(serverAddress).path("api/mail")//
