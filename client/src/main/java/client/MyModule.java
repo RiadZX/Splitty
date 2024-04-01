@@ -18,6 +18,7 @@ package client;
 import client.scenes.*;
 import client.services.NotificationHelper;
 import client.services.NotificationService;
+import client.utils.ServerUtils;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
@@ -38,5 +39,6 @@ public class MyModule implements Module {
         binder.bind(SettingsCtrl.class).in(Scopes.SINGLETON);
         //bind notification service to the notification service implementation
         binder.bind(NotificationService.class).to(NotificationHelper.class);
+        binder.bind(ServerUtils.class).toInstance(new ServerUtils());
     }
 }
