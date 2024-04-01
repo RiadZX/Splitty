@@ -42,6 +42,8 @@ public class DebtResolveCtrl implements Initializable {
     @FXML
     private TableColumn<TableEntry, Double> amountColumn;
 
+    private ObservableList<TableEntry> tableEntries = FXCollections.observableArrayList();
+
     @Inject
     public DebtResolveCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
         this.server = server;
@@ -55,8 +57,6 @@ public class DebtResolveCtrl implements Initializable {
         amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
         debtTable.setItems(tableEntries);
     }
-
-    private ObservableList<TableEntry> tableEntries = FXCollections.observableArrayList();
 
     public void setEvent(Event event) {
         this.event = event;
@@ -106,7 +106,7 @@ public class DebtResolveCtrl implements Initializable {
                 max = a.getKey();
             }
         }
-
+        tableEntries.clear();
         for (Entry<Participant, Double> a : netAmounts.entrySet()) {
             netAmounts.put(a.getKey(), a.getValue() - maxAmount);
             tableEntries.add(new TableEntry(a.getKey().getName(), a.getValue() - maxAmount));

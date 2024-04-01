@@ -35,12 +35,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.DebtResolveCtrl">
+
+<Pane prefHeight="400.0" prefWidth="640.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.DebtResolveCtrl">
    <children>
-      <TableView layoutX="70.0" layoutY="80.0" prefHeight="200.0" prefWidth="200.0" fx:id="debtTable">
+      <TableView fx:id="debtTable" prefHeight="200.0" prefWidth="200.0">
         <columns>
-          <TableColumn prefWidth="70.0" text="Person" fx:id="personColumn" />
-          <TableColumn minWidth="0.0" text="Amount" fx:id="amountColumn" />
+          <TableColumn fx:id="personColumn" prefWidth="70.0" text="Person" />
+          <TableColumn fx:id="amountColumn" minWidth="0.0" text="Amount" />
         </columns>
       </TableView>
    </children>
