@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.Event;
+import commons.EventLongPollingWrapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class EventController {
      * The key is a randomly created object to identify the listener.
      * The value is a consumer that accepts an event, it is the deferredresult that will be accepted with a new event.
      */
-    private Map<Object, Consumer<Event>> listeners = new ConcurrentHashMap<>();
+    private Map<Object, Consumer<EventLongPollingWrapper>> listeners = new ConcurrentHashMap<>();
 
     public EventController(EventRepository repo) {
         this.repo = repo;
@@ -50,7 +51,8 @@ public class EventController {
             return ResponseEntity.badRequest().build();
         }
         Event saved = repo.save(event);
-        listeners.values().forEach(listener -> listener.accept(saved)); // notify all listeners of a new event
+        EventLongPollingWrapper wrapper=new EventLongPollingWrapper("POST", saved);
+        listeners.values().forEach(listener -> listener.accept(wrapper)); // notify all listeners of a new event
         return ResponseEntity.ok(saved);
     }
     /**
@@ -88,6 +90,8 @@ public class EventController {
     public ResponseEntity<Void> remove(@PathVariable("id") UUID id) {
         if (repo.findById(id).isPresent()) {
             repo.deleteById(id);
+            EventLongPollingWrapper wrapper=new EventLongPollingWrapper("DELETE", new Event(id));
+            listeners.values().forEach(listener -> listener.accept(wrapper)); // notify all listeners of a new event
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
@@ -105,6 +109,8 @@ public class EventController {
         }
         event.setLastActivityTime(Instant.now()); //update last activity time
         Event saved = repo.save(event);
+        EventLongPollingWrapper wrapper=new EventLongPollingWrapper("PUT", event);
+        listeners.values().forEach(listener -> listener.accept(wrapper)); // notify all listeners of a new event
         return ResponseEntity.ok(saved);
     }
 
@@ -113,15 +119,17 @@ public class EventController {
      * @return - new event.
      */
     @GetMapping("/subscribe")
-    public DeferredResult<ResponseEntity<Event>> subscribe() {
+    public DeferredResult<ResponseEntity<EventLongPollingWrapper>> subscribe() {
         var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        DeferredResult<ResponseEntity<Event>> deferredResult = new DeferredResult<>(// deferred result is a result that is not completed yet.
+        DeferredResult<ResponseEntity<EventLongPollingWrapper>> deferredResult = new DeferredResult<>(// deferred result is a result that is not completed yet.
                 30000L, //If within 30 seconds the result is not set, the request will be timed out
                 noContent//if not found then this code will be returned
         );
         Object key = new Object();
-        listeners.put(key, event -> {
-            deferredResult.setResult(ResponseEntity.ok(event));
+        listeners.put(key, wrapper -> {
+            System.out.println(wrapper);
+            System.out.println(wrapper.getAction());
+            deferredResult.setResult(ResponseEntity.ok(wrapper));
         });
         deferredResult.onCompletion(() -> {
             listeners.remove(key);

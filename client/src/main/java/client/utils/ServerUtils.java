@@ -17,9 +17,11 @@ package client.utils;
 
 import com.google.gson.JsonObject;
 import commons.Event;
+import commons.EventLongPollingWrapper;
 import commons.Expense;
 import commons.Participant;
 import commons.Quote;
+import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -165,7 +167,7 @@ public class ServerUtils {
     /**
      * Listen for new events
      */
-    public void listenEvents(Consumer<Event> eventConsumer) {
+    public void listenEvents(Consumer<EventLongPollingWrapper> eventConsumer) {
         exec.submit(() -> {
             System.out.println("Listening for updates");
             while (!Thread.currentThread().isInterrupted()) {
@@ -184,13 +186,18 @@ public class ServerUtils {
                     System.out.println("Error: " + res.getStatus());
                     continue;
                 }
-                var event = res.readEntity(Event.class);
-                if (event == null) {
+                EventLongPollingWrapper wrapper = null;
+                try {
+                    wrapper = res.readEntity(EventLongPollingWrapper.class);
+                }
+                catch (ProcessingException e){
+                    e.printStackTrace();
+                }
+                if (wrapper == null) {
                     System.out.println("No event");
                     continue;
                 }
-
-                eventConsumer.accept(event);
+                eventConsumer.accept(wrapper);
             }
             System.out.println("Stopped listening for updates");
         });
