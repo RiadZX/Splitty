@@ -47,7 +47,7 @@ public class ServerUtils {
     public ServerUtils() {
         URL resource = getClass().getClassLoader().getResource("client/server_config.toml");
 
-        File config = null;
+        File config;
 
         if (resource == null) {
             throw new IllegalArgumentException("File not found!");
@@ -59,7 +59,7 @@ public class ServerUtils {
             }
         }
 
-        Toml toml = null;
+        Toml toml;
 
         try {
             toml = new Toml().read(config);
