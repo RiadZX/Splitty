@@ -53,7 +53,7 @@ public class Expense {
                 + '}';
     }
 
-    @OneToMany(mappedBy = "expense", orphanRemoval = true)
+    @OneToMany(mappedBy = "expense", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JsonManagedReference ("expense-debts")
     @Expose
     private List<Debt> debts;

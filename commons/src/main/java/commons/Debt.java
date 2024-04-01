@@ -92,10 +92,6 @@ public class Debt {
                 + "debt_id="
                 + id
                 + ", expense="
-                + expense
-                + ", participant="
-                + participant
-                + ", amount="
                 + amount
                 + ", paid="
                 + paid
