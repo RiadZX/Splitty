@@ -268,17 +268,17 @@ public class ServerUtils {
                 .post(Entity.entity(body.toString(), APPLICATION_JSON), String.class);
     }
 
-    public void convert(double amount, String from, String to, Instant when) {
+    public double convert(double amount, String from, String to, Instant when) {
         JsonObject body = new JsonObject();
         body.addProperty("amount", amount);
         body.addProperty("from", from);
         body.addProperty("to", to);
         body.addProperty("when", when.toString());
         System.out.println(body);
-        ClientBuilder.newClient(new ClientConfig())//
-                .target(serverAddress).path("api/mail")//
+        return ClientBuilder.newClient(new ClientConfig())//
+                .target(serverAddress).path("api/convert")//
                 .request(APPLICATION_JSON)//
                 .accept(APPLICATION_JSON)//
-                .post(Entity.entity(body.toString(), APPLICATION_JSON), String.class);
+                .post(Entity.entity(body.toString(), APPLICATION_JSON), Double.class);
     }
 }

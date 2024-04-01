@@ -228,7 +228,7 @@ public class EventOverviewCtrl implements Initializable {
     private BorderPane createRow(Expense e) {
         Insets insets = new Insets(0.0, 5.0, 0.0, 5.0);
         BorderPane bp = new BorderPane();
-        double convertedAmount = e.getAmount();
+        double convertedAmount = server.convert(e.getAmount(), e.getCurrency(), String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), e.getDate());
         bp.setLeft(new Text(
                 (e.getPaidBy() == null ? "NULL" : e.getPaidBy().getName())
                         + "'s expense - "
