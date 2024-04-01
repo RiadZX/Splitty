@@ -5,25 +5,22 @@ import commons.EventLongPollingWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.context.request.async.DeferredResult;
-import server.database.EventRepository;
 import server.services.EventService;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-@RestController
+@Controller
 @RequestMapping("/api/events")
 public class EventController {
-    private final EventRepository repo;
     private final EventService service;
 
     @Autowired
-    public EventController(EventRepository repo, EventService service) {
-        this.repo = repo;
+    public EventController(EventService service) {
         this.service= service;
     }
     /**
@@ -32,7 +29,7 @@ public class EventController {
      */
     @GetMapping(path = { "", "/" })
     public ResponseEntity<List<Event>> getAll() {
-        return ResponseEntity.ok(repo.findAll());
+        return ResponseEntity.ok(service.getAll());
     }
 
     /**
@@ -45,10 +42,7 @@ public class EventController {
         if (event==null){
             return ResponseEntity.badRequest().build();
         }
-        Event saved = repo.save(event);
-        EventLongPollingWrapper wrapper=new EventLongPollingWrapper("POST", saved);
-        service.accept(wrapper);
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.ok(service.add(event));
     }
     /**
      * Join an event
@@ -57,13 +51,11 @@ public class EventController {
      */
     @GetMapping("/join/{inviteCode}")
     public ResponseEntity<Event> join(@PathVariable("inviteCode") String inviteCode) {
-        Event saved=repo.getEventForInviteCode(inviteCode);
+        Event saved=service.joinEvent(inviteCode);
         if (saved==null){
             return ResponseEntity.badRequest().build();
         }
-        else {
-            return ResponseEntity.ok(saved);
-        }
+        return ResponseEntity.ok(saved);
     }
     /**
      * Get event by id
@@ -72,21 +64,15 @@ public class EventController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Event> getById(@PathVariable("id") UUID id) {
-        if (!repo.existsById(id)) {
+        Event saved=service.get(id);
+        if (saved==null){
             return ResponseEntity.badRequest().build();
         }
-        if (repo.findById(id).isPresent()){
-            return ResponseEntity.ok(repo.findById(id).get());
-        }else {
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(saved);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> remove(@PathVariable("id") UUID id) {
-        if (repo.findById(id).isPresent()) {
-            repo.deleteById(id);
-            EventLongPollingWrapper wrapper=new EventLongPollingWrapper("DELETE", new Event(id));
-            service.accept(wrapper);
+        if (this.service.delete(id)){
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
@@ -99,14 +85,11 @@ public class EventController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Event> update(@PathVariable("id") UUID id, @RequestBody Event event) {
-        if (!repo.existsById(id)) {
-            return ResponseEntity.badRequest().build();
+        Event saved=service.update(id, event);
+        if (saved!=null) {
+            return ResponseEntity.ok(saved);
         }
-        event.setLastActivityTime(Instant.now()); //update last activity time
-        Event saved = repo.save(event);
-        EventLongPollingWrapper wrapper=new EventLongPollingWrapper("PUT", event);
-        service.accept(wrapper);
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.badRequest().build();
     }
 
     /**

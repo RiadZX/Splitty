@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 
 import commons.Event;
 import server.database.EventRepository;
+import server.services.EventService;
+import server.services.ParticipantService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,15 +21,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 public class EventControllerTest {
-    @Mock
-    private EventRepository eventRepository;
 
-    @InjectMocks
+    private EventService service;
     private EventController eventController;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        service = mock(EventService.class);
+        eventController=new EventController(service);
     }
 
     @Test
@@ -37,7 +38,7 @@ public class EventControllerTest {
         events.get(0).setId(UUID.randomUUID());
         events.add(new Event("Event 2"));
         events.get(1).setId(UUID.randomUUID());
-        when(eventRepository.findAll()).thenReturn(events);
+        when(service.getAll()).thenReturn(events);
 
         ResponseEntity<List<Event>> responseEntity = eventController.getAll();
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -48,7 +49,7 @@ public class EventControllerTest {
     void testAdd() {
         Event event = new Event("New Event");
         event.setId(UUID.randomUUID());
-        when(eventRepository.save(any(Event.class))).thenReturn(event);
+        when(service.add(any(Event.class))).thenReturn(event);
 
         ResponseEntity<Event> responseEntity = eventController.add(event);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -58,7 +59,7 @@ public class EventControllerTest {
     void testJoinExistingEvent() {
         Event event = new Event("Event 1");
         event.setId(UUID.randomUUID());
-        when(eventRepository.getEventForInviteCode("inviteCode")).thenReturn(event);
+        when(service.joinEvent("inviteCode")).thenReturn(event);
 
         ResponseEntity<Event> responseEntity = eventController.join("inviteCode");
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -67,7 +68,7 @@ public class EventControllerTest {
 
     @Test
     void testJoinNonExistingEvent() {
-        when(eventRepository.getEventForInviteCode("invalidInviteCode")).thenReturn(null);
+        when(service.joinEvent("invalidInviteCode")).thenReturn(null);
 
         ResponseEntity<Event> responseEntity = eventController.join("invalidInviteCode");
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -77,8 +78,8 @@ public class EventControllerTest {
         UUID eventId = UUID.randomUUID();
         Event event = new Event("Event 1");
         event.setId(UUID.randomUUID());
-        when(eventRepository.existsById(eventId)).thenReturn(true);
-        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+        when(service.existsById(eventId)).thenReturn(true);
+        when(service.get(eventId)).thenReturn(event);
 
         ResponseEntity<Event> responseEntity = eventController.getById(eventId);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -88,7 +89,7 @@ public class EventControllerTest {
     @Test
     void testGetByIdNonExistingEvent() {
         UUID eventId = UUID.randomUUID();
-        when(eventRepository.existsById(eventId)).thenReturn(false);
+        when(service.existsById(eventId)).thenReturn(false);
 
         ResponseEntity<Event> responseEntity = eventController.getById(eventId);
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -122,8 +123,8 @@ public class EventControllerTest {
         UUID eventId = UUID.randomUUID();
         Event event = new Event("Event 1");
         event.setId(eventId);
-        when(eventRepository.existsById(eventId)).thenReturn(true);
-        when(eventRepository.save(any(Event.class))).thenReturn(event);
+        when(service.existsById(eventId)).thenReturn(true);
+        when(service.update(any(UUID.class), any(Event.class))).thenReturn(event);
 
         ResponseEntity<Event> responseEntity = eventController.update(eventId, event);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -135,7 +136,7 @@ public class EventControllerTest {
         UUID eventId = UUID.randomUUID();
         Event event = new Event("Event 1");
         event.setId(eventId);
-        when(eventRepository.existsById(eventId)).thenReturn(false);
+        when(service.existsById(eventId)).thenReturn(false);
 
         ResponseEntity<Event> responseEntity = eventController.update(eventId, event);
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());

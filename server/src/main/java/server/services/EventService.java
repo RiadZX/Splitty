@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
-
+import java.util.List;
 @Service
 public class EventService {
 
@@ -42,6 +42,46 @@ public class EventService {
         }
     }
 
+    public List<Event> getAll(){
+        return eventRepository.findAll();
+    }
+
+    public Event get(UUID id){
+        return eventRepository.findById(id).orElse(null);
+    }
+    public Event joinEvent(String inviteCode){
+        return eventRepository.getEventForInviteCode(inviteCode);
+    }
+
+    public Event add(Event e){
+        Event saved = eventRepository.save(e);
+        EventLongPollingWrapper wrapper=new EventLongPollingWrapper("POST", saved);
+        this.accept(wrapper);
+        return saved;
+    }
+
+    public boolean delete(UUID id){
+        if (eventRepository.existsById(id)) {
+            eventRepository.deleteById(id);
+            EventLongPollingWrapper wrapper=new EventLongPollingWrapper("DELETE", new Event(id));
+            this.accept(wrapper);
+            return true;
+        }
+        return false;
+    }
+
+    public Event update(UUID id, Event event){
+        if (eventRepository.existsById(id)) {
+            event.setId(id);
+            event.setLastActivityTime(Instant.now()); //update last activity time
+            Event saved = eventRepository.save(event);
+            EventLongPollingWrapper wrapper = new EventLongPollingWrapper("PUT", event);
+            this.accept(wrapper);
+            return saved;
+        }
+        return null;
+    }
+
     public void accept(EventLongPollingWrapper wrapper){
         System.out.println("accepting!!!");
         System.out.println(wrapper);
@@ -67,5 +107,9 @@ public class EventService {
         deferredResult.onTimeout(() -> {
             deferredResult.setErrorResult(ResponseEntity.status(HttpStatus.NO_CONTENT).build());
         });
+    }
+
+    public boolean existsById(UUID id){
+        return eventRepository.existsById(id);
     }
 }
