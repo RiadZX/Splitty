@@ -72,6 +72,9 @@ public class CurrencyConverterService {
 
         String resource = Objects.requireNonNull(getClass().getClassLoader().getResource("rates/")).getPath();
         String dest = resource + "/" + stringifyCalendar(time) + "/" + from + "/";
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            dest = dest.replaceAll("/", "\\");
+        }
         File cache = new File(dest + to + ".txt");
 
         try {
