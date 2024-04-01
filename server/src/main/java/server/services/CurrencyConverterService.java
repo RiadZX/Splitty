@@ -20,12 +20,12 @@ import java.util.*;
 
 @Service
 public class CurrencyConverterService {
-    private final static String OER_URL = "http://openexchangerates.org/api/";
-    private static final String LATEST = "latest.json?app_id=%s";
-    private static final String HISTORICAL = "historical/%04d-%02d-%02d.json?app_id=%s";
     private static final String APP_ID = "5e0ce6c240024d09a9131b11070b3df2";
+    private static final String HISTORICAL = "historical/%04d-%02d-%02d.json?app_id=%s";
+    private static final String LATEST = "latest.json?app_id=%s";
+    private final static String OER_URL = "https://openexchangerates.org/api/";
 
-    private final static ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     private Map<String, BigDecimal> updateExchangeRates(String downloadPath) {
         try {
