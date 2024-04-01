@@ -8,6 +8,7 @@ import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import commons.Event;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.fxml.FXML;
@@ -116,11 +117,11 @@ public class AdminEventsCtrl implements Initializable {
     private void removeEventAction(Event e) {
         server.removeEvent(e.getId());
         removeEvent(e);
-        populateList();
     }
 
     private void removeEvent(Event e){
         events.removeIf(tmp -> tmp.getId().equals(e.getId()));
+        populateList();
     }
 
     private File getDirectory() {
@@ -160,12 +161,14 @@ public class AdminEventsCtrl implements Initializable {
      * Uses the locally stored list of events to render the table.
      */
     public void populateList() {
-        myListView.getItems().clear();
-        if (sortCol!=null){
-            sortEvents();
-        }
-        List<BorderPane> contents = events.stream().map(e -> createRow(e)).toList();
-        myListView.getItems().addAll(contents);
+        Platform.runLater(() -> {
+            myListView.getItems().clear();
+            if (sortCol!=null){
+                sortEvents();
+            }
+            List<BorderPane> contents = events.stream().map(e -> createRow(e)).toList();
+            myListView.getItems().addAll(contents);
+        });
     }
 
     /**
