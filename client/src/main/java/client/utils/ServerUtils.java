@@ -27,7 +27,6 @@ import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
-import javax.naming.directory.InvalidAttributesException;
 import java.io.*;
 import java.net.URL;
 import java.util.List;
