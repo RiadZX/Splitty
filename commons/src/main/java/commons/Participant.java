@@ -19,7 +19,6 @@ public class Participant {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "participant_id")
     private UUID id;
-
     @Expose
     private String name;
 
@@ -31,12 +30,12 @@ public class Participant {
     @JsonBackReference ("event-participants")
     private Event event; //event part of field does not actually work
 
-    @OneToMany(mappedBy = "participant", orphanRemoval = true)
+    @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference ("participant-debts")
     @Expose
     private List<Debt> debts;
 
-    @OneToMany(mappedBy = "paidBy", orphanRemoval = true)
+    @OneToMany(mappedBy = "paidBy", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     @Expose
     private List<Expense> paidFor;
@@ -51,19 +50,22 @@ public class Participant {
         this.paidFor = new ArrayList<>();
     }
 
-    public Participant(String name, Event event, String iban, String email, String bic) {
+    public Participant(String name) {
         this();
         this.name = name;
+    }
+
+    public Participant(String name, Event event) {
+        this(name);
         this.event = event;
+    }
+
+    public Participant(String name, Event event, String iban, String email, String bic) {
+        this(name, event);
         this.iban = iban;
         this.email = email;
         this.bic = bic;
     }
-
-    public String getIban() {
-        return iban;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -83,6 +85,10 @@ public class Participant {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, iban, event);
+    }
+
+    public String getIban() {
+        return iban;
     }
 
     public void setIban(String iban) {
@@ -105,17 +111,9 @@ public class Participant {
         this.bic = bic;
     }
 
-    public Participant(String name) {
-        this();
-        this.name = name;
+    public Event getEvent() {
+        return event;
     }
-
-    public Participant(String name, Event event) {
-        this();
-        this.name = name;
-        this.event = event;
-    }
-
 
     public void setEventPartOf(Event event) {
         this.event = event;
@@ -129,10 +127,11 @@ public class Participant {
         this.debts = debts;
     }
 
-
-
     public UUID getId() {
         return id;
+    }
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public void payFor(Expense e) {
@@ -143,10 +142,6 @@ public class Participant {
         return paidFor;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
@@ -154,13 +149,6 @@ public class Participant {
     public void setName(String name) {
         this.name = name;
     }
-
-    public Event getEvent() {
-        return event;
-    }
-
-
-
     @Override
     public String toString() {
         return "Participant{"
