@@ -10,6 +10,16 @@ import java.util.List;
 import java.util.UUID;
 
 public class User implements Serializable {
+
+    enum Currency {
+        USD,
+        EUR,
+        CHF,
+        RON,
+    }
+
+    private Currency prefferedCurrency;
+
     private String name;
 
     private String email;
@@ -17,8 +27,8 @@ public class User implements Serializable {
     private String iban;
 
     private  String bic;
-    private LinkedHashMap<UUID, UUID> eventParticipant;
 
+    private LinkedHashMap<UUID, UUID> eventParticipant;
 
     public User(){
         eventParticipant=new LinkedHashMap<UUID, UUID>();
@@ -28,9 +38,10 @@ public class User implements Serializable {
      * Only use this for testing
      * @param name name of the user
      */
-    public User(String name){
+    public User(String name, String preferredCurrency){
         this();
         this.name=name;
+        this.prefferedCurrency = Currency.valueOf(preferredCurrency);
         this.email="test@test.com";
         this.iban="GB12ABCD10203012345678";
         this.bic="AAAABBCCDD";
