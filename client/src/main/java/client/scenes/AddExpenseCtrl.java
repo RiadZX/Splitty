@@ -277,7 +277,6 @@ public class AddExpenseCtrl implements Initializable {
                 )),
                 paidBy,
                 event,
-                event.getId(),
                 debts,
                 new ArrayList<>());
         for (Debt d : newExpense.getDebts()){
