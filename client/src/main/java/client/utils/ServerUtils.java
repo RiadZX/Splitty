@@ -27,6 +27,7 @@ import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
+import javax.naming.directory.InvalidAttributesException;
 import java.io.*;
 import java.net.URL;
 import java.util.List;
@@ -57,7 +58,13 @@ public class ServerUtils {
             }
         }
 
-        Toml toml = new Toml().read(config);
+        Toml toml = null;
+
+        try {
+            toml = new Toml().read(config);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Unable to parse toml file: " + e.getMessage());
+        }
 
         String address = toml.getString("address");
         long port = toml.getLong("port");
