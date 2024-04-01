@@ -32,7 +32,7 @@ public class Expense {
     @JoinColumn(name = "participant_id")
     private Participant paidBy;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "event_id")
     @JsonBackReference("event-expenses")
     private Event event;

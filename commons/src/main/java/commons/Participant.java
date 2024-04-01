@@ -3,7 +3,6 @@ package commons;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 
@@ -25,13 +24,13 @@ public class Participant {
     @Expose
     private String email;
 
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne (fetch = FetchType.EAGER)
     @JoinColumn(name = "event_id")
     @JsonBackReference ("event-participants")
     private Event event; //event part of field does not actually work
 
-    @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference ("participant-debts")
+    @OneToMany(mappedBy = "participant", cascade = CascadeType.PERSIST)
+    @JsonIgnore
     @Expose
     private List<Debt> debts;
 
