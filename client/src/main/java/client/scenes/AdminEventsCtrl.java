@@ -72,7 +72,7 @@ public class AdminEventsCtrl implements Initializable {
             System.out.println(wrapper);
             switch (wrapper.getAction()) {
                 case "POST" -> addItem(wrapper.getEvent());
-                //case "PUT" -> updateItem(wrapper.getEvent());
+                case "PUT" -> updateItem(wrapper.getEvent());
                 case "DELETE" -> removeEvent(wrapper.getEvent());
                 default -> System.out.println("Unknown action received");
             }
@@ -88,8 +88,13 @@ public class AdminEventsCtrl implements Initializable {
         populateList();
     }
 
+    private void updateItem(Event e){
+        events.replaceAll(x -> x.getId().equals(e.getId()) ? e : x);
+        populateList();
+    }
+
     /**
-     * Removes event from db and table.
+     * Removes event from db and table after the remove button has been clicked.
      * @param e Event to be removed
      */
     private void removeEventAction(Event e) {
@@ -99,7 +104,10 @@ public class AdminEventsCtrl implements Initializable {
         server.removeEvent(e.getId());
         removeEvent(e);
     }
-
+    /**
+     * Removes event the table.
+     * @param e Event to be removed
+     */
     private void removeEvent(Event e){
         events.removeIf(tmp -> tmp.getId().equals(e.getId()));
         populateList();
@@ -142,7 +150,7 @@ public class AdminEventsCtrl implements Initializable {
      * Uses the locally stored list of events to render the table.
      */
     public void populateList() {
-        Platform.runLater(() -> {
+        Platform.runLater(() -> { //Platform run later fixed thread issues
             myListView.getItems().clear();
             if (sortCol!=null){
                 sortEvents();
