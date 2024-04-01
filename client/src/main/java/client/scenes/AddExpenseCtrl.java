@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.services.I18N;
 import client.services.NotificationHelper;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -10,10 +11,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -23,9 +26,7 @@ public class AddExpenseCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private Event event;
-
     private Expense expense;
-
     @FXML
     private Button submitButton;
     @FXML
@@ -40,6 +41,23 @@ public class AddExpenseCtrl implements Initializable {
     private VBox tagSelector, createTagBox, partialPaidSelector;
     @FXML
     private Label tagErrorLabel, errorLabel;
+    @FXML
+    private Text paid;
+    @FXML
+    private Text when;
+    @FXML
+    private Text amount;
+    @FXML
+    private Text how;
+    @FXML
+    private Text what;
+    @FXML
+    private Button addButton;
+    @FXML
+    private Button abortButton;
+    @FXML
+    private Button createButton;
+
 
     @Inject
     public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl, Event event) {
@@ -50,6 +68,16 @@ public class AddExpenseCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        I18N.update(paid);
+        I18N.update(when);
+        I18N.update(amount);
+        I18N.update(how);
+        I18N.update(what);
+        I18N.update(submitButton);
+        I18N.update(abortButton);
+        I18N.update(createButton);
+        I18N.update(allBox);
+        I18N.update(someBox);
     }
     @FXML
     public void backToOverview(){
@@ -69,17 +97,20 @@ public class AddExpenseCtrl implements Initializable {
         partialPaidSelector.setVisible(true);
     }
 
-    public void setup(Event event, Expense expense){
+    public void setup(Event event, Expense e){
         this.event = event;
-        this.expense = expense;
-
+        this.expense = e;
         createTagBox.setVisible(false);
+        paidBySelector.setItems(FXCollections.observableList(event.getParticipants().stream().map(Participant::getName).toList()));
+        paidBySelector.setValue(event.getParticipants().get(0).getName());
+
+        howMuchField.setText("");
+        someBox.setSelected(false);
+        allBox.setSelected(false);
 
         currencySelector.setItems(FXCollections.observableList(Stream.of("EUR", "USD", "RON").toList()));
         currencySelector.setValue("EUR");
         currencySelector.setVisible(true);
-
-        paidBySelector.setItems(FXCollections.observableList(event.getParticipants().stream().map(Participant::getName).toList()));
 
         tagSelector.getChildren().clear();
         for (int i = 1; i<event.getTags().size() + 1; i++){
@@ -87,31 +118,36 @@ public class AddExpenseCtrl implements Initializable {
             tagSelector.getChildren().add(checkbox);
         }
 
+        partialPaidSelector.setVisible(false);
         partialPaidSelector.getChildren().clear();
         for (Participant p : event.getParticipants()){
             partialPaidSelector.getChildren().add(new CheckBox(p.getName()));
         }
-
-        if (expense == null){
-            setupNewExpense();
-        }
-        else {
+        if (expense == null) {
+            showNewExpense();
+        } else {
             setupExistingExpense(expense);
         }
     }
 
+    private void showNewExpense() {
+        I18N.update(submitButton);
+    }
+
     private void setupExistingExpense(Expense expense){
-        submitButton.setText("Save");
+        I18N.update(submitButton);
 
         paidBySelector.setValue(expense.getPaidBy().getName());
         howMuchField.setText(String.valueOf(expense.getAmount()));
-        whenField.setValue(LocalDate.from(expense.getDate()));
+        whenField.setValue(expense.getDate().atZone(ZoneId.systemDefault()).toLocalDate());
 
         //check partial debtors if any
         boolean partialPay = false;
+        Participant whoPaid = expense.getPaidBy();
         List<Participant> debtors = expense.getDebts().stream().map(Debt::getParticipant).toList();
         for (Participant p : event.getParticipants()){
-            if (!p.equals(expense.getPaidBy()) && !debtors.contains(p)){
+            if (!p.getId().equals(whoPaid.getId()) && !debtors.contains(p)){
+                System.out.println("This happens " + p.getEvent() + " " + whoPaid.getEvent());
                 checkSome();
                 partialPay = true;
             }
@@ -126,8 +162,11 @@ public class AddExpenseCtrl implements Initializable {
                     }
                 }
             }
+            someBox.setSelected(true);
+            checkSome();
         }
         else {
+            allBox.setSelected(true);
             checkAll();
         }
 
@@ -143,40 +182,7 @@ public class AddExpenseCtrl implements Initializable {
         }
     }
 
-    private void setupNewExpense() {
-        submitButton.setText("Add");
-
-        paidBySelector.setValue(event.getParticipants().get(0).getName());
-
-        howMuchField.setText("");
-        someBox.setSelected(false);
-        allBox.setSelected(false);
-
-        partialPaidSelector.setVisible(false);
-    }
-
-    public void submitPressed(){
-        //create an expense
-        Expense newExpense = createExpense();
-        if (newExpense != null) {
-            newExpense.setEvent(event);
-            for (Debt d : newExpense.getDebts()) {
-                d.setExpense(newExpense); //setup each debt's expense pointer
-            }
-
-            //update the eventual edited expense or add it as a new one
-            if (expense == null) {
-                event.addExpense(newExpense);
-                server.addExpense(event.getId(), newExpense);
-            } else {
-                expense = newExpense;
-                server.updateExpense(event.getId(), expense);
-            }
-            mainCtrl.showEventOverviewScene(event);
-        }
-    }
-
-    private Expense createExpense(){
+    public void createExpense(){
         //get participants
         List<Participant> participantList = new ArrayList<>(event.getParticipants());
 
@@ -189,7 +195,7 @@ public class AddExpenseCtrl implements Initializable {
                     please add a valid payee
                     """;
             notificationHelper.showError("Warning", warningMessage);
-            return null;
+            return;
         }
 
         LocalDate date = whenField.getValue();
@@ -200,7 +206,7 @@ public class AddExpenseCtrl implements Initializable {
                     please select a valid date
                     """;
             notificationHelper.showError("Warning", warningMessage);
-            return null;
+            return;
         }
 
         if (!someBox.isSelected() && !allBox.isSelected()){
@@ -211,7 +217,7 @@ public class AddExpenseCtrl implements Initializable {
                     or if you wish to split with the whole group
                     """;
             notificationHelper.showError("Warning", warningMessage);
-            return null;
+            return;
         }
 
         //create a list of debtors
@@ -231,7 +237,7 @@ public class AddExpenseCtrl implements Initializable {
                     please type in an amount
                     """;
             notificationHelper.showError("Warning", warningMessage);
-            return null;
+            return;
         }
 
         if (Integer.parseInt(howMuchField.getText()) < 0){
@@ -241,7 +247,7 @@ public class AddExpenseCtrl implements Initializable {
                     please type in a positive number
                     """;
             notificationHelper.showError("Warning", warningMessage);
-            return null;
+            return;
         }
 
         List<Debt> debts = createDebts(toEur(Double.parseDouble(howMuchField.getText()), currencySelector.getValue()), participantList);
@@ -263,11 +269,29 @@ public class AddExpenseCtrl implements Initializable {
         }
          */
 
-        //create the expense TODO : changed the name of event because event tags are not implemented yet
-        return new Expense(paidBy.getName() + " paid for " + "EXPENSE TEMPLATE", Double.parseDouble(howMuchField.getText()), Instant.from(date.atStartOfDay(
-                java.time.ZoneId.systemDefault()
-        )), paidBy, event, event.getId(), debts, new ArrayList<>());
+        //create the expense, TODO : changed the name of event because event tags are not implemented yet
+        Expense newExpense = new Expense(paidBy.getName() + " paid for " + "EXPENSE TEMPLATE",
+                Double.parseDouble(howMuchField.getText()),
+                Instant.from(date.atStartOfDay(
+                        java.time.ZoneId.systemDefault()
+                )),
+                paidBy,
+                event,
+                event.getId(),
+                debts,
+                new ArrayList<>());
+        for (Debt d : newExpense.getDebts()){
+            d.setExpense(newExpense); //setup each debt's expense pointer
+        }
+        if (expense == null) {
+            server.addExpense(event.getId(), newExpense);
+        } else {
+            server.updateExpense(event.getId(), expense.getId(), newExpense);
+        }
+        mainCtrl.showEventOverviewScene(event);
     }
+
+
 
     private List<Debt> createDebts(double amount, List<Participant> participants){
         List<Debt> debts = new ArrayList<>();

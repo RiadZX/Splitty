@@ -73,6 +73,14 @@ public class ServerUtils {
                 .post(Entity.entity(participant, APPLICATION_JSON), Participant.class);
     }
 
+    public Participant getParticipant(UUID eventId, UUID participantId) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/events/" + eventId + "/participants/" + participantId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<Participant>(){});
+    }
+
     public Participant updateParticipant(Event event, Participant participant) {
         participant.setEventPartOf(event);
         return ClientBuilder.newClient(new ClientConfig())
@@ -143,6 +151,7 @@ public class ServerUtils {
     }
 
     public Expense addExpense(UUID eventId, Expense exp) {
+        System.out.println("ServerUtils: " + exp.getPaidBy());
         return ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("/api/events/" + eventId + "/expenses")
                 .request(APPLICATION_JSON)
@@ -150,9 +159,13 @@ public class ServerUtils {
                 .post(Entity.entity(exp, APPLICATION_JSON), Expense.class);
     }
 
-    public Expense updateExpense(UUID evenId, Expense exp){
-        // TODO implement an updateExpense method for editing the expenses
-        return exp;
+    public void updateExpense(UUID eventId, UUID expenseId, Expense exp){
+        System.out.println(eventId);
+        ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("/api/events/" + eventId + "/expenses/" + expenseId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(exp, APPLICATION_JSON), Expense.class);
     }
 
     public List<Expense> getExpensesByEvent(UUID eventId) {

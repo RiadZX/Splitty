@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.ValueGenerationType;
 
 import java.lang.annotation.Retention;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -204,17 +203,6 @@ public class Event {
                 getParticipants(),
                 getExpenses(),
                 getTags());
-    }
-
-    public static String generateInviteCode(){
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        StringBuilder codeBuilder = new StringBuilder(8);
-        SecureRandom secureRandom = new SecureRandom();
-        for (int i = 0; i < 8; i++) {
-            int randomIndex = secureRandom.nextInt(characters.length());
-            codeBuilder.append(characters.charAt(randomIndex));
-        }
-        return codeBuilder.toString();
     }
 
     @Override
