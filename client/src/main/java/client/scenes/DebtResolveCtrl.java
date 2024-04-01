@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.services.NotificationService;
 import client.utils.ServerUtils;
+import client.utils.DebtResolveTableEntry;
 import com.google.inject.Inject;
 import commons.Debt;
 import commons.Event;
@@ -11,11 +12,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.glassfish.jersey.internal.guava.Table;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -34,15 +33,15 @@ public class DebtResolveCtrl implements Initializable {
     private HashMap<Participant, Amounts> amounts;
 
     @FXML
-    private TableView<TableEntry> debtTable;
+    private TableView<DebtResolveTableEntry> debtTable;
 
     @FXML
-    private TableColumn<TableEntry, String> personColumn;
+    private TableColumn<DebtResolveTableEntry, String> personColumn;
 
     @FXML
-    private TableColumn<TableEntry, Double> amountColumn;
+    private TableColumn<DebtResolveTableEntry, Double> amountColumn;
 
-    private ObservableList<TableEntry> tableEntries = FXCollections.observableArrayList();
+    private ObservableList<DebtResolveTableEntry> tableEntries = FXCollections.observableArrayList();
 
     @Inject
     public DebtResolveCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
@@ -88,6 +87,9 @@ public class DebtResolveCtrl implements Initializable {
             }
         }
 
+        System.out.println("calculated");
+        System.out.println(this.amounts);
+
         HashMap<Participant, Double> netAmounts = new HashMap<>();
 
         for (Entry<Participant, Amounts> a : this.amounts.entrySet()) {
@@ -106,10 +108,11 @@ public class DebtResolveCtrl implements Initializable {
                 max = a.getKey();
             }
         }
+
         tableEntries.clear();
         for (Entry<Participant, Double> a : netAmounts.entrySet()) {
             netAmounts.put(a.getKey(), a.getValue() - maxAmount);
-            tableEntries.add(new TableEntry(a.getKey().getName(), a.getValue() - maxAmount));
+            tableEntries.add(new DebtResolveTableEntry(a.getKey().getName(), a.getValue() - maxAmount));
         }
 
         System.out.println("calculated");
@@ -130,4 +133,3 @@ record Amounts(Double giving, Double getting) {
     }
 }
 
-record TableEntry(String person, Double amount) {}
