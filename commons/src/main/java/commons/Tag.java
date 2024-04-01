@@ -1,9 +1,11 @@
 package commons;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -12,21 +14,28 @@ import java.util.UUID;
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "tag_id")
     private UUID id;
 
     @Expose
     private String tag;
 
     @ManyToOne
+    @JoinColumn(name = "event_id")
     @JsonBackReference("event-tags")
     private Event event;
 
-    public Tag(String tag, Event event) {
-        this.tag = tag;
-        this.event = event;
-    }
+    @ManyToMany(mappedBy = "tags")
+    @JsonIgnore
+    private List<Expense> expenses;
 
     public Tag() {
+    }
+
+    public Tag(String tag, Event event) {
+        this();
+        this.tag = tag;
+        this.event = event;
     }
 
     public Tag(String tagName) {
@@ -37,12 +46,12 @@ public class Tag {
         return tag;
     }
 
-    public Event getEvent() {
-        return event;
-    }
-
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public Event getEvent() {
+        return event;
     }
 
     public void setEvent(Event event) {
