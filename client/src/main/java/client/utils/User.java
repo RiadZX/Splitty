@@ -34,6 +34,26 @@ public class User implements Serializable {
         eventParticipant=new LinkedHashMap<UUID, UUID>();
     }
 
+    public Currency getPrefferedCurrency() {
+        return prefferedCurrency;
+    }
+
+    public void setPrefferedCurrency(Currency prefferedCurrency) {
+        this.prefferedCurrency = prefferedCurrency;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
+
+    public void setBic(String bic) {
+        this.bic = bic;
+    }
+
     /**
      * Only use this for testing
      * @param name name of the user
