@@ -10,12 +10,14 @@ public class EmailSenderService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendEmail(String toEmail,
+
+    public void sendEmail(String senderEmail,
+                          String toEmail,
                           String inviteCode,
                           String creator) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("splitty35@gmail.com");
-        message.setCc("splitty35@gmail.com");
+        message.setFrom(senderEmail);
+        message.setCc(senderEmail);
         message.setTo(toEmail);
         String body = "  Good evening,\n \n  You have been invited to a new event on Splitty by "
                 + creator

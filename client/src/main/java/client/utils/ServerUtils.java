@@ -40,6 +40,8 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 public class ServerUtils {
 
     private final String serverAddress;
+
+    private final String senderEmail;
     private ExecutorService exec = Executors.newSingleThreadExecutor();
 
     public ServerUtils() {
@@ -68,6 +70,7 @@ public class ServerUtils {
         String address = toml.getString("address");
         long port = toml.getLong("port");
 
+        senderEmail = toml.getString("email");
         serverAddress = address + ":" + port + "/";
         System.out.println(serverAddress);
     }
@@ -252,6 +255,7 @@ public class ServerUtils {
 
     public void sendEmail(String toEmail, String inviteCode, String creator) {
         JsonObject body = new JsonObject();
+        body.addProperty("senderEmail", senderEmail);
         body.addProperty("toEmail", toEmail);
         body.addProperty("inviteCode", inviteCode);
         body.addProperty("creator", creator);
