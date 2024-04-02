@@ -70,7 +70,7 @@
          <font>
             <Font size="19.0" />
          </font></Text>
-      <Text layoutX="423.0" layoutY="392.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total amount paid : " wrappingWidth="171.13671875" />
-      <Text layoutX="423.0" layoutY="412.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Some more stats : " wrappingWidth="171.13671875" />
+      <Text fill="WHITE" layoutX="423.0" layoutY="392.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total amount paid : " wrappingWidth="171.13671875" />
+      <Text fill="WHITE" layoutX="423.0" layoutY="412.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Some more stats : " wrappingWidth="171.13671875" />
    </children>
 </AnchorPane>

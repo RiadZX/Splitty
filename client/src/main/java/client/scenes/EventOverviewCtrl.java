@@ -44,8 +44,6 @@ public class EventOverviewCtrl implements Initializable {
     @FXML
     public Pane backButton;
     @FXML
-    public PieChart pieStats;
-    @FXML
     public Button settleDebt;
     @FXML
     public Button sendInvite;
@@ -152,7 +150,6 @@ public class EventOverviewCtrl implements Initializable {
         System.out.println("set event: "+ event);
         this.expenses = server.getExpensesByEvent(this.event.getId());
         System.out.println("expenses: "+ expenses);
-        updatePieChart();
     }
 
     public void reassignParticipants(List<Participant> participantList){
@@ -203,21 +200,7 @@ public class EventOverviewCtrl implements Initializable {
         mainCtrl.showAddExpense();
     }
 
-    public void updatePieChart(){
-        pieStats.getData().clear();
-        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
-        Map<String, Double> stats = new HashMap<>();
-        //for each expense get the tags and add the amount to the corresponding tag
-        for (Expense e : expenses){
-            for (Tag t : e.getTags()){
-                stats.put(t.getTag(), stats.getOrDefault(t.getTag(), 0.0) + e.getAmount());
-            }
-        }
-        for (Map.Entry<String, Double> entry : stats.entrySet()){
-            pieChartData.add(new PieChart.Data(entry.getKey(), entry.getValue()));
-        }
-        pieStats.setData(pieChartData);
-    }
+
 
     public void refresh(){
         try {
@@ -235,7 +218,6 @@ public class EventOverviewCtrl implements Initializable {
             expensesList.getItems().clear();
             expensesList.getItems().addAll(expenses);
             System.out.println("refreshed");
-            updatePieChart();
             /* TO DO:
             * - refresh all data related to the event
             * - add functionality to the expense list and filtering*/
