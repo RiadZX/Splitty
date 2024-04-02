@@ -187,33 +187,23 @@ public class AddExpenseCtrl implements Initializable {
         Participant paidBy = findParticipant(paidBySelector.getValue());
         if (paidBy == null) {
             NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = """
-                    Your payee information is incorrect
-                    please add a valid payee
-                    """;
-            notificationHelper.showError("Warning", warningMessage);
+            String warningMessage = I18N.get("expense.add.error.emptyPayee");
+            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
 
         LocalDate date = whenField.getValue();
         if (date == null){
             NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = """
-                    You have not selected any date
-                    please select a valid date
-                    """;
-            notificationHelper.showError("Warning", warningMessage);
+            String warningMessage = I18N.get("expense.add.error.emptyDate");
+            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
 
         if (!someBox.isSelected() && !allBox.isSelected()){
             NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = """
-                    You have not selected any split options
-                    please select how you wish to split
-                    or if you wish to split with the whole group
-                    """;
-            notificationHelper.showError("Warning", warningMessage);
+            String warningMessage = I18N.get("expense.add.error.emptySplit");
+            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
 
@@ -229,21 +219,15 @@ public class AddExpenseCtrl implements Initializable {
 
         if (howMuchField.getText() == null || howMuchField.getText().isEmpty()){
             NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = """
-                    You have not selected an amount to pay
-                    please type in an amount
-                    """;
-            notificationHelper.showError("Warning", warningMessage);
+            String warningMessage = I18N.get("expense.add.error.emptyAmount");
+            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
 
-        if (Integer.parseInt(howMuchField.getText()) < 0){
+        if (Double.parseDouble(howMuchField.getText()) < 0.0){
             NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = """
-                    You cannot select a negative amount
-                    please type in a positive number
-                    """;
-            notificationHelper.showError("Warning", warningMessage);
+            String warningMessage = I18N.get("expense.add.error.negativeAmount");
+            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
 

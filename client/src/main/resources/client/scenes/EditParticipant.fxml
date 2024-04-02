@@ -21,12 +21,13 @@
             <Cursor fx:constant="CLOSED_HAND" />
          </cursor></Button>
         <ButtonBar prefHeight="40.0" prefWidth="200.0" />
-        <Button fx:id="editButton" layoutX="177.0" layoutY="233.0" mnemonicParsing="false" onAction="#editParticipantButton" prefHeight="26.0" prefWidth="55.0" text="general.edit">
-         <cursor>
-            <Cursor fx:constant="CLOSED_HAND" />
-         </cursor></Button>
-        <TextField fx:id="name" layoutX="102.0" layoutY="67.0" prefHeight="26.0" prefWidth="243.0" promptText="e.g. John Smith" />
-        <TextField fx:id="email" layoutX="102.0" layoutY="104.0" prefHeight="26.0" prefWidth="243.0" promptText="name@email.com" />
+        <Button layoutX="177.0" layoutY="233.0" mnemonicParsing="false" onAction="#editParticipantButton" prefHeight="26.0" prefWidth="55.0" text="general.edit" fx:id="editButton">
+            <cursor>
+                <Cursor fx:constant="CLOSED_HAND" />
+            </cursor>
+        </Button>
+        <TextField fx:id="name" layoutX="102.0" layoutY="67.0" prefHeight="26.0" prefWidth="243.0" promptText="e.g. Noah Martin" />
+        <TextField fx:id="email" layoutX="102.0" layoutY="104.0" prefHeight="26.0" prefWidth="243.0" promptText="Noah@Martin.net" />
         <TextField fx:id="iban" layoutX="102.0" layoutY="141.0" prefHeight="26.0" prefWidth="243.0" promptText="NL12ABCD12345612345678" />
         <TextField fx:id="bic" layoutX="102.0" layoutY="178.0" prefHeight="26.0" prefWidth="243.0" promptText="HBUKGB4B" />
       <Button fx:id="deleteButton" layoutX="261.0" layoutY="233.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#removeParticipant" prefHeight="29.0" prefWidth="85.0" text="general.delete">
