@@ -16,7 +16,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -25,9 +24,9 @@ public class StatisticsCtrl implements Initializable {
     private final MainCtrl mainCtrl;
     private final NotificationService notificationService;
     @FXML public Label expenseLabel;
-    @FXML public TableColumn<StatsRow, String> tName;
-    @FXML public TableColumn<StatsRow, Double> tIncoming;
-    @FXML public TableColumn<StatsRow, Double> tOutgoing;
+    @FXML public TableColumn<StatsRow, String> tFrom;
+    @FXML public TableColumn<StatsRow, Double> tTo;
+    @FXML public TableColumn<StatsRow, Double> tAmount;
     @FXML public TableView<StatsRow> tableView;
     private Event event;
 
@@ -35,9 +34,9 @@ public class StatisticsCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        tName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        tIncoming.setCellValueFactory(new PropertyValueFactory<>("incoming"));
-        tOutgoing.setCellValueFactory(new PropertyValueFactory<>("outgoing"));
+        tFrom.setCellValueFactory(new PropertyValueFactory<>("from"));
+        tTo.setCellValueFactory(new PropertyValueFactory<>("to"));
+        tAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
     }
 
     @Inject
@@ -68,48 +67,51 @@ public class StatisticsCtrl implements Initializable {
     public void setParticipantStats(){
         tableView.getItems().clear();
         ObservableList<StatsRow> data = FXCollections.observableArrayList();
-        for (Participant p : event.getParticipants()){
-            double incoming = calculateIncoming(p);
-            double outgoing = calculateOutgoing(p);
-            data.add(new StatsRow(p.getName(), incoming, outgoing));
+        for (Expense e : event.getExpenses()){
+            for (Debt d : e.getDebts()){
+                if (d.isPaid()){
+                    continue;
+                }
+                data.add(new StatsRow(d.getParticipant().getName(), e.getPaidBy().getName(), d.getAmount()));
+            }
         }
         tableView.setItems(data);
     }
-    public double calculateIncoming(Participant p){
-        double incoming = 0;
-        for (Expense e : event.getExpenses()){
-            if (!e.getPaidBy().getId().equals(p.getId())){
-                continue;
-            }
-            List<Debt> debts = e.getDebts();
-            for (Debt d : debts) {
-                if (d.isPaid()) {
-                    continue;
-                }
-                incoming += d.getAmount();
-            }
-        }
-        return incoming;
-    }
-
-    public double calculateOutgoing(Participant p){
-        double outgoing = 0;
-        for (Expense e : event.getExpenses()){
-            if (e.getPaidBy().getId().equals(p.getId())){
-                continue;
-            }
-            List<Debt> debts = e.getDebts();
-            for (Debt d : debts) {
-                if (d.isPaid()) {
-                    continue;
-                }
-                if (d.getParticipant().getId().equals(p.getId())){
-                    outgoing+=d.getAmount();
-                }
-            }
-        }
-        return outgoing;
-    }
+//    public double calculateIncoming(Participant p){
+//        double incoming = 0;
+//        for (Expense e : event.getExpenses()){
+//            if (!e.getPaidBy().getId().equals(p.getId())){
+//                continue;
+//            }
+//            List<Debt> debts = e.getDebts();
+//            for (Debt d : debts) {
+//                if (d.isPaid()) {
+//                    continue;
+//                }
+//                incoming += d.getAmount();
+//            }
+//        }
+//        return incoming;
+//    }
+//
+//    public double calculateOutgoing(Participant p){
+//        double outgoing = 0;
+//        for (Expense e : event.getExpenses()){
+//            if (e.getPaidBy().getId().equals(p.getId())){
+//                continue;
+//            }
+//            List<Debt> debts = e.getDebts();
+//            for (Debt d : debts) {
+//                if (d.isPaid()) {
+//                    continue;
+//                }
+//                if (d.getParticipant().getId().equals(p.getId())){
+//                    outgoing+=d.getAmount();
+//                }
+//            }
+//        }
+//        return outgoing;
+//    }
 
     public void setSumOfExpenses(){
         double sum = 0;
@@ -129,26 +131,23 @@ public class StatisticsCtrl implements Initializable {
         setParticipantStats();
     }
     public class StatsRow {
-        private final String name;
-        private final double incoming;
-        private final double outgoing;
+        private final String from;
+        private final String to;
+        private final double amount;
 
-        public StatsRow(String name, double incoming, double outgoing) {
-            this.name = name;
-            this.incoming = incoming;
-            this.outgoing = outgoing;
+        public StatsRow(String name, String to, double amount) {
+            this.from = name;
+            this.to = to;
+            this.amount=amount;
         }
-
-        public String getName() {
-            return name;
+        public String getFrom(){
+            return from;
         }
-
-        public double getIncoming() {
-            return incoming;
+        public String getTo(){
+            return to;
         }
-
-        public double getOutgoing() {
-            return outgoing;
+        public double getAmount(){
+            return amount;
         }
     }
 }

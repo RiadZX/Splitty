@@ -27,9 +27,9 @@
             </font></Label>
       <TableView layoutX="22.0" layoutY="50.0" prefHeight="312.0" prefWidth="382.0" fx:id="tableView">
         <columns>
-          <TableColumn fx:id="tName" prefWidth="192.0" text="Participant" />
-          <TableColumn fx:id="tIncoming" prefWidth="100.0" text="Incoming " />
-            <TableColumn fx:id="tOutgoing" prefWidth="89.0" text="Outgoing" />
+          <TableColumn fx:id="tFrom" prefWidth="192.0" text="From" />
+          <TableColumn fx:id="tTo" prefWidth="100.0" text="To" />
+            <TableColumn fx:id="tAmount" prefWidth="89.0" text="Amount" />
         </columns>
       </TableView>
       <Button onAction="#back"  layoutX="22.0" layoutY="12.0" mnemonicParsing="false" text="Back" />
