@@ -1,6 +1,6 @@
 |  Key  |  Value  |
 |  ---  |   ---   |
-| Date: | 19.03.2024 |
+| Date: | 26.03.2024 |
 | Time: | 15:45 |
 | Location: | Drebelweg PC Hall 1 |
 | Chair        | Tijmen de Jong |

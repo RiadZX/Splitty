@@ -15,14 +15,13 @@ public class Debt {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne (fetch = FetchType.EAGER)
     @JoinColumn(name = "expense_id")
     @JsonBackReference ("expense-debts")
     private Expense expense;
 
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne (fetch = FetchType.EAGER)
     @JoinColumn(name = "participant_id")
-    @JsonBackReference ("participant-debts")
     private Participant participant;
 
     @Expose
@@ -33,6 +32,7 @@ public class Debt {
 
     public Debt() {}
     public Debt(Expense expense, Participant participant, double amount) {
+        this();
         this.expense = expense;
         this.participant = participant;
         this.amount = amount;
@@ -91,10 +91,6 @@ public class Debt {
         return "Debt{"
                 + "debt_id="
                 + id
-                + ", expense="
-                + expense
-                + ", participant="
-                + participant
                 + ", amount="
                 + amount
                 + ", paid="

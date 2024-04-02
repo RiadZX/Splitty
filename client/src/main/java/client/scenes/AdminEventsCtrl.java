@@ -8,6 +8,7 @@ import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import commons.Event;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.fxml.FXML;
@@ -66,9 +67,15 @@ public class AdminEventsCtrl implements Initializable {
         dlg=setupSortDialog();
         populateList();
         //register for event updates
-        server.listenEvents(event -> {
+        server.listenEvents(wrapper -> {
             System.out.println("Event received");
-            addItem(event);
+            System.out.println(wrapper);
+            switch (wrapper.getAction()) {
+                case "POST" -> addItem(wrapper.getEvent());
+                case "PUT" -> updateItem(wrapper.getEvent());
+                case "DELETE" -> removeEvent(wrapper.getEvent());
+                default -> System.out.println("Unknown action received");
+            }
         });
     }
 
@@ -81,16 +88,28 @@ public class AdminEventsCtrl implements Initializable {
         populateList();
     }
 
+    private void updateItem(Event e){
+        events.replaceAll(x -> x.getId().equals(e.getId()) ? e : x);
+        populateList();
+    }
+
     /**
-     * Removes event from db and table.
+     * Removes event from db and table after the remove button has been clicked.
      * @param e Event to be removed
      */
-    private void removeEvent(Event e) {
+    private void removeEventAction(Event e) {
         if (!notificationService.showConfirmation("Delete event", "Are you sure you want to delete this event?")) {
             return;
         }
         server.removeEvent(e.getId());
-        this.events.remove(e);
+        removeEvent(e);
+    }
+    /**
+     * Removes event the table.
+     * @param e Event to be removed
+     */
+    private void removeEvent(Event e){
+        events.removeIf(tmp -> tmp.getId().equals(e.getId()));
         populateList();
     }
 
@@ -131,12 +150,14 @@ public class AdminEventsCtrl implements Initializable {
      * Uses the locally stored list of events to render the table.
      */
     public void populateList() {
-        myListView.getItems().clear();
-        if (sortCol!=null){
-            sortEvents();
-        }
-        List<BorderPane> contents = events.stream().map(e -> createRow(e)).toList();
-        myListView.getItems().addAll(contents);
+        Platform.runLater(() -> { //Platform run later fixed thread issues
+            myListView.getItems().clear();
+            if (sortCol!=null){
+                sortEvents();
+            }
+            List<BorderPane> contents = events.stream().map(e -> createRow(e)).toList();
+            myListView.getItems().addAll(contents);
+        });
     }
 
     /**
@@ -156,7 +177,7 @@ public class AdminEventsCtrl implements Initializable {
         Image removeImage = new Image("client/icons/bin.png");
         ImageView remove = new ImageView();
         remove.setImage(removeImage);
-        remove.setOnMouseClicked(x -> removeEvent(e));
+        remove.setOnMouseClicked(x -> removeEventAction(e));
         remove.cursorProperty().set(Cursor.HAND);
         remove.setFitHeight(12.0);
         remove.setPickOnBounds(true);
