@@ -3,10 +3,7 @@ package client.scenes;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
-import commons.Tag;
+import commons.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,6 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -71,11 +69,27 @@ public class StatisticsCtrl implements Initializable {
         tableView.getItems().clear();
         ObservableList<StatsRow> data = FXCollections.observableArrayList();
         for (Participant p : event.getParticipants()){
-            double incoming = 10;
+            double incoming = calculateIncoming(p);
             double outgoing = -20;
             data.add(new StatsRow(p.getName(), incoming, outgoing));
         }
         tableView.setItems(data);
+    }
+    public double calculateIncoming(Participant p){
+        double incoming = 0;
+        for (Expense e : event.getExpenses()){
+            if (!e.getPaidBy().getId().equals(p.getId())){
+                continue;
+            }
+            List<Debt> debts = e.getDebts();
+            for (Debt d : debts) {
+                if (d.isPaid()) {
+                    continue;
+                }
+                incoming += d.getAmount();
+            }
+        }
+        return incoming;
     }
 
     public void setSumOfExpenses(){
