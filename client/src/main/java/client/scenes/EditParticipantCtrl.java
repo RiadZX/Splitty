@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.services.I18N;
 import client.services.NotificationHelper;
 import commons.Event;
 import commons.Participant;
@@ -9,9 +10,15 @@ import client.utils.ServerUtils;
 
 import javax.inject.Inject;
 
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-public class EditParticipantCtrl {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class EditParticipantCtrl implements Initializable {
     private final MainCtrl mainCtrl;
 
     private final ServerUtils server;
@@ -28,6 +35,16 @@ public class EditParticipantCtrl {
     @FXML
     private TextField bic;
 
+    @FXML
+    public Button cancelButton2;
+    @FXML
+    public Button editButton;
+    @FXML
+    public Button deleteButton;
+    @FXML
+    public Label nameLabel2;
+    @FXML
+    public Label editParticipant;
     private Event event;
     private Participant p;
 
@@ -39,6 +56,14 @@ public class EditParticipantCtrl {
         this.server = server;
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        I18N.update(cancelButton2);
+        I18N.update(editButton);
+        I18N.update(deleteButton);
+        I18N.update(nameLabel2);
+        I18N.update(editParticipant);
+    }
     public void setEvent(Event event) {
         this.event = event;
     }
@@ -51,9 +76,9 @@ public class EditParticipantCtrl {
         if (name.getText().isEmpty() || email.getText().isEmpty() || iban.getText().isEmpty()
                 || bic.getText().isEmpty()) {
             NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = "You have not properly filled in the following fields: ( ";
+            String warningMessage = I18N.get("participant.add.error");
             if (name.getText().isEmpty()){
-                warningMessage += "name ";
+                warningMessage += I18N.get("participant.add.error.name") + " ";
             }
             if (email.getText().isEmpty()){
                 warningMessage += "email ";
@@ -65,27 +90,19 @@ public class EditParticipantCtrl {
                 warningMessage += "bic";
             }
             warningMessage += ")";
-            notificationHelper.showError("Warning!", warningMessage);
+            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
         if (!email.getText().matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            String warningMessage = """
-                    The email address you have filled in is not valid,
-                    please type in an email address with the correct format
-                    (i.e john.smith@emailprovide.com)
-                    """;
+            String warningMessage = I18N.get("participant.add.error.message.email");
             NotificationHelper notificationHelper = new NotificationHelper();
-            notificationHelper.showError("Warning!", warningMessage);
+            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
         if (iban.getText().length() != 34){
-            String warningMessage = """
-                    The IBAN address you have filled in is not valid,
-                    please type in an Iban with the correct format
-                    (i.e format with length 34)
-                    """;
+            String warningMessage = I18N.get("participant.add.error.message.iban");
             NotificationHelper notificationHelper = new NotificationHelper();
-            notificationHelper.showError("Warning!", warningMessage);
+            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
         p.setName(name.getText());
@@ -107,11 +124,9 @@ public class EditParticipantCtrl {
         try {
             server.removeParticipant(event, p);
         } catch (WebApplicationException e) {
-            String warningMessage = """
-                    Unable to delete the participant.
-                    """;
+            String warningMessage = I18N.get("participant.remove.error");
             NotificationHelper notificationHelper = new NotificationHelper();
-            notificationHelper.showError("Warning!", warningMessage);
+            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
 
         } finally {
             returnToOverview();

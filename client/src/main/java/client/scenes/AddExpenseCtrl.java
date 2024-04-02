@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.services.I18N;
 import client.services.NotificationHelper;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -10,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.time.Instant;
@@ -38,7 +40,22 @@ public class AddExpenseCtrl implements Initializable {
     @FXML
     private VBox tagSelector, createTagBox, partialPaidSelector;
     @FXML
-    private Label tagErrorLabel;
+    private Label tagErrorLabel, errorLabel;
+    @FXML
+    private Text paid;
+    @FXML
+    private Text when;
+    @FXML
+    private Text amount;
+    @FXML
+    private Text how;
+    @FXML
+    private Text what;
+    @FXML
+    private Button abortButton;
+    @FXML
+    private Button createButton;
+
 
     @Inject
     public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl, Event event) {
@@ -49,6 +66,15 @@ public class AddExpenseCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        I18N.update(paid);
+        I18N.update(when);
+        I18N.update(amount);
+        I18N.update(how);
+        I18N.update(what);
+        I18N.update(abortButton);
+        I18N.update(createButton);
+        I18N.update(allBox);
+        I18N.update(someBox);
     }
     @FXML
     public void backToOverview(){
@@ -102,11 +128,11 @@ public class AddExpenseCtrl implements Initializable {
     }
 
     private void showNewExpense() {
-        submitButton.setText("Add");
+        I18N.update(submitButton, "general.add");
     }
 
     private void setupExistingExpense(Expense expense){
-        submitButton.setText("Save");
+        I18N.update(submitButton, "general.save");
 
         paidBySelector.setValue(expense.getPaidBy().getName());
         howMuchField.setText(String.valueOf(expense.getAmount()));
@@ -248,7 +274,6 @@ public class AddExpenseCtrl implements Initializable {
                 )),
                 paidBy,
                 event,
-                event.getId(),
                 debts,
                 new ArrayList<>());
         for (Debt d : newExpense.getDebts()){

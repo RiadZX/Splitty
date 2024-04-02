@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.services.I18N;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -19,9 +20,13 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.control.TableColumn;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -35,13 +40,28 @@ public class EventOverviewCtrl implements Initializable {
     private final MainCtrl mainCtrl;
     private final NotificationService notificationService;
     @FXML
-    public Button sendInviteButton;
-    @FXML
     public TextFlow textFlow;
     @FXML
     public Pane backButton;
     @FXML
     public PieChart pieStats;
+    @FXML
+    public Button settleDebt;
+    @FXML
+    public Button sendInvite;
+    @FXML
+    public Button addExpense;
+    @FXML
+    public Label expenseLabel;
+    @FXML
+    public Label participantLabel;
+
+    @FXML
+    public TableColumn to;
+    @FXML
+    public TableColumn from;
+    @FXML
+    public TableColumn all;
 
     @FXML
     private TextField eventTitle;
@@ -77,7 +97,14 @@ public class EventOverviewCtrl implements Initializable {
             }
         }));
 
-        this.sendInviteButton.setOnAction(event -> sendInvite());
+        this.sendInvite.setOnAction(event -> sendInvite());
+        I18N.update(sendInvite);
+        I18N.update(addExpense);
+        I18N.update(settleDebt);
+        I18N.update(expenseLabel);
+        I18N.update(participantLabel);
+        I18N.update(eventTitle);
+        this.sendInvite.setOnAction(event -> sendInvite());
 
         payerSelector.setCellFactory(param -> getPayerListCell());
         payerSelector.setButtonCell(getPayerListCell());
@@ -106,7 +133,7 @@ public class EventOverviewCtrl implements Initializable {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setGraphic(null);
-                    setText("ALL");
+                    setText(I18N.get("general.all"));
                 } else {
                     setText(item.getName());
                 }
