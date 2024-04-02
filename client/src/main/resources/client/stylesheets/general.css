@@ -36,5 +36,6 @@
     -fx-border-width: 1px;
     -fx-border-radius: 30px;
 }
-
-
+.text{
+    -fx-text-fill: #eaeaea;
+}

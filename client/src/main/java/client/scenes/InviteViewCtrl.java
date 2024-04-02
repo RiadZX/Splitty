@@ -24,8 +24,6 @@ public class InviteViewCtrl implements Initializable {
     private final MainCtrl mainCtrl;
     private final NotificationService notificationService;
     @FXML
-    public Text eventTitle;
-    @FXML
     public Text eventCode;
     @FXML
     public Button copyToClipboardBtn;
@@ -93,7 +91,6 @@ public class InviteViewCtrl implements Initializable {
 
     public void setEvent(Event newEvent){
         this.event=newEvent;
-        eventTitle.setText(this.event.getTitle());
         eventCode.setText(this.event.getInviteCode());
 
     }
