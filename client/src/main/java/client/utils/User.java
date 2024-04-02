@@ -31,9 +31,9 @@ public class User implements Serializable {
     public User(String name){
         this();
         this.name=name;
-        this.email="test@test.com";
-        this.iban="GB12ABCD10203012345678";
-        this.bic="AAAABBCCDD";
+        this.email="";
+        this.iban="";
+        this.bic="";
     }
     public User(String name, String email, String iban, String bic){
         this();

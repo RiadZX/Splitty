@@ -17,3 +17,11 @@
     -fx-background-color: #161616;
     -fx-text-fill: #eaeaea;
 }
+.back-pane:pressed{
+
+}
+.back-pane:hover{
+    -fx-border-color: #dadada;
+    -fx-border-width: 1px;
+    -fx-border-radius: 30px;
+}
