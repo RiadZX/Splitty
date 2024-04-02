@@ -21,6 +21,8 @@ public class LanguageCtrl implements Initializable {
     private Button dutchButton;
     @FXML
     private Label languageLabel;
+    @FXML
+    private Label backButtonLabel;
 
     @Inject
     public LanguageCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
@@ -34,6 +36,7 @@ public class LanguageCtrl implements Initializable {
         I18N.update(englishButton);
         I18N.update(dutchButton);
         I18N.update(languageLabel);
+        I18N.update(backButtonLabel);
     }
 
     public void backAction(){

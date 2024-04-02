@@ -48,7 +48,8 @@ public class EventOverviewCtrl implements Initializable {
     public Label expenseLabel;
     @FXML
     public Label participantLabel;
-
+    @FXML
+    public Label backButtonLabel;
     @FXML
     public TableColumn to;
     @FXML
@@ -97,6 +98,7 @@ public class EventOverviewCtrl implements Initializable {
         I18N.update(expenseLabel);
         I18N.update(participantLabel);
         I18N.update(eventTitle);
+        I18N.update(backButtonLabel);
         this.sendInvite.setOnAction(event -> sendInvite());
 
         payerSelector.setCellFactory(param -> getPayerListCell());
@@ -216,7 +218,7 @@ public class EventOverviewCtrl implements Initializable {
             * - refresh all data related to the event
             * - add functionality to the expense list and filtering*/
         }catch (WebApplicationException e) {
-            notificationService.showError("Error refreshing event", "Could not refresh event data");
+            notificationService.showError(I18N.get("event.overview.showRefreshingEvent"), I18N.get("event.overview.showRefreshingEventMessage"));
         }
     }
 
@@ -228,7 +230,7 @@ public class EventOverviewCtrl implements Initializable {
     private BorderPane createRow(Expense e) {
         Insets insets = new Insets(0.0, 5.0, 0.0, 5.0);
         BorderPane bp = new BorderPane();
-        bp.setLeft(new Text("Expense paid by " + (e.getPaidBy() == null ? "NULL" : e.getPaidBy().getName())));
+        bp.setLeft(new Text(I18N.get("event.overview.showExpense") + " " + (e.getPaidBy() == null ? "NULL" : e.getPaidBy().getName())));
 
         Image editImage = new Image("client/icons/pencil.png");
         ImageView edit = new ImageView();
