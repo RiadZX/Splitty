@@ -37,7 +37,16 @@ public class Expense {
     @JsonBackReference("event-expenses")
     private Event event;
 
+    @OneToMany(mappedBy = "expense", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference ("expense-debts")
+    @Expose
+    private List<Debt> debts;
+
     @ManyToMany
+    @JoinTable(
+            name = "expense_tag",
+            joinColumns = @JoinColumn(name = "expense_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
     @Expose
     private List<Tag> tags;
 
@@ -53,29 +62,13 @@ public class Expense {
                 + '}';
     }
 
-    @OneToMany(mappedBy = "expense", orphanRemoval = true)
-    @JsonManagedReference ("expense-debts")
-    @Expose
-    private List<Debt> debts;
-
     public Expense() {
         // For JPA
     }
 
     public Expense(String title, double amount, Instant date,
                    Participant paidBy, Event event, List<Debt> debts, List<Tag> tags) {
-        this.title = title;
-        this.amount = amount;
-        this.date = date;
-        this.paidBy = paidBy;
-        this.event = event;
-        this.debts = debts;
-        this.tags = tags;
-    }
-
-
-    public Expense(String title, double amount, Instant date,
-                   Participant paidBy, Event event, UUID eventId, List<Debt> debts, List<Tag> tags) {
+        this();
         this.title = title;
         this.amount = amount;
         this.date = date;
@@ -109,10 +102,6 @@ public class Expense {
         this.amount = amount;
     }
 
-    public Instant getDate() {
-        return date;
-    }
-
     public Participant getPaidBy() {
         return paidBy;
     }
@@ -137,6 +126,25 @@ public class Expense {
         this.debts = debts;
     }
 
+    public Instant getDate() {
+        return date;
+    }
+
+    public void setDate(Instant date) {
+        this.date = date;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public void addTag(Tag tag) {
+        this.tags.add(tag);
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -161,15 +169,4 @@ public class Expense {
         return Objects.hash(id, title, amount, date, paidBy, event, debts, tags);
     }
 
-    public void setDate(Instant date) {
-        this.date = date;
-    }
-
-    public List<Tag> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
-    }
 }
