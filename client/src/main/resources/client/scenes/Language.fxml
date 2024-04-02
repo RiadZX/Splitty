@@ -9,9 +9,9 @@
 <AnchorPane prefHeight="415.0" prefWidth="357.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.LanguageCtrl">
 
     <children>
-        <Label fx:id="languageLabel" layoutX="108.0" layoutY="44.0" prefHeight="43.0" prefWidth="142.0" text="settings.language">
+        <Label fx:id="languageLabel" layoutX="108.0" layoutY="44.0" prefHeight="43.0" prefWidth="186.0" text="settings.language">
             <font>
-                <Font name="Comfortaa Medium" size="33.0" />
+                <Font name="Comfortaa Medium" size="30.0" />
             </font>
         </Label>
         <Button fx:id="englishButton" layoutX="118.0" layoutY="122.0" mnemonicParsing="false" onAction="#switchToEnglish" prefHeight="31.0" prefWidth="122.0" text="language.English">

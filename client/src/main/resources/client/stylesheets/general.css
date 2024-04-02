@@ -11,13 +11,22 @@
 .button{
     -fx-text-alignment: center;
     -fx-background-color: #161616;
-    -fx-text-fill: #eaeaea;
+    -fx-text-fill: #cacaca;
     -fx-border-color: #202020;
     -fx-border-width: 1px;
+}
+.button:hover{
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #232323;
+
 }
 .text-field{
     -fx-background-color: #161616;
     -fx-text-fill: #eaeaea;
+}
+.text-field:focused{
+    -fx-border-color: #bababa;
+    -fx-border-width: 1px;
 }
 .back-pane:pressed .label{
     -fx-text-fill: #ffffff;
@@ -28,6 +37,4 @@
     -fx-border-radius: 30px;
 }
 
-.start-form .text-field:focused{
-    fx-border-color: #ffffff;
-}
+
