@@ -50,11 +50,11 @@ public class EventOverviewCtrl implements Initializable {
     @FXML
     public Label backButtonLabel;
     @FXML
-    public Menu allFilter;
+    public Label allFilter;
     @FXML
-    public Menu fromFilter;
+    public Label fromFilter;
     @FXML
-    public Menu toFilter;
+    public Label toFilter;
 
     @FXML
     public ImageView flagView;
@@ -118,10 +118,13 @@ public class EventOverviewCtrl implements Initializable {
             @Override
             protected void updateItem(Expense item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || item == null || (payer != null && !item.getPaidBy().getId().equals(payer.getId()))) {
+                System.out.println(filter);
+                if (empty || item == null || (payer != null && !item.getPaidBy().getId().equals(payer.getId())) && filter.equals("from")) {
                     setGraphic(null);
                     setText(null);
                 } else {
+                    System.out.println(payer);
+                    System.out.println(item.getPaidBy());
                     setGraphic(createRow(item));
                 }
             }
@@ -134,7 +137,7 @@ public class EventOverviewCtrl implements Initializable {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setGraphic(null);
-                    setText(I18N.get("general.all"));
+                    setText(null);
                 } else {
                     setText(item.getName());
                 }
@@ -215,13 +218,12 @@ public class EventOverviewCtrl implements Initializable {
             System.out.println("refreshing");
             this.setEvent(refreshed);
             payerSelector.setItems(FXCollections.observableArrayList(event.getParticipants()));
-            payerSelector.getItems().add(0, null);
             payerSelector.getSelectionModel().selectFirst();
-            payerSelector.setOnAction(e -> {
-                payer = payerSelector.getValue();
-                expensesList.getItems().clear();
-                expensesList.getItems().addAll(expenses);
-            });
+//            payerSelector.setOnAction(e -> {
+//                payer = payerSelector.getValue();
+//                expensesList.getItems().clear();
+//                expensesList.getItems().addAll(expenses);
+//            });
             expensesList.getItems().clear();
             expensesList.getItems().addAll(expenses);
             System.out.println("refreshed");
@@ -271,14 +273,23 @@ public class EventOverviewCtrl implements Initializable {
 
     public void setToFilter(){
         filter="to";
+        payer = payerSelector.getValue();
+        expensesList.getItems().clear();
+        expensesList.getItems().addAll(expenses);
     }
 
     public void setFromFilter(){
         filter="from";
+        payer = payerSelector.getValue();
+        expensesList.getItems().clear();
+        expensesList.getItems().addAll(expenses);
     }
 
     public void setAllFilter(){
         filter="all";
+        payer = payerSelector.getValue();
+        expensesList.getItems().clear();
+        expensesList.getItems().addAll(expenses);
     }
 
 }

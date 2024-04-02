@@ -7,6 +7,7 @@
 }
 .label{
     -fx-text-fill: #eaeaea;
+    -fx-text-alignment: center;
 }
 .button{
     -fx-text-alignment: center;
