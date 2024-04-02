@@ -14,6 +14,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -58,6 +60,11 @@ public class EditParticipantCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        ImageView bin=new ImageView(new Image("client/icons/bin.png"));
+        bin.setPreserveRatio(true);
+        bin.setFitHeight(15);
+
+        deleteButton.setGraphic(bin);
         I18N.update(cancelButton2);
         I18N.update(editButton);
         I18N.update(deleteButton);
