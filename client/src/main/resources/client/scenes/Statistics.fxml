@@ -2,21 +2,36 @@
 
 <?import java.lang.String?>
 <?import javafx.scene.chart.PieChart?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="512.0" prefWidth="801.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StatisticsCtrl">
+<?import javafx.scene.control.Label?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="544.0" prefWidth="801.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StatisticsCtrl">
     <children>
-        <PieChart id="piechart" fx:id="pieStats" layoutX="415.0" layoutY="57.0" prefHeight="313.0" prefWidth="372.0" style="-fx-border-color: #444444; -fx-border-radius: 5; -fx-background-color: #ffffff; -fx-text-fill: #000000;" stylesheets="@../stylesheets/general.css">
+        <PieChart id="piechart" fx:id="pieStats" layoutX="421.0" layoutY="57.0" prefHeight="299.0" prefWidth="360.0" style="-fx-border-color: #444444; -fx-border-radius: 5; -fx-background-color: #ffffff; -fx-text-fill: #000000;" stylesheets="@../stylesheets/general.css">
             <styleClass>
                 <String fx:value="text-area" />
                 <String fx:value="chart-pie-label" />
             </styleClass></PieChart>
-        <Text fill="WHITE" layoutX="421.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Distribution of tags across expenses" textAlignment="CENTER" wrappingWidth="360.0">
+        <Text layoutX="421.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Distribution of tags across expenses" textAlignment="CENTER" wrappingWidth="360.0">
             <font>
                 <Font size="19.0" />
             </font></Text>
-        <Text fill="WHITE" layoutX="423.0" layoutY="392.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total amount paid : " wrappingWidth="171.13671875" />
-        <Text fill="WHITE" layoutX="423.0" layoutY="412.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Some more stats : " wrappingWidth="171.13671875" />
+        <Label fx:id="expenseLabel" layoutX="22.0" layoutY="400.0"  text="Total Event costs: ">
+            <font>
+                <Font size="15.0" />
+            </font></Label>
+      <TableView layoutX="22.0" layoutY="50.0" prefHeight="312.0" prefWidth="382.0">
+        <columns>
+          <TableColumn prefWidth="192.0" text="Participant" />
+          <TableColumn prefWidth="100.0" text="Incoming " />
+            <TableColumn prefWidth="89.0" text="Outgoing" />
+        </columns>
+      </TableView>
+      <Button onAction="#back"  layoutX="22.0" layoutY="12.0" mnemonicParsing="false" text="Back" />
     </children>
 </AnchorPane>

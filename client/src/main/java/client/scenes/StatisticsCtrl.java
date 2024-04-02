@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Label;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ public class StatisticsCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private final NotificationService notificationService;
+    @FXML public Label expenseLabel;
     private Event event;
 
     @FXML private PieChart pieStats;
@@ -56,4 +58,20 @@ public class StatisticsCtrl implements Initializable {
         pieStats.setData(pieChartData);
     }
 
+    public void setSumOfExpenses(){
+        double sum = 0;
+        for (Expense e : event.getExpenses()){
+            sum += e.getAmount();
+        }
+        expenseLabel.setText("Total expenses: " + sum);
+    }
+
+    public void back(){
+        mainCtrl.showEventOverviewScene(event);
+    }
+
+    public void refresh() {
+        updatePieChart();
+        setSumOfExpenses();
+    }
 }

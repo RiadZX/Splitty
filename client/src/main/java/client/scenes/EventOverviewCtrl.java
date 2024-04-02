@@ -7,31 +7,23 @@ import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
-import commons.Tag;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
-import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.control.TableColumn;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 
@@ -60,6 +52,8 @@ public class EventOverviewCtrl implements Initializable {
     public TableColumn from;
     @FXML
     public TableColumn all;
+    @FXML
+    public Button statsBtn;
 
     @FXML
     private TextField eventTitle;
@@ -96,6 +90,8 @@ public class EventOverviewCtrl implements Initializable {
         }));
 
         this.sendInvite.setOnAction(event -> sendInvite());
+
+        this.statsBtn.setOnAction(e -> mainCtrl.showStatistics(this.event));
         I18N.update(sendInvite);
         I18N.update(addExpense);
         I18N.update(settleDebt);
@@ -249,4 +245,5 @@ public class EventOverviewCtrl implements Initializable {
         bp.setRight(edit);
         return bp;
     }
+
 }

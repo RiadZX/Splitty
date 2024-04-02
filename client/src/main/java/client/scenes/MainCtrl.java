@@ -69,6 +69,8 @@ public class MainCtrl {
 
     private LanguageCtrl languageCtrl;
     private Scene languages;
+    private Scene statistics;
+    private StatisticsCtrl statisticsCtrl;
 
     private AdminEventsCtrl adminEventsCtrl;
     private Scene adminEvents;
@@ -85,7 +87,8 @@ public class MainCtrl {
                            Pair<SettingsCtrl, Parent> settings,
                            Pair<AdminEventsCtrl, Parent> adminEvents,
                            Pair<LanguageCtrl, Parent> languages,
-                           boolean adminMode
+                           boolean adminMode,
+                            Pair<StatisticsCtrl, Parent> statistics
     ) {
         this.admin=false;
         this.user = new User();
@@ -127,6 +130,9 @@ public class MainCtrl {
 
         this.adminEventsCtrl = adminEvents.getKey();
         this.adminEvents = new Scene(adminEvents.getValue());
+
+        this.statisticsCtrl = statistics.getKey();
+        this.statistics = new Scene(statistics.getValue());
 
         chooseFirstPage(adminMode);
 
@@ -272,6 +278,13 @@ public class MainCtrl {
     public  void setUser(User user){
         this.user=user;
         Config.writeUserConfigFile(user);
+    }
+
+    public void showStatistics(Event event){
+        primaryStage.setTitle("Statistics");
+        statisticsCtrl.setEvent(event);
+        statisticsCtrl.refresh();
+        primaryStage.setScene(statistics);
     }
 
     public void addUserEvent(UUID event, UUID participant){
