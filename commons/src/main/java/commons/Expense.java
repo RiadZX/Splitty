@@ -90,7 +90,7 @@ public class Expense {
     }
 
     public Expense(String title, double amount, String currency, Instant date,
-                   Participant paidBy, Event event, UUID eventId, List<Debt> debts, List<Tag> tags) {
+                   Participant paidBy, Event event, List<Debt> debts, List<Tag> tags) {
         this.title = title;
         this.amount = amount;
         this.currency = currency;
