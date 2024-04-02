@@ -43,7 +43,7 @@
          </image>
       </ImageView>
       <TextFlow fx:id="textFlow" layoutX="31.0" layoutY="136.0" prefHeight="23.0" prefWidth="360.0" />
-      <Pane fx:id="backButton" layoutX="7.0" layoutY="10.0" onMouseClicked="#backToStart" prefHeight="27.0" prefWidth="75.0" styleClass="back-pane">
+      <Pane fx:id="backButton" layoutX="7.0" layoutY="10.0" onMouseClicked="#backToStart" prefHeight="27.0" prefWidth="84.0" styleClass="back-pane">
          <children>
             <ImageView fitHeight="21.0" fitWidth="17.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                <image>
