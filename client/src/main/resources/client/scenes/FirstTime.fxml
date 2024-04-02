@@ -14,12 +14,12 @@
          </font>
       </Label>
       <Label fx:id="setup" layoutX="118.0" layoutY="81.0" text="first_time.setup" textFill="#000000ca" />
-      <TextField fx:id="nameField" layoutX="85.0" layoutY="144.0" promptText="Enter your name">
+      <TextField fx:id="nameField" focusTraversable="false" layoutX="85.0" layoutY="144.0" promptText="Enter your name">
          <font>
             <Font size="14.0" />
          </font>
       </TextField>
-      <Button fx:id="start" layoutX="166.0" layoutY="211.0" mnemonicParsing="false" onAction="#moveToStart" text="first_time.start">
+      <Button fx:id="start" layoutX="180.0" layoutY="187.0" mnemonicParsing="false" onAction="#moveToStart" prefHeight="33.0" prefWidth="78.0" text="first_time.start">
          <font>
             <Font size="15.0" />
          </font>

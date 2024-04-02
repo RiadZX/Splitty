@@ -19,7 +19,7 @@
             <Font size="19.0" />
          </font>
       </Label>
-       <Pane layoutX="7.0" layoutY="10.0" onMouseClicked="#back" prefHeight="27.0" prefWidth="75.0">
+       <Pane layoutX="7.0" layoutY="10.0" onMouseClicked="#back" prefHeight="27.0" prefWidth="75.0" styleClass="back-pane">
            <children>
                <ImageView fitHeight="21.0" fitWidth="17.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                    <image>
@@ -34,11 +34,11 @@
            </children>
        </Pane>
       <Label layoutX="-83.0" layoutY="-42.0" />
-      <Button fx:id="addButton" layoutX="498.0" layoutY="67.0" mnemonicParsing="false" onAction="#importEvent" prefHeight="27.0" prefWidth="61.0">
+      <Button fx:id="addButton" layoutX="475.0" layoutY="68.0" mnemonicParsing="false" onAction="#importEvent" prefHeight="29.0" prefWidth="83.0" text="Upload">
          <graphic>
             <ImageView fitHeight="12.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@/client/icons/plus-sign.png" />
+                  <Image url="@/client/icons/plus-sign-white.png" />
                </image>
             </ImageView>
          </graphic>
@@ -46,7 +46,7 @@
             <Cursor fx:constant="CLOSED_HAND" />
          </cursor>
       </Button>
-      <Button layoutX="419.0" layoutY="66.0" mnemonicParsing="false" onMousePressed="#sortAction" prefHeight="29.0" prefWidth="61.0" text="Sort" textAlignment="CENTER">
+      <Button layoutX="388.0" layoutY="67.0" mnemonicParsing="false" onMousePressed="#sortAction" prefHeight="29.0" prefWidth="61.0" text="Sort" textAlignment="CENTER">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>

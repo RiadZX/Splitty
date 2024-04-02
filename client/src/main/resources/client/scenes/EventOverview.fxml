@@ -9,7 +9,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="639.0" prefWidth="434.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EventOverviewCtrl">
    <children>
-      <TextField fx:id="eventTitle" layoutX="29.0" layoutY="72.0" prefHeight="31.0" prefWidth="211.0" promptText="event.overview.eventTitle">
+      <TextField fx:id="eventTitle" focusTraversable="false" layoutX="29.0" layoutY="72.0" prefHeight="31.0" prefWidth="211.0" promptText="event.overview.eventTitle">
          <font>
             <Font size="15.0" />
          </font>
