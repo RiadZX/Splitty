@@ -14,7 +14,7 @@
             <Font size="15.0" />
          </font>
       </TextField>
-      <Button fx:id="sendInvite" layoutX="268.0" layoutY="72.0" mnemonicParsing="false" text="event.overview.sendInvite">
+      <Button fx:id="sendInvite" layoutX="268.0" layoutY="72.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="106.0" text="event.overview.sendInvite">
          <cursor>
             <Cursor fx:constant="CLOSED_HAND" />
          </cursor></Button>
@@ -29,11 +29,11 @@
          </font>
       </Label>
       <ComboBox fx:id="payerSelector" layoutX="45.0" layoutY="247.0" prefWidth="150.0" />
-      <Button fx:id="addExpense" layoutX="27.0" layoutY="530.0" mnemonicParsing="false" onAction="#addExpense" text="event.overview.addExpense">
+      <Button fx:id="addExpense" layoutX="24.0" layoutY="533.0" mnemonicParsing="false" onAction="#addExpense" text="event.overview.addExpense">
          <cursor>
             <Cursor fx:constant="CLOSED_HAND" />
          </cursor></Button>
-      <Button fx:id="settleDebt" layoutX="302.0" layoutY="576.0" mnemonicParsing="false" text="event.overview.settleDebt">
+      <Button fx:id="settleDebt" layoutX="314.0" layoutY="583.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="106.0" text="event.overview.settleDebt">
          <cursor>
             <Cursor fx:constant="CLOSED_HAND" />
          </cursor></Button>
