@@ -115,6 +115,10 @@ public class I18N {
         entity.textProperty().bind(createStringBinding(entity.getText()));
     }
 
+    public static void update(Labeled entity, String textToBind) {
+        entity.textProperty().bind(createStringBinding(textToBind));
+    }
+
     public static void update(TableColumn entity) {
         entity.textProperty().bind(createStringBinding(entity.getText()));
     }

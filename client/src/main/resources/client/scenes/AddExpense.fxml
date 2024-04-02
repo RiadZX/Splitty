@@ -68,8 +68,8 @@
               </rowConstraints>
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.paid" GridPane.halignment="CENTER" fx:id="paid"/>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.when" GridPane.halignment="CENTER" GridPane.rowIndex="2" fx:id="when"/>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.amount" GridPane.halignment="CENTER" GridPane.rowIndex="1" fx:id="amount"/>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.amount" GridPane.halignment="CENTER" GridPane.rowIndex="2" fx:id="amount"/>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.when" GridPane.halignment="CENTER" GridPane.rowIndex="1" fx:id="when"/>
                   <DatePicker fx:id="whenField" prefHeight="25.0" prefWidth="184.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.how" GridPane.halignment="CENTER" GridPane.rowIndex="3" fx:id="how"/>
                   <CheckBox fx:id="allBox" mnemonicParsing="false" onAction="#checkAll" text="expense.add.checkbox.equal" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
