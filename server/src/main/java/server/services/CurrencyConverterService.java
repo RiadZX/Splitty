@@ -71,9 +71,9 @@ public class CurrencyConverterService {
 
 
         String resource = Objects.requireNonNull(getClass().getClassLoader().getResource("rates/")).getPath();
-        String dest = resource + "/" + stringifyCalendar(time) + "/" + from + "/";
+        String dest = resource + stringifyCalendar(time) + "/" + from + "/";
         if (System.getProperty("os.name").startsWith("Windows")) {
-            dest = dest.replaceAll("/", "\\");
+            dest = dest.substring(1);
         }
         File cache = new File(dest + to + ".txt");
 
@@ -97,9 +97,9 @@ public class CurrencyConverterService {
                 return ret;
             } else {
                 Scanner reader = new Scanner(cache);
-                if (reader.hasNextDouble()) {
+                if (reader.hasNext()) {
                     System.out.println("FROM CACHE");
-                    return reader.nextDouble();
+                    return Double.parseDouble(reader.next());
                 } else {
                     throw new RuntimeException("Failed to read from caching file.");
                 }
