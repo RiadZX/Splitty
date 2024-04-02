@@ -5,6 +5,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
+import commons.Participant;
 import commons.Tag;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,6 +13,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -23,13 +27,19 @@ public class StatisticsCtrl implements Initializable {
     private final MainCtrl mainCtrl;
     private final NotificationService notificationService;
     @FXML public Label expenseLabel;
+    @FXML public TableColumn<StatsRow, String> tName;
+    @FXML public TableColumn<StatsRow, Double> tIncoming;
+    @FXML public TableColumn<StatsRow, Double> tOutgoing;
+    @FXML public TableView<StatsRow> tableView;
     private Event event;
 
     @FXML private PieChart pieStats;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // TODO
+        tName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tIncoming.setCellValueFactory(new PropertyValueFactory<>("incoming"));
+        tOutgoing.setCellValueFactory(new PropertyValueFactory<>("outgoing"));
     }
 
     @Inject
@@ -57,6 +67,16 @@ public class StatisticsCtrl implements Initializable {
         }
         pieStats.setData(pieChartData);
     }
+    public void setParticipantStats(){
+        tableView.getItems().clear();
+        ObservableList<StatsRow> data = FXCollections.observableArrayList();
+        for (Participant p : event.getParticipants()){
+            double incoming = 10;
+            double outgoing = -20;
+            data.add(new StatsRow(p.getName(), incoming, outgoing));
+        }
+        tableView.setItems(data);
+    }
 
     public void setSumOfExpenses(){
         double sum = 0;
@@ -73,5 +93,30 @@ public class StatisticsCtrl implements Initializable {
     public void refresh() {
         updatePieChart();
         setSumOfExpenses();
+        setParticipantStats();
+    }
+    public class StatsRow {
+        private final String name;
+        private final double incoming;
+        private final double outgoing;
+
+        public StatsRow(String name, double incoming, double outgoing) {
+            this.name = name;
+            this.incoming = incoming;
+            this.outgoing = outgoing;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public double getIncoming() {
+            return incoming;
+        }
+
+        public double getOutgoing() {
+            return outgoing;
+        }
     }
 }
+
