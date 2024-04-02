@@ -70,7 +70,7 @@ public class StatisticsCtrl implements Initializable {
         ObservableList<StatsRow> data = FXCollections.observableArrayList();
         for (Participant p : event.getParticipants()){
             double incoming = calculateIncoming(p);
-            double outgoing = -20;
+            double outgoing = calculateOutgoing(p);
             data.add(new StatsRow(p.getName(), incoming, outgoing));
         }
         tableView.setItems(data);
@@ -90,6 +90,25 @@ public class StatisticsCtrl implements Initializable {
             }
         }
         return incoming;
+    }
+
+    public double calculateOutgoing(Participant p){
+        double outgoing = 0;
+        for (Expense e : event.getExpenses()){
+            if (e.getPaidBy().getId().equals(p.getId())){
+                continue;
+            }
+            List<Debt> debts = e.getDebts();
+            for (Debt d : debts) {
+                if (d.isPaid()) {
+                    continue;
+                }
+                if (d.getParticipant().getId().equals(p.getId())){
+                    outgoing+=d.getAmount();
+                }
+            }
+        }
+        return outgoing;
     }
 
     public void setSumOfExpenses(){
