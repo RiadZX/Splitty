@@ -87,10 +87,11 @@ public class CurrencyConverterService {
                 }
                 BigDecimal prevFrom = historicalCurrency(from, time);
                 BigDecimal prevTo = historicalCurrency(to, time);
-                double ret = amount * (prevTo.doubleValue() / prevFrom.doubleValue());
+                double rate = prevTo.doubleValue() / prevFrom.doubleValue();
+                double ret = amount * rate;
 
                 FileWriter writer = new FileWriter(cache, false);
-                writer.write(Double.toString(ret));
+                writer.write(Double.toString(rate));
                 writer.flush();
                 writer.close();
                 System.out.println("FROM API");
@@ -99,7 +100,7 @@ public class CurrencyConverterService {
                 Scanner reader = new Scanner(cache);
                 if (reader.hasNext()) {
                     System.out.println("FROM CACHE");
-                    return Double.parseDouble(reader.next());
+                    return amount * Double.parseDouble(reader.next());
                 } else {
                     throw new RuntimeException("Failed to read from caching file.");
                 }
