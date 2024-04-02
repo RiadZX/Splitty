@@ -75,7 +75,7 @@ public class EventService {
             event.setId(id);
             event.setLastActivityTime(Instant.now()); //update last activity time
             Event saved = eventRepository.save(event);
-            EventLongPollingWrapper wrapper = new EventLongPollingWrapper("PUT", event);
+            EventLongPollingWrapper wrapper = new EventLongPollingWrapper("PUT", saved);
             this.accept(wrapper);
             return saved;
         }
