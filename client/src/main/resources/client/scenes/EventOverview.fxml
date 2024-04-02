@@ -1,38 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="512.0" prefWidth="420.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EventOverviewCtrl">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="639.0" prefWidth="434.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EventOverviewCtrl">
    <children>
       <TextField fx:id="eventTitle" layoutX="29.0" layoutY="72.0" prefHeight="31.0" prefWidth="211.0" promptText="event.overview.eventTitle">
          <font>
             <Font size="15.0" />
          </font>
       </TextField>
-      <Button fx:id="sendInvite" layoutX="268.0" layoutY="72.0" mnemonicParsing="false" text="event.overview.sendInvite" />
-       <Label layoutX="29.0" layoutY="126.0" text="event.overview.participant" fx:id="participantLabel">
+      <Button fx:id="sendInvite" layoutX="268.0" layoutY="72.0" mnemonicParsing="false" text="event.overview.sendInvite">
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor></Button>
+       <Label fx:id="participantLabel" layoutX="29.0" layoutY="126.0" text="event.overview.participant">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Label layoutX="29.0" layoutY="200.0" text="event.overview.expense" fx:id="expenseLabel">
+      <Label fx:id="expenseLabel" layoutX="27.0" layoutY="197.0" text="event.overview.expense">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <ComboBox fx:id="payerSelector" layoutX="34.0" layoutY="243.0" prefWidth="150.0" />
-      <Button layoutX="228.0" layoutY="243.0" mnemonicParsing="false" onAction="#addExpense" text="event.overview.addExpense" fx:id="addExpense"/>
-      <Button layoutX="312.0" layoutY="456.0" mnemonicParsing="false" text="event.overview.settleDebt" fx:id="settleDebt"/>
+      <ComboBox fx:id="payerSelector" layoutX="45.0" layoutY="247.0" prefWidth="150.0" />
+      <Button fx:id="addExpense" layoutX="27.0" layoutY="530.0" mnemonicParsing="false" onAction="#addExpense" text="event.overview.addExpense">
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor></Button>
+      <Button fx:id="settleDebt" layoutX="302.0" layoutY="576.0" mnemonicParsing="false" text="event.overview.settleDebt">
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor></Button>
       <ImageView fitHeight="22.0" fitWidth="22.0" layoutX="134.0" layoutY="125.0" onMouseClicked="#addParticipant" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@/client/icons/user.png" />
          </image>
       </ImageView>
       <TextFlow fx:id="textFlow" layoutX="30.0" layoutY="162.0" prefHeight="23.0" prefWidth="360.0" />
-      <Pane fx:id="backButton" layoutX="7.0" layoutY="10.0" onMouseClicked="#backToStart" prefHeight="27.0" prefWidth="75.0">
+      <Pane fx:id="backButton" layoutX="7.0" layoutY="10.0" onMouseClicked="#backToStart" prefHeight="27.0" prefWidth="75.0" styleClass="back-pane">
          <children>
             <ImageView fitHeight="21.0" fitWidth="17.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -43,9 +54,26 @@
                <font>
                   <Font size="16.0" />
                </font>
+               <cursor>
+                  <Cursor fx:constant="CLOSED_HAND" />
+               </cursor>
             </Label>
          </children>
       </Pane>
-      <ListView fx:id="expensesList" layoutX="30.0" layoutY="287.0" prefHeight="184.0" prefWidth="264.0" />
+      <ListView fx:id="expensesList" layoutX="24.0" layoutY="341.0" prefHeight="184.0" prefWidth="264.0">
+         <padding>
+            <Insets top="5.0" />
+         </padding></ListView>
+      <MenuBar layoutX="91.0" layoutY="320.0" prefHeight="28.0" prefWidth="137.0" style="-fx-background-color: #161616;">
+        <menus>
+          <Menu fx:id="allFilter" mnemonicParsing="false" text="All" />
+          <Menu fx:id="fromFilter" mnemonicParsing="false" text="From" />
+          <Menu fx:id="toFilter" mnemonicParsing="false" text="To" />
+        </menus>
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor>
+      </MenuBar>
+      <Label layoutX="30.0" layoutY="222.0" text="Filter by Participant:" />
    </children>
 </AnchorPane>

@@ -8,20 +8,26 @@
 .label{
     -fx-text-fill: #eaeaea;
 }
-
 .button{
     -fx-text-alignment: center;
+    -fx-background-color: #161616;
+    -fx-text-fill: #eaeaea;
+    -fx-border-color: #202020;
+    -fx-border-width: 1px;
 }
-
 .text-field{
     -fx-background-color: #161616;
     -fx-text-fill: #eaeaea;
 }
-.back-pane:pressed{
-
+.back-pane:pressed .label{
+    -fx-text-fill: #ffffff;
 }
 .back-pane:hover{
     -fx-border-color: #dadada;
     -fx-border-width: 1px;
     -fx-border-radius: 30px;
+}
+
+.start-form .text-field:focused{
+    fx-border-color: #ffffff;
 }

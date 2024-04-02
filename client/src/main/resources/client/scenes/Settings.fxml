@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
@@ -12,10 +13,22 @@
             <Font name="Comfortaa Medium" size="33.0" />
          </font>
       </Label>
-      <Button fx:id="edit" layoutX="118.0" layoutY="122.0" mnemonicParsing="false" onAction="#editProfileAction" prefHeight="31.0" prefWidth="122.0" text="settings.edit_profile" />
-      <Button fx:id="language" layoutX="118.0" layoutY="175.0" mnemonicParsing="false" onAction="#language" prefHeight="27.0" prefWidth="122.0" text="settings.language" />
-      <Button fx:id="adminMode" layoutX="118.0" layoutY="283.0" mnemonicParsing="false" onAction="#adminAction" prefHeight="27.0" prefWidth="122.0" text="settings.admin_mode" />
-      <Button fx:id="nukeEmData" layoutX="118.0" layoutY="231.0" mnemonicParsing="false" onAction="#deleteDataAction" prefHeight="27.0" prefWidth="122.0" text="settings.delete_all_dat" />
+      <Button fx:id="edit" layoutX="118.0" layoutY="122.0" mnemonicParsing="false" onAction="#editProfileAction" prefHeight="31.0" prefWidth="122.0" text="settings.edit_profile">
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor></Button>
+      <Button fx:id="language" layoutX="118.0" layoutY="175.0" mnemonicParsing="false" onAction="#language" prefHeight="27.0" prefWidth="122.0" text="settings.language">
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor></Button>
+      <Button fx:id="adminMode" layoutX="118.0" layoutY="283.0" mnemonicParsing="false" onAction="#adminAction" prefHeight="27.0" prefWidth="122.0" text="settings.admin_mode">
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor></Button>
+      <Button fx:id="nukeEmData" layoutX="118.0" layoutY="231.0" mnemonicParsing="false" onAction="#deleteDataAction" prefHeight="27.0" prefWidth="122.0" text="settings.delete_all_dat">
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor></Button>
       <Pane layoutX="7.0" layoutY="10.0" onMouseClicked="#backAction" prefHeight="27.0" prefWidth="75.0" styleClass="back-pane">
          <children>
             <ImageView fitHeight="21.0" fitWidth="17.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
@@ -29,6 +42,9 @@
                </font>
             </Label>
          </children>
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor>
       </Pane>
    </children>
 </AnchorPane>
