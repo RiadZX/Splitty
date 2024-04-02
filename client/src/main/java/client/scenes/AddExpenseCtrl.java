@@ -52,8 +52,6 @@ public class AddExpenseCtrl implements Initializable {
     @FXML
     private Text what;
     @FXML
-    private Button addButton;
-    @FXML
     private Button abortButton;
     @FXML
     private Button createButton;
@@ -73,7 +71,6 @@ public class AddExpenseCtrl implements Initializable {
         I18N.update(amount);
         I18N.update(how);
         I18N.update(what);
-        I18N.update(submitButton);
         I18N.update(abortButton);
         I18N.update(createButton);
         I18N.update(allBox);
@@ -131,11 +128,11 @@ public class AddExpenseCtrl implements Initializable {
     }
 
     private void showNewExpense() {
-        I18N.update(submitButton);
+        I18N.update(submitButton, "general.add");
     }
 
     private void setupExistingExpense(Expense expense){
-        I18N.update(submitButton);
+        I18N.update(submitButton, "general.save");
 
         paidBySelector.setValue(expense.getPaidBy().getName());
         howMuchField.setText(String.valueOf(expense.getAmount()));
