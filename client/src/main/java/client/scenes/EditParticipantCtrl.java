@@ -60,7 +60,7 @@ public class EditParticipantCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ImageView bin=new ImageView(new Image("client/icons/bin.png"));
+        ImageView bin=new ImageView(new Image("client/icons/bin-white.png"));
         bin.setPreserveRatio(true);
         bin.setFitHeight(15);
 
