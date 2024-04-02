@@ -104,6 +104,7 @@ public class UserSettingsCtrl implements Initializable {
             return;
         }
         User newUser=new User(name, email, iban, bic);
+        newUser.setLanguage(this.mainCtrl.getUser().getLanguage());
         LinkedHashMap<UUID, UUID> tmp =(LinkedHashMap<UUID, UUID>) this.mainCtrl.getUser().getEventParticipant();
         newUser.setEventParticipant(tmp);
         this.mainCtrl.setUser(newUser);

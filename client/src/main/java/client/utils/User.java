@@ -19,6 +19,8 @@ public class User implements Serializable {
     private  String bic;
     private LinkedHashMap<UUID, UUID> eventParticipant;
 
+    private String language;
+
 
     public User(){
         eventParticipant=new LinkedHashMap<UUID, UUID>();
@@ -34,6 +36,7 @@ public class User implements Serializable {
         this.email="";
         this.iban="";
         this.bic="";
+        this.language="english";
     }
     public User(String name, String email, String iban, String bic){
         this();
@@ -41,6 +44,11 @@ public class User implements Serializable {
         this.email=email;
         this.iban=iban;
         this.bic=bic;
+    }
+
+    public User(String name, String email, String iban, String bic, String language){
+        this(name, email, iban, bic);
+        this.language=language;
     }
 
     public Participant createParticipant(){
@@ -85,6 +93,14 @@ public class User implements Serializable {
 
     public void addEventParticipant(UUID event, UUID participant){
         this.eventParticipant.put(event, participant);
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     @Override

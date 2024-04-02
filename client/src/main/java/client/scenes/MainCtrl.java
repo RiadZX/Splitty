@@ -214,11 +214,17 @@ public class MainCtrl {
 
     public void switchToEnglish() {
         I18N.setLocale(Locale.ENGLISH);
+        eventOverviewCtrl.setFlag("english");
+        this.user.setLanguage("english");
+        Config.writeUserConfigFile(this.user);
     }
 
     public void switchToDutch() {
         Locale dutch = I18N.getSupportedLocales().get(1);
         I18N.setLocale(dutch);
+        eventOverviewCtrl.setFlag("dutch");
+        this.user.setLanguage("dutch");
+        Config.writeUserConfigFile(this.user);
     }
 
     public void uponLanguageSwitch(){

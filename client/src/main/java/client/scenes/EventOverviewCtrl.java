@@ -51,11 +51,14 @@ public class EventOverviewCtrl implements Initializable {
     @FXML
     public Label backButtonLabel;
     @FXML
-    public TableColumn to;
+    public Menu allFilter;
     @FXML
-    public TableColumn from;
+    public Menu fromFilter;
     @FXML
-    public TableColumn all;
+    public Menu toFilter;
+
+    @FXML
+    public ImageView flagView;
 
     @FXML
     private TextField eventTitle;
@@ -244,5 +247,17 @@ public class EventOverviewCtrl implements Initializable {
 
         bp.setRight(edit);
         return bp;
+    }
+
+    public void setFlag(String language){
+        this.flagView.setImage(new Image("client/icons/flag-"+language+".png"));
+    }
+
+    public void changeLanguage(){
+        switch (this.mainCtrl.getUser().getLanguage()){
+            case "english" -> this.mainCtrl.switchToDutch();
+            case "dutch" -> this.mainCtrl.switchToEnglish();
+            default -> System.out.println("Unsupported language "+this.mainCtrl.getUser().getLanguage());
+        }
     }
 }
