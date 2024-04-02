@@ -64,11 +64,11 @@
          <padding>
             <Insets top="5.0" />
          </padding></ListView>
-      <MenuBar layoutX="91.0" layoutY="252.0" prefHeight="28.0" prefWidth="137.0" style="-fx-background-color: #161616;">
+      <MenuBar layoutX="84.0" layoutY="252.0" prefHeight="28.0" prefWidth="158.0" style="-fx-background-color: #161616;">
         <menus>
-          <Menu fx:id="allFilter" mnemonicParsing="false" text="All" />
-          <Menu fx:id="fromFilter" mnemonicParsing="false" text="From" />
-          <Menu fx:id="toFilter" mnemonicParsing="false" text="To" />
+          <Menu fx:id="allFilter" mnemonicParsing="false" onAction="#setAllFilter" text="general.all" />
+          <Menu fx:id="fromFilter" mnemonicParsing="false" onAction="#setFromFilter" text="From" />
+          <Menu fx:id="toFilter" mnemonicParsing="false" onAction="#setToFilter" text="To" />
         </menus>
          <cursor>
             <Cursor fx:constant="CLOSED_HAND" />

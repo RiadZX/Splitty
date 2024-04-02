@@ -74,12 +74,15 @@ public class EventOverviewCtrl implements Initializable {
 
     private Participant payer;
 
+    private String filter;
+
     @Inject
     public EventOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.notificationService = notificationService;
         this.event=new Event();
+        this.filter="all";
     }
 
     @Override
@@ -174,6 +177,7 @@ public class EventOverviewCtrl implements Initializable {
         this.event.setName(this.eventTitle.getText());
         try {
             this.server.updateEvent(this.event);
+            notificationService.showConfirmation("Title Change", "The title has been successfully changed!");
         }
         catch (WebApplicationException e){
             notificationService.showError("Error updating event", "Could not update event title");
@@ -200,6 +204,11 @@ public class EventOverviewCtrl implements Initializable {
         mainCtrl.showAddExpense();
     }
 
+    public void editExpense(Expense e) {
+        mainCtrl.showEditExpense(e);
+    }
+
+
     public void refresh(){
         try {
             Event refreshed = server.getEvent(event.getId());
@@ -223,11 +232,6 @@ public class EventOverviewCtrl implements Initializable {
             notificationService.showError(I18N.get("event.overview.showRefreshingEvent"), I18N.get("event.overview.showRefreshingEventMessage"));
         }
     }
-
-    public void editExpense(Expense e) {
-        mainCtrl.showEditExpense(e);
-    }
-
 
     private BorderPane createRow(Expense e) {
         Insets insets = new Insets(0.0, 5.0, 0.0, 5.0);
@@ -259,4 +263,22 @@ public class EventOverviewCtrl implements Initializable {
             default -> System.out.println("Unsupported language "+this.mainCtrl.getUser().getLanguage());
         }
     }
+    public void refreshLanguage(){
+        this.allFilter.setText(I18N.get("general.all"));
+        this.fromFilter.setText(I18N.get("general.from"));
+        this.toFilter.setText(I18N.get("general.to"));
+    }
+
+    public void setToFilter(){
+        filter="to";
+    }
+
+    public void setFromFilter(){
+        filter="from";
+    }
+
+    public void setAllFilter(){
+        filter="all";
+    }
+
 }
