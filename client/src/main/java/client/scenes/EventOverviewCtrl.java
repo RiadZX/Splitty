@@ -29,6 +29,7 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 
 public class EventOverviewCtrl implements Initializable {
@@ -120,8 +121,15 @@ public class EventOverviewCtrl implements Initializable {
             @Override
             protected void updateItem(Expense item, boolean empty) {
                 super.updateItem(item, empty);
+                if (empty || item == null){
+                    setGraphic(null);
+                    setText(null);
+                    return;
+                }
+                List<UUID> uuids=item.getDebts().stream().map(debt -> debt.getParticipant().getId()).toList();
+                System.out.println(uuids);
                 System.out.println(filter);
-                if (empty || item == null || (payer != null && !item.getPaidBy().getId().equals(payer.getId()) && filter==2)){
+                if (payer != null && payer.getId() != null && (!item.getPaidBy().getId().equals(payer.getId()) && filter==2)||(filter==1 && !uuids.contains(payer.getId()))){
                     setGraphic(null);
                     setText(null);
                 }
@@ -303,5 +311,41 @@ public class EventOverviewCtrl implements Initializable {
         expensesList.getItems().clear();
         expensesList.getItems().addAll(expenses);
     }
+
+    //    public double calculateIncoming(Participant p){
+//        double incoming = 0;
+//        for (Expense e : event.getExpenses()){
+//            if (!e.getPaidBy().getId().equals(p.getId())){
+//                continue;
+//            }
+//            List<Debt> debts = e.getDebts();
+//            for (Debt d : debts) {
+//                if (d.isPaid()) {
+//                    continue;
+//                }
+//                incoming += d.getAmount();
+//            }
+//        }
+//        return incoming;
+//    }
+//
+//    public double calculateOutgoing(Participant p){
+//        double outgoing = 0;
+//        for (Expense e : event.getExpenses()){
+//            if (e.getPaidBy().getId().equals(p.getId())){
+//                continue;
+//            }
+//            List<Debt> debts = e.getDebts();
+//            for (Debt d : debts) {
+//                if (d.isPaid()) {
+//                    continue;
+//                }
+//                if (d.getParticipant().getId().equals(p.getId())){
+//                    outgoing+=d.getAmount();
+//                }
+//            }
+//        }
+//        return outgoing;
+//    }
 
 }
