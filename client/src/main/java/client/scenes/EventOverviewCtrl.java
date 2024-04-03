@@ -76,7 +76,7 @@ public class EventOverviewCtrl implements Initializable {
 
     private Participant payer;
 
-    private String filter;
+    private int filter;
 
     @Inject
     public EventOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
@@ -84,7 +84,7 @@ public class EventOverviewCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
         this.notificationService = notificationService;
         this.event=new Event();
-        this.filter="all";
+        this.filter=0;
     }
 
     @Override
@@ -121,10 +121,11 @@ public class EventOverviewCtrl implements Initializable {
             protected void updateItem(Expense item, boolean empty) {
                 super.updateItem(item, empty);
                 System.out.println(filter);
-                if (empty || item == null || (payer != null && !item.getPaidBy().getId().equals(payer.getId())) && filter.equals("from")) {
+                if (empty || item == null || (payer != null && !item.getPaidBy().getId().equals(payer.getId()) && filter==2)){
                     setGraphic(null);
                     setText(null);
-                } else {
+                }
+                else {
                     System.out.println(payer);
                     System.out.println(item.getPaidBy());
                     setGraphic(createRow(item));
@@ -283,21 +284,21 @@ public class EventOverviewCtrl implements Initializable {
     }
 
     public void setToFilter(){
-        filter="to";
+        filter=1;
         payer = payerSelector.getValue();
         expensesList.getItems().clear();
         expensesList.getItems().addAll(expenses);
     }
 
     public void setFromFilter(){
-        filter="from";
+        filter=2;
         payer = payerSelector.getValue();
         expensesList.getItems().clear();
         expensesList.getItems().addAll(expenses);
     }
 
     public void setAllFilter(){
-        filter="all";
+        filter=0;
         payer = payerSelector.getValue();
         expensesList.getItems().clear();
         expensesList.getItems().addAll(expenses);
