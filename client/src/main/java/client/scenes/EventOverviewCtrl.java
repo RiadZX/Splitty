@@ -66,7 +66,7 @@ public class EventOverviewCtrl implements Initializable {
     private TextField eventTitle;
 
     @FXML
-    private ListView<Expense> expensesList;
+    private ListView<BorderPane> expensesList;
 
     @FXML
     private ComboBox<Participant> payerSelector;
@@ -112,31 +112,28 @@ public class EventOverviewCtrl implements Initializable {
         payerSelector.setCellFactory(param -> getPayerListCell());
         payerSelector.setButtonCell(getPayerListCell());
 
-        expensesList.setCellFactory(param -> getExpenseListCell());
-
     }
 
-    public ListCell<Expense> getExpenseListCell() {
-        return new ListCell<>() {
-            @Override
-            protected void updateItem(Expense item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null){
-                    setGraphic(null);
-                    setText(null);
-                    return;
-                }
-                List<UUID> uuids=item.getDebts().stream().map(debt -> debt.getParticipant().getId()).toList();
-                if (payer != null  && (!item.getPaidBy().getId().equals(payer.getId()) && filter==2)||(filter==1 && !uuids.contains(payer.getId()))){
-                    setGraphic(null);
-                    setText(null);
-                }
-                else {
-                    setGraphic(createRow(item));
-                }
-            }
-        };
-    }
+//    public ListCell<Expense> getExpenseListCell() {
+//        return new ListCell<>() {
+//            @Override
+//            protected void updateItem(Expense item, boolean empty) {
+//                super.updateItem(item, empty);
+//                if (empty || item == null){
+//                    setGraphic(null);
+//                    setText(null);
+//                    return;
+//                }
+//                if (payer != null  && (! && filter==2)||(filter==1 && !uuids.contains(payer.getId()))){
+//                    setGraphic(null);
+//                    setText(null);
+//                }
+//                else {
+//                    setGraphic(createRow(item));
+//                }
+//            }
+//        };
+//    }
     public ListCell<Participant> getPayerListCell() {
         return new ListCell<>() {
             @Override
@@ -232,8 +229,7 @@ public class EventOverviewCtrl implements Initializable {
 //                expensesList.getItems().clear();
 //                expensesList.getItems().addAll(expenses);
 //            });
-            expensesList.getItems().clear();
-            expensesList.getItems().addAll(expenses);
+            this.setAllFilter();
             System.out.println("refreshed");
             /* TO DO:
             * - refresh all data related to the event
@@ -292,21 +288,24 @@ public class EventOverviewCtrl implements Initializable {
         filter=1;
         payer = payerSelector.getValue();
         expensesList.getItems().clear();
-        expensesList.getItems().addAll(expenses);
+        expensesList.getItems().addAll(expenses.stream().filter((expense) -> {
+            List<UUID> uuids=expense.getDebts().stream().map(debt -> debt.getParticipant().getId()).toList();
+            return uuids.contains(payer.getId());
+                }).map(this::createRow).toList());
     }
 
     public void setFromFilter(){
         filter=2;
         payer = payerSelector.getValue();
         expensesList.getItems().clear();
-        expensesList.getItems().addAll(expenses);
+        expensesList.getItems().addAll(expenses.stream().filter((expense -> expense.getPaidBy().getId().equals(payer.getId()))).map(this::createRow).toList());
     }
 
     public void setAllFilter(){
         filter=0;
         payer = payerSelector.getValue();
         expensesList.getItems().clear();
-        expensesList.getItems().addAll(expenses);
+        expensesList.getItems().addAll(expenses.stream().map(this::createRow).toList());
     }
 
     //    public double calculateIncoming(Participant p){
