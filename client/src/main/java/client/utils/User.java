@@ -12,8 +12,8 @@ import java.util.UUID;
 public class User implements Serializable {
 
     public enum Currency {
-        USD,
         EUR,
+        USD,
         CHF,
         RON,
     }
