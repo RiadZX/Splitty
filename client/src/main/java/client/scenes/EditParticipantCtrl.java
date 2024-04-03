@@ -1,7 +1,6 @@
 package client.scenes;
 
 import client.services.I18N;
-import client.services.NotificationHelper;
 import client.services.NotificationService;
 import commons.Event;
 import commons.Participant;
@@ -26,7 +25,7 @@ public class EditParticipantCtrl implements Initializable {
 
     private final ServerUtils server;
 
-    private final NotificationService notificationService;
+    private final NotificationService notificationHelper;
 
 
     @FXML
@@ -60,7 +59,7 @@ public class EditParticipantCtrl implements Initializable {
         this.event = event;
         this.p = p;
         this.server = server;
-        this.notificationService = notificationService;
+        this.notificationHelper = notificationService;
     }
 
     @Override
@@ -87,7 +86,6 @@ public class EditParticipantCtrl implements Initializable {
     public void editParticipantButton() {
         if (name.getText().isEmpty() || email.getText().isEmpty() || iban.getText().isEmpty()
                 || bic.getText().isEmpty()) {
-            NotificationHelper notificationHelper = new NotificationHelper();
             String warningMessage = I18N.get("participant.add.error");
             if (name.getText().isEmpty()){
                 warningMessage += I18N.get("participant.add.error.name") + " ";
@@ -107,13 +105,11 @@ public class EditParticipantCtrl implements Initializable {
         }
         if (!email.getText().matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
             String warningMessage = I18N.get("participant.add.error.message.email");
-            NotificationHelper notificationHelper = new NotificationHelper();
             notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
         if (iban.getText().length() != 34){
             String warningMessage = I18N.get("participant.add.error.message.iban");
-            NotificationHelper notificationHelper = new NotificationHelper();
             notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
@@ -140,7 +136,6 @@ public class EditParticipantCtrl implements Initializable {
             server.removeParticipant(event, p);
         } catch (WebApplicationException e) {
             String warningMessage = I18N.get("participant.remove.error");
-            NotificationHelper notificationHelper = new NotificationHelper();
             notificationHelper.showError(I18N.get("general.warning"), warningMessage);
 
         } finally {
