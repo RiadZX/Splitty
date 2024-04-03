@@ -9,22 +9,22 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="311.0" prefWidth="464.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditParticipantCtrl">
     <children>
-        <Label layoutX="50.0" layoutY="34.0" text="Edit Participant">
+        <Label layoutX="50.0" layoutY="34.0" text="participant.remove.title" fx:id="editParticipant">
             <font>
                 <Font name="System Bold" size="16.0" />
             </font>
         </Label>
-        <Label layoutX="48.0" layoutY="71.0" text="Name" />
+        <Label layoutX="48.0" layoutY="71.0" text="general.name" fx:id="nameLabel2"/>
         <Label layoutX="51.0" layoutY="108.0" text="Email" />
         <Label layoutX="50.0" layoutY="145.0" text="IBAN" />
         <Label layoutX="55.0" layoutY="182.0" text="BIC" />
-        <Button layoutX="101.0" layoutY="233.0" mnemonicParsing="false" onAction="#returnToOverview" text="Cancel" />
+        <Button layoutX="101.0" layoutY="233.0" mnemonicParsing="false" onAction="#returnToOverview" text="general.cancel" fx:id="cancelButton2" />
         <ButtonBar prefHeight="40.0" prefWidth="200.0" />
-        <Button layoutX="177.0" layoutY="233.0" mnemonicParsing="false" onAction="#editParticipantButton" prefHeight="26.0" prefWidth="55.0" text="Edit" />
-        <TextField fx:id="name" layoutX="102.0" layoutY="67.0" prefHeight="26.0" prefWidth="243.0" promptText="e.g. John Smith" />
-        <TextField fx:id="email" layoutX="102.0" layoutY="104.0" prefHeight="26.0" prefWidth="243.0" promptText="name@email.com" />
+        <Button layoutX="177.0" layoutY="233.0" mnemonicParsing="false" onAction="#editParticipantButton" prefHeight="26.0" prefWidth="55.0" text="general.edit" fx:id="editButton"/>
+        <TextField fx:id="name" layoutX="102.0" layoutY="67.0" prefHeight="26.0" prefWidth="243.0" promptText="e.g. Noah Martin" />
+        <TextField fx:id="email" layoutX="102.0" layoutY="104.0" prefHeight="26.0" prefWidth="243.0" promptText="Noah@Martin.net" />
         <TextField fx:id="iban" layoutX="102.0" layoutY="141.0" prefHeight="26.0" prefWidth="243.0" promptText="NL12ABCD12345612345678" />
         <TextField fx:id="bic" layoutX="102.0" layoutY="178.0" prefHeight="26.0" prefWidth="243.0" promptText="HBUKGB4B" />
-      <Button layoutX="250.0" layoutY="234.0" mnemonicParsing="false" onAction="#removeParticipant" text="Delete" />
+      <Button layoutX="250.0" layoutY="233.0" mnemonicParsing="false" onAction="#removeParticipant" text="general.delete" fx:id="deleteButton"/>
     </children>
 </Pane>

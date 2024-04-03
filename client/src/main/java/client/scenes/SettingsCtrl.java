@@ -67,12 +67,13 @@ public class SettingsCtrl implements Initializable {
 
     private void prepareAdminLogin(){
         passwordPrompt=new TextInputDialog();
-        passwordPrompt.setTitle("Splitty: Admin Login");
-        passwordPrompt.setContentText("Admin password:");
+        passwordPrompt.setTitle(I18N.get("window.event.admin.login"));
+        passwordPrompt.setContentText(I18N.get("settings.admin.password"));
         passwordPrompt.setHeaderText("");
         passwordPrompt.setGraphic(null);
     }
     public void adminAction(){
+        this.prepareAdminLogin();
         passwordPrompt.getEditor().clear(); // Clear Dialogue Input
         Optional<String> result = passwordPrompt.showAndWait();
         result.ifPresent(this::checkPassword); // if ok is pressed check password
@@ -81,7 +82,7 @@ public class SettingsCtrl implements Initializable {
     private void checkPassword(String password){
         if (password.isEmpty()){
             NotificationHelper notificationHelper = new NotificationHelper();
-            notificationHelper.showError("Warning!", "Password cannot be blank...");
+            notificationHelper.showError(I18N.get("general.warning"), I18N.get("settings.admin.warning"));
             return;
         }
         try {
@@ -92,7 +93,7 @@ public class SettingsCtrl implements Initializable {
         }
         catch (Exception E){
             NotificationHelper notificationHelper = new NotificationHelper();
-            notificationHelper.showError("Error!", "Wrong Password...");
+            notificationHelper.showError(I18N.get("general.error"), I18N.get("settings.admin.wrongPassword"));
         }
     }
 }

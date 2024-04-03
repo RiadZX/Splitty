@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.services.I18N;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -16,11 +17,15 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.control.TableColumn;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.List;
@@ -33,11 +38,27 @@ public class EventOverviewCtrl implements Initializable {
     private final MainCtrl mainCtrl;
     private final NotificationService notificationService;
     @FXML
-    public Button sendInviteButton;
-    @FXML
     public TextFlow textFlow;
     @FXML
     public Pane backButton;
+    @FXML
+    public Button settleDebt;
+    @FXML
+    public Button sendInvite;
+    @FXML
+    public Button addExpense;
+    @FXML
+    public Label expenseLabel;
+    @FXML
+    public Label participantLabel;
+    @FXML
+    public Label backButtonLabel;
+    @FXML
+    public TableColumn to;
+    @FXML
+    public TableColumn from;
+    @FXML
+    public TableColumn all;
 
     @FXML
     private TextField eventTitle;
@@ -73,7 +94,15 @@ public class EventOverviewCtrl implements Initializable {
             }
         }));
 
-        this.sendInviteButton.setOnAction(event -> sendInvite());
+        this.sendInvite.setOnAction(event -> sendInvite());
+        I18N.update(sendInvite);
+        I18N.update(addExpense);
+        I18N.update(settleDebt);
+        I18N.update(expenseLabel);
+        I18N.update(participantLabel);
+        I18N.update(eventTitle);
+        I18N.update(backButtonLabel);
+        this.sendInvite.setOnAction(event -> sendInvite());
 
         payerSelector.setCellFactory(param -> getPayerListCell());
         payerSelector.setButtonCell(getPayerListCell());
@@ -108,7 +137,7 @@ public class EventOverviewCtrl implements Initializable {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setGraphic(null);
-                    setText("ALL");
+                    setText(I18N.get("general.all"));
                 } else {
                     setText(item.getName());
                 }
@@ -202,7 +231,7 @@ public class EventOverviewCtrl implements Initializable {
             * - refresh all data related to the event
             * - add functionality to the expense list and filtering*/
         }catch (WebApplicationException e) {
-            notificationService.showError("Error refreshing event", "Could not refresh event data");
+            notificationService.showError(I18N.get("event.overview.showRefreshingEvent"), I18N.get("event.overview.showRefreshingEventMessage"));
         }
     }
 
@@ -214,7 +243,7 @@ public class EventOverviewCtrl implements Initializable {
     private BorderPane createRow(Expense e) {
         Insets insets = new Insets(0.0, 5.0, 0.0, 5.0);
         BorderPane bp = new BorderPane();
-        bp.setLeft(new Text("Expense paid by " + (e.getPaidBy() == null ? "NULL" : e.getPaidBy().getName())));
+        bp.setLeft(new Text(I18N.get("event.overview.showExpense") + " " + (e.getPaidBy() == null ? "NULL" : e.getPaidBy().getName())));
 
         Image editImage = new Image("client/icons/pencil.png");
         ImageView edit = new ImageView();

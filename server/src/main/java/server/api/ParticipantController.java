@@ -16,8 +16,6 @@ public class ParticipantController {
 
     private final ParticipantService service;
 
-
-
     public ParticipantController(ParticipantService service) {
         this.service = service;
     }

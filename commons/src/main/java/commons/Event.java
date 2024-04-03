@@ -33,17 +33,17 @@ public class Event {
     @Expose
     private String title; //fix response issue for now
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference ("event-participants")
     @Expose
     private List<Participant> participants;
 
-    @OneToMany(mappedBy = "event", orphanRemoval = true)
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("event-expenses")
     @Expose
     private List<Expense> expenses;
 
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("event-tags")
     @Expose
     private List<Tag> tags;
@@ -56,16 +56,17 @@ public class Event {
     @JsonSerialize(using = InstantSerializer.class)
     private Instant lastActivityTime;
 
-    public Event(UUID id) {
-        this.id = id;
-    }
-
     public Event() {
         this.participants=new ArrayList<>();
         this.expenses = new ArrayList<>();
         this.tags = new ArrayList<>();
         this.creationTime= Instant.now();
         this.lastActivityTime=Instant.now();
+    }
+
+    public Event(UUID id) {
+        this();
+        this.id = id;
     }
 
     public Event(String name){
@@ -98,6 +99,11 @@ public class Event {
     public void setId(UUID id) {
         this.id = id;
     }
+
+    public List<Participant> getParticipants(){
+        return this.participants;
+    }
+
     /**
      * Sets all participants,
      * may be used by creator while event is being created
@@ -114,10 +120,6 @@ public class Event {
 
     public void removeParticipant(Participant participant){
         this.participants.remove(participant);
-    }
-
-    public List<Participant> getParticipants(){
-        return this.participants;
     }
 
     public List<Tag> getTags() {
@@ -208,17 +210,6 @@ public class Event {
                 getParticipants(),
                 getExpenses(),
                 getTags());
-    }
-
-    public static String generateInviteCode(){
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        StringBuilder codeBuilder = new StringBuilder(8);
-        SecureRandom secureRandom = new SecureRandom();
-        for (int i = 0; i < 8; i++) {
-            int randomIndex = secureRandom.nextInt(characters.length());
-            codeBuilder.append(characters.charAt(randomIndex));
-        }
-        return codeBuilder.toString();
     }
 
     @Override

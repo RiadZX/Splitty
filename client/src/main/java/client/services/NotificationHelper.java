@@ -16,7 +16,7 @@ public class NotificationHelper implements NotificationService {
     public void showError(String title, String message) {
         Alert errorAlert = new Alert(AlertType.ERROR);
         errorAlert.initModality(Modality.APPLICATION_MODAL);
-        errorAlert.setTitle("Error");
+        errorAlert.setTitle(I18N.get("general.error"));
         errorAlert.setHeaderText(title);
         errorAlert.setContentText(message);
         errorAlert.showAndWait();

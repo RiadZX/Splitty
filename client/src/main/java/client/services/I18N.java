@@ -6,6 +6,9 @@ import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Labeled;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 
 import java.text.MessageFormat;
 import java.util.*;
@@ -69,7 +72,6 @@ public class I18N {
      * @return localized formatted string
      */
     public static String get(final String key, final Object... args) {
-        System.out.println(getLocale());
         ResourceBundle bundle = ResourceBundle.getBundle("languages", getLocale());
         String retStr;
         try {
@@ -111,5 +113,21 @@ public class I18N {
 
     public static void update(Labeled entity) {
         entity.textProperty().bind(createStringBinding(entity.getText()));
+    }
+
+    public static void update(Labeled entity, String textToBind) {
+        entity.textProperty().bind(createStringBinding(textToBind));
+    }
+
+    public static void update(TableColumn entity) {
+        entity.textProperty().bind(createStringBinding(entity.getText()));
+    }
+
+    public static void update(Text entity) {
+        entity.textProperty().bind(createStringBinding(entity.getText()));
+    }
+
+    public static void update(TextField entity) {
+        entity.promptTextProperty().bind(createStringBinding(entity.getPromptText()));
     }
 }
