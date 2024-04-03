@@ -187,7 +187,7 @@ public class AdminEventsCtrl implements Initializable {
         innerBp.setMaxWidth(40.0);
         innerBp.setMaxHeight(15.0);
 
-        Image removeImage = new Image("client/icons/bin-white.png");
+        Image removeImage = new Image("client/icons/bin-red.png");
         ImageView remove = new ImageView();
         remove.setImage(removeImage);
         remove.setOnMouseClicked(x -> removeEventAction(e));

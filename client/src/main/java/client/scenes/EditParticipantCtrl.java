@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.services.I18N;
 import client.services.NotificationHelper;
+import client.services.NotificationService;
 import commons.Event;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
@@ -24,6 +25,9 @@ public class EditParticipantCtrl implements Initializable {
     private final MainCtrl mainCtrl;
 
     private final ServerUtils server;
+
+    private final NotificationService notificationService;
+
 
     @FXML
     private TextField email;
@@ -51,16 +55,17 @@ public class EditParticipantCtrl implements Initializable {
     private Participant p;
 
     @Inject
-    public EditParticipantCtrl(MainCtrl mainCtrl, Event event, Participant p, ServerUtils server) {
+    public EditParticipantCtrl(MainCtrl mainCtrl, Event event, Participant p, ServerUtils server, NotificationService notificationService) {
         this.mainCtrl = mainCtrl;
         this.event = event;
         this.p = p;
         this.server = server;
+        this.notificationService = notificationService;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ImageView bin=new ImageView(new Image("client/icons/bin-white.png"));
+        ImageView bin=new ImageView(new Image("client/icons/bin-red.png"));
         bin.setPreserveRatio(true);
         bin.setFitHeight(15);
 
@@ -128,6 +133,9 @@ public class EditParticipantCtrl implements Initializable {
     }
 
     public void removeParticipant() {
+        if (!notificationService.showConfirmation(I18N.get("participant.remove.notification_title"), I18N.get("participant.remove.notification"))) {
+            return;
+        }
         try {
             server.removeParticipant(event, p);
         } catch (WebApplicationException e) {
