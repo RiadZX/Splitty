@@ -22,7 +22,10 @@ public class EmailController {
     public ResponseEntity<Void> sendEmail(@RequestBody String contents) {
         JsonObject body = JsonParser.parseString(contents).getAsJsonObject();
 
-        emailSender.sendEmail(body.get("toEmail").toString(), body.get("inviteCode").toString(), body.get("creator").toString());
+        emailSender.sendEmail(body.get("senderEmail").toString(),
+                body.get("toEmail").toString(),
+                body.get("inviteCode").toString(),
+                body.get("creator").toString());
         return ResponseEntity.ok().build();
     }
 }
