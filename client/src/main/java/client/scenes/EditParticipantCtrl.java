@@ -129,7 +129,7 @@ public class EditParticipantCtrl implements Initializable {
     }
 
     public void removeParticipant() {
-        if (!notificationService.showConfirmation(I18N.get("participant.remove.notification_title"), I18N.get("participant.remove.notification"))) {
+        if (!notificationHelper.showConfirmation(I18N.get("participant.remove.notification_title"), I18N.get("participant.remove.notification"))) {
             return;
         }
         try {
