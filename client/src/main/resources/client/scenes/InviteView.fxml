@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -22,7 +23,10 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <TextArea fx:id="textArea" layoutX="18.0" layoutY="168.0" prefHeight="241.0" prefWidth="389.0" />
+      <TextArea fx:id="textArea" layoutX="18.0" layoutY="168.0" prefHeight="241.0" prefWidth="389.0">
+         <padding>
+            <Insets bottom="5.0" left="2.0" top="5.0" />
+         </padding></TextArea>
       <Button fx:id="sendInviteBtn" layoutX="328.0" layoutY="428.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="98.0" text="invite.send" />
       <Button fx:id="cancelBtn" layoutX="18.0" layoutY="428.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="98.0" text="invite.cancel" />
    </children>

@@ -2,8 +2,14 @@
     -fx-background-color: #101010;
 }
 .text-area{
-    -fx-background-color: #d1d1d1;
-    -fx-text-fill: #000000;
+    -fx-background-color: #242424;
+    -fx-text-fill: #eaeaea;
+
+}
+
+.text-area .content{
+    -fx-background-color: #242424;
+    -fx-text-fill: #eaeaea;
 }
 .label{
     -fx-text-fill: #eaeaea;
