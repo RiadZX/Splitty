@@ -18,6 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.scene.control.Button;
@@ -241,12 +242,14 @@ public class EventOverviewCtrl implements Initializable {
         BorderPane bp = new BorderPane();
         double convertedAmount = server.convert(e.getAmount(), e.getCurrency(), String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), e.getDate());
         DecimalFormat df = new DecimalFormat("#.00");
-        bp.setLeft(new Text(
+        Text text=new Text(
                 (e.getPaidBy() == null ? "NULL" : e.getPaidBy().getName())
                         + "'s expense - "
                         + df.format(convertedAmount)
                         + " "
-                        + mainCtrl.getUser().getPrefferedCurrency()));
+                        + mainCtrl.getUser().getPrefferedCurrency());
+        text.setFill(Color.WHITESMOKE);
+        bp.setLeft(text);
 
         Image editImage = new Image("client/icons/pencil.png");
         ImageView edit = new ImageView();

@@ -115,3 +115,28 @@
 .combo-box-base:disabled {
     -fx-opacity: .4;
 }
+.list-view{
+    -fx-background-color: #181818;
+    -fx-text-fill: #cacaca;
+}
+
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: #404040;
+    -fx-text-fill: white;
+}
+.list-cell{
+    -fx-text-fill: #cacaca;
+}
+.list-cell:odd { /* <=== changed to even */
+    -fx-background-color: #181818;
+    -fx-text-fill: #cacaca;
+}
+.list-cell:even { /* <=== changed to even */
+    -fx-background-color: #202020;
+    -fx-text-fill: #cacaca;
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: #242424;
+    -fx-text-fill: #eaeaea;
+}
