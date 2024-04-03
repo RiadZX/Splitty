@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
@@ -28,18 +29,29 @@ public class CurrencyConverterService {
     private final ObjectMapper mapper = new ObjectMapper();
 
     private Map<String, BigDecimal> updateExchangeRates(String downloadPath) {
+        JsonNode node=null;
+        HttpURLConnection conn=null;
         try {
             Map<String, BigDecimal> exchangeRates = new HashMap<>();
             String urlString = String.format(OER_URL + downloadPath, APP_ID);
             URL url = URI.create(urlString).toURL();
-            URLConnection conn = url.openConnection();
+            conn = (HttpURLConnection) url.openConnection();
 
-            JsonNode node = mapper.readTree(conn.getInputStream());
+            node = mapper.readTree(conn.getInputStream());
             Iterator<Map.Entry<String, JsonNode>> fieldNames = node.get("rates").fields();
 
             fieldNames.forEachRemaining(e -> exchangeRates.put(e.getKey(), e.getValue().decimalValue()));
             return exchangeRates;
         } catch (IOException e) {
+            try {
+                node= mapper.readTree(conn.getErrorStream());
+                System.out.println(node.get("message").textValue());
+                if (node.get("message").textValue().equals("not_available")){
+                    return latest();
+                }
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
             throw new IllegalArgumentException(e.getMessage());
         }
     }

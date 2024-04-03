@@ -127,15 +127,11 @@ public class EventOverviewCtrl implements Initializable {
                     return;
                 }
                 List<UUID> uuids=item.getDebts().stream().map(debt -> debt.getParticipant().getId()).toList();
-                System.out.println(uuids);
-                System.out.println(filter);
-                if (payer != null && payer.getId() != null && (!item.getPaidBy().getId().equals(payer.getId()) && filter==2)||(filter==1 && !uuids.contains(payer.getId()))){
+                if (payer != null  && (!item.getPaidBy().getId().equals(payer.getId()) && filter==2)||(filter==1 && !uuids.contains(payer.getId()))){
                     setGraphic(null);
                     setText(null);
                 }
                 else {
-                    System.out.println(payer);
-                    System.out.println(item.getPaidBy());
                     setGraphic(createRow(item));
                 }
             }
@@ -170,7 +166,7 @@ public class EventOverviewCtrl implements Initializable {
     }
 
     public void reassignParticipants(List<Participant> participantList){
-        System.out.println(participantList.stream().map(x -> x.getName()).toList());
+        System.out.println(participantList.stream().map(Participant::getName).toList());
         textFlow.getChildren().clear();
         if (participantList.isEmpty()) {
             textFlow.getChildren().add(new Label("No participants, yet"));
@@ -179,11 +175,12 @@ public class EventOverviewCtrl implements Initializable {
         for (Participant p : participantList.subList(0, participantList.size() - 1)) {
             Label label = new Label(p.getName());
             label.setOnMouseClicked(e -> editParticipant(p));
+            label.setCursor(Cursor.CLOSED_HAND);
             textFlow.getChildren().add(label);
             textFlow.getChildren().add(new Label(", "));
         }
-        Label lastLabel = new Label(participantList.get(participantList.size() - 1).getName());
-        lastLabel.setOnMouseClicked(e -> editParticipant(participantList.get(participantList.size() - 1)));
+        Label lastLabel = new Label(participantList.getLast().getName());
+        lastLabel.setOnMouseClicked(e -> editParticipant(participantList.getLast()));
         textFlow.getChildren().add(lastLabel);
     }
 

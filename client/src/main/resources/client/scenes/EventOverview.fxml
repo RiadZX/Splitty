@@ -85,23 +85,23 @@
             <Cursor fx:constant="CLOSED_HAND" />
          </cursor>
       </ImageView>
-      <Pane layoutX="75.0" layoutY="261.0" prefHeight="20.0" prefWidth="159.0" style="-fx-background-color: #101010;">
+      <Pane layoutX="91.0" layoutY="261.0" prefHeight="20.0" prefWidth="132.0" style="-fx-background-color: #101010;">
          <children>
-            <Label fx:id="allFilter" layoutX="1.0" onMouseClicked="#setAllFilter" prefHeight="18.0" prefWidth="45.0" text="general.all" textAlignment="CENTER">
+            <Label fx:id="allFilter" layoutX="1.0" onMouseClicked="#setAllFilter" prefHeight="18.0" prefWidth="45.0" style="-fx-text-alignment: center;" text="general.all" textAlignment="CENTER">
                <padding>
                   <Insets left="3.0" right="3.0" />
                </padding>
                <cursor>
                   <Cursor fx:constant="CLOSED_HAND" />
                </cursor></Label>
-            <Label fx:id="fromFilter" layoutX="102.0" layoutY="1.0" onMouseClicked="#setFromFilter" prefHeight="18.0" prefWidth="56.0" text="general.from" textAlignment="CENTER">
+            <Label fx:id="fromFilter" layoutX="91.0" onMouseClicked="#setFromFilter" prefHeight="18.0" prefWidth="45.0" style="-fx-text-alignment: center;" text="general.from" textAlignment="CENTER">
                <padding>
                   <Insets left="3.0" right="3.0" />
                </padding>
                <cursor>
                   <Cursor fx:constant="CLOSED_HAND" />
                </cursor></Label>
-            <Label fx:id="toFilter" layoutX="46.0" layoutY="1.0" onMouseClicked="#setToFilter" prefHeight="18.0" prefWidth="56.0" text="general.to" textAlignment="CENTER">
+            <Label fx:id="toFilter" layoutX="46.0" layoutY="1.0" onMouseClicked="#setToFilter" prefHeight="18.0" prefWidth="45.0" style="-fx-text-alignment: center;" text="general.to" textAlignment="CENTER">
                <cursor>
                   <Cursor fx:constant="CLOSED_HAND" />
                </cursor>
