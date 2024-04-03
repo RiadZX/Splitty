@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="298.0" prefWidth="332.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.FirstTimeCtrl">
+<AnchorPane prefHeight="298.0" prefWidth="332.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.FirstTimeCtrl">
    <children>
       <!-- not making the text for this one language controlled because the app name stays the same -->
       <Label layoutX="107.0" layoutY="30.0" text="Splitty" textAlignment="CENTER">
@@ -19,7 +19,7 @@
             <Font size="14.0" />
          </font>
       </TextField>
-      <Button fx:id="start" layoutX="180.0" layoutY="187.0" mnemonicParsing="false" onAction="#moveToStart" prefHeight="33.0" prefWidth="78.0" text="first_time.start">
+      <Button fx:id="start" layoutX="175.0" layoutY="181.0" mnemonicParsing="false" onAction="#moveToStart" prefHeight="27.0" prefWidth="78.0" text="first_time.start">
          <font>
             <Font size="15.0" />
          </font>
@@ -27,6 +27,9 @@
             <Cursor fx:constant="CLOSED_HAND" />
          </cursor>
       </Button>
-      <ComboBox fx:id="currency" layoutX="86.0" layoutY="184.0" prefHeight="26.0" prefWidth="172.0" promptText="Preferred Currency" />
+      <ComboBox fx:id="currency" layoutX="85.0" layoutY="181.0" prefHeight="33.0" prefWidth="78.0" promptText="Preferred Currency" style="-fx-background-color: #141414;">
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor></ComboBox>
    </children>
 </AnchorPane>

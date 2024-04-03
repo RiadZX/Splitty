@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class User implements Serializable {
 
-    enum Currency {
+    public enum Currency {
         USD,
         EUR,
         CHF,
@@ -34,7 +34,12 @@ public class User implements Serializable {
 
 
     public User(){
-        eventParticipant=new LinkedHashMap<UUID, UUID>();
+        this.email="";
+        this.iban="";
+        this.bic="";
+        this.language="english";
+        this.eventParticipant=new LinkedHashMap<UUID, UUID>();
+        this.prefferedCurrency=Currency.EUR;
     }
 
     /**
@@ -44,19 +49,12 @@ public class User implements Serializable {
     public User(String name){
         this();
         this.name=name;
-        this.email="";
-        this.iban="";
-        this.bic="";
-        this.language="english";
     }
 
     public User(String name, String preferredCurrency){
         this();
         this.name=name;
         this.prefferedCurrency = Currency.valueOf(preferredCurrency);
-        this.email="test@test.com";
-        this.iban="GB12ABCD10203012345678";
-        this.bic="AAAABBCCDD";
     }
 
     public User(String name, String email, String iban, String bic){
@@ -67,12 +65,12 @@ public class User implements Serializable {
         this.bic=bic;
     }
 
-    public User(String name, String email, String iban, String bic, String language){
+    public User(String name, String email, String iban, String bic, String language) {
         this(name, email, iban, bic);
-        this.language=language;
+        this.language = language;
     }
 
-    public Participant createParticipant(){
+    public Participant createParticipant() {
         return new Participant(name, null, iban, email, bic);
     }
 

@@ -8,13 +8,12 @@ import client.utils.User;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.util.LinkedHashMap;
-import java.util.ResourceBundle;
-import java.util.UUID;
+import java.util.*;
 
 
 public class UserSettingsCtrl implements Initializable {
@@ -30,6 +29,8 @@ public class UserSettingsCtrl implements Initializable {
     private TextField ibanField;
     @FXML
     private TextField bicField;
+    @FXML
+    private ComboBox<String> currencyComboBox;
 
     @FXML
     private Labeled profileSettings;
@@ -60,10 +61,13 @@ public class UserSettingsCtrl implements Initializable {
         emailField.setText(user.getEmail());
         ibanField.setText(user.getIban());
         bicField.setText(user.getBic());
+        currencyComboBox.getSelectionModel().select(user.getPrefferedCurrency().toString());
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        List<String> currencies = Arrays.stream(User.Currency.values()).map(Enum::toString).toList();
+        currencyComboBox.getItems().addAll(currencies);
         I18N.update(profileSettings);
         I18N.update(nameLabel);
         I18N.update(emailLabel);
