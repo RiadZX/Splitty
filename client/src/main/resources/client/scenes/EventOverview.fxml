@@ -39,7 +39,7 @@
                   <Image url="@/client/icons/back.png" />
                </image>
             </ImageView>
-            <Label layoutX="30.0" layoutY="3.0" prefHeight="17.0" prefWidth="45.0" text="Back">
+            <Label layoutX="30.0" layoutY="3.0" prefHeight="17.0" prefWidth="45.0" text="settings.back" fx:id="backButtonLabel">
                <font>
                   <Font size="16.0" />
                </font>
