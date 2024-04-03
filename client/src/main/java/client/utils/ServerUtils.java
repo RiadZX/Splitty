@@ -31,6 +31,7 @@ import org.glassfish.jersey.client.ClientConfig;
 
 import java.io.*;
 import java.net.URL;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -42,12 +43,14 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 public class ServerUtils {
 
     private final String serverAddress;
+
+    private final String senderEmail;
     private ExecutorService exec = Executors.newSingleThreadExecutor();
 
     public ServerUtils() {
         URL resource = getClass().getClassLoader().getResource("client/server_config.toml");
 
-        File config = null;
+        File config;
 
         if (resource == null) {
             throw new IllegalArgumentException("File not found!");
@@ -59,7 +62,7 @@ public class ServerUtils {
             }
         }
 
-        Toml toml = null;
+        Toml toml;
 
         try {
             toml = new Toml().read(config);
@@ -70,6 +73,7 @@ public class ServerUtils {
         String address = toml.getString("address");
         long port = toml.getLong("port");
 
+        senderEmail = toml.getString("email");
         serverAddress = address + ":" + port + "/";
         System.out.println(serverAddress);
     }
@@ -259,6 +263,7 @@ public class ServerUtils {
 
     public void sendEmail(String toEmail, String inviteCode, String creator) {
         JsonObject body = new JsonObject();
+        body.addProperty("senderEmail", senderEmail);
         body.addProperty("toEmail", toEmail);
         body.addProperty("inviteCode", inviteCode);
         body.addProperty("creator", creator);
@@ -268,5 +273,19 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)//
                 .accept(APPLICATION_JSON)//
                 .post(Entity.entity(body.toString(), APPLICATION_JSON), String.class);
+    }
+
+    public double convert(double amount, String from, String to, Instant when) {
+        JsonObject body = new JsonObject();
+        body.addProperty("amount", amount);
+        body.addProperty("from", from);
+        body.addProperty("to", to);
+        body.addProperty("when", when.toString());
+        System.out.println(body);
+        return ClientBuilder.newClient(new ClientConfig())//
+                .target(serverAddress).path("api/convert")//
+                .request(APPLICATION_JSON)//
+                .accept(APPLICATION_JSON)//
+                .post(Entity.entity(body.toString(), APPLICATION_JSON), Double.class);
     }
 }

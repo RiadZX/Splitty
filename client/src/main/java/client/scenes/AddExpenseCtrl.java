@@ -105,7 +105,7 @@ public class AddExpenseCtrl implements Initializable {
         someBox.setSelected(false);
         allBox.setSelected(false);
 
-        currencySelector.setItems(FXCollections.observableList(Stream.of("EUR", "USD", "RON").toList()));
+        currencySelector.setItems(FXCollections.observableList(Stream.of("EUR", "USD", "CHF", "RON").toList()));
         currencySelector.setValue("EUR");
         currencySelector.setVisible(true);
 
@@ -253,6 +253,7 @@ public class AddExpenseCtrl implements Initializable {
         //create the expense, TODO : changed the name of event because event tags are not implemented yet
         Expense newExpense = new Expense(paidBy.getName() + " paid for " + "EXPENSE TEMPLATE",
                 Double.parseDouble(howMuchField.getText()),
+                currencySelector.getValue(),
                 Instant.from(date.atStartOfDay(
                         java.time.ZoneId.systemDefault()
                 )),
