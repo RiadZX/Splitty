@@ -291,7 +291,7 @@ public class EventOverviewCtrl implements Initializable {
         expensesList.getItems().addAll(expenses.stream().filter((expense) -> {
             List<UUID> uuids=expense.getDebts().stream().map(debt -> debt.getParticipant().getId()).toList();
             return uuids.contains(payer.getId());
-                }).map(this::createRow).toList());
+        }).map(this::createRow).toList());
     }
 
     public void setFromFilter(){
