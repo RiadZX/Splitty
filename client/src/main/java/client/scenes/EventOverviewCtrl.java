@@ -113,6 +113,7 @@ public class EventOverviewCtrl implements Initializable {
         server.registerForMessages("/topic/events", e -> {
             System.out.println("Am primit " + e.getTitle());
             setEvent(e);
+            server.updateEvent(event);
         });
 
     }
