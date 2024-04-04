@@ -96,7 +96,6 @@ public class AddExpenseCtrl implements Initializable {
 
     @FXML
     public void checkSome(){
-        System.out.println(paidBySelector.getValue());
         allBox.setSelected(false);
         partialPaidSelector.setVisible(true);
     }
@@ -150,7 +149,6 @@ public class AddExpenseCtrl implements Initializable {
         List<Participant> debtors = expense.getDebts().stream().map(Debt::getParticipant).toList();
         for (Participant p : event.getParticipants()){
             if (!p.getId().equals(whoPaid.getId()) && !debtors.contains(p)){
-                System.out.println("This happens " + p.getEvent() + " " + whoPaid.getEvent());
                 checkSome();
                 partialPay = true;
             }
@@ -272,11 +270,10 @@ public class AddExpenseCtrl implements Initializable {
         }
         if (expense == null) {
             server.addExpense(event.getId(), newExpense);
-            event.addExpense(newExpense);
-            //server.send("/app/events", event);
         } else {
             server.updateExpense(event.getId(), expense.getId(), newExpense);
         }
+        server.send("/app/events", event);
         mainCtrl.showEventOverviewScene(event);
     }
 
