@@ -15,6 +15,9 @@
  */
 package client.utils;
 
+import client.services.GsonInstantTypeAdapter;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.moandjiezana.toml.Toml;
 import commons.*;
@@ -24,7 +27,7 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.converter.GsonMessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -299,7 +302,12 @@ public class ServerUtils {
     private StompSession connect(String url){
         var client = new StandardWebSocketClient();
         var stomp = new WebSocketStompClient(client);
-        stomp.setMessageConverter(new MappingJackson2MessageConverter());
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .excludeFieldsWithoutExposeAnnotation()
+                .registerTypeAdapter(Instant.class, new GsonInstantTypeAdapter())
+                .create();
+        stomp.setMessageConverter(new GsonMessageConverter(gson));
         try{
             return stomp.connect(url, new StompSessionHandlerAdapter() {}).get();
         } catch (InterruptedException e){
@@ -325,7 +333,7 @@ public class ServerUtils {
     }
 
     public void send(String dest, Event e){
-        System.out.println("I send message to " + dest + " for " + e.getTitle());
+        System.out.println("I send message to " + dest + " for " + e.getTitle() + " with id " + e.getId());
         session.send(dest, e);
     }
 }

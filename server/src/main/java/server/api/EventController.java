@@ -1,10 +1,13 @@
 package server.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import commons.Event;
 import commons.EventLongPollingWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import server.services.EventService;
@@ -80,10 +83,8 @@ public class EventController {
     @MessageMapping("/events")
     @SendTo("/topic/events")
     public Event updateTitle(Event event) throws JsonProcessingException {
-        System.out.println("It works! " + update(event.getId(), event).getBody().getTitle());
-        MessageConverter m = new MappingJackson2MessageConverter();
-        Message<?> s = m.toMessage(event, null);
-        System.out.println("Event is " + s.getPayload());
+
+        System.out.println("It works! " + event.getId());
         return event;
     }
     /**
