@@ -113,5 +113,6 @@
             <Insets bottom="15.0" left="15.0" right="15.0" top="5.0" />
          </padding>
       </Pane>
+      <Button fx:id="statsBtn" layoutX="302.0" layoutY="114.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Statistics" />
    </children>
 </AnchorPane>
