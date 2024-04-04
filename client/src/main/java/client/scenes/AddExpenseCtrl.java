@@ -272,6 +272,8 @@ public class AddExpenseCtrl implements Initializable {
         }
         if (expense == null) {
             server.addExpense(event.getId(), newExpense);
+            event.addExpense(newExpense);
+            //server.send("/app/events", event);
         } else {
             server.updateExpense(event.getId(), expense.getId(), newExpense);
         }

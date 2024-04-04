@@ -19,6 +19,7 @@ public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "expense_id")
+    @Expose
     private UUID id;
 
     @Expose

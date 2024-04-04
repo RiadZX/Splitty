@@ -113,9 +113,8 @@ public class EventOverviewCtrl implements Initializable {
         payerSelector.setButtonCell(getPayerListCell());
 
         server.registerForMessages("/topic/events", e -> {
-            System.out.println("Am primit " + e.getTitle());
+            System.out.println("Am primit " + e);
             setEvent(e);
-            server.updateEvent(event);
         });
 
     }
@@ -165,7 +164,6 @@ public class EventOverviewCtrl implements Initializable {
         reassignParticipants(this.event.getParticipants());
         System.out.println("set event: "+ event);
         this.expenses = server.getExpensesByEvent(this.event.getId());
-        System.out.println("expenses: "+ expenses);
     }
 
     public void reassignParticipants(List<Participant> participantList){
@@ -189,9 +187,9 @@ public class EventOverviewCtrl implements Initializable {
 
     public void changeTitle(){
         this.event.setName(this.eventTitle.getText());
-        System.out.println("title change");
-        server.updateEvent(this.event);
-        server.send("/app/events", this.event);
+        //server.updateEvent(this.event);
+        server.send("/app/events", server.updateEvent(this.event));
+        //setEvent(server.getEvent(event.getId()));
         /*
         try {
             this.server.updateEvent(this.event);

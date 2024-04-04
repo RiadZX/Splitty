@@ -8,7 +8,6 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.ValueGenerationType;
 
 import java.lang.annotation.Retention;
-import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +22,7 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "event_id")
+    @Expose
     private UUID id;
 
     @Expose
