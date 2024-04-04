@@ -28,6 +28,9 @@ public class Expense {
     @Expose
     private Instant date;
 
+    @Expose
+    private String currency;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "participant_id")
     private Participant paidBy;
@@ -68,9 +71,29 @@ public class Expense {
 
     public Expense(String title, double amount, Instant date,
                    Participant paidBy, Event event, List<Debt> debts, List<Tag> tags) {
-        this();
         this.title = title;
         this.amount = amount;
+        this.date = date;
+        this.paidBy = paidBy;
+        this.event = event;
+        this.debts = debts;
+        this.tags = tags;
+    }
+
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public Expense(String title, double amount, String currency, Instant date,
+                   Participant paidBy, Event event, List<Debt> debts, List<Tag> tags) {
+        this.title = title;
+        this.amount = amount;
+        this.currency = currency;
         this.date = date;
         this.paidBy = paidBy;
         this.event = event;
@@ -168,5 +191,4 @@ public class Expense {
     public int hashCode() {
         return Objects.hash(id, title, amount, date, paidBy, event, debts, tags);
     }
-
 }

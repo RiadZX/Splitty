@@ -7,10 +7,14 @@ import com.google.inject.Inject;
 import javafx.fxml.FXML;
 
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.TextField;
+import client.utils.User.Currency;
 
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class FirstTimeCtrl implements Initializable{
@@ -19,6 +23,9 @@ public class FirstTimeCtrl implements Initializable{
 
     @FXML
     private TextField nameField;
+
+    @FXML
+    private ComboBox<String> currency;
 
     @FXML
     private Labeled start;
@@ -34,6 +41,10 @@ public class FirstTimeCtrl implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
         I18N.update(start);
         I18N.update(setup);
+        List<String> currencies = Arrays.stream(Currency.values()).map(Enum::toString).toList();
+
+        this.currency.getItems().addAll(currencies);
+        this.currency.getSelectionModel().selectFirst();
         this.nameField.setOnKeyPressed((event -> {
             switch (event.getCode()) {
                 case ENTER -> moveToStart();
@@ -45,7 +56,7 @@ public class FirstTimeCtrl implements Initializable{
     }
 
     public void moveToStart(){
-        User user=new User(nameField.getText());
+        User user=new User(nameField.getText(), currency.getValue());
         this.mainCtrl.setUser(user);
         this.mainCtrl.showStartScene();
     }

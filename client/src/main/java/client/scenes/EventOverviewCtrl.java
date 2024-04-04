@@ -18,12 +18,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 
 public class EventOverviewCtrl implements Initializable {
@@ -44,11 +47,17 @@ public class EventOverviewCtrl implements Initializable {
     public Label expenseLabel;
     @FXML
     public Label participantLabel;
+    @FXML
+    public Label backButtonLabel;
+    @FXML
+    public Label allFilter;
+    @FXML
+    public Label fromFilter;
+    @FXML
+    public Label toFilter;
 
     @FXML
-    public TableColumn to;
-    @FXML
-    public TableColumn from;
+    public ImageView flagView;
     @FXML
     public TableColumn all;
     @FXML
@@ -58,7 +67,7 @@ public class EventOverviewCtrl implements Initializable {
     private TextField eventTitle;
 
     @FXML
-    private ListView<Expense> expensesList;
+    private ListView<BorderPane> expensesList;
 
     @FXML
     private ComboBox<Participant> payerSelector;
@@ -69,12 +78,15 @@ public class EventOverviewCtrl implements Initializable {
 
     private Participant payer;
 
+    private int filter;
+
     @Inject
     public EventOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.notificationService = notificationService;
         this.event=new Event();
+        this.filter=0;
     }
 
     @Override
@@ -97,28 +109,33 @@ public class EventOverviewCtrl implements Initializable {
         I18N.update(expenseLabel);
         I18N.update(participantLabel);
         I18N.update(eventTitle);
+        I18N.update(backButtonLabel);
         this.sendInvite.setOnAction(event -> sendInvite());
 
         payerSelector.setCellFactory(param -> getPayerListCell());
         payerSelector.setButtonCell(getPayerListCell());
-
-        expensesList.setCellFactory(param -> getExpenseListCell());
     }
 
-    public ListCell<Expense> getExpenseListCell() {
-        return new ListCell<>() {
-            @Override
-            protected void updateItem(Expense item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null || (payer != null && !item.getPaidBy().getId().equals(payer.getId()))) {
-                    setGraphic(null);
-                    setText(null);
-                } else {
-                    setGraphic(createRow(item));
-                }
-            }
-        };
-    }
+//    public ListCell<Expense> getExpenseListCell() {
+//        return new ListCell<>() {
+//            @Override
+//            protected void updateItem(Expense item, boolean empty) {
+//                super.updateItem(item, empty);
+//                if (empty || item == null){
+//                    setGraphic(null);
+//                    setText(null);
+//                    return;
+//                }
+//                if (payer != null  && (! && filter==2)||(filter==1 && !uuids.contains(payer.getId()))){
+//                    setGraphic(null);
+//                    setText(null);
+//                }
+//                else {
+//                    setGraphic(createRow(item));
+//                }
+//            }
+//        };
+//    }
     public ListCell<Participant> getPayerListCell() {
         return new ListCell<>() {
             @Override
@@ -126,7 +143,7 @@ public class EventOverviewCtrl implements Initializable {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setGraphic(null);
-                    setText(I18N.get("general.all"));
+                    setText(null);
                 } else {
                     setText(item.getName());
                 }
@@ -148,7 +165,7 @@ public class EventOverviewCtrl implements Initializable {
     }
 
     public void reassignParticipants(List<Participant> participantList){
-        System.out.println(participantList.stream().map(x -> x.getName()).toList());
+        System.out.println(participantList.stream().map(Participant::getName).toList());
         textFlow.getChildren().clear();
         if (participantList.isEmpty()) {
             textFlow.getChildren().add(new Label("No participants, yet"));
@@ -157,11 +174,12 @@ public class EventOverviewCtrl implements Initializable {
         for (Participant p : participantList.subList(0, participantList.size() - 1)) {
             Label label = new Label(p.getName());
             label.setOnMouseClicked(e -> editParticipant(p));
+            label.setCursor(Cursor.CLOSED_HAND);
             textFlow.getChildren().add(label);
             textFlow.getChildren().add(new Label(", "));
         }
-        Label lastLabel = new Label(participantList.get(participantList.size() - 1).getName());
-        lastLabel.setOnMouseClicked(e -> editParticipant(participantList.get(participantList.size() - 1)));
+        Label lastLabel = new Label(participantList.getLast().getName());
+        lastLabel.setOnMouseClicked(e -> editParticipant(participantList.getLast()));
         textFlow.getChildren().add(lastLabel);
     }
 
@@ -169,6 +187,7 @@ public class EventOverviewCtrl implements Initializable {
         this.event.setName(this.eventTitle.getText());
         try {
             this.server.updateEvent(this.event);
+            notificationService.showConfirmation("Title Change", "The title has been successfully changed!");
         }
         catch (WebApplicationException e){
             notificationService.showError("Error updating event", "Could not update event title");
@@ -197,39 +216,46 @@ public class EventOverviewCtrl implements Initializable {
 
 
 
+    public void editExpense(Expense e) {
+        mainCtrl.showEditExpense(e);
+    }
+
+
     public void refresh(){
         try {
             Event refreshed = server.getEvent(event.getId());
             System.out.println("refreshing");
             this.setEvent(refreshed);
             payerSelector.setItems(FXCollections.observableArrayList(event.getParticipants()));
-            payerSelector.getItems().add(0, null);
             payerSelector.getSelectionModel().selectFirst();
-            payerSelector.setOnAction(e -> {
-                payer = payerSelector.getValue();
-                expensesList.getItems().clear();
-                expensesList.getItems().addAll(expenses);
-            });
-            expensesList.getItems().clear();
-            expensesList.getItems().addAll(expenses);
+//            payerSelector.setOnAction(e -> {
+//                payer = payerSelector.getValue();
+//                expensesList.getItems().clear();
+//                expensesList.getItems().addAll(expenses);
+//            });
+            this.setAllFilter();
             System.out.println("refreshed");
             /* TO DO:
             * - refresh all data related to the event
             * - add functionality to the expense list and filtering*/
         }catch (WebApplicationException e) {
-            notificationService.showError("Error refreshing event", "Could not refresh event data");
+            notificationService.showError(I18N.get("event.overview.showRefreshingEvent"), I18N.get("event.overview.showRefreshingEventMessage"));
         }
     }
-
-    public void editExpense(Expense e) {
-        mainCtrl.showEditExpense(e);
-    }
-
 
     private BorderPane createRow(Expense e) {
         Insets insets = new Insets(0.0, 5.0, 0.0, 5.0);
         BorderPane bp = new BorderPane();
-        bp.setLeft(new Text("Expense paid by " + (e.getPaidBy() == null ? "NULL" : e.getPaidBy().getName())));
+        double convertedAmount = server.convert(e.getAmount(), e.getCurrency(), String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), e.getDate());
+        DecimalFormat df = new DecimalFormat("#.00");
+        Text text=new Text(
+                (e.getPaidBy() == null ? "NULL" : e.getPaidBy().getName())
+                        + "'s expense - "
+                        + df.format(convertedAmount)
+                        + " "
+                        + mainCtrl.getUser().getPrefferedCurrency());
+        text.setFill(Color.WHITESMOKE);
+        bp.setLeft(text);
 
         Image editImage = new Image("client/icons/pencil.png");
         ImageView edit = new ImageView();
@@ -244,5 +270,82 @@ public class EventOverviewCtrl implements Initializable {
         bp.setRight(edit);
         return bp;
     }
+
+    public void setFlag(String language){
+        this.flagView.setImage(new Image("client/icons/flag-"+language+".png"));
+    }
+
+    public void changeLanguage(){
+        switch (this.mainCtrl.getUser().getLanguage()){
+            case "english" -> this.mainCtrl.switchToDutch();
+            case "dutch" -> this.mainCtrl.switchToEnglish();
+            default -> System.out.println("Unsupported language "+this.mainCtrl.getUser().getLanguage());
+        }
+    }
+    public void refreshLanguage(){
+        this.allFilter.setText(I18N.get("general.all"));
+        this.fromFilter.setText(I18N.get("general.from"));
+        this.toFilter.setText(I18N.get("general.to"));
+    }
+
+    public void setToFilter(){
+        filter=1;
+        payer = payerSelector.getValue();
+        expensesList.getItems().clear();
+        expensesList.getItems().addAll(expenses.stream().filter((expense) -> {
+            List<UUID> uuids=expense.getDebts().stream().map(debt -> debt.getParticipant().getId()).toList();
+            return uuids.contains(payer.getId());
+        }).map(this::createRow).toList());
+    }
+
+    public void setFromFilter(){
+        filter=2;
+        payer = payerSelector.getValue();
+        expensesList.getItems().clear();
+        expensesList.getItems().addAll(expenses.stream().filter((expense -> expense.getPaidBy().getId().equals(payer.getId()))).map(this::createRow).toList());
+    }
+
+    public void setAllFilter(){
+        filter=0;
+        payer = payerSelector.getValue();
+        expensesList.getItems().clear();
+        expensesList.getItems().addAll(expenses.stream().map(this::createRow).toList());
+    }
+
+    //    public double calculateIncoming(Participant p){
+//        double incoming = 0;
+//        for (Expense e : event.getExpenses()){
+//            if (!e.getPaidBy().getId().equals(p.getId())){
+//                continue;
+//            }
+//            List<Debt> debts = e.getDebts();
+//            for (Debt d : debts) {
+//                if (d.isPaid()) {
+//                    continue;
+//                }
+//                incoming += d.getAmount();
+//            }
+//        }
+//        return incoming;
+//    }
+//
+//    public double calculateOutgoing(Participant p){
+//        double outgoing = 0;
+//        for (Expense e : event.getExpenses()){
+//            if (e.getPaidBy().getId().equals(p.getId())){
+//                continue;
+//            }
+//            List<Debt> debts = e.getDebts();
+//            for (Debt d : debts) {
+//                if (d.isPaid()) {
+//                    continue;
+//                }
+//                if (d.getParticipant().getId().equals(p.getId())){
+//                    outgoing+=d.getAmount();
+//                }
+//            }
+//        }
+//        return outgoing;
+//    }
 
 }

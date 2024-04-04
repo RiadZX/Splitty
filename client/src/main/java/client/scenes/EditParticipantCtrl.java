@@ -1,7 +1,7 @@
 package client.scenes;
 
 import client.services.I18N;
-import client.services.NotificationHelper;
+import client.services.NotificationService;
 import commons.Event;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
@@ -14,6 +14,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,6 +24,9 @@ public class EditParticipantCtrl implements Initializable {
     private final MainCtrl mainCtrl;
 
     private final ServerUtils server;
+
+    private final NotificationService notificationHelper;
+
 
     @FXML
     private TextField email;
@@ -49,15 +54,21 @@ public class EditParticipantCtrl implements Initializable {
     private Participant p;
 
     @Inject
-    public EditParticipantCtrl(MainCtrl mainCtrl, Event event, Participant p, ServerUtils server) {
+    public EditParticipantCtrl(MainCtrl mainCtrl, Event event, Participant p, ServerUtils server, NotificationService notificationService) {
         this.mainCtrl = mainCtrl;
         this.event = event;
         this.p = p;
         this.server = server;
+        this.notificationHelper = notificationService;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        ImageView bin=new ImageView(new Image("client/icons/bin-red.png"));
+        bin.setPreserveRatio(true);
+        bin.setFitHeight(15);
+
+        deleteButton.setGraphic(bin);
         I18N.update(cancelButton2);
         I18N.update(editButton);
         I18N.update(deleteButton);
@@ -75,7 +86,6 @@ public class EditParticipantCtrl implements Initializable {
     public void editParticipantButton() {
         if (name.getText().isEmpty() || email.getText().isEmpty() || iban.getText().isEmpty()
                 || bic.getText().isEmpty()) {
-            NotificationHelper notificationHelper = new NotificationHelper();
             String warningMessage = I18N.get("participant.add.error");
             if (name.getText().isEmpty()){
                 warningMessage += I18N.get("participant.add.error.name") + " ";
@@ -95,13 +105,11 @@ public class EditParticipantCtrl implements Initializable {
         }
         if (!email.getText().matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
             String warningMessage = I18N.get("participant.add.error.message.email");
-            NotificationHelper notificationHelper = new NotificationHelper();
             notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
         if (iban.getText().length() != 34){
             String warningMessage = I18N.get("participant.add.error.message.iban");
-            NotificationHelper notificationHelper = new NotificationHelper();
             notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
@@ -121,11 +129,13 @@ public class EditParticipantCtrl implements Initializable {
     }
 
     public void removeParticipant() {
+        if (!notificationHelper.showConfirmation(I18N.get("participant.remove.notification_title"), I18N.get("participant.remove.notification"))) {
+            return;
+        }
         try {
             server.removeParticipant(event, p);
         } catch (WebApplicationException e) {
             String warningMessage = I18N.get("participant.remove.error");
-            NotificationHelper notificationHelper = new NotificationHelper();
             notificationHelper.showError(I18N.get("general.warning"), warningMessage);
 
         } finally {

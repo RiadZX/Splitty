@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.control.TextInputDialog;
 
 import java.net.URL;
 import java.time.Instant;
@@ -19,14 +20,19 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
+
 
 public class AddExpenseCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private Event event;
     private Expense expense;
+
+    private TextInputDialog tagDialog;
+
     @FXML
     private Button submitButton;
     @FXML
@@ -34,13 +40,12 @@ public class AddExpenseCtrl implements Initializable {
     @FXML
     private ComboBox<String> paidBySelector, currencySelector;
     @FXML
-    private TextField howMuchField, tagField;
+    private TextField howMuchField;
     @FXML
     private DatePicker whenField;
     @FXML
-    private VBox tagSelector, createTagBox, partialPaidSelector;
-    @FXML
-    private Label tagErrorLabel, errorLabel;
+    private VBox tagSelector, partialPaidSelector;
+
     @FXML
     private Text paid;
     @FXML
@@ -55,6 +60,7 @@ public class AddExpenseCtrl implements Initializable {
     private Button abortButton;
     @FXML
     private Button createButton;
+
 
 
     @Inject
@@ -75,6 +81,7 @@ public class AddExpenseCtrl implements Initializable {
         I18N.update(createButton);
         I18N.update(allBox);
         I18N.update(someBox);
+        this.prepareTagDialog();
     }
     @FXML
     public void backToOverview(){
@@ -97,7 +104,6 @@ public class AddExpenseCtrl implements Initializable {
     public void setup(Event event, Expense e){
         this.event = event;
         this.expense = e;
-        createTagBox.setVisible(false);
         paidBySelector.setItems(FXCollections.observableList(event.getParticipants().stream().map(Participant::getName).toList()));
         paidBySelector.setValue(event.getParticipants().get(0).getName());
 
@@ -105,7 +111,7 @@ public class AddExpenseCtrl implements Initializable {
         someBox.setSelected(false);
         allBox.setSelected(false);
 
-        currencySelector.setItems(FXCollections.observableList(Stream.of("EUR", "USD", "RON").toList()));
+        currencySelector.setItems(FXCollections.observableList(Stream.of("EUR", "USD", "CHF", "RON").toList()));
         currencySelector.setValue("EUR");
         currencySelector.setVisible(true);
 
@@ -187,33 +193,23 @@ public class AddExpenseCtrl implements Initializable {
         Participant paidBy = findParticipant(paidBySelector.getValue());
         if (paidBy == null) {
             NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = """
-                    Your payee information is incorrect
-                    please add a valid payee
-                    """;
-            notificationHelper.showError("Warning", warningMessage);
+            String warningMessage = I18N.get("expense.add.error.emptyPayee");
+            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
 
         LocalDate date = whenField.getValue();
         if (date == null){
             NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = """
-                    You have not selected any date
-                    please select a valid date
-                    """;
-            notificationHelper.showError("Warning", warningMessage);
+            String warningMessage = I18N.get("expense.add.error.emptyDate");
+            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
 
         if (!someBox.isSelected() && !allBox.isSelected()){
             NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = """
-                    You have not selected any split options
-                    please select how you wish to split
-                    or if you wish to split with the whole group
-                    """;
-            notificationHelper.showError("Warning", warningMessage);
+            String warningMessage = I18N.get("expense.add.error.emptySplit");
+            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
 
@@ -229,21 +225,15 @@ public class AddExpenseCtrl implements Initializable {
 
         if (howMuchField.getText() == null || howMuchField.getText().isEmpty()){
             NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = """
-                    You have not selected an amount to pay
-                    please type in an amount
-                    """;
-            notificationHelper.showError("Warning", warningMessage);
+            String warningMessage = I18N.get("expense.add.error.emptyAmount");
+            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
 
-        if (Integer.parseInt(howMuchField.getText()) < 0){
+        if (Double.parseDouble(howMuchField.getText()) < 0.0){
             NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = """
-                    You cannot select a negative amount
-                    please type in a positive number
-                    """;
-            notificationHelper.showError("Warning", warningMessage);
+            String warningMessage = I18N.get("expense.add.error.negativeAmount");
+            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
 
@@ -269,6 +259,7 @@ public class AddExpenseCtrl implements Initializable {
         //create the expense, TODO : changed the name of event because event tags are not implemented yet
         Expense newExpense = new Expense(paidBy.getName() + " paid for " + "EXPENSE TEMPLATE",
                 Double.parseDouble(howMuchField.getText()),
+                currencySelector.getValue(),
                 Instant.from(date.atStartOfDay(
                         java.time.ZoneId.systemDefault()
                 )),
@@ -303,27 +294,26 @@ public class AddExpenseCtrl implements Initializable {
         };
     }
 
-    public void createTag(){
-        String tagName = tagField.getText();
-        if (tagName == null || tagName.isEmpty() || event.getTags().stream().map(Tag::getTag).toList().contains(tagName)){
-            tagErrorLabel.setVisible(true);
-        }
-        else {
-            Tag tag = new Tag(tagName);
-            event.addTag(tag);
-            tagSelector.getChildren().add(new CheckBox(tag.getTag()));
-            closeCreateTag();
-        }
+    public void createTag(String tagName){
+        Tag tag = new Tag(tagName);
+        event.addTag(tag);
+        tagSelector.getChildren().add(new CheckBox(tag.getTag()));
     }
 
-    public void openTagScene(){
-        createTagBox.setVisible(true);
-        tagErrorLabel.setVisible(false);
+    public void openTagDialog(){
+        tagDialog.getEditor().clear();
+        Optional<String> result = tagDialog.showAndWait();
+        result.ifPresent(this::createTag); // if ok is pressed check password
     }
 
-    public void closeCreateTag(){
-        createTagBox.setVisible(false);
+    public void prepareTagDialog(){
+        tagDialog=new TextInputDialog();
+        tagDialog.setTitle(I18N.get("expense.add.createTag"));
+        tagDialog.setContentText(I18N.get("expense.add.createTagText"));
+        tagDialog.setHeaderText("");
+        tagDialog.setGraphic(null);
     }
+
     public Participant findParticipant(String name){
         Participant r = null;
         for (Participant p : event.getParticipants()){

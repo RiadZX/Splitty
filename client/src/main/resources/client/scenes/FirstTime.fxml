@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane stylesheets="@/client/stylesheets/general.css" prefHeight="341.0" prefWidth="330.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.FirstTimeCtrl">
+<AnchorPane prefHeight="298.0" prefWidth="332.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.FirstTimeCtrl">
    <children>
       <!-- not making the text for this one language controlled because the app name stays the same -->
       <Label layoutX="107.0" layoutY="30.0" text="Splitty" textAlignment="CENTER">
@@ -13,16 +13,23 @@
             <Font name="Comfortaa Bold" size="35.0" />
          </font>
       </Label>
-      <Label layoutX="118.0" layoutY="81.0" text="first_time.setup" textFill="#000000ca" fx:id="setup" />
-      <TextField fx:id="nameField" layoutX="85.0" layoutY="144.0" promptText="Enter your name">
+      <Label fx:id="setup" layoutX="118.0" layoutY="81.0" text="first_time.setup" textFill="#000000ca" />
+      <TextField fx:id="nameField" focusTraversable="false" layoutX="85.0" layoutY="144.0" promptText="Enter your name">
          <font>
             <Font size="14.0" />
          </font>
       </TextField>
-      <Button layoutX="144.0" layoutY="193.0" mnemonicParsing="false" onAction="#moveToStart" text="first_time.start" fx:id="start">
+      <Button fx:id="start" layoutX="175.0" layoutY="181.0" mnemonicParsing="false" onAction="#moveToStart" prefHeight="27.0" prefWidth="78.0" text="first_time.start">
          <font>
             <Font size="15.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor>
       </Button>
+      <ComboBox fx:id="currency" layoutX="85.0" layoutY="181.0" prefHeight="33.0" prefWidth="78.0" promptText="Preferred Currency">
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor></ComboBox>
    </children>
 </AnchorPane>

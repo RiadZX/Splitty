@@ -1,36 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.scene.image.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="415.0" prefWidth="357.0" stylesheets="@/client/stylesheets/general.css"
-            xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="client.scenes.LanguageCtrl">
+<AnchorPane prefHeight="415.0" prefWidth="357.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.LanguageCtrl">
 
     <children>
-        <Label layoutX="108.0" layoutY="44.0" prefHeight="43.0" prefWidth="142.0" text="settings.language" fx:id="languageLabel">
+        <Label fx:id="languageLabel" layoutX="108.0" layoutY="44.0" prefHeight="43.0" prefWidth="186.0" text="settings.language">
             <font>
-                <Font name="Comfortaa Medium" size="33.0" />
+                <Font name="Comfortaa Medium" size="30.0" />
             </font>
         </Label>
-        <Button layoutX="118.0" layoutY="122.0" onAction="#switchToEnglish" mnemonicParsing="false" prefHeight="31.0" prefWidth="122.0" text="language.English" fx:id="englishButton"/>
-        <Button layoutX="118.0" layoutY="175.0" onAction="#switchToDutch"   mnemonicParsing="false" prefHeight="27.0" prefWidth="122.0" text="language.Dutch"   fx:id="dutchButton"/>
-        <Pane layoutX="7.0" layoutY="10.0" onMouseClicked="#backAction" prefHeight="27.0" prefWidth="75.0">
+        <Button fx:id="englishButton" layoutX="118.0" layoutY="122.0" mnemonicParsing="false" onAction="#switchToEnglish" prefHeight="31.0" prefWidth="122.0" text="language.English">
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor></Button>
+        <Button fx:id="dutchButton" layoutX="118.0" layoutY="175.0" mnemonicParsing="false" onAction="#switchToDutch" prefHeight="27.0" prefWidth="122.0" text="language.Dutch">
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor></Button>
+        <Button fx:id="romanianButton" layoutX="118.0" layoutY="219.0" mnemonicParsing="false" onAction="#switchToRomanian" prefHeight="27.0" prefWidth="122.0" text="language.Romanian">
+            <cursor>
+                <Cursor fx:constant="CLOSED_HAND" />
+            </cursor>
+        </Button>
+        <Pane layoutX="7.0" layoutY="10.0" onMouseClicked="#backAction" prefHeight="27.0" prefWidth="75.0" styleClass="back-pane">
             <children>
                 <ImageView fitHeight="21.0" fitWidth="17.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@/client/icons/back.png" />
                     </image>
                 </ImageView>
-                <Label layoutX="30.0" layoutY="3.0" prefHeight="17.0" prefWidth="45.0" text="Back">
+                <Label fx:id="backButtonLabel" layoutX="30.0" layoutY="3.0" prefHeight="17.0" prefWidth="45.0" text="settings.back">
                     <font>
                         <Font size="16.0" />
                     </font>
                 </Label>
             </children>
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor>
         </Pane>
     </children>
 
