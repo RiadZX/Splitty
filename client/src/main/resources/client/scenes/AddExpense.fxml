@@ -39,8 +39,8 @@
 
 <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="400.0" prefWidth="515.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpenseCtrl">
     <children>
-          <Button fx:id="submitButton" layoutX="442.0" layoutY="313.0" mnemonicParsing="false" onAction="#createExpense" text="general.add" />
-          <Button fx:id="abortButton" layoutX="383.0" layoutY="313.0" mnemonicParsing="false" onAction="#backToOverview" text="expense.add.abort" />
+          <Button fx:id="submitButton" layoutX="442.0" layoutY="313.0" mnemonicParsing="false" onAction="#createExpense" text="general.add" id="confirmBtn"/>
+          <Button fx:id="abortButton" layoutX="383.0" layoutY="313.0" mnemonicParsing="false" onAction="#backToOverview" text="expense.add.abort" id="cancelBtn" />
           <Text fx:id="what" fill="#eaeaea" layoutX="371.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.what" textAlignment="CENTER" />
           <GridPane alignment="CENTER" layoutX="4.0" layoutY="20.0" prefHeight="169.0" prefWidth="302.0">
             <columnConstraints>
