@@ -34,7 +34,7 @@
 }
 
 #cancelBtn{
-    -fx-background-color: #a41a1a;
+    -fx-background-color: #ff1212;
     -fx-text-fill: #ffffff;
 }
 .button:hover{
