@@ -28,6 +28,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -243,7 +244,14 @@ public class EventOverviewCtrl implements Initializable {
     private BorderPane createRow(Expense e) {
         Insets insets = new Insets(0.0, 5.0, 0.0, 5.0);
         BorderPane bp = new BorderPane();
-        bp.setLeft(new Text(I18N.get("event.overview.showExpense") + " " + (e.getPaidBy() == null ? "NULL" : e.getPaidBy().getName())));
+        double convertedAmount = server.convert(e.getAmount(), e.getCurrency(), String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), e.getDate());
+        DecimalFormat df = new DecimalFormat("#.00");
+        bp.setLeft(new Text(
+                (e.getPaidBy() == null ? "NULL" : e.getPaidBy().getName())
+                        + "'s expense - "
+                        + df.format(convertedAmount)
+                        + " "
+                        + mainCtrl.getUser().getPrefferedCurrency()));
 
         Image editImage = new Image("client/icons/pencil.png");
         ImageView edit = new ImageView();

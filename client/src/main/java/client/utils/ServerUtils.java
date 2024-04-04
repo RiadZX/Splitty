@@ -17,51 +17,35 @@ package client.utils;
 
 import com.google.gson.JsonObject;
 import com.moandjiezana.toml.Toml;
-import commons.Event;
-import commons.EventLongPollingWrapper;
-import commons.Expense;
-import commons.Participant;
-import commons.Quote;
+import commons.*;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.springframework.messaging.simp.stomp.StompFrameHandler;
-import org.springframework.messaging.simp.stomp.StompHeaders;
-import org.springframework.messaging.simp.stomp.StompSession;
-import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
-import org.springframework.web.socket.client.standard.StandardWebSocketClient;
-import org.springframework.web.socket.messaging.WebSocketStompClient;
 
-import java.io.*;
+import java.io.File;
 import java.net.URL;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
-import java.util.concurrent.ExecutionException;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
     private final String serverAddress;
+
+    private final String senderEmail;
     private ExecutorService exec = Executors.newSingleThreadExecutor();
 
     public ServerUtils() {
         URL resource = getClass().getClassLoader().getResource("client/server_config.toml");
 
-        File config = null;
+        File config;
 
         if (resource == null) {
             throw new IllegalArgumentException("File not found!");
@@ -73,7 +57,7 @@ public class ServerUtils {
             }
         }
 
-        Toml toml = null;
+        Toml toml;
 
         try {
             toml = new Toml().read(config);
@@ -84,6 +68,7 @@ public class ServerUtils {
         String address = toml.getString("address");
         long port = toml.getLong("port");
 
+        senderEmail = toml.getString("email");
         serverAddress = address + ":" + port + "/";
         System.out.println(serverAddress);
     }
@@ -273,6 +258,7 @@ public class ServerUtils {
 
     public void sendEmail(String toEmail, String inviteCode, String creator) {
         JsonObject body = new JsonObject();
+        body.addProperty("senderEmail", senderEmail);
         body.addProperty("toEmail", toEmail);
         body.addProperty("inviteCode", inviteCode);
         body.addProperty("creator", creator);
@@ -282,6 +268,20 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)//
                 .accept(APPLICATION_JSON)//
                 .post(Entity.entity(body.toString(), APPLICATION_JSON), String.class);
+    }
+
+    public double convert(double amount, String from, String to, Instant when) {
+        JsonObject body = new JsonObject();
+        body.addProperty("amount", amount);
+        body.addProperty("from", from);
+        body.addProperty("to", to);
+        body.addProperty("when", when.toString());
+        System.out.println(body);
+        return ClientBuilder.newClient(new ClientConfig())//
+                .target(serverAddress).path("api/convert")//
+                .request(APPLICATION_JSON)//
+                .accept(APPLICATION_JSON)//
+                .post(Entity.entity(body.toString(), APPLICATION_JSON), Double.class);
     }
 
     private StompSession session = connect("ws://localhost:8080/websocket");
