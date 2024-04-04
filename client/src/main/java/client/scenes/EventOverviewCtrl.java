@@ -275,6 +275,7 @@ public class EventOverviewCtrl implements Initializable {
         switch (this.mainCtrl.getUser().getLanguage()){
             case "english" -> this.mainCtrl.switchToDutch();
             case "dutch" -> this.mainCtrl.switchToEnglish();
+            case "romanian" -> this.mainCtrl.switchToRomanian();
             default -> System.out.println("Unsupported language "+this.mainCtrl.getUser().getLanguage());
         }
     }

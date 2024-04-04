@@ -237,6 +237,15 @@ public class MainCtrl {
         Config.writeUserConfigFile(this.user);
     }
 
+    public void switchToRomanian(){
+        Locale romanian = I18N.getSupportedLocales().get(2);
+        I18N.setLocale(romanian);
+        eventOverviewCtrl.setFlag("romanian");
+        eventOverviewCtrl.refreshLanguage();
+        this.user.setLanguage("romanian");
+        Config.writeUserConfigFile(this.user);
+    }
+
     public void uponLanguageSwitch(){
         primaryStage.setTitle(I18N.get("window.settings.language"));
         String switchLanguageHeader = I18N.get("language.infoLanguages");
