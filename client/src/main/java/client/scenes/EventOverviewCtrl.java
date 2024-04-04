@@ -18,6 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -27,6 +28,7 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 @Controller
 @EnableScheduling
@@ -110,8 +112,6 @@ public class EventOverviewCtrl implements Initializable {
         payerSelector.setCellFactory(param -> getPayerListCell());
         payerSelector.setButtonCell(getPayerListCell());
 
-        expensesList.setCellFactory(param -> getExpenseListCell());
-
         server.registerForMessages("/topic/events", e -> {
             System.out.println("Am primit " + e.getTitle());
             setEvent(e);
@@ -190,6 +190,7 @@ public class EventOverviewCtrl implements Initializable {
     public void changeTitle(){
         this.event.setName(this.eventTitle.getText());
         System.out.println("title change");
+        server.updateEvent(this.event);
         server.send("/app/events", this.event);
         /*
         try {
