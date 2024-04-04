@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
@@ -7,28 +8,43 @@
 
 <AnchorPane prefHeight="415.0" prefWidth="357.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SettingsCtrl">
    <children>
-      <Label layoutX="108.0" layoutY="44.0" prefHeight="43.0" prefWidth="142.0" text="settings.settings" fx:id="settings">
+      <Label fx:id="settings" layoutX="108.0" layoutY="44.0" prefHeight="43.0" prefWidth="142.0" text="settings.settings">
          <font>
             <Font name="Comfortaa Medium" size="33.0" />
          </font>
       </Label>
-      <Button layoutX="118.0" layoutY="122.0" mnemonicParsing="false" onAction="#editProfileAction" prefHeight="31.0" prefWidth="122.0" text="settings.edit_profile" fx:id="edit"/>
-      <Button layoutX="118.0" layoutY="175.0" mnemonicParsing="false" onAction="#language" prefHeight="27.0" prefWidth="122.0" text="settings.language" fx:id="language"/>
-      <Button layoutX="118.0" layoutY="283.0" mnemonicParsing="false" onAction="#adminAction" prefHeight="27.0" prefWidth="122.0" text="settings.admin_mode" fx:id="adminMode"/>
-      <Button layoutX="118.0" layoutY="231.0" mnemonicParsing="false" onAction="#deleteDataAction" prefHeight="27.0" prefWidth="122.0" text="settings.delete_all_dat" fx:id="nukeEmData"/>
-      <Pane layoutX="7.0" layoutY="10.0" onMouseClicked="#backAction" prefHeight="27.0" prefWidth="75.0">
+      <Button fx:id="edit" layoutX="118.0" layoutY="122.0" mnemonicParsing="false" onAction="#editProfileAction" prefHeight="31.0" prefWidth="122.0" text="settings.edit_profile">
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor></Button>
+      <Button fx:id="language" layoutX="118.0" layoutY="175.0" mnemonicParsing="false" onAction="#language" prefHeight="27.0" prefWidth="122.0" text="settings.language">
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor></Button>
+      <Button fx:id="adminMode" layoutX="118.0" layoutY="283.0" mnemonicParsing="false" onAction="#adminAction" prefHeight="27.0" prefWidth="122.0" text="settings.admin_mode">
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor></Button>
+      <Button fx:id="nukeEmData" layoutX="118.0" layoutY="231.0" mnemonicParsing="false" onAction="#deleteDataAction" prefHeight="27.0" prefWidth="122.0" text="settings.delete_all_dat">
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor></Button>
+      <Pane layoutX="7.0" layoutY="10.0" onMouseClicked="#backAction" prefHeight="27.0" prefWidth="75.0" styleClass="back-pane">
          <children>
             <ImageView fitHeight="21.0" fitWidth="17.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@/client/icons/back.png" />
                </image>
             </ImageView>
-            <Label layoutX="30.0" layoutY="3.0" prefHeight="17.0" prefWidth="45.0" text="settings.back" fx:id="back">
+            <Label fx:id="back" layoutX="30.0" layoutY="3.0" prefHeight="17.0" prefWidth="45.0" text="settings.back">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
          </children>
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor>
       </Pane>
    </children>
 </AnchorPane>

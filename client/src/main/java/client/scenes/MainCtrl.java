@@ -26,6 +26,7 @@ import commons.Participant;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -128,6 +129,7 @@ public class MainCtrl {
         this.adminEventsCtrl = adminEvents.getKey();
         this.adminEvents = new Scene(adminEvents.getValue());
 
+        primaryStage.getIcons().add(new Image("client/icons/app-icon.png"));
         chooseFirstPage(adminMode);
 
         // in eventoverview, press alt+1 to go back to start
@@ -167,6 +169,13 @@ public class MainCtrl {
         inviteViewCtrl.setEvent(event);
         primaryStage.setScene(inviteView);
     }
+    public void chooseLanguage(){
+        switch (this.getUser().getLanguage()){
+            case "english"-> this.switchToEnglish();
+            case "dutch" -> this.switchToDutch();
+            default -> System.out.println("language not implemented");
+        }
+    }
 
     /**
      * Choose the first page to show
@@ -184,6 +193,7 @@ public class MainCtrl {
                 primaryStage.show();
 
             } else {
+                chooseLanguage();
                 this.showStartScene();
                 primaryStage.show();
             }
@@ -212,11 +222,19 @@ public class MainCtrl {
 
     public void switchToEnglish() {
         I18N.setLocale(Locale.ENGLISH);
+        eventOverviewCtrl.setFlag("english");
+        eventOverviewCtrl.refreshLanguage();
+        this.user.setLanguage("english");
+        Config.writeUserConfigFile(this.user);
     }
 
     public void switchToDutch() {
         Locale dutch = I18N.getSupportedLocales().get(1);
         I18N.setLocale(dutch);
+        eventOverviewCtrl.setFlag("dutch");
+        eventOverviewCtrl.refreshLanguage();
+        this.user.setLanguage("dutch");
+        Config.writeUserConfigFile(this.user);
     }
 
     public void uponLanguageSwitch(){
@@ -238,6 +256,7 @@ public class MainCtrl {
     // TODO Both setEvent and refresh call the setEvent function
     public void showEventOverviewScene(Event newEvent){
         primaryStage.setTitle(I18N.get("window.event.overview"));
+        eventOverviewCtrl.refreshLanguage();
         eventOverviewCtrl.setEvent(newEvent);
         eventOverviewCtrl.refresh();
         primaryStage.setScene(eventOverview);

@@ -11,9 +11,9 @@ import java.util.UUID;
 
 public class User implements Serializable {
 
-    enum Currency {
-        USD,
+    public enum Currency {
         EUR,
+        USD,
         CHF,
         RON,
     }
@@ -30,8 +30,48 @@ public class User implements Serializable {
 
     private LinkedHashMap<UUID, UUID> eventParticipant;
 
+    private String language;
+
+
     public User(){
-        eventParticipant=new LinkedHashMap<UUID, UUID>();
+        this.email="";
+        this.iban="";
+        this.bic="";
+        this.language="english";
+        this.eventParticipant=new LinkedHashMap<UUID, UUID>();
+        this.prefferedCurrency=Currency.EUR;
+    }
+
+    /**
+     * Only use this for testing
+     * @param name name of the user
+     */
+    public User(String name){
+        this();
+        this.name=name;
+    }
+
+    public User(String name, String preferredCurrency){
+        this();
+        this.name=name;
+        this.prefferedCurrency = Currency.valueOf(preferredCurrency);
+    }
+
+    public User(String name, String email, String iban, String bic){
+        this();
+        this.name=name;
+        this.email=email;
+        this.iban=iban;
+        this.bic=bic;
+    }
+
+    public User(String name, String email, String iban, String bic, String language) {
+        this(name, email, iban, bic);
+        this.language = language;
+    }
+
+    public Participant createParticipant() {
+        return new Participant(name, null, iban, email, bic);
     }
 
     public Currency getPrefferedCurrency() {
@@ -52,30 +92,6 @@ public class User implements Serializable {
 
     public void setBic(String bic) {
         this.bic = bic;
-    }
-
-    /**
-     * Only use this for testing
-     * @param name name of the user
-     */
-    public User(String name, String preferredCurrency){
-        this();
-        this.name=name;
-        this.prefferedCurrency = Currency.valueOf(preferredCurrency);
-        this.email="test@test.com";
-        this.iban="GB12ABCD10203012345678";
-        this.bic="AAAABBCCDD";
-    }
-    public User(String name, String email, String iban, String bic){
-        this();
-        this.name=name;
-        this.email=email;
-        this.iban=iban;
-        this.bic=bic;
-    }
-
-    public Participant createParticipant(){
-        return new Participant(name, null, iban, email, bic);
     }
 
     public String getName() {
@@ -116,6 +132,14 @@ public class User implements Serializable {
 
     public void addEventParticipant(UUID event, UUID participant){
         this.eventParticipant.put(event, participant);
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     @Override

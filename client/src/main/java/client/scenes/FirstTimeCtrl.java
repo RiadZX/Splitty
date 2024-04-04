@@ -10,8 +10,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.TextField;
+import client.utils.User.Currency;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -39,7 +41,8 @@ public class FirstTimeCtrl implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
         I18N.update(start);
         I18N.update(setup);
-        List<String> currencies = List.of("EUR", "USD", "CHF", "RON");
+        List<String> currencies = Arrays.stream(Currency.values()).map(Enum::toString).toList();
+
         this.currency.getItems().addAll(currencies);
         this.currency.getSelectionModel().selectFirst();
         this.nameField.setOnKeyPressed((event -> {

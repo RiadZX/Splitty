@@ -32,86 +32,49 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Text?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpenseCtrl">
-  <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="629.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
-      <children>
-            <Button layoutX="539.0" layoutY="316.0" mnemonicParsing="false" onAction="#createExpense" text="general.add" fx:id="submitButton"/>
-            <Button layoutX="480.0" layoutY="316.0" mnemonicParsing="false" onAction="#backToOverview" text="expense.add.abort" fx:id="abortButton"/>
-            <Text layoutX="418.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.what" textAlignment="CENTER" fx:id="what"/>
-            <GridPane alignment="CENTER" layoutX="4.0" layoutY="20.0" prefHeight="169.0" prefWidth="302.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.0" minWidth="10.0" prefWidth="80.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="239.0" minWidth="10.0" prefWidth="116.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints maxHeight="95.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="106.0" minHeight="10.0" prefHeight="42.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="138.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="126.0" minHeight="0.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="93.0" minHeight="0.0" prefHeight="29.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.paid" GridPane.halignment="CENTER" fx:id="paid"/>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.amount" GridPane.halignment="CENTER" GridPane.rowIndex="2" fx:id="amount"/>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.when" GridPane.halignment="CENTER" GridPane.rowIndex="1" fx:id="when"/>
-                  <DatePicker fx:id="whenField" prefHeight="25.0" prefWidth="184.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.how" GridPane.halignment="CENTER" GridPane.rowIndex="3" fx:id="how"/>
-                  <CheckBox fx:id="allBox" mnemonicParsing="false" onAction="#checkAll" text="expense.add.checkbox.equal" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <CheckBox fx:id="someBox" mnemonicParsing="false" onAction="#checkSome" text="expense.add.checkbox.select" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <ComboBox fx:id="paidBySelector" prefWidth="300.0" promptText="select" GridPane.columnIndex="1" />
-                  <ComboBox fx:id="currencySelector" prefHeight="25.0" prefWidth="84.0" visibleRowCount="3" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-                  <TextField fx:id="howMuchField" maxWidth="85.0" prefHeight="25.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-               </children>
-            </GridPane>
-            <VBox fx:id="tagSelector" layoutX="404.0" layoutY="102.0" prefHeight="145.0" prefWidth="153.0" spacing="3.0" />
-            <Button alignment="CENTER" contentDisplay="BOTTOM" layoutX="395.0" layoutY="62.0" mnemonicParsing="false" onAction="#openTagScene" prefHeight="25.0" prefWidth="111.0" text="expense.add.createTag" textAlignment="CENTER" fx:id="createButton"/>
-            <VBox fx:id="createTagBox" alignment="CENTER" layoutX="150.0" layoutY="74.0" prefHeight="192.0" prefWidth="302.0">
-               <children>
-                  <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="200.0" prefWidth="377.0">
-                     <children>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="200.0" stroke="BLACK" strokeType="INSIDE" width="302.0" />
-                        <Label layoutX="111.0" layoutY="27.0" text="Create new tag" />
-                        <GridPane alignment="CENTER" layoutX="81.0" layoutY="61.0" prefHeight="30.0" prefWidth="163.0">
-                           <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="76.0" minWidth="10.0" prefWidth="40.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="123.0" minWidth="10.0" prefWidth="123.0" />
-                           </columnConstraints>
-                           <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                           </rowConstraints>
-                           <children>
-                              <Label alignment="CENTER" text="Name" GridPane.halignment="CENTER" />
-                              <TextField fx:id="tagField" GridPane.columnIndex="1" />
-                           </children>
-                        </GridPane>
-                        <Button layoutX="126.0" layoutY="100.0" mnemonicParsing="false" onAction="#createTag" text="Create" />
-                        <Button layoutX="218.0" layoutY="161.0" mnemonicParsing="false" onAction="#closeCreateTag" text="Cancel" />
-                        <Label fx:id="tagErrorLabel" layoutX="103.0" layoutY="137.0" text="Tag already exists!" textFill="#fc0000" />
-                     </children>
-                  </AnchorPane>
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </VBox>
-            <VBox fx:id="partialPaidSelector" layoutX="155.0" layoutY="189.0" prefHeight="200.0" prefWidth="153.0" spacing="3.0" />
-      </children>
-    </AnchorPane>
-  </children>
-</VBox>
+<AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="400.0" prefWidth="515.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpenseCtrl">
+    <children>
+          <Button fx:id="submitButton" layoutX="442.0" layoutY="313.0" mnemonicParsing="false" onAction="#createExpense" text="general.add" id="confirmBtn"/>
+          <Button fx:id="abortButton" layoutX="383.0" layoutY="313.0" mnemonicParsing="false" onAction="#backToOverview" text="expense.add.abort" id="cancelBtn" />
+          <Text fx:id="what" fill="#eaeaea" layoutX="371.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.what" textAlignment="CENTER" />
+          <GridPane alignment="CENTER" layoutX="4.0" layoutY="20.0" prefHeight="169.0" prefWidth="302.0">
+            <columnConstraints>
+              <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.0" minWidth="10.0" prefWidth="80.0" />
+              <ColumnConstraints hgrow="SOMETIMES" maxWidth="239.0" minWidth="10.0" prefWidth="116.0" />
+            </columnConstraints>
+            <rowConstraints>
+              <RowConstraints maxHeight="95.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+              <RowConstraints maxHeight="106.0" minHeight="10.0" prefHeight="42.0" vgrow="SOMETIMES" />
+              <RowConstraints maxHeight="138.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="126.0" minHeight="0.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="93.0" minHeight="0.0" prefHeight="29.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+             <children>
+                <Text fx:id="paid" fill="#eaeaea" strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.paid" GridPane.halignment="CENTER" />
+                <Text fx:id="amount" fill="#eaeaea" strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.amount" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                <Text fx:id="when" fill="#eaeaea" strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.when" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                <DatePicker fx:id="whenField" prefHeight="25.0" prefWidth="184.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Text fx:id="how" fill="#eaeaea" strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.how" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                <CheckBox fx:id="allBox" mnemonicParsing="false" onAction="#checkAll" text="expense.add.checkbox.equal" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <CheckBox fx:id="someBox" mnemonicParsing="false" onAction="#checkSome" text="expense.add.checkbox.select" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <ComboBox fx:id="paidBySelector" prefWidth="300.0" promptText="select" GridPane.columnIndex="1" />
+                <ComboBox fx:id="currencySelector" prefHeight="25.0" prefWidth="77.0" visibleRowCount="3" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets left="2.0" />
+               </GridPane.margin></ComboBox>
+                <TextField fx:id="howMuchField" maxWidth="85.0" prefHeight="25.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+             </children>
+          </GridPane>
+          <VBox fx:id="tagSelector" layoutX="357.0" layoutY="98.0" prefHeight="145.0" prefWidth="153.0" spacing="3.0" />
+          <Button fx:id="createButton" alignment="CENTER" contentDisplay="BOTTOM" layoutX="357.0" layoutY="57.0" mnemonicParsing="false" onAction="#openTagDialog" prefHeight="29.0" prefWidth="127.0" text="expense.add.createTag" textAlignment="CENTER" />
+          <VBox fx:id="partialPaidSelector" layoutX="155.0" layoutY="189.0" prefHeight="200.0" prefWidth="153.0" spacing="3.0" />
+    </children>
+   <padding>
+      <Insets left="20.0" />
+   </padding>
+</AnchorPane>

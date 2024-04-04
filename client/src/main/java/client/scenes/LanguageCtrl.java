@@ -20,6 +20,8 @@ public class LanguageCtrl implements Initializable {
     @FXML
     private Button dutchButton;
     @FXML
+    private Button romanianButton;
+    @FXML
     private Label languageLabel;
     @FXML
     private Label backButtonLabel;
@@ -35,6 +37,7 @@ public class LanguageCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         I18N.update(englishButton);
         I18N.update(dutchButton);
+        I18N.update(romanianButton);
         I18N.update(languageLabel);
         I18N.update(backButtonLabel);
     }
@@ -51,5 +54,9 @@ public class LanguageCtrl implements Initializable {
     public void switchToDutch(){
         this.mainCtrl.switchToDutch();
         this.mainCtrl.uponLanguageSwitch();
+    }
+
+    public void switchToRomanian(){
+        System.out.println("switch to romanian");
     }
 }

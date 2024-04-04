@@ -14,6 +14,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,6 +24,9 @@ public class EditParticipantCtrl implements Initializable {
     private final MainCtrl mainCtrl;
 
     private final ServerUtils server;
+
+    private final NotificationService notificationHelper;
+
 
     @FXML
     private TextField email;
@@ -47,7 +52,6 @@ public class EditParticipantCtrl implements Initializable {
     public Label editParticipant;
     private Event event;
     private Participant p;
-    private final NotificationService notificationHelper;
 
     @Inject
     public EditParticipantCtrl(MainCtrl mainCtrl, Event event, Participant p, ServerUtils server, NotificationService notificationService) {
@@ -60,6 +64,11 @@ public class EditParticipantCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        ImageView bin=new ImageView(new Image("client/icons/bin-red.png"));
+        bin.setPreserveRatio(true);
+        bin.setFitHeight(15);
+
+        deleteButton.setGraphic(bin);
         I18N.update(cancelButton2);
         I18N.update(editButton);
         I18N.update(deleteButton);
@@ -120,6 +129,9 @@ public class EditParticipantCtrl implements Initializable {
     }
 
     public void removeParticipant() {
+        if (!notificationHelper.showConfirmation(I18N.get("participant.remove.notification_title"), I18N.get("participant.remove.notification"))) {
+            return;
+        }
         try {
             server.removeParticipant(event, p);
         } catch (WebApplicationException e) {
