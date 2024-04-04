@@ -21,6 +21,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -178,13 +179,15 @@ public class AdminEventsCtrl implements Initializable {
     private BorderPane createRow(Event e) {
         Insets insets = new Insets(0.0, 5.0, 0.0, 5.0);
         BorderPane bp = new BorderPane();
-        bp.setLeft(new Text(e.getName()));
+        Text text=new Text(e.getName());
+        text.setFill(Color.WHITESMOKE);
+        bp.setLeft(text);
 
         BorderPane innerBp = new BorderPane();
         innerBp.setMaxWidth(40.0);
         innerBp.setMaxHeight(15.0);
 
-        Image removeImage = new Image("client/icons/bin.png");
+        Image removeImage = new Image("client/icons/bin-red.png");
         ImageView remove = new ImageView();
         remove.setImage(removeImage);
         remove.setOnMouseClicked(x -> removeEventAction(e));
@@ -195,7 +198,7 @@ public class AdminEventsCtrl implements Initializable {
         innerBp.setRight(remove);
         BorderPane.setMargin(remove, insets);
 
-        Image downloadImage = new Image("client/icons/downloads.png");
+        Image downloadImage = new Image("client/icons/downloads-white.png");
         ImageView download = new ImageView();
         download.setImage(downloadImage);
         download.setOnMouseClicked(x -> downloadEvent(e));

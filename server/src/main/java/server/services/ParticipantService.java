@@ -29,8 +29,7 @@ public class ParticipantService {
 
     public Participant add(Participant p, UUID eventID){
         //check if participant has empty fields
-        if (p == null || isNullOrEmpty(p.getName()) || isNullOrEmpty(p.getIban())
-                || isNullOrEmpty(p.getEmail())) {
+        if (p == null || isNullOrEmpty(p.getName())) {
             return null;
         }
         //set event part of based on id
