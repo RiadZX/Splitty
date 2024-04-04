@@ -22,6 +22,21 @@
     -fx-border-color: #202020;
     -fx-border-width: 1px;
 }
+
+#actionBtn{
+    -fx-background-color: #1b60a4;
+    -fx-text-fill: #ffffff;
+}
+
+#confirmBtn{
+    -fx-background-color: #1a7f1a;
+    -fx-text-fill: #ffffff;
+}
+
+#cancelBtn{
+    -fx-background-color: #ff1212;
+    -fx-text-fill: #ffffff;
+}
 .button:hover{
     -fx-text-fill: #ffffff;
     -fx-background-color: #232323;
