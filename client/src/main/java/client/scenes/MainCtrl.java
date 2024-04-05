@@ -136,8 +136,11 @@ public class MainCtrl {
         eventOverview.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (event.isAltDown() && event.getCode() == KeyCode.DIGIT1) {
+                if (event.isAltDown() && event.getCode() == KeyCode.DIGIT1 || event.getCode() == KeyCode.HOME) {
                     showStartScene();
+                }
+                if (event.isAltDown() && event.getCode() == KeyCode.S) {
+                    showSettings();
                 }
             }
         });
@@ -161,6 +164,9 @@ public class MainCtrl {
             public void handle(KeyEvent event) {
                 if (event.isAltDown() && event.getCode() == KeyCode.S) {
                     showSettings();
+                }
+                if (event.isAltDown() && event.getCode() == KeyCode.H) {
+                    startCtrl.shortCuts();
                 }
             }
         });

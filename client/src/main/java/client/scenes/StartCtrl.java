@@ -156,6 +156,15 @@ public class StartCtrl implements Initializable {
         clearFields();
     }
 
+    public  void joinRecentEvent(int index){ //add handling for deleted event
+        List<UUID> eventIDs=this.mainCtrl.getUser().getEvents();
+        if (index<0 || index>=eventIDs.size()){
+            notificationService.showError("Error joining event", "Index out of bounds");
+            return;
+        }
+        joinRecentEvent(eventIDs.get(index));
+    }
+
     /**
      * Move to the Settings scene when the icon is pressed
      */
@@ -169,6 +178,18 @@ public class StartCtrl implements Initializable {
     public  void clearFields(){
         this.createEventField.clear();
         this.joinEventField.clear();
+    }
+
+    public void shortCuts(){
+        notificationService.informUser("Shortcuts",
+                """
+                        ALT + H  |  show this help message
+                        ESCAPE   |  abort an action, go back to the previous scene
+                        ALT + S  |  go to the settings scene
+                        ALT + 1  |  (if in event overview) go to the main scene
+                        HOME KEY |  exit the event overview page
+                        """,
+                "Shortcuts");
     }
 
 }
