@@ -120,6 +120,6 @@
             <Insets bottom="15.0" left="15.0" right="15.0" top="5.0" />
          </padding>
       </Pane>
-      <Button fx:id="addTag" layoutX="182.0" layoutY="489.0" mnemonicParsing="false" text="event.overview.addTag" />
+      <Button fx:id="addTag" layoutX="182.0" layoutY="489.0" mnemonicParsing="false" onAction="#addTag" text="event.overview.addTag" />
    </children>
 </AnchorPane>

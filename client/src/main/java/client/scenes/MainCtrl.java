@@ -73,6 +73,10 @@ public class MainCtrl {
 
     private AdminEventsCtrl adminEventsCtrl;
     private Scene adminEvents;
+
+    private AddTagCtrl addTagCtrl;
+    private Scene addTag;
+
     private NotificationService notificationService;
 
     public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime,
@@ -85,6 +89,7 @@ public class MainCtrl {
                            Pair<UserSettingsCtrl, Parent> userSettings,
                            Pair<SettingsCtrl, Parent> settings,
                            Pair<AdminEventsCtrl, Parent> adminEvents,
+                           Pair<AddTagCtrl, Parent> addTag,
                            Pair<LanguageCtrl, Parent> languages,
                            boolean adminMode
     ) {
@@ -128,6 +133,9 @@ public class MainCtrl {
 
         this.adminEventsCtrl = adminEvents.getKey();
         this.adminEvents = new Scene(adminEvents.getValue());
+
+        this.addTagCtrl = addTag.getKey();
+        this.addTag = new Scene(addTag.getValue());
 
         primaryStage.getIcons().add(new Image("client/icons/app-icon.png"));
         chooseFirstPage(adminMode);
@@ -279,6 +287,12 @@ public class MainCtrl {
         primaryStage.setTitle(I18N.get("window.event.admin"));
         adminEventsCtrl.populateList();
         primaryStage.setScene(adminEvents);
+    }
+
+    public void showAddTagScene(Event e) {
+        primaryStage.setTitle(I18N.get("window.tags"));
+        addTagCtrl.setUp(e);
+        primaryStage.setScene(addTag);
     }
     public Stage getPrimaryStage() {
         return primaryStage;

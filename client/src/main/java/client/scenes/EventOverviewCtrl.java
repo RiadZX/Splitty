@@ -211,6 +211,10 @@ public class EventOverviewCtrl implements Initializable {
         mainCtrl.showEditParticipantScene(event, p);
     }
 
+    public void addTag() {
+        mainCtrl.showAddTagScene(event);
+    }
+
     public void addExpense(){
         mainCtrl.showAddExpense();
     }
