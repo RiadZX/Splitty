@@ -141,7 +141,20 @@ public class MainCtrl {
                 }
             }
         });
+        initShortcuts(start, settings, inviteView, userSettings, addParticipant, editParticipant, languages, addExpense);
+        this.notificationService = new NotificationHelper();
+    }
 
+    private void initShortcuts(
+            Pair<StartCtrl, Parent> start,
+            Pair<SettingsCtrl, Parent> settings,
+            Pair<InviteViewCtrl, Parent> inviteView,
+            Pair<UserSettingsCtrl, Parent> userSettings,
+            Pair<AddParticipantCtrl, Parent> addParticipant,
+            Pair<EditParticipantCtrl, Parent> editParticipant,
+            Pair<LanguageCtrl, Parent> languages,
+            Pair<AddExpenseCtrl, Parent> addExpense
+    ) {
         // in start, press alt+s to go to settings
         start.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
@@ -156,12 +169,81 @@ public class MainCtrl {
         settings.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (event.isAltDown() && event.getCode() == KeyCode.DIGIT1) {
+                if (event.isAltDown() && event.getCode() == KeyCode.ESCAPE) {
                     showStartScene();
                 }
             }
         });
-        this.notificationService = new NotificationHelper();
+        inviteView.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showEventOverviewScene(inviteViewCtrl.getEvent());
+                }
+            }
+        });
+
+        userSettings.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showSettings();
+                }
+            }
+        });
+
+        editParticipant.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showEventOverviewScene(editParticipantCtrl.getEvent());
+                }
+            }
+        });
+        settings.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showStartScene();
+                }
+            }
+        });
+
+        addParticipant.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showEventOverviewScene(addParticipantCtrl.getEvent());
+                }
+            }
+        });
+
+        editParticipant.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showEventOverviewScene(editParticipantCtrl.getEvent());
+                }
+            }
+        });
+        addExpense.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showEventOverviewScene(addExpenseCtrl.getEvent());
+                }
+            }
+        });
+
+        languages.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showSettings();
+                }
+            }
+        });
+
     }
 
     public void showInviteView(Event event){
