@@ -266,14 +266,14 @@ public class AddExpenseCtrl implements Initializable {
             d.setExpense(newExpense); //setup each debt's expense pointer
         }
 
-        for (Tag t : tags) {
-
-        }
         Expense e;
         if (expense == null) {
-            server.addExpense(event.getId(), newExpense);
+            expense = server.addExpense(event.getId(), newExpense);
         } else {
             server.updateExpense(event.getId(), expense.getId(), newExpense);
+        }
+        for (Tag t : tags) {
+            server.addExpense(event.getId(), t.getId(), expense.getId());
         }
         mainCtrl.showEventOverviewScene(event);
     }

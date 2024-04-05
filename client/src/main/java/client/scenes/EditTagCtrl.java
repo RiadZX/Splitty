@@ -68,7 +68,7 @@ public class EditTagCtrl implements Initializable {
             return;
         }
 
-        if (event.getTags().stream().map(t -> t.getTag()).toList().contains(name)) {
+        if (event.getTags().stream().map(t -> t.getTag()).toList().contains(name) && !tag.getTag().equals(name)) {
             String warningMessage = I18N.get("tag.add.exists");
             notificationService.showError(I18N.get("general.warning"), warningMessage);
             return;

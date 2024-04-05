@@ -279,6 +279,8 @@ public class EventOverviewCtrl implements Initializable {
         HBox hbox = new HBox();
         List<BorderPane> tags = e.getTags().stream().map(this::pretty).toList();
         hbox.getChildren().addAll(tags);
+        hbox.setSpacing(5.0);
+        hbox.setPadding(insets);
         innerBp.setLeft(hbox);
 
         bp.setRight(innerBp);
@@ -362,7 +364,7 @@ public class EventOverviewCtrl implements Initializable {
 //        return outgoing;
 //    }
     public BorderPane pretty(Tag t) {
-        Insets insets = new Insets(5.0, 5.0, 5.0, 5.0);
+        Insets insets = new Insets(2.0, 5.0, 2.0, 5.0);
 
         BorderPane bp = new BorderPane();
         bp.setBackground(Background.fill(Color.web(t.getColor())));
