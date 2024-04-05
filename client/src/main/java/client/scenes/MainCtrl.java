@@ -23,6 +23,7 @@ import client.utils.User;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import commons.Tag;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -75,6 +76,13 @@ public class MainCtrl {
 
     private AdminEventsCtrl adminEventsCtrl;
     private Scene adminEvents;
+
+    private AddTagCtrl addTagCtrl;
+    private Scene addTag;
+
+    private EditTagCtrl editTagCtrl;
+    private Scene editTag;
+
     private NotificationService notificationService;
 
     public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime,
@@ -87,6 +95,8 @@ public class MainCtrl {
                            Pair<UserSettingsCtrl, Parent> userSettings,
                            Pair<SettingsCtrl, Parent> settings,
                            Pair<AdminEventsCtrl, Parent> adminEvents,
+                           Pair<AddTagCtrl, Parent> addTag,
+                           Pair<EditTagCtrl, Parent> editTag,
                            Pair<LanguageCtrl, Parent> languages,
                            boolean adminMode,
                             Pair<StatisticsCtrl, Parent> statistics
@@ -131,6 +141,12 @@ public class MainCtrl {
 
         this.adminEventsCtrl = adminEvents.getKey();
         this.adminEvents = new Scene(adminEvents.getValue());
+
+        this.addTagCtrl = addTag.getKey();
+        this.addTag = new Scene(addTag.getValue());
+
+        this.editTagCtrl = editTag.getKey();
+        this.editTag = new Scene(editTag.getValue());
 
         this.statisticsCtrl = statistics.getKey();
         this.statistics = new Scene(statistics.getValue());
@@ -286,6 +302,19 @@ public class MainCtrl {
         adminEventsCtrl.populateList();
         primaryStage.setScene(adminEvents);
     }
+
+    public void showAddTagScene(Event e) {
+        primaryStage.setTitle(I18N.get("window.tags"));
+        addTagCtrl.setUp(e.getId());
+        primaryStage.setScene(addTag);
+    }
+
+    public void showEditTagScene(Tag t, Event e) {
+        primaryStage.setTitle(I18N.get("window.edit.tags"));
+        editTagCtrl.setUp(t, e);
+        primaryStage.setScene(editTag);
+    }
+
     public Stage getPrimaryStage() {
         return primaryStage;
     }

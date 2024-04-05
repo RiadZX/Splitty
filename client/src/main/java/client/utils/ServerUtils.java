@@ -17,11 +17,7 @@ package client.utils;
 
 import com.google.gson.JsonObject;
 import com.moandjiezana.toml.Toml;
-import commons.Event;
-import commons.EventLongPollingWrapper;
-import commons.Expense;
-import commons.Participant;
-import commons.Quote;
+import commons.*;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -288,4 +284,55 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)//
                 .post(Entity.entity(body.toString(), APPLICATION_JSON), Double.class);
     }
+
+
+
+    public List<Tag> getTagsFromEvent(UUID eventId) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverAddress).path("api/events/" + eventId + "/tags")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Tag>>(){});
+    }
+
+    public Tag getTag(UUID eventId, UUID id) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverAddress).path("api/events/" + eventId + "/tags/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<Tag>(){});
+    }
+
+    public Tag addTag(UUID eventId, Tag t) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverAddress).path("api/events/" + eventId + "/tags/")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(t, APPLICATION_JSON), Tag.class);
+    }
+
+    public void removeTag(UUID eventId, UUID id) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(serverAddress).path("api/events/" + eventId + "/tags/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
+
+    public Tag updateTag(UUID eventId, UUID id, Tag t) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverAddress).path("api/events/" + eventId + "/tags/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(t, APPLICATION_JSON), Tag.class);
+    }
+
+    public void addExpense(UUID eventId, UUID id, UUID expenseId) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(serverAddress).path("api/events/" + eventId + "/tags/" + id + "/expenses")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(expenseId, APPLICATION_JSON), Tag.class);
+    }
+
 }

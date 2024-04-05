@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import commons.Tag;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -16,7 +17,9 @@ import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -43,6 +46,8 @@ public class EventOverviewCtrl implements Initializable {
     public Button sendInvite;
     @FXML
     public Button addExpense;
+    @FXML
+    public Button addTag;
     @FXML
     public Label expenseLabel;
     @FXML
@@ -105,6 +110,7 @@ public class EventOverviewCtrl implements Initializable {
         this.statsBtn.setOnAction(e -> mainCtrl.showStatistics(this.event));
         I18N.update(sendInvite);
         I18N.update(addExpense);
+        I18N.update(addTag);
         I18N.update(settleDebt);
         I18N.update(expenseLabel);
         I18N.update(participantLabel);
@@ -159,9 +165,7 @@ public class EventOverviewCtrl implements Initializable {
         this.event=newEvent;
         eventTitle.setText(this.event.getTitle());
         reassignParticipants(this.event.getParticipants());
-        System.out.println("set event: "+ event);
         this.expenses = server.getExpensesByEvent(this.event.getId());
-        System.out.println("expenses: "+ expenses);
     }
 
     public void reassignParticipants(List<Participant> participantList){
@@ -174,7 +178,7 @@ public class EventOverviewCtrl implements Initializable {
         for (Participant p : participantList.subList(0, participantList.size() - 1)) {
             Label label = new Label(p.getName());
             label.setOnMouseClicked(e -> editParticipant(p));
-            label.setCursor(Cursor.CLOSED_HAND);
+            label.setCursor(Cursor.HAND);
             textFlow.getChildren().add(label);
             textFlow.getChildren().add(new Label(", "));
         }
@@ -210,6 +214,10 @@ public class EventOverviewCtrl implements Initializable {
         mainCtrl.showEditParticipantScene(event, p);
     }
 
+    public void addTag() {
+        mainCtrl.showAddTagScene(event);
+    }
+
     public void addExpense(){
         mainCtrl.showAddExpense();
     }
@@ -224,6 +232,8 @@ public class EventOverviewCtrl implements Initializable {
     public void refresh(){
         try {
             Event refreshed = server.getEvent(event.getId());
+            System.out.println("LIST OF TAGS:");
+            System.out.println(refreshed.getTags());
             System.out.println("refreshing");
             this.setEvent(refreshed);
             payerSelector.setItems(FXCollections.observableArrayList(event.getParticipants()));
@@ -257,6 +267,8 @@ public class EventOverviewCtrl implements Initializable {
         text.setFill(Color.WHITESMOKE);
         bp.setLeft(text);
 
+        BorderPane innerBp = new BorderPane();
+
         Image editImage = new Image("client/icons/pencil.png");
         ImageView edit = new ImageView();
         edit.setImage(editImage);
@@ -266,8 +278,16 @@ public class EventOverviewCtrl implements Initializable {
         edit.setPickOnBounds(true);
         edit.setFitWidth(12.0);
         BorderPane.setMargin(edit, insets);
+        innerBp.setRight(edit);
 
-        bp.setRight(edit);
+        HBox hbox = new HBox();
+        List<BorderPane> tags = e.getTags().stream().map(this::pretty).toList();
+        hbox.getChildren().addAll(tags);
+        hbox.setSpacing(5.0);
+        hbox.setPadding(insets);
+        innerBp.setLeft(hbox);
+
+        bp.setRight(innerBp);
         return bp;
     }
 
@@ -347,5 +367,30 @@ public class EventOverviewCtrl implements Initializable {
 //        }
 //        return outgoing;
 //    }
+    public BorderPane pretty(Tag t) {
+        Insets insets = new Insets(2.0, 5.0, 2.0, 5.0);
+
+        BorderPane bp = new BorderPane();
+        bp.setBackground(Background.fill(Color.web(t.getColor())));
+        String style = """
+                -fx-background-radius: 30;
+                -fx-border-radius: 30;
+                -fx-border-width:0.8;
+                -fx-border-color: #F5F5F5;
+                """;
+        style = style + "-fx-background-color: " + t.getColor();
+        bp.setStyle(style);
+        bp.setMinHeight(8.0);
+        bp.setMaxWidth(300.0);
+
+        Text name = new Text(t.getTag());
+        name.setFill(Color.WHITESMOKE);
+        name.setCursor(Cursor.HAND);
+        BorderPane.setMargin(name, insets);
+
+        bp.setLeft(name);
+
+        return bp;
+    }
 
 }
