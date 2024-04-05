@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -40,6 +41,7 @@ public class Tag {
         this();
         this.tag = tag;
         this.event = event;
+        this.expenses = new ArrayList<>();
     }
 
     public Tag(String tag, String color, Event e) {
@@ -57,6 +59,10 @@ public class Tag {
 
     public UUID getId() {
         return id;
+    }
+
+    public void addExpense(Expense e) {
+        expenses.add(e);
     }
 
     public void setId(UUID id) {

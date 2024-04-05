@@ -62,4 +62,12 @@ public class TagController {
         }
         return ResponseEntity.ok(t);
     }
+
+    @PostMapping("/{id}/expenses")
+    public ResponseEntity<Void> addExpense(@PathVariable("eventId") UUID eventId,
+                                           @PathVariable("id") UUID id,
+                                           @RequestBody UUID expenseId) {
+        repo.addExpense(eventId, id, expenseId);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -1,9 +1,11 @@
 package server.services;
 
 import commons.Event;
+import commons.Expense;
 import commons.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import server.database.ExpenseRepository;
 import server.database.TagRepository;
 
 import java.util.List;
@@ -12,10 +14,12 @@ import java.util.UUID;
 @Service
 public class TagService {
     private final TagRepository tagRepository;
+    private final ExpenseRepository expenseRepository;
 
     @Autowired
-    public TagService(TagRepository tagRepository) {
+    public TagService(TagRepository tagRepository, ExpenseRepository expenseRepository) {
         this.tagRepository = tagRepository;
+        this.expenseRepository = expenseRepository;
     }
 
     public List<Tag> getAllFromEvent(UUID id) {
@@ -51,5 +55,17 @@ public class TagService {
             return t;
         }
         return null;
+    }
+
+    public void addExpense(UUID eventId, UUID id, UUID expenseId) {
+        Tag t = tagRepository.findById(id).orElse(null);
+        Expense e = new Expense();
+        e.setId(expenseId);
+        if (t != null) {
+            t.addExpense(e);
+            updateTag(eventId, id, t);
+        } else {
+            throw new RuntimeException("Tag or Expense was null");
+        }
     }
 }
