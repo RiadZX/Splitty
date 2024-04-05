@@ -142,6 +142,16 @@ public class MainCtrl {
                 if (event.isAltDown() && event.getCode() == KeyCode.S) {
                     showSettings();
                 }
+                if (event.isAltDown() && event.getCode() == KeyCode.E) {
+                    showAddExpense();
+                }
+                if (event.isAltDown() && event.getCode() == KeyCode.P) {
+                    showAddParticipantScene(eventOverviewCtrl.getEvent());
+                }
+                if (event.isAltDown() && event.getCode() == KeyCode.I) {
+                    inviteViewCtrl.setEvent(eventOverviewCtrl.getEvent());
+                    showInviteView(eventOverviewCtrl.getEvent());
+                }
             }
         });
         initShortcuts(start, settings, inviteView, userSettings, addParticipant, editParticipant, languages, addExpense);
@@ -224,14 +234,7 @@ public class MainCtrl {
             }
         });
 
-        editParticipant.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ESCAPE) {
-                    showEventOverviewScene(editParticipantCtrl.getEvent());
-                }
-            }
-        });
+
         addExpense.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {

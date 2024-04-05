@@ -187,6 +187,9 @@ public class StartCtrl implements Initializable {
                         ESCAPE   |  abort an action, go back to the previous scene
                         ALT + S  |  go to the settings scene
                         ALT + 1  |  (if in event overview) go to the main scene
+                        ALT + E  |  (if in event overview) create new expense
+                        ALT + P  |  (if in event overview) create new participant
+                        ALT + I  |  (if in event overview) open invite code dialog
                         HOME KEY |  exit the event overview page
                         """,
                 "Shortcuts");
