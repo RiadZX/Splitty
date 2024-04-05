@@ -65,8 +65,8 @@ public class StatisticsCtrl implements Initializable {
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         Map<String, Double> stats = new HashMap<>();
         //for each expense get the tags and add the amount to the corresponding tag
-        Event fakeEvent = getDummyPieChartData();
-        for (Expense e : fakeEvent.getExpenses()) {
+        //Event fakeEvent = getDummyPieChartData();
+        for (Expense e : event.getExpenses()) {
             for (Tag t : e.getTags()) {
                 stats.put(t.getTag(), stats.getOrDefault(t.getTag(), 0.0) + e.getAmount());
             }
