@@ -297,6 +297,57 @@ public class ServerUtils {
                 .post(Entity.entity(body.toString(), APPLICATION_JSON), Double.class);
     }
 
+
+
+    public List<Tag> getTagsFromEvent(UUID eventId) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverAddress).path("api/events/" + eventId + "/tags")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Tag>>(){});
+    }
+
+    public Tag getTag(UUID eventId, UUID id) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverAddress).path("api/events/" + eventId + "/tags/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<Tag>(){});
+    }
+
+    public Tag addTag(UUID eventId, Tag t) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverAddress).path("api/events/" + eventId + "/tags/")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(t, APPLICATION_JSON), Tag.class);
+    }
+
+    public void removeTag(UUID eventId, UUID id) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(serverAddress).path("api/events/" + eventId + "/tags/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
+
+    public Tag updateTag(UUID eventId, UUID id, Tag t) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverAddress).path("api/events/" + eventId + "/tags/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(t, APPLICATION_JSON), Tag.class);
+    }
+
+    public void addExpense(UUID eventId, UUID id, UUID expenseId) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(serverAddress).path("api/events/" + eventId + "/tags/" + id + "/expenses")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(expenseId, APPLICATION_JSON), Tag.class);
+    }
+
+
     private StompSession session = connect("ws://localhost:8080/websocket");
 
     private StompSession connect(String url){

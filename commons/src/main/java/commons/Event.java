@@ -44,7 +44,6 @@ public class Event {
     private List<Expense> expenses;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference("event-tags")
     @Expose
     private List<Tag> tags;
 
