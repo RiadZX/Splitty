@@ -5,7 +5,6 @@ import client.services.NotificationService;
 import client.utils.ServerUtils;
 import commons.Event;
 import commons.Tag;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
