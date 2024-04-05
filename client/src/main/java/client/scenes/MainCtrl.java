@@ -291,7 +291,7 @@ public class MainCtrl {
 
     public void showAddTagScene(Event e) {
         primaryStage.setTitle(I18N.get("window.tags"));
-        addTagCtrl.setUp(e);
+        addTagCtrl.setUp(e.getId());
         primaryStage.setScene(addTag);
     }
     public Stage getPrimaryStage() {

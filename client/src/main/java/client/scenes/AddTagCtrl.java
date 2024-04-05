@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.services.I18N;
+import client.services.NotificationService;
 import commons.Event;
 import commons.Tag;
 import javafx.fxml.FXML;
@@ -26,6 +27,7 @@ import java.util.List;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class AddTagCtrl implements Initializable {
@@ -52,11 +54,14 @@ public class AddTagCtrl implements Initializable {
 
     private Event event;
 
+    private final NotificationService notificationService;
+
     @Inject
-    public AddTagCtrl(MainCtrl mainCtrl, Event event, ServerUtils server) {
+    public AddTagCtrl(MainCtrl mainCtrl, Event event, ServerUtils server, NotificationService notificationService) {
         this.mainCtrl = mainCtrl;
         this.event = event;
         this.server = server;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -67,9 +72,9 @@ public class AddTagCtrl implements Initializable {
         I18N.update(createTagLabel);
     }
 
-    public void setUp(Event e) {
-        this.event = e;
-        List<BorderPane> tags = e.getTags().stream().map(t -> pretty(t)).toList();
+    public void setUp(UUID e) {
+        this.event = server.getEvent(e);
+        List<BorderPane> tags = event.getTags().stream().map(t -> pretty(t)).toList();
 
         tagsPane.getChildren().clear();
         tagsPane.getChildren().addAll(tags);
@@ -111,8 +116,28 @@ public class AddTagCtrl implements Initializable {
     public void addTag() {
         Color color = colorPicker.getValue();
         String name = tagName.getText();
-        setUp(event);
+
+        if (name.isEmpty()) {
+            String warningMessage = I18N.get("tag.add.error");
+            notificationService.showError(I18N.get("general.warning"), warningMessage);
+            return;
+        }
+
+        server.addTag(
+                event.getId(),
+                new Tag(name, toRGBCode(color), event)
+        );
+
+        setUp(event.getId());
     }
+
+    public static String toRGBCode( Color color ) {
+        return String.format( "#%02X%02X%02X",
+                (int)( color.getRed() * 255 ),
+                (int)( color.getGreen() * 255 ),
+                (int)( color.getBlue() * 255 ) );
+    }
+
 
     public void setEvent(Event event) {
         this.event = event;
