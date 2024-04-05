@@ -1,23 +1,30 @@
 package client.scenes;
 
 import client.services.I18N;
-import client.services.NotificationHelper;
 import commons.Event;
-import commons.Participant;
+import commons.Tag;
 import javafx.fxml.FXML;
 import client.utils.ServerUtils;
 
 import javax.inject.Inject;
 
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Text;
+
+import java.util.List;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class AddTagCtrl implements Initializable {
     private final MainCtrl mainCtrl;
@@ -60,6 +67,29 @@ public class AddTagCtrl implements Initializable {
 
     public void setUp(Event e) {
         this.event = e;
+        List<BorderPane> tags = e.getTags().stream().map(this::pretty).toList();
+
+        tagsPane.getChildren().clear();
+        tagsPane.getChildren().addAll(tags);
+        System.out.println("SETUP");
+        System.out.println(e.getTags());
+    }
+
+    public BorderPane pretty(Tag t) {
+        BorderPane bp = new BorderPane();
+        bp.setOnMouseClicked(e -> editTag(t));
+        bp.setBackground(Background.fill(Paint.valueOf(t.getColor())));
+
+        Label name = new Label(t.getTag());
+        name.setCursor(Cursor.HAND);
+
+        bp.setLeft(name);
+
+        return bp;
+    }
+
+    public void editTag(Tag t) {
+
     }
 
     public void addTag() {

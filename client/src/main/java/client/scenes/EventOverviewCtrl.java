@@ -160,9 +160,7 @@ public class EventOverviewCtrl implements Initializable {
         this.event=newEvent;
         eventTitle.setText(this.event.getTitle());
         reassignParticipants(this.event.getParticipants());
-        System.out.println("set event: "+ event);
         this.expenses = server.getExpensesByEvent(this.event.getId());
-        System.out.println("expenses: "+ expenses);
     }
 
     public void reassignParticipants(List<Participant> participantList){
@@ -175,7 +173,7 @@ public class EventOverviewCtrl implements Initializable {
         for (Participant p : participantList.subList(0, participantList.size() - 1)) {
             Label label = new Label(p.getName());
             label.setOnMouseClicked(e -> editParticipant(p));
-            label.setCursor(Cursor.CLOSED_HAND);
+            label.setCursor(Cursor.HAND);
             textFlow.getChildren().add(label);
             textFlow.getChildren().add(new Label(", "));
         }
@@ -227,6 +225,8 @@ public class EventOverviewCtrl implements Initializable {
     public void refresh(){
         try {
             Event refreshed = server.getEvent(event.getId());
+            System.out.println("LIST OF TAGS:");
+            System.out.println(refreshed.getTags());
             System.out.println("refreshing");
             this.setEvent(refreshed);
             payerSelector.setItems(FXCollections.observableArrayList(event.getParticipants()));

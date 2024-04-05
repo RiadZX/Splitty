@@ -5,6 +5,7 @@ import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Participant;
+import commons.Tag;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -85,6 +86,12 @@ public class StartCtrl implements Initializable {
 
         Participant creator=new Participant(this.mainCtrl.getUser().getName());
         Event newEvent= new Event(title, creator);
+        Tag food = new Tag("food", "#8DE137", newEvent);
+        Tag entraceFees = new Tag("entrance fees", "#38C4D5", newEvent);
+        Tag travel = new Tag("travel", "#D53838", newEvent);
+        newEvent.addTag(food);
+        newEvent.addTag(entraceFees);
+        newEvent.addTag(travel);
         try {
             newEvent=server.addEvent(newEvent);
         } catch (WebApplicationException e) {
