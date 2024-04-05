@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -10,35 +9,32 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="608.0"
-            prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="client.scenes.StatisticsCtrl">
-    <PieChart fx:id="pieStats" layoutX="509.0" layoutY="93.0" prefHeight="351.0" prefWidth="380.0">
-    </PieChart>
-    <Text layoutX="526.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0"
-          text="Distribution of tags across expenses" textAlignment="CENTER" wrappingWidth="360.0">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="608.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StatisticsCtrl">
+
+    <Text layoutX="526.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Distribution of tags across expenses" textAlignment="CENTER" wrappingWidth="360.0">
         <font>
-            <Font size="19.0"/>
+            <Font size="19.0" />
         </font>
     </Text>
     <Label fx:id="expenseLabel" layoutX="304.0" layoutY="537.0" text="Total Event costs: ">
         <font>
-            <Font size="35.0"/>
+            <Font size="35.0" />
         </font>
     </Label>
     <TableView fx:id="tableView" layoutX="14.0" layoutY="73.0" prefHeight="452.0" prefWidth="487.0">
       <columns>
-          <TableColumn fx:id="tFrom" prefWidth="142.0" text="From"/>
-          <TableColumn fx:id="tTo" prefWidth="107.0" text="To"/>
-          <TableColumn fx:id="tAmount" prefWidth="68.0" text="Amount"/>
-          <TableColumn fx:id="tExpenseName" prefWidth="169.0" text="Expense"/>
+          <TableColumn fx:id="tFrom" prefWidth="142.0" text="From" />
+          <TableColumn fx:id="tTo" prefWidth="107.0" text="To" />
+          <TableColumn fx:id="tAmount" prefWidth="68.0" text="Amount" />
+          <TableColumn fx:id="tExpenseName" prefWidth="169.0" text="Expense" />
 
       </columns>
     </TableView>
-    <Button layoutX="22.0" layoutY="12.0" mnemonicParsing="false" onAction="#back" text="Back"/>
+    <Button layoutX="22.0" layoutY="12.0" mnemonicParsing="false" onAction="#back" text="Back" />
     <Label alignment="CENTER" layoutX="206.0" layoutY="37.0" prefHeight="21.0" prefWidth="104.0" text="Debts">
         <font>
-          <Font size="21.0"/>
+          <Font size="21.0" />
         </font>
     </Label>
+   <PieChart fx:id="pieStats" layoutX="526.0" layoutY="99.0" prefHeight="287.0" prefWidth="360.0" />
 </AnchorPane>
