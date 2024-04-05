@@ -55,11 +55,7 @@ public class AddExpenseCtrl implements Initializable {
     @FXML
     private Text how;
     @FXML
-    private Text what;
-    @FXML
     private Button abortButton;
-    @FXML
-    private Button createButton;
 
 
 
@@ -76,9 +72,7 @@ public class AddExpenseCtrl implements Initializable {
         I18N.update(when);
         I18N.update(amount);
         I18N.update(how);
-        I18N.update(what);
         I18N.update(abortButton);
-        I18N.update(createButton);
         I18N.update(allBox);
         I18N.update(someBox);
         this.prepareTagDialog();
@@ -266,14 +260,20 @@ public class AddExpenseCtrl implements Initializable {
                 paidBy,
                 event,
                 debts,
-                new ArrayList<>());
+                tags
+                );
         for (Debt d : newExpense.getDebts()){
             d.setExpense(newExpense); //setup each debt's expense pointer
         }
+
+        Expense e;
         if (expense == null) {
-            server.addExpense(event.getId(), newExpense);
+            expense = server.addExpense(event.getId(), newExpense);
         } else {
             server.updateExpense(event.getId(), expense.getId(), newExpense);
+        }
+        for (Tag t : tags) {
+            server.addExpense(event.getId(), t.getId(), expense.getId());
         }
         mainCtrl.showEventOverviewScene(event);
     }
