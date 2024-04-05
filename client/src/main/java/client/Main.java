@@ -50,10 +50,11 @@ public class Main extends Application {
         var settings= FXML.load(SettingsCtrl.class, "client", "scenes", "Settings.fxml");
         var adminEvents = FXML.load(AdminEventsCtrl.class, "client", "scenes", "AdminEvents.fxml");
         var addTag = FXML.load(AddTagCtrl.class, "client", "scenes", "AddTags.fxml");
+        var editTag = FXML.load(EditTagCtrl.class, "client", "scenes", "EditTags.fxml");
         var languageOptions = FXML.load(LanguageCtrl.class, "client", "scenes", "Language.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, firstTime, eventOverview, addParticipant, start, addExpense, inviteView, editParticipant, userSettings, settings, adminEvents, addTag, languageOptions, admin);
+        mainCtrl.initialize(primaryStage, firstTime, eventOverview, addParticipant, start, addExpense, inviteView, editParticipant, userSettings, settings, adminEvents, addTag, editTag, languageOptions, admin);
         // calls the stop method to stop the listener thread, otherwise it will keep on running.
         primaryStage.setOnCloseRequest(e -> {
             adminEvents.getKey().stop();

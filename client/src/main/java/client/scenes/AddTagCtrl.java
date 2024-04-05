@@ -108,7 +108,7 @@ public class AddTagCtrl implements Initializable {
     }
 
     public void editTag(Tag t) {
-
+        mainCtrl.showEditTagScene(t, event);
     }
 
     public void addTag() {
