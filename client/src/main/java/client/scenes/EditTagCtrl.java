@@ -61,14 +61,20 @@ public class EditTagCtrl implements Initializable {
 
     public void updateTag() {
         String name = tagName.getText();
+
         if (name.isEmpty()) {
             String warningMessage = I18N.get("tag.add.error");
             notificationService.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
+
+        if (event.getTags().stream().map(t -> t.getTag()).toList().contains(name)) {
+            String warningMessage = I18N.get("tag.add.exists");
+            notificationService.showError(I18N.get("general.warning"), warningMessage);
+            return;
+        }
         tag.setColor(AddTagCtrl.toRGBCode(colorPicker.getValue()));
         tag.setTag(name);
-//        tag.setEvent(event);
 
         server.updateTag(event.getId(), tag.getId(), tag);
         returnToOverview();

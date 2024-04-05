@@ -121,6 +121,12 @@ public class AddTagCtrl implements Initializable {
             return;
         }
 
+        if (event.getTags().stream().map(t -> t.getTag()).toList().contains(name)) {
+            String warningMessage = I18N.get("tag.add.exists");
+            notificationService.showError(I18N.get("general.warning"), warningMessage);
+            return;
+        }
+
         server.addTag(
                 event.getId(),
                 new Tag(name, toRGBCode(color), event)
