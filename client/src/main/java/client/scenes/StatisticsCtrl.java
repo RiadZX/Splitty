@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
 
 import java.net.URL;
 import java.util.*;
@@ -36,10 +37,12 @@ public class StatisticsCtrl implements Initializable {
     public TableColumn<StatsRow, String> tExpenseName;
     @FXML
     public TableView<StatsRow> tableView;
+    @FXML
+    public Pane piechartPane;
     private Event event;
 
-    @FXML
-    private PieChart pieStats;
+//    @FXML
+//    private PieChart pieStats;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -61,6 +64,14 @@ public class StatisticsCtrl implements Initializable {
     }
 
     public void updatePieChart() {
+        PieChart pieStats = new PieChart();
+        pieStats.setStyle("""
+                -fx-text-fill: white;
+                -fx-border-width: 0;
+                -fx-padding: 0;
+                -fx-background-color: #ffffff
+                """);
+        //set colors for the pie chart slices
         pieStats.setCache(false);
         pieStats.getData().clear();
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
@@ -70,10 +81,31 @@ public class StatisticsCtrl implements Initializable {
                 stats.put(t.getTag(), stats.getOrDefault(t.getTag(), 0.0) + e.getAmount());
             }
         }
+        List<String> colors = Arrays.asList(
+                "#FF6347",
+                "#FFD700",
+                "#40E0D0",
+                "#EE82EE",
+                "#ADFF2F");
+        int colorIndex = 0;
         for (Map.Entry<String, Double> entry : stats.entrySet()) {
-            pieChartData.add(new PieChart.Data(entry.getKey(), entry.getValue()));
+            PieChart.Data data = new PieChart.Data(entry.getKey(), entry.getValue());
+            pieChartData.add(data);
+            colorIndex++;
         }
         pieStats.setData(pieChartData);
+
+        // we can set the color for each slice.
+        colorIndex = 0;
+        for (PieChart.Data data : pieStats.getData()) {
+            data.getNode().setStyle("-fx-pie-color: " + colors.get(colorIndex % colors.size()) + ";");
+            colorIndex++;
+        }
+
+        pieStats.setLabelsVisible(true);
+        pieStats.setLegendVisible(false);
+        piechartPane.getChildren().clear();
+        piechartPane.getChildren().add(pieStats);
     }
 
     public void setParticipantStats() {
