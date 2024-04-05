@@ -55,11 +55,7 @@ public class AddExpenseCtrl implements Initializable {
     @FXML
     private Text how;
     @FXML
-    private Text what;
-    @FXML
     private Button abortButton;
-    @FXML
-    private Button createButton;
 
 
 
@@ -76,9 +72,7 @@ public class AddExpenseCtrl implements Initializable {
         I18N.update(when);
         I18N.update(amount);
         I18N.update(how);
-        I18N.update(what);
         I18N.update(abortButton);
-        I18N.update(createButton);
         I18N.update(allBox);
         I18N.update(someBox);
         this.prepareTagDialog();
