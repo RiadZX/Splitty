@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import commons.Tag;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -16,7 +17,9 @@ import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -260,6 +263,8 @@ public class EventOverviewCtrl implements Initializable {
         text.setFill(Color.WHITESMOKE);
         bp.setLeft(text);
 
+        BorderPane innerBp = new BorderPane();
+
         Image editImage = new Image("client/icons/pencil.png");
         ImageView edit = new ImageView();
         edit.setImage(editImage);
@@ -269,8 +274,14 @@ public class EventOverviewCtrl implements Initializable {
         edit.setPickOnBounds(true);
         edit.setFitWidth(12.0);
         BorderPane.setMargin(edit, insets);
+        innerBp.setRight(edit);
 
-        bp.setRight(edit);
+        HBox hbox = new HBox();
+        List<BorderPane> tags = e.getTags().stream().map(this::pretty).toList();
+        hbox.getChildren().addAll(tags);
+        innerBp.setLeft(hbox);
+
+        bp.setRight(innerBp);
         return bp;
     }
 
@@ -350,5 +361,30 @@ public class EventOverviewCtrl implements Initializable {
 //        }
 //        return outgoing;
 //    }
+    public BorderPane pretty(Tag t) {
+        Insets insets = new Insets(5.0, 5.0, 5.0, 5.0);
+
+        BorderPane bp = new BorderPane();
+        bp.setBackground(Background.fill(Color.web(t.getColor())));
+        String style = """
+                -fx-background-radius: 30;
+                -fx-border-radius: 30;
+                -fx-border-width:0.8;
+                -fx-border-color: #F5F5F5;
+                """;
+        style = style + "-fx-background-color: " + t.getColor();
+        bp.setStyle(style);
+        bp.setMinHeight(8.0);
+        bp.setMaxWidth(300.0);
+
+        Text name = new Text(t.getTag());
+        name.setFill(Color.WHITESMOKE);
+        name.setCursor(Cursor.HAND);
+        BorderPane.setMargin(name, insets);
+
+        bp.setLeft(name);
+
+        return bp;
+    }
 
 }
