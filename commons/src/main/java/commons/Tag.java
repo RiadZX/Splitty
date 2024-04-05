@@ -20,9 +20,13 @@ public class Tag {
     @Expose
     private String tag;
 
+    @Expose
+    private String color;
+
     @ManyToOne
     @JoinColumn(name = "event_id")
     @JsonBackReference("event-tags")
+    @JsonIgnore
     private Event event;
 
     @ManyToMany(mappedBy = "tags")
@@ -38,12 +42,41 @@ public class Tag {
         this.event = event;
     }
 
+    public Tag(String tag, String color, Event e) {
+        this(tag, e);
+        this.color = color;
+    }
+
     public Tag(String tagName) {
         this.tag = tagName;
     }
 
     public String getTag() {
         return tag;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public List<Expense> getExpenses() {
+        return expenses;
+    }
+
+    public void setExpenses(List<Expense> expenses) {
+        this.expenses = expenses;
     }
 
     public void setTag(String tag) {
