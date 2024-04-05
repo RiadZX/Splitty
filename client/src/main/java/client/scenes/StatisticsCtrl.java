@@ -164,7 +164,7 @@ public class StatisticsCtrl implements Initializable {
     public void setSumOfExpenses() {
         double sum = 0;
         for (Expense e : event.getExpenses()) {
-            sum += e.getAmount();
+            sum += e.getAmount(); //TODO: CONSIDER DIFFERENT CURRENCIES
         }
         expenseLabel.setText("Total expenses: " + sum);
     }
