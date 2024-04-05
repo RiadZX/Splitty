@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
@@ -28,6 +29,16 @@ public class AddTagCtrl implements Initializable {
     @FXML
     public Label backButtonLabel;
     @FXML
+    public Label availableTagsLabel;
+    @FXML
+    public Label createTagLabel;
+    @FXML
+    public ColorPicker colorPicker;
+    @FXML
+    public TextField tagName;
+    @FXML
+    public Button addButton;
+    @FXML
     public FlowPane tagsPane;
 
     private Event event;
@@ -43,10 +54,16 @@ public class AddTagCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         I18N.update(manageTags);
         I18N.update(backButtonLabel);
+        I18N.update(availableTagsLabel);
+        I18N.update(createTagLabel);
     }
 
     public void setUp(Event e) {
         this.event = e;
+    }
+
+    public void addTag() {
+
     }
 
     public void setEvent(Event event) {
