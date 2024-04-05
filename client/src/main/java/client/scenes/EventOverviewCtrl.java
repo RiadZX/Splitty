@@ -47,6 +47,8 @@ public class EventOverviewCtrl implements Initializable {
     @FXML
     public Button addExpense;
     @FXML
+    public Button addTag;
+    @FXML
     public Label expenseLabel;
     @FXML
     public Label participantLabel;
@@ -102,6 +104,7 @@ public class EventOverviewCtrl implements Initializable {
         this.sendInvite.setOnAction(event -> sendInvite());
         I18N.update(sendInvite);
         I18N.update(addExpense);
+        I18N.update(addTag);
         I18N.update(settleDebt);
         I18N.update(expenseLabel);
         I18N.update(participantLabel);
