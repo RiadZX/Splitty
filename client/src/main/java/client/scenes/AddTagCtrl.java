@@ -83,6 +83,14 @@ public class AddTagCtrl implements Initializable {
         BorderPane bp = new BorderPane();
         bp.setOnMouseClicked(e -> editTag(t));
         bp.setBackground(Background.fill(Color.web(t.getColor())));
+        String style = """
+                -fx-background-radius: 30;
+                -fx-border-radius: 30;
+                -fx-border-width:0.8;
+                -fx-border-color: #F5F5F5;
+                """;
+        style = style + "-fx-background-color: " + t.getColor();
+        bp.setStyle(style);
         bp.setMinHeight(8.0);
         bp.setMaxWidth(300.0);
 
@@ -101,6 +109,8 @@ public class AddTagCtrl implements Initializable {
     }
 
     public void addTag() {
+        Color color = colorPicker.getValue();
+        String name = tagName.getText();
         setUp(event);
     }
 
