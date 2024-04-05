@@ -89,11 +89,11 @@ public class StartCtrl implements Initializable {
         Tag food = new Tag("food", "#8DE137", newEvent);
         Tag entraceFees = new Tag("entrance fees", "#38C4D5", newEvent);
         Tag travel = new Tag("travel", "#D53838", newEvent);
-        newEvent.addTag(food);
-        newEvent.addTag(entraceFees);
-        newEvent.addTag(travel);
         try {
             newEvent=server.addEvent(newEvent);
+            server.addTag(newEvent.getId(), food);
+            server.addTag(newEvent.getId(), entraceFees);
+            server.addTag(newEvent.getId(), travel);
         } catch (WebApplicationException e) {
             notificationService.showError("Error creating event", e.getMessage());
             return;

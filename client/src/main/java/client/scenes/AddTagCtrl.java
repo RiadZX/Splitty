@@ -9,6 +9,7 @@ import client.utils.ServerUtils;
 import javax.inject.Inject;
 
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
@@ -17,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 
@@ -67,21 +69,27 @@ public class AddTagCtrl implements Initializable {
 
     public void setUp(Event e) {
         this.event = e;
-        List<BorderPane> tags = e.getTags().stream().map(this::pretty).toList();
+        List<BorderPane> tags = e.getTags().stream().map(t -> pretty(t)).toList();
 
         tagsPane.getChildren().clear();
         tagsPane.getChildren().addAll(tags);
-        System.out.println("SETUP");
-        System.out.println(e.getTags());
+        tagsPane.setHgap(10);
+        tagsPane.setVgap(10);
     }
 
     public BorderPane pretty(Tag t) {
+        Insets insets = new Insets(5.0, 5.0, 5.0, 5.0);
+
         BorderPane bp = new BorderPane();
         bp.setOnMouseClicked(e -> editTag(t));
-        bp.setBackground(Background.fill(Paint.valueOf(t.getColor())));
+        bp.setBackground(Background.fill(Color.web(t.getColor())));
+        bp.setMinHeight(8.0);
+        bp.setMaxWidth(300.0);
 
-        Label name = new Label(t.getTag());
+        Text name = new Text(t.getTag());
+        name.setFill(Color.WHITESMOKE);
         name.setCursor(Cursor.HAND);
+        BorderPane.setMargin(name, insets);
 
         bp.setLeft(name);
 
@@ -93,7 +101,7 @@ public class AddTagCtrl implements Initializable {
     }
 
     public void addTag() {
-
+        setUp(event);
     }
 
     public void setEvent(Event event) {

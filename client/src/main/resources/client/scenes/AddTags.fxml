@@ -34,7 +34,7 @@
          <font>
             <Font size="16.0" />
          </font></Label>
-      <FlowPane fx:id="tagsPane" layoutX="31.0" layoutY="149.0" prefHeight="222.0" prefWidth="269.0" />
+      <FlowPane fx:id="tagsPane" layoutX="31.0" layoutY="134.0" prefHeight="222.0" prefWidth="269.0" />
       <Label fx:id="availableTagsLabel" layoutX="151.0" layoutY="105.0" text="tag.available" />
       <ColorPicker fx:id="colorPicker" layoutX="366.0" layoutY="136.0" prefHeight="26.0" prefWidth="159.0" />
       <Label fx:id="createTagLabel" layoutX="366.0" layoutY="105.0" text="tag.create" />

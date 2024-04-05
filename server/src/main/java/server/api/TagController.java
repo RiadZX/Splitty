@@ -37,7 +37,7 @@ public class TagController {
 
     @PostMapping(path = {"", "/"})
     @ResponseBody
-    public ResponseEntity<Tag> addTag(@PathVariable("eventId") UUID eventId, Tag t) {
+    public ResponseEntity<Tag> addTag(@PathVariable("eventId") UUID eventId, @RequestBody Tag t) {
         return ResponseEntity.ok(repo.addTag(t, eventId));
     }
 
@@ -55,7 +55,7 @@ public class TagController {
     @ResponseBody
     public ResponseEntity<Tag> updateTag(@PathVariable("eventId") UUID eventId,
                                          @PathVariable("id") UUID id,
-                                         Tag tag) {
+                                         @RequestBody Tag tag) {
         Tag t = repo.updateTag(eventId, id, tag);
         if (t == null) {
             return ResponseEntity.badRequest().build();
