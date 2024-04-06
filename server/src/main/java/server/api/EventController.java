@@ -83,10 +83,10 @@ public class EventController {
     }
     @MessageMapping("/events")
     @SendTo("/topic/events")
-    public String updateTitle(String t) throws JsonProcessingException {
+    public Event updateTitle(Event e) throws JsonProcessingException {
 
-        System.out.println("It works! " + t);
-        return t;
+        System.out.println("It works! " + e.getTitle());
+        return e;
     }
     /**
      * Update event

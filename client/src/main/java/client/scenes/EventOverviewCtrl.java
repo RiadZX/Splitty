@@ -261,6 +261,7 @@ public class EventOverviewCtrl implements Initializable {
             System.out.println(refreshed.getTags());
             System.out.println("refreshing");
             System.out.println("EXPENSES FROM REFRESH: " + refreshed.getExpenses());
+            System.out.println("TITLE: " + refreshed.getTitle());
             this.setEvent(refreshed);
             Platform.runLater(() -> {
                 payerSelector.setItems(FXCollections.observableArrayList(event.getParticipants()));
