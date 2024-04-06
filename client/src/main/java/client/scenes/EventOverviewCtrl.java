@@ -70,6 +70,10 @@ public class EventOverviewCtrl implements Initializable {
 
     @FXML
     public ImageView flagView;
+    @FXML
+    public TableColumn all;
+    @FXML
+    public Button statsBtn;
 
     @FXML
     private TextField eventTitle;
@@ -109,6 +113,8 @@ public class EventOverviewCtrl implements Initializable {
         }));
 
         this.sendInvite.setOnAction(event -> sendInvite());
+
+        this.statsBtn.setOnAction(e -> mainCtrl.showStatistics(this.event));
         I18N.update(sendInvite);
         I18N.update(addExpense);
         I18N.update(addTag);

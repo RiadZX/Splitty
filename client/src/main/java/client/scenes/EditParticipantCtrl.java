@@ -2,14 +2,11 @@ package client.scenes;
 
 import client.services.I18N;
 import client.services.NotificationService;
+import client.utils.ServerUtils;
 import commons.Event;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
-import client.utils.ServerUtils;
-
-import javax.inject.Inject;
-
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import javax.inject.Inject;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -52,6 +50,9 @@ public class EditParticipantCtrl implements Initializable {
     public Label editParticipant;
     private Event event;
     private Participant p;
+    public Event getEvent() {
+        return event;
+    }
 
     @Inject
     public EditParticipantCtrl(MainCtrl mainCtrl, Event event, Participant p, ServerUtils server, NotificationService notificationService) {

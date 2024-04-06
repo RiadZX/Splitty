@@ -71,6 +71,8 @@ public class MainCtrl {
 
     private LanguageCtrl languageCtrl;
     private Scene languages;
+    private Scene statistics;
+    private StatisticsCtrl statisticsCtrl;
 
     private AdminEventsCtrl adminEventsCtrl;
     private Scene adminEvents;
@@ -96,7 +98,8 @@ public class MainCtrl {
                            Pair<AddTagCtrl, Parent> addTag,
                            Pair<EditTagCtrl, Parent> editTag,
                            Pair<LanguageCtrl, Parent> languages,
-                           boolean adminMode
+                           boolean adminMode,
+                            Pair<StatisticsCtrl, Parent> statistics
     ) {
         this.admin=false;
         this.user = new User();
@@ -145,6 +148,9 @@ public class MainCtrl {
         this.editTagCtrl = editTag.getKey();
         this.editTag = new Scene(editTag.getValue());
 
+        this.statisticsCtrl = statistics.getKey();
+        this.statistics = new Scene(statistics.getValue());
+
         primaryStage.getIcons().add(new Image("client/icons/app-icon.png"));
         chooseFirstPage(adminMode);
 
@@ -152,18 +158,56 @@ public class MainCtrl {
         eventOverview.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (event.isAltDown() && event.getCode() == KeyCode.DIGIT1) {
-                    showStartScene();
+                if (event.isAltDown()){
+                    switch (event.getCode()) {
+                        case KeyCode.DIGIT1, KeyCode.HOME -> showStartScene();
+                        case KeyCode.S -> showSettings();
+                        case KeyCode.E -> showAddExpense();
+                        case KeyCode.P -> showAddParticipantScene(eventOverviewCtrl.getEvent());
+                        case KeyCode.I -> {
+                            inviteViewCtrl.setEvent(eventOverviewCtrl.getEvent());
+                            showInviteView(eventOverviewCtrl.getEvent());
+                        }
+                        case KeyCode.T -> showStatistics(eventOverviewCtrl.getEvent());
+                        default -> {
+                        }
+                    }
+
                 }
             }
         });
+        initShortcuts(start, settings, inviteView, userSettings, addParticipant, editParticipant, languages, addExpense, statistics);
+        this.notificationService = new NotificationHelper();
+    }
 
+    private void initShortcuts(
+            Pair<StartCtrl, Parent> start,
+            Pair<SettingsCtrl, Parent> settings,
+            Pair<InviteViewCtrl, Parent> inviteView,
+            Pair<UserSettingsCtrl, Parent> userSettings,
+            Pair<AddParticipantCtrl, Parent> addParticipant,
+            Pair<EditParticipantCtrl, Parent> editParticipant,
+            Pair<LanguageCtrl, Parent> languages,
+            Pair<AddExpenseCtrl, Parent> addExpense,
+            Pair<StatisticsCtrl, Parent> statistics
+    ) {
+        statistics.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showEventOverviewScene(statisticsCtrl.getEvent());
+                }
+            }
+        });
         // in start, press alt+s to go to settings
         start.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 if (event.isAltDown() && event.getCode() == KeyCode.S) {
                     showSettings();
+                }
+                if (event.isAltDown() && event.getCode() == KeyCode.H) {
+                    startCtrl.shortCuts();
                 }
             }
         });
@@ -172,12 +216,74 @@ public class MainCtrl {
         settings.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (event.isAltDown() && event.getCode() == KeyCode.DIGIT1) {
+                if (event.isAltDown() && event.getCode() == KeyCode.ESCAPE) {
                     showStartScene();
                 }
             }
         });
-        this.notificationService = new NotificationHelper();
+        inviteView.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showEventOverviewScene(inviteViewCtrl.getEvent());
+                }
+            }
+        });
+
+        userSettings.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showSettings();
+                }
+            }
+        });
+
+        editParticipant.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showEventOverviewScene(editParticipantCtrl.getEvent());
+                }
+            }
+        });
+        settings.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showStartScene();
+                }
+            }
+        });
+
+        addParticipant.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showEventOverviewScene(addParticipantCtrl.getEvent());
+                }
+            }
+        });
+
+
+        addExpense.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showEventOverviewScene(addExpenseCtrl.getEvent());
+                }
+            }
+        });
+
+        languages.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showSettings();
+                }
+            }
+        });
+
     }
 
     public void showInviteView(Event event){
@@ -320,6 +426,13 @@ public class MainCtrl {
     public  void setUser(User user){
         this.user=user;
         Config.writeUserConfigFile(user);
+    }
+
+    public void showStatistics(Event event){
+        primaryStage.setTitle("Statistics");
+        statisticsCtrl.setEvent(event);
+        statisticsCtrl.refresh();
+        primaryStage.setScene(statistics);
     }
 
     public void addUserEvent(UUID event, UUID participant){
