@@ -136,21 +136,20 @@ public class MainCtrl {
         eventOverview.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (event.isAltDown() && event.getCode() == KeyCode.DIGIT1 || event.getCode() == KeyCode.HOME) {
-                    showStartScene();
-                }
-                if (event.isAltDown() && event.getCode() == KeyCode.S) {
-                    showSettings();
-                }
-                if (event.isAltDown() && event.getCode() == KeyCode.E) {
-                    showAddExpense();
-                }
-                if (event.isAltDown() && event.getCode() == KeyCode.P) {
-                    showAddParticipantScene(eventOverviewCtrl.getEvent());
-                }
-                if (event.isAltDown() && event.getCode() == KeyCode.I) {
-                    inviteViewCtrl.setEvent(eventOverviewCtrl.getEvent());
-                    showInviteView(eventOverviewCtrl.getEvent());
+                if (event.isAltDown()){
+                    switch (event.getCode()) {
+                        case KeyCode.DIGIT1, KeyCode.HOME -> showStartScene();
+                        case KeyCode.S -> showSettings();
+                        case KeyCode.E -> showAddExpense();
+                        case KeyCode.P -> showAddParticipantScene(eventOverviewCtrl.getEvent());
+                        case KeyCode.I -> {
+                            inviteViewCtrl.setEvent(eventOverviewCtrl.getEvent());
+                            showInviteView(eventOverviewCtrl.getEvent());
+                        }
+                        default -> {
+                        }
+                    }
+
                 }
             }
         });
