@@ -132,8 +132,12 @@ public class EventOverviewCtrl implements Initializable {
             //print the e as json in pretty format
             System.out.println("MESSAGE RECEIVED");
             System.out.println("EXPENSES FROM WS: " + e.getExpenses());
-            setEvent(e);
-            refresh();
+            System.out.println("MY ID : " + event.getId());
+            System.out.println("MESSAGE ID: " + e.getId());
+            if (e.getId().equals(this.event.getId())){
+                setEvent(e);
+                refresh();
+            }
         });
 
     }
