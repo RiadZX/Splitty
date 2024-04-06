@@ -333,4 +333,8 @@ public class AddExpenseCtrl implements Initializable {
         }
         return t;
     }
+
+    public Event getEvent() {
+        return event;
+    }
 }

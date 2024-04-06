@@ -162,7 +162,6 @@ public class StartCtrl implements Initializable {
         mainCtrl.showEventOverviewScene(currEvent);
         clearFields();
     }
-
     /**
      * Move to the Settings scene when the icon is pressed
      */
@@ -176,6 +175,21 @@ public class StartCtrl implements Initializable {
     public  void clearFields(){
         this.createEventField.clear();
         this.joinEventField.clear();
+    }
+
+    public void shortCuts(){
+        notificationService.informUser("Shortcuts",
+                """
+                        ALT + H  |  show this help message
+                        ESCAPE   |  abort an action, go back to the previous scene
+                        ALT + S  |  go to the settings scene
+                        ALT + 1  |  (if in event overview) go to the main scene
+                        ALT + E  |  (if in event overview) create new expense
+                        ALT + P  |  (if in event overview) create new participant
+                        ALT + I  |  (if in event overview) open invite code dialog
+                        HOME KEY |  exit the event overview page
+                        """,
+                "Shortcuts");
     }
 
 }
