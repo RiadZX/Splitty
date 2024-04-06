@@ -187,6 +187,7 @@ public class StartCtrl implements Initializable {
                         ALT + E  |  (if in event overview) create new expense
                         ALT + P  |  (if in event overview) create new participant
                         ALT + I  |  (if in event overview) open invite code dialog
+                        ALT + T  |  (if in event overview) open statistics
                         HOME KEY |  exit the event overview page
                         """,
                 "Shortcuts");

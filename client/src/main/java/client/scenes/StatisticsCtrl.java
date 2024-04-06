@@ -196,6 +196,10 @@ public class StatisticsCtrl implements Initializable {
         setParticipantStats();
     }
 
+    public Event getEvent() {
+        return event;
+    }
+
     public class StatsRow {
         private final String from;
         private final String to;

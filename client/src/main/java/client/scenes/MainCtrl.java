@@ -168,6 +168,7 @@ public class MainCtrl {
                             inviteViewCtrl.setEvent(eventOverviewCtrl.getEvent());
                             showInviteView(eventOverviewCtrl.getEvent());
                         }
+                        case KeyCode.T -> showStatistics(eventOverviewCtrl.getEvent());
                         default -> {
                         }
                     }
@@ -175,7 +176,7 @@ public class MainCtrl {
                 }
             }
         });
-        initShortcuts(start, settings, inviteView, userSettings, addParticipant, editParticipant, languages, addExpense);
+        initShortcuts(start, settings, inviteView, userSettings, addParticipant, editParticipant, languages, addExpense, statistics);
         this.notificationService = new NotificationHelper();
     }
 
@@ -187,8 +188,17 @@ public class MainCtrl {
             Pair<AddParticipantCtrl, Parent> addParticipant,
             Pair<EditParticipantCtrl, Parent> editParticipant,
             Pair<LanguageCtrl, Parent> languages,
-            Pair<AddExpenseCtrl, Parent> addExpense
+            Pair<AddExpenseCtrl, Parent> addExpense,
+            Pair<StatisticsCtrl, Parent> statistics
     ) {
+        statistics.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showEventOverviewScene(statisticsCtrl.getEvent());
+                }
+            }
+        });
         // in start, press alt+s to go to settings
         start.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
