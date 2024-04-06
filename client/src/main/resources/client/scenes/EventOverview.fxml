@@ -122,5 +122,6 @@
          </padding>
       </Pane>
       <Button fx:id="addTag" layoutX="182.0" layoutY="489.0" mnemonicParsing="false" onAction="#addTag" text="event.overview.addTag" />
+      <Button fx:id="statsBtn" layoutX="302.0" layoutY="114.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Statistics" />
    </children>
 </AnchorPane>

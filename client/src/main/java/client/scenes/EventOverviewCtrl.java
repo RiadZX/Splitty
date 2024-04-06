@@ -24,9 +24,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -66,6 +63,10 @@ public class EventOverviewCtrl implements Initializable {
 
     @FXML
     public ImageView flagView;
+    @FXML
+    public TableColumn all;
+    @FXML
+    public Button statsBtn;
 
     @FXML
     private TextField eventTitle;
@@ -105,6 +106,8 @@ public class EventOverviewCtrl implements Initializable {
         }));
 
         this.sendInvite.setOnAction(event -> sendInvite());
+
+        this.statsBtn.setOnAction(e -> mainCtrl.showStatistics(this.event));
         I18N.update(sendInvite);
         I18N.update(addExpense);
         I18N.update(addTag);
@@ -117,7 +120,6 @@ public class EventOverviewCtrl implements Initializable {
 
         payerSelector.setCellFactory(param -> getPayerListCell());
         payerSelector.setButtonCell(getPayerListCell());
-
     }
 
 //    public ListCell<Expense> getExpenseListCell() {
@@ -219,6 +221,8 @@ public class EventOverviewCtrl implements Initializable {
     public void addExpense(){
         mainCtrl.showAddExpense();
     }
+
+
 
     public void editExpense(Expense e) {
         mainCtrl.showEditExpense(e);

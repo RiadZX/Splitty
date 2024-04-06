@@ -277,13 +277,10 @@ public class AddExpenseCtrl implements Initializable {
         }
         mainCtrl.showEventOverviewScene(event);
     }
-
-
-
     private List<Debt> createDebts(double amount, List<Participant> participants){
         List<Debt> debts = new ArrayList<>();
         for (Participant p : participants) {
-            debts.add(new Debt(new Expense(), p, amount/participants.size() + 1));
+            debts.add(new Debt(new Expense(), p, amount/(participants.size()+1)));
         }
         return debts;
     }
