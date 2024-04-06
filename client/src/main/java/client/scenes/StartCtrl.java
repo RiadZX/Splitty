@@ -155,16 +155,6 @@ public class StartCtrl implements Initializable {
         mainCtrl.showEventOverviewScene(currEvent);
         clearFields();
     }
-
-    public  void joinRecentEvent(int index){ //add handling for deleted event
-        List<UUID> eventIDs=this.mainCtrl.getUser().getEvents();
-        if (index<0 || index>=eventIDs.size()){
-            notificationService.showError("Error joining event", "Index out of bounds");
-            return;
-        }
-        joinRecentEvent(eventIDs.get(index));
-    }
-
     /**
      * Move to the Settings scene when the icon is pressed
      */
