@@ -1,16 +1,18 @@
 package commons;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
 import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ValueGenerationType;
 
 import java.lang.annotation.Retention;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.time.Instant;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -20,6 +22,7 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "event_id")
+    @Expose
     private UUID id;
 
     @Expose
@@ -36,19 +39,20 @@ public class Event {
     private List<Participant> participants;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference("event-expenses")
+    @JsonManagedReference ("event-expenses")
     @Expose
     private List<Expense> expenses;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference("event-tags")
     @Expose
     private List<Tag> tags;
 
     @Expose
+    @JsonSerialize(using = InstantSerializer.class)
     private Instant creationTime;
 
     @Expose
+    @JsonSerialize(using = InstantSerializer.class)
     private Instant lastActivityTime;
 
     public Event() {

@@ -1,14 +1,17 @@
 package server.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import commons.Event;
 import commons.EventLongPollingWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
-
 import org.springframework.web.context.request.async.DeferredResult;
 import server.services.EventService;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -43,6 +46,8 @@ public class EventController {
         }
         return ResponseEntity.ok(service.add(event));
     }
+
+
     /**
      * Join an event
      * @param inviteCode - invite code for the event
@@ -76,6 +81,13 @@ public class EventController {
         }
         return ResponseEntity.badRequest().build();
     }
+    @MessageMapping("/events")
+    @SendTo("/topic/events")
+    public Event updateTitle(Event e) throws JsonProcessingException {
+
+        System.out.println("It works! " + e.getTitle());
+        return e;
+    }
     /**
      * Update event
      * @param id - id of event
@@ -83,8 +95,10 @@ public class EventController {
      * @return - updated event
      */
     @PutMapping("/{id}")
+    @Transactional
     public ResponseEntity<Event> update(@PathVariable("id") UUID id, @RequestBody Event event) {
         Event saved=service.update(id, event);
+        System.out.println(saved);
         if (saved!=null) {
             return ResponseEntity.ok(saved);
         }

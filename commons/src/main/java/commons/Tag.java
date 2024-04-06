@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -20,9 +21,13 @@ public class Tag {
     @Expose
     private String tag;
 
+    @Expose
+    private String color;
+
     @ManyToOne
     @JoinColumn(name = "event_id")
     @JsonBackReference("event-tags")
+    @JsonIgnore
     private Event event;
 
     @ManyToMany(mappedBy = "tags")
@@ -36,6 +41,12 @@ public class Tag {
         this();
         this.tag = tag;
         this.event = event;
+        this.expenses = new ArrayList<>();
+    }
+
+    public Tag(String tag, String color, Event e) {
+        this(tag, e);
+        this.color = color;
     }
 
     public Tag(String tagName) {
@@ -44,6 +55,34 @@ public class Tag {
 
     public String getTag() {
         return tag;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void addExpense(Expense e) {
+        expenses.add(e);
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public List<Expense> getExpenses() {
+        return expenses;
+    }
+
+    public void setExpenses(List<Expense> expenses) {
+        this.expenses = expenses;
     }
 
     public void setTag(String tag) {

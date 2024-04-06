@@ -97,4 +97,8 @@ public class InviteViewCtrl implements Initializable {
     public void backToEvent(){
         mainCtrl.showEventOverviewScene(event);
     }
+
+    public Event getEvent() {
+        return event;
+    }
 }

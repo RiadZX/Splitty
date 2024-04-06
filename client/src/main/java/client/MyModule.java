@@ -37,6 +37,7 @@ public class MyModule implements Module {
         binder.bind(AddParticipantCtrl.class).in(Scopes.SINGLETON);
         binder.bind(AddExpenseCtrl.class).in(Scopes.SINGLETON);
         binder.bind(SettingsCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(StatisticsCtrl.class).in(Scopes.SINGLETON);
         //bind notification service to the notification service implementation
         binder.bind(NotificationService.class).to(NotificationHelper.class);
         binder.bind(ServerUtils.class).toInstance(new ServerUtils());

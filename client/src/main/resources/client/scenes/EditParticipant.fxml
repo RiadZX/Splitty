@@ -16,12 +16,12 @@
         <Label layoutX="51.0" layoutY="108.0" text="Email" />
         <Label layoutX="50.0" layoutY="145.0" text="IBAN" />
         <Label layoutX="55.0" layoutY="182.0" text="BIC" />
-        <Button fx:id="cancelButton2" layoutX="55.0" layoutY="233.0" mnemonicParsing="false" onAction="#returnToOverview" text="general.cancel">
+        <Button fx:id="cancelButton2" id="cancelBtn" layoutX="55.0" layoutY="233.0" mnemonicParsing="false" onAction="#returnToOverview" text="general.cancel">
          <cursor>
             <Cursor fx:constant="CLOSED_HAND" />
          </cursor></Button>
         <ButtonBar prefHeight="40.0" prefWidth="200.0" />
-        <Button fx:id="editButton" layoutX="174.0" layoutY="233.0" mnemonicParsing="false" onAction="#editParticipantButton" prefHeight="29.0" prefWidth="92.0" text="general.edit">
+        <Button fx:id="editButton" id="confirmBtn" layoutX="174.0" layoutY="233.0" mnemonicParsing="false" onAction="#editParticipantButton" prefHeight="29.0" prefWidth="92.0" text="general.edit">
             <cursor>
                 <Cursor fx:constant="CLOSED_HAND" />
             </cursor>

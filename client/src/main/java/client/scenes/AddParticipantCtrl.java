@@ -2,18 +2,16 @@ package client.scenes;
 
 import client.services.I18N;
 import client.services.NotificationHelper;
+import client.utils.ServerUtils;
 import commons.Event;
 import commons.Participant;
 import javafx.fxml.FXML;
-import client.utils.ServerUtils;
-
-import javax.inject.Inject;
-
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
+import javax.inject.Inject;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -122,5 +120,9 @@ public class AddParticipantCtrl implements Initializable {
 
     public void returnToOverview() {
         mainCtrl.showEventOverviewScene(event);
+    }
+
+    public Event getEvent() {
+        return event;
     }
 }
