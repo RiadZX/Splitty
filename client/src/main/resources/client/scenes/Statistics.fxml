@@ -25,8 +25,8 @@
       <columns>
           <TableColumn fx:id="tFrom" prefWidth="89.0" text="From" />
           <TableColumn fx:id="tTo" prefWidth="115.0" text="To" />
-          <TableColumn fx:id="tAmount" prefWidth="95.0" text="Amount" />
-          <TableColumn fx:id="tExpenseName" prefWidth="109.0" text="Expense" />
+          <TableColumn fx:id="tAmount" prefWidth="61.0" text="Amount" />
+          <TableColumn fx:id="tExpenseName" prefWidth="143.0" text="Expense" />
 
       </columns>
     </TableView>

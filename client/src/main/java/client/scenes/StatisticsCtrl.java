@@ -78,7 +78,13 @@ public class StatisticsCtrl implements Initializable {
         Map<String, Double> stats = new HashMap<>();
         for (Expense e : event.getExpenses()) {
             for (Tag t : e.getTags()) {
-                stats.put(t.getTag(), stats.getOrDefault(t.getTag(), 0.0) + e.getAmount());
+                double amount;
+                if (e.getCurrency().equals(String.valueOf(mainCtrl.getUser().getPrefferedCurrency()))){
+                    amount = e.getAmount();
+                } else {
+                    amount = server.convert(e.getAmount(), e.getCurrency(), String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), e.getDate());
+                }
+                stats.put(t.getTag(), stats.getOrDefault(t.getTag(), 0.0) + amount);
             }
         }
         List<String> colors = Arrays.asList(
@@ -116,7 +122,13 @@ public class StatisticsCtrl implements Initializable {
                 if (d.isPaid()) {
                     continue;
                 }
-                data.add(new StatsRow(d.getParticipant().getName(), e.getPaidBy().getName(), d.getAmount(), e.getTitle()));
+                double amount;
+                if (e.getCurrency().equals(String.valueOf(mainCtrl.getUser().getPrefferedCurrency()))){
+                    amount = d.getAmount();
+                } else {
+                    amount = server.convert(d.getAmount(), e.getCurrency(), String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), e.getDate());
+                }
+                data.add(new StatsRow(d.getParticipant().getName(), e.getPaidBy().getName(), amount, e.getTitle()));
             }
         }
         tableView.setItems(data);
@@ -193,7 +205,7 @@ public class StatisticsCtrl implements Initializable {
         public StatsRow(String name, String to, double amount, String expenseName) {
             this.from = name;
             this.to = to;
-            this.amount = amount;
+            this.amount = Math.round(amount * 100.0) / 100.0;
             this.expenseName = expenseName;
         }
 
