@@ -275,6 +275,7 @@ public class AddExpenseCtrl implements Initializable {
         for (Tag t : tags) {
             server.addExpense(event.getId(), t.getId(), expense.getId());
         }
+        server.send("/app/events", event);
         mainCtrl.showEventOverviewScene(event);
     }
     private List<Debt> createDebts(double amount, List<Participant> participants){

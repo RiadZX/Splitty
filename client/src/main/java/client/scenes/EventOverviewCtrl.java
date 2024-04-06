@@ -9,6 +9,7 @@ import commons.Expense;
 import commons.Participant;
 import commons.Tag;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,6 +25,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.stereotype.Controller;
 
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -31,7 +37,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
-
+@Controller
+@EnableScheduling
 public class EventOverviewCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -120,6 +127,19 @@ public class EventOverviewCtrl implements Initializable {
 
         payerSelector.setCellFactory(param -> getPayerListCell());
         payerSelector.setButtonCell(getPayerListCell());
+
+        server.registerForMessages("/topic/events", e -> {
+            //print the e as json in pretty format
+            System.out.println("MESSAGE RECEIVED");
+            System.out.println("EXPENSES FROM WS: " + e.getExpenses());
+            System.out.println("MY ID : " + event.getId());
+            System.out.println("MESSAGE ID: " + e.getId());
+            if (e.getId().equals(this.event.getId())){
+                setEvent(e);
+                refresh();
+            }
+        });
+
     }
 
 //    public ListCell<Expense> getExpenseListCell() {
@@ -163,35 +183,45 @@ public class EventOverviewCtrl implements Initializable {
 
     public void setEvent(Event newEvent){
         this.event=newEvent;
-        eventTitle.setText(this.event.getTitle());
-        reassignParticipants(this.event.getParticipants());
-        this.expenses = server.getExpensesByEvent(this.event.getId());
+//        eventTitle.setText(this.event.getTitle());
+//        reassignParticipants(this.event.getParticipants());
+//        this.expenses = server.getExpensesByEvent(this.event.getId());
+        System.out.println("---event overview---");
+        System.out.println("id: "+this.event.getId());
+        System.out.println("title: "+this.event.getTitle());
+        System.out.println("participants: "+ this.event.getParticipants().size());
+        System.out.println("expenses: "+ this.event.getExpenses().size());
+        System.out.println("invite code: "+ this.event.getInviteCode());
+        System.out.println("---------");
     }
 
     public void reassignParticipants(List<Participant> participantList){
         System.out.println(participantList.stream().map(Participant::getName).toList());
-        textFlow.getChildren().clear();
-        if (participantList.isEmpty()) {
-            textFlow.getChildren().add(new Label("No participants, yet"));
-            return;
-        }
-        for (Participant p : participantList.subList(0, participantList.size() - 1)) {
-            Label label = new Label(p.getName());
-            label.setOnMouseClicked(e -> editParticipant(p));
-            label.setCursor(Cursor.HAND);
-            textFlow.getChildren().add(label);
-            textFlow.getChildren().add(new Label(", "));
-        }
-        Label lastLabel = new Label(participantList.getLast().getName());
-        lastLabel.setOnMouseClicked(e -> editParticipant(participantList.getLast()));
-        textFlow.getChildren().add(lastLabel);
+        Platform.runLater(() -> {
+            textFlow.getChildren().clear();
+            if (participantList.isEmpty()) {
+                textFlow.getChildren().add(new Label("No participants, yet"));
+                return;
+            }
+            for (Participant p : participantList.subList(0, participantList.size() - 1)) {
+                Label label = new Label(p.getName());
+                label.setOnMouseClicked(e -> editParticipant(p));
+                label.setCursor(Cursor.HAND);
+                textFlow.getChildren().add(label);
+                textFlow.getChildren().add(new Label(", "));
+            }
+            Label lastLabel = new Label(participantList.getLast().getName());
+            lastLabel.setOnMouseClicked(e -> editParticipant(participantList.getLast()));
+            textFlow.getChildren().add(lastLabel);
+        });
     }
 
     public void changeTitle(){
         this.event.setName(this.eventTitle.getText());
         try {
-            this.server.updateEvent(this.event);
+            Event updatedEvent = this.server.updateEvent(this.event);
             notificationService.showConfirmation("Title Change", "The title has been successfully changed!");
+            server.send("/app/events", updatedEvent);
         }
         catch (WebApplicationException e){
             notificationService.showError("Error updating event", "Could not update event title");
@@ -222,29 +252,30 @@ public class EventOverviewCtrl implements Initializable {
         mainCtrl.showAddExpense();
     }
 
-
-
     public void editExpense(Expense e) {
         mainCtrl.showEditExpense(e);
     }
 
 
+    @SuppressWarnings("checkstyle:RegexpSingleline")
     public void refresh(){
         try {
             Event refreshed = server.getEvent(event.getId());
             System.out.println("LIST OF TAGS:");
             System.out.println(refreshed.getTags());
             System.out.println("refreshing");
+            System.out.println("EXPENSES FROM REFRESH: " + refreshed.getExpenses());
+            System.out.println("TITLE: " + refreshed.getTitle());
             this.setEvent(refreshed);
-            payerSelector.setItems(FXCollections.observableArrayList(event.getParticipants()));
-            payerSelector.getSelectionModel().selectFirst();
-//            payerSelector.setOnAction(e -> {
-//                payer = payerSelector.getValue();
-//                expensesList.getItems().clear();
-//                expensesList.getItems().addAll(expenses);
-//            });
-            this.setAllFilter();
-            System.out.println("refreshed");
+            Platform.runLater(() -> {
+                payerSelector.setItems(FXCollections.observableArrayList(event.getParticipants()));
+                payerSelector.getSelectionModel().selectFirst();
+                eventTitle.setText(this.event.getTitle());
+                reassignParticipants(this.event.getParticipants());
+                this.expenses = server.getExpensesByEvent(this.event.getId());
+                this.setAllFilter();
+            });
+
             /* TO DO:
             * - refresh all data related to the event
             * - add functionality to the expense list and filtering*/

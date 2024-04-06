@@ -15,6 +15,9 @@
  */
 package client.utils;
 
+import client.services.GsonInstantTypeAdapter;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.moandjiezana.toml.Toml;
 import commons.*;
@@ -24,12 +27,21 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.messaging.converter.GsonMessageConverter;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
-import java.io.*;
+import java.io.File;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -335,4 +347,44 @@ public class ServerUtils {
                 .post(Entity.entity(expenseId, APPLICATION_JSON), Tag.class);
     }
 
+
+    private StompSession session = connect("ws://localhost:8080/websocket");
+
+    private StompSession connect(String url){
+        var client = new StandardWebSocketClient();
+        var stomp = new WebSocketStompClient(client);
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .excludeFieldsWithoutExposeAnnotation()
+                .registerTypeAdapter(Instant.class, new GsonInstantTypeAdapter())
+                .create();
+        stomp.setMessageConverter(new GsonMessageConverter(gson));
+        try {
+            return stomp.connect(url, new StompSessionHandlerAdapter() {}).get();
+        } catch (InterruptedException e){
+            Thread.currentThread().interrupt();
+        } catch (ExecutionException e){
+            throw new RuntimeException();
+        }
+        throw new IllegalStateException();
+    }
+
+    public void registerForMessages(String dest, Consumer<Event> consumer){
+        session.subscribe(dest, new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return Event.class;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders headers, Object payload) {
+                consumer.accept((Event) payload);
+            }
+        });
+    }
+
+    public void send(String dest, Event e){
+        System.out.println("I send message to " + dest + " for " + e.getTitle() + " with id " + e.getId());
+        session.send(dest, e);
+    }
 }
