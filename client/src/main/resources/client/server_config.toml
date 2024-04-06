@@ -1,3 +1,4 @@
 address = "http://localhost"
+websocket = "ws://localhost"
 port = 8080
 email = "splitty35@gmail.com"

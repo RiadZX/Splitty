@@ -85,7 +85,7 @@ public class ServerUtils {
         senderEmail = toml.getString("email");
         serverAddress = address + ":" + port + "/";
         //session = connect("ws://localhost:8080/websocket");
-        session = connect(address.replace("http://", "ws://")+ ":" + port + "/websocket");
+        session = connect(toml.getString("websocket")+":"+port+"/websocket");
         System.out.println(serverAddress);
     }
 
