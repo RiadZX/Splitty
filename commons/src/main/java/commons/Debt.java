@@ -13,7 +13,6 @@ import java.util.UUID;
 public class Debt {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Expose
     private UUID id;
 
     @ManyToOne (fetch = FetchType.EAGER)

@@ -17,7 +17,6 @@ public class Participant {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "participant_id")
-    @Expose
     private UUID id;
     @Expose
     private String name;
