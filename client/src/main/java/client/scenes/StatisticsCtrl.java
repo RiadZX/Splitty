@@ -164,9 +164,14 @@ public class StatisticsCtrl implements Initializable {
     public void setSumOfExpenses() {
         double sum = 0;
         for (Expense e : event.getExpenses()) {
-            sum += e.getAmount(); //TODO: CONSIDER DIFFERENT CURRENCIES
+            if (e.getCurrency().equals(String.valueOf(mainCtrl.getUser().getPrefferedCurrency()))){
+                sum += e.getAmount();
+                continue;
+            }
+            double convertedAmount = server.convert(e.getAmount(), e.getCurrency(), String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), e.getDate());
+            sum += convertedAmount;
         }
-        expenseLabel.setText("Total expenses: " + sum);
+        expenseLabel.setText("Total expenses: " + String.format("%.2f", sum) + " " + mainCtrl.getUser().getPrefferedCurrency());
     }
 
     public void back() {
