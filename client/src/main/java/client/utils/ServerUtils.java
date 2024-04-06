@@ -54,6 +54,7 @@ public class ServerUtils {
 
     private final String senderEmail;
     private ExecutorService exec = Executors.newSingleThreadExecutor();
+    private StompSession session;
 
     public ServerUtils() {
         URL resource = getClass().getClassLoader().getResource("client/server_config.toml");
@@ -83,6 +84,8 @@ public class ServerUtils {
 
         senderEmail = toml.getString("email");
         serverAddress = address + ":" + port + "/";
+        //session = connect("ws://localhost:8080/websocket");
+        session = connect(address.replace("http://", "ws://")+ ":" + port + "/websocket");
         System.out.println(serverAddress);
     }
 
@@ -346,9 +349,6 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(expenseId, APPLICATION_JSON), Tag.class);
     }
-
-
-    private StompSession session = connect("ws://localhost:8080/websocket");
 
     private StompSession connect(String url){
         var client = new StandardWebSocketClient();
