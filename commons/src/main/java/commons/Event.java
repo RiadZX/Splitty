@@ -22,12 +22,14 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "event_id")
+    @Expose
     private UUID id;
 
     @Expose
     private String name;
 
     @Column(nullable = false)
+    @Expose
     @INVITECODE String inviteCode;
     @Expose
     private String title; //fix response issue for now

@@ -16,6 +16,7 @@ public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "tag_id")
+    @Expose
     private UUID id;
 
     @Expose

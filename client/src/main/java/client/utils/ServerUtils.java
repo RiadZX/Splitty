@@ -339,7 +339,7 @@ public class ServerUtils {
                 .put(Entity.entity(t, APPLICATION_JSON), Tag.class);
     }
 
-    public void addExpense(UUID eventId, UUID id, UUID expenseId) {
+    public void addExpenseTag(UUID eventId, UUID id, UUID expenseId) {
         ClientBuilder.newClient(new ClientConfig())
                 .target(serverAddress).path("api/events/" + eventId + "/tags/" + id + "/expenses")
                 .request(APPLICATION_JSON)

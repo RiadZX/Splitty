@@ -273,7 +273,7 @@ public class AddExpenseCtrl implements Initializable {
             server.updateExpense(event.getId(), expense.getId(), newExpense);
         }
         for (Tag t : tags) {
-            server.addExpense(event.getId(), t.getId(), expense.getId());
+            server.addExpenseTag(event.getId(), t.getId(), expense.getId());
         }
         server.send("/app/events", event);
         mainCtrl.showEventOverviewScene(event);
