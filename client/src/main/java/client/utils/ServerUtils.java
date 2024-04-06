@@ -359,7 +359,7 @@ public class ServerUtils {
                 .registerTypeAdapter(Instant.class, new GsonInstantTypeAdapter())
                 .create();
         stomp.setMessageConverter(new GsonMessageConverter(gson));
-        try{
+        try {
             return stomp.connect(url, new StompSessionHandlerAdapter() {}).get();
         } catch (InterruptedException e){
             Thread.currentThread().interrupt();
