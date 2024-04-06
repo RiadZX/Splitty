@@ -1,19 +1,19 @@
 package server.services;
+
+import commons.Event;
 import commons.EventLongPollingWrapper;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.async.DeferredResult;
 import server.database.EventRepository;
-import commons.Event;
 
 import java.time.Instant;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
-import java.util.List;
 @Service
 public class EventService {
 
@@ -70,11 +70,13 @@ public class EventService {
         return false;
     }
 
+    @Transactional
     public Event update(UUID id, Event event){
-        if (eventRepository.existsById(id)) {
-            event.setId(id);
-            event.setLastActivityTime(Instant.now()); //update last activity time
-            Event saved = eventRepository.save(event);
+        Event existing=eventRepository.findById(id).orElse(null);
+        if (existing!=null) {
+            existing.setLastActivityTime(Instant.now()); //update last activity time
+            existing.setName(event.getName());
+            Event saved = eventRepository.saveAndFlush(existing);
             EventLongPollingWrapper wrapper = new EventLongPollingWrapper("PUT", saved);
             this.accept(wrapper);
             return saved;

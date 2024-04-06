@@ -39,7 +39,7 @@ public class Event {
     private List<Participant> participants;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference("event-expenses")
+    @JsonManagedReference ("event-expenses")
     @Expose
     private List<Expense> expenses;
 

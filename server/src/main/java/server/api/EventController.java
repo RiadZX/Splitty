@@ -11,6 +11,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import server.services.EventService;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -94,8 +95,10 @@ public class EventController {
      * @return - updated event
      */
     @PutMapping("/{id}")
+    @Transactional
     public ResponseEntity<Event> update(@PathVariable("id") UUID id, @RequestBody Event event) {
         Event saved=service.update(id, event);
+        System.out.println(saved);
         if (saved!=null) {
             return ResponseEntity.ok(saved);
         }
