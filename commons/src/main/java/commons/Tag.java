@@ -24,10 +24,9 @@ public class Tag {
     @Expose
     private String color;
 
-    @ManyToOne
-    @JoinColumn(name = "event_id")
+    @ManyToOne (fetch = FetchType.EAGER)
     @JsonBackReference("event-tags")
-    @JsonIgnore
+    @JoinColumn (name = "event_id")
     private Event event;
 
     @ManyToMany(mappedBy = "tags")
@@ -106,11 +105,11 @@ public class Tag {
             return false;
         }
         Tag tag1 = (Tag) o;
-        return Objects.equals(tag, tag1.getTag()) && Objects.equals(event, tag1.getEvent());
+        return Objects.equals(tag, tag1.getTag());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tag, event);
+        return Objects.hash(tag);
     }
 }
