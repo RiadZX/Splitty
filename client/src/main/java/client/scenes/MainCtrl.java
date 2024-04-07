@@ -155,8 +155,6 @@ public class MainCtrl {
         this.statistics = new Scene(statistics.getValue());
 
         primaryStage.getIcons().add(new Image("client/icons/app-icon.png"));
-        this.debtResolveCtrl = debtResolve.getKey();
-        this.debtResolve = new Scene(debtResolve.getValue());
 
         chooseFirstPage(adminMode);
 
