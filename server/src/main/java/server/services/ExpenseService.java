@@ -1,6 +1,7 @@
 package server.services;
 
 import commons.Expense;
+import commons.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import server.database.ExpenseRepository;
@@ -34,11 +35,20 @@ public class ExpenseService {
     public Expense updateExpense(Expense expense) {
         System.out.println(expense);
         Expense saved = expenseRepository.saveAndFlush(expense);
-        System.out.println(saved);
         if (expenseRepository.findById(saved.getId()).isPresent()) {
             return saved;
         }
         return null;
     }
 
+    public Expense addTag(UUID expenseId, UUID tagId) {
+        Tag t = new Tag();
+        t.setId(tagId);
+        Expense saved = expenseRepository.findById(expenseId).orElse(null);
+        if (saved == null) {
+            return null;
+        }
+        saved.addTag(t);
+        return updateExpense(saved);
+    }
 }

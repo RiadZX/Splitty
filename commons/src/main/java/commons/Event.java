@@ -29,6 +29,7 @@ public class Event {
     private String name;
 
     @Column(nullable = false)
+    @Expose
     @INVITECODE String inviteCode;
     @Expose
     private String title; //fix response issue for now
@@ -44,6 +45,7 @@ public class Event {
     private List<Expense> expenses;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("event-tags")
     @Expose
     private List<Tag> tags;
 

@@ -37,6 +37,7 @@ public class Expense {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "participant_id")
+    @Expose
     private Participant paidBy;
 
     @ManyToOne(fetch = FetchType.EAGER)

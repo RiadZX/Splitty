@@ -54,11 +54,22 @@ public class EventService {
     }
 
     public Event add(Event e){
+        System.out.println(e);
         Event saved = eventRepository.save(e);
         EventLongPollingWrapper wrapper=new EventLongPollingWrapper("POST", saved);
         this.accept(wrapper);
         return saved;
     }
+
+//    public Event specialAdd(Event e) {
+//        Event repoEvent = eventRepository.save(new Event(e.getName()));
+//        repoEvent.setParticipants(e.getParticipants());
+//        eventRepository.flush();
+//        repoEvent.setTags(e.getTags());
+//        eventRepository.flush();
+//        repoEvent.setExpenses(e.getExpenses());
+//        return newEvent;
+//    }
 
     public boolean delete(UUID id){
         if (eventRepository.existsById(id)) {

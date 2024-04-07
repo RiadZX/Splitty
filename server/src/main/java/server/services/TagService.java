@@ -5,7 +5,6 @@ import commons.Expense;
 import commons.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import server.database.ExpenseRepository;
 import server.database.TagRepository;
 
 import java.util.List;
@@ -14,12 +13,12 @@ import java.util.UUID;
 @Service
 public class TagService {
     private final TagRepository tagRepository;
-    private final ExpenseRepository expenseRepository;
+    private final ExpenseService expenseService;
 
     @Autowired
-    public TagService(TagRepository tagRepository, ExpenseRepository expenseRepository) {
+    public TagService(TagRepository tagRepository, ExpenseService expenseService) {
         this.tagRepository = tagRepository;
-        this.expenseRepository = expenseRepository;
+        this.expenseService = expenseService;
     }
 
     public List<Tag> getAllFromEvent(UUID id) {
