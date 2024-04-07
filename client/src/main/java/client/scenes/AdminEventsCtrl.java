@@ -256,7 +256,7 @@ public class AdminEventsCtrl implements Initializable {
                 Tag toAddTag = new Tag();
                 toAddTag.setTag(t.getTag());
                 toAddTag.setColor(t.getColor());
-                Tag savedTag = server.addTag(savedEvent.getId(), t);
+                Tag savedTag = server.addTag(savedEvent.getId(), toAddTag);
                 tagIdLinking.put(t.getId(), savedTag.getId());
             }
 
@@ -268,11 +268,16 @@ public class AdminEventsCtrl implements Initializable {
                 toAddExpense.setCurrency(ex.getCurrency());
                 toAddExpense.setDebts(new ArrayList<>());
                 Expense savedExpense = server.addExpense(savedEvent.getId(), toAddExpense);
+
                 savedExpense.setPaidBy(server.getParticipant(savedEvent.getId(), participantIdLinking.get(ex.getPaidBy().getId())));
                 server.updateExpense(savedEvent.getId(), savedExpense.getId(), savedExpense);
+
+                savedExpense.setTags(new ArrayList<>());
                 for(Tag t : ex.getTags()) {
-                    server.addExpenseTag(savedEvent.getId(), tagIdLinking.get(t.getId()), savedExpense.getId());
+                    Tag toAddTag = server.getTag(savedEvent.getId(), tagIdLinking.get(t.getId()));
+                    savedExpense.addTag(toAddTag);
                 }
+                server.updateExpense(savedEvent.getId(), savedExpense.getId(), savedExpense);
             }
 
 
@@ -280,14 +285,6 @@ public class AdminEventsCtrl implements Initializable {
             notificationService.showError(I18N.get("admin.event.import.error.readFile"), x.toString());
             return;
         }
-        Event saved = null;
-        if (e != null) {
-            saved = server.addEvent(e);
-        } else {
-            notificationService.showError(I18N.get("admin.event.import.error.process"), I18N.get("admin.event.import.errorMessage.process"));
-        }
-        //this.events.add(saved);
-        //populateList();
     }
 
     public void sortAction(){

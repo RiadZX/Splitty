@@ -14,12 +14,12 @@ import java.util.UUID;
 @Service
 public class TagService {
     private final TagRepository tagRepository;
-    private final ExpenseRepository expenseRepository;
+    private final ExpenseService expenseService;
 
     @Autowired
-    public TagService(TagRepository tagRepository, ExpenseRepository expenseRepository) {
+    public TagService(TagRepository tagRepository, ExpenseService expenseService) {
         this.tagRepository = tagRepository;
-        this.expenseRepository = expenseRepository;
+        this.expenseService = expenseService;
     }
 
     public List<Tag> getAllFromEvent(UUID id) {
