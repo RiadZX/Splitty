@@ -372,7 +372,7 @@ public class MainCtrl {
         Locale userLang = I18N.getSupportedLocales().get(3);
         I18N.setLocale(userLang);
         eventOverviewCtrl.refreshLanguage();
-        this.user.setLanguage("dutch");
+        this.user.setLanguage("Custom Language");
         Config.writeUserConfigFile(this.user);
     }
 
