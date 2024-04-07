@@ -9,6 +9,9 @@ import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import commons.Event;
+import commons.Expense;
+import commons.Participant;
+import commons.Tag;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -31,10 +34,7 @@ import java.io.*;
 import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class AdminEventsCtrl implements Initializable {
     private final MainCtrl mainCtrl;
@@ -231,18 +231,60 @@ public class AdminEventsCtrl implements Initializable {
         try {
             String contents = Files.asCharSource(selectedFile, Charsets.UTF_8).read();
             e = gson.fromJson(contents, Event.class);
+            System.out.println(e);
+
+            Event toAdd = new Event();
+            toAdd.setName(e.getName());
+            toAdd.setCreationTime(e.getCreationTime());
+            toAdd.setTitle(e.getTitle());
+            toAdd.setInviteCode(e.getInviteCode());
+            Event savedEvent = server.addEvent(toAdd);
+
+            Map<UUID, UUID> participantIdLinking = new HashMap<>();
+            for (Participant p : e.getParticipants()) {
+                Participant toAddParticipant = new Participant();
+                toAddParticipant.setName(p.getName());
+                toAddParticipant.setEmail(p.getEmail());
+                toAddParticipant.setBic(p.getBic());
+                toAddParticipant.setIban(p.getIban());
+                Participant savedParticipant = server.addParticipant(savedEvent.getId(), toAddParticipant);
+                participantIdLinking.put(p.getId(), savedParticipant.getId());
+            }
+
+            Map<UUID, UUID> tagIdLinking = new HashMap<>();
+            for (Tag t : e.getTags()) {
+                Tag toAddTag = new Tag();
+                toAddTag.setTag(t.getTag());
+                toAddTag.setColor(t.getColor());
+                Tag savedTag = server.addTag(savedEvent.getId(), toAddTag);
+                tagIdLinking.put(t.getId(), savedTag.getId());
+            }
+
+            for (Expense ex : e.getExpenses()) {
+                Expense toAddExpense = new Expense();
+                toAddExpense.setTitle(ex.getTitle());
+                toAddExpense.setAmount(ex.getAmount());
+                toAddExpense.setDate(ex.getDate());
+                toAddExpense.setCurrency(ex.getCurrency());
+                toAddExpense.setDebts(new ArrayList<>());
+                Expense savedExpense = server.addExpense(savedEvent.getId(), toAddExpense);
+
+                savedExpense.setPaidBy(server.getParticipant(savedEvent.getId(), participantIdLinking.get(ex.getPaidBy().getId())));
+                server.updateExpense(savedEvent.getId(), savedExpense.getId(), savedExpense);
+
+                savedExpense.setTags(new ArrayList<>());
+                for (Tag t : ex.getTags()) {
+                    Tag toAddTag = server.getTag(savedEvent.getId(), tagIdLinking.get(t.getId()));
+                    savedExpense.addTag(toAddTag);
+                }
+                server.updateExpense(savedEvent.getId(), savedExpense.getId(), savedExpense);
+            }
+
+
         } catch (IOException x) {
             notificationService.showError(I18N.get("admin.event.import.error.readFile"), x.toString());
             return;
         }
-        Event saved = null;
-        if (e != null) {
-            saved = server.addEvent(e);
-        } else {
-            notificationService.showError(I18N.get("admin.event.import.error.process"), I18N.get("admin.event.import.errorMessage.process"));
-        }
-        //this.events.add(saved);
-        //populateList();
     }
 
     public void sortAction(){

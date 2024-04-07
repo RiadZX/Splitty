@@ -57,6 +57,7 @@ public class LanguageCtrl implements Initializable {
     }
 
     public void switchToRomanian(){
-        System.out.println("switch to romanian");
+        this.mainCtrl.switchToRomanian();
+        this.mainCtrl.uponLanguageSwitch();
     }
 }

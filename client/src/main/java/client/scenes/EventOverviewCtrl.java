@@ -7,7 +7,9 @@ import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import commons.Tag;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,7 +18,9 @@ import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -24,6 +28,8 @@ import javafx.scene.text.TextFlow;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.stereotype.Controller;
 
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -31,7 +37,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
-
+@Controller
+@EnableScheduling
 public class EventOverviewCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -47,6 +54,8 @@ public class EventOverviewCtrl implements Initializable {
     @FXML
     public Button addExpense;
     @FXML
+    public Button addTag;
+    @FXML
     public Label expenseLabel;
     @FXML
     public Label participantLabel;
@@ -61,6 +70,10 @@ public class EventOverviewCtrl implements Initializable {
 
     @FXML
     public ImageView flagView;
+    @FXML
+    public TableColumn all;
+    @FXML
+    public Button statsBtn;
 
     @FXML
     private TextField eventTitle;
@@ -100,8 +113,11 @@ public class EventOverviewCtrl implements Initializable {
         }));
 
         this.sendInvite.setOnAction(event -> sendInvite());
+
+        this.statsBtn.setOnAction(e -> mainCtrl.showStatistics(this.event));
         I18N.update(sendInvite);
         I18N.update(addExpense);
+        I18N.update(addTag);
         I18N.update(settleDebt);
         I18N.update(expenseLabel);
         I18N.update(participantLabel);
@@ -111,6 +127,18 @@ public class EventOverviewCtrl implements Initializable {
 
         payerSelector.setCellFactory(param -> getPayerListCell());
         payerSelector.setButtonCell(getPayerListCell());
+
+        server.registerForMessages("/topic/events", e -> {
+            //print the e as json in pretty format
+            System.out.println("MESSAGE RECEIVED");
+            System.out.println("EXPENSES FROM WS: " + e.getExpenses());
+            System.out.println("MY ID : " + event.getId());
+            System.out.println("MESSAGE ID: " + e.getId());
+            if (e.getId().equals(this.event.getId())){
+                setEvent(e);
+                refresh();
+            }
+        });
 
     }
 
@@ -155,11 +183,16 @@ public class EventOverviewCtrl implements Initializable {
 
     public void setEvent(Event newEvent){
         this.event=newEvent;
-        eventTitle.setText(this.event.getTitle());
-        reassignParticipants(this.event.getParticipants());
-        System.out.println("set event: "+ event);
-        this.expenses = server.getExpensesByEvent(this.event.getId());
-        System.out.println("expenses: "+ expenses);
+//        eventTitle.setText(this.event.getTitle());
+//        reassignParticipants(this.event.getParticipants());
+//        this.expenses = server.getExpensesByEvent(this.event.getId());
+        System.out.println("---event overview---");
+        System.out.println("id: "+this.event.getId());
+        System.out.println("title: "+this.event.getTitle());
+        System.out.println("participants: "+ this.event.getParticipants().size());
+        System.out.println("expenses: "+ this.event.getExpenses().size());
+        System.out.println("invite code: "+ this.event.getInviteCode());
+        System.out.println("---------");
     }
 
     public void settleDebt(){
@@ -168,28 +201,31 @@ public class EventOverviewCtrl implements Initializable {
 
     public void reassignParticipants(List<Participant> participantList){
         System.out.println(participantList.stream().map(Participant::getName).toList());
-        textFlow.getChildren().clear();
-        if (participantList.isEmpty()) {
-            textFlow.getChildren().add(new Label("No participants, yet"));
-            return;
-        }
-        for (Participant p : participantList.subList(0, participantList.size() - 1)) {
-            Label label = new Label(p.getName());
-            label.setOnMouseClicked(e -> editParticipant(p));
-            label.setCursor(Cursor.CLOSED_HAND);
-            textFlow.getChildren().add(label);
-            textFlow.getChildren().add(new Label(", "));
-        }
-        Label lastLabel = new Label(participantList.getLast().getName());
-        lastLabel.setOnMouseClicked(e -> editParticipant(participantList.getLast()));
-        textFlow.getChildren().add(lastLabel);
+        Platform.runLater(() -> {
+            textFlow.getChildren().clear();
+            if (participantList.isEmpty()) {
+                textFlow.getChildren().add(new Label("No participants, yet"));
+                return;
+            }
+            for (Participant p : participantList.subList(0, participantList.size() - 1)) {
+                Label label = new Label(p.getName());
+                label.setOnMouseClicked(e -> editParticipant(p));
+                label.setCursor(Cursor.HAND);
+                textFlow.getChildren().add(label);
+                textFlow.getChildren().add(new Label(", "));
+            }
+            Label lastLabel = new Label(participantList.getLast().getName());
+            lastLabel.setOnMouseClicked(e -> editParticipant(participantList.getLast()));
+            textFlow.getChildren().add(lastLabel);
+        });
     }
 
     public void changeTitle(){
         this.event.setName(this.eventTitle.getText());
         try {
-            this.server.updateEvent(this.event);
+            Event updatedEvent = this.server.updateEvent(this.event);
             notificationService.showConfirmation("Title Change", "The title has been successfully changed!");
+            server.send("/app/events", updatedEvent);
         }
         catch (WebApplicationException e){
             notificationService.showError("Error updating event", "Could not update event title");
@@ -212,6 +248,10 @@ public class EventOverviewCtrl implements Initializable {
         mainCtrl.showEditParticipantScene(event, p);
     }
 
+    public void addTag() {
+        mainCtrl.showAddTagScene(event);
+    }
+
     public void addExpense(){
         mainCtrl.showAddExpense();
     }
@@ -221,20 +261,25 @@ public class EventOverviewCtrl implements Initializable {
     }
 
 
+    @SuppressWarnings("checkstyle:RegexpSingleline")
     public void refresh(){
         try {
             Event refreshed = server.getEvent(event.getId());
+            System.out.println("LIST OF TAGS:");
+            System.out.println(refreshed.getTags());
             System.out.println("refreshing");
+            System.out.println("EXPENSES FROM REFRESH: " + refreshed.getExpenses());
+            System.out.println("TITLE: " + refreshed.getTitle());
             this.setEvent(refreshed);
-            payerSelector.setItems(FXCollections.observableArrayList(event.getParticipants()));
-            payerSelector.getSelectionModel().selectFirst();
-//            payerSelector.setOnAction(e -> {
-//                payer = payerSelector.getValue();
-//                expensesList.getItems().clear();
-//                expensesList.getItems().addAll(expenses);
-//            });
-            this.setAllFilter();
-            System.out.println("refreshed");
+            Platform.runLater(() -> {
+                payerSelector.setItems(FXCollections.observableArrayList(event.getParticipants()));
+                payerSelector.getSelectionModel().selectFirst();
+                eventTitle.setText(this.event.getTitle());
+                reassignParticipants(this.event.getParticipants());
+                this.expenses = server.getExpensesByEvent(this.event.getId());
+                this.setAllFilter();
+            });
+
             /* TO DO:
             * - refresh all data related to the event
             * - add functionality to the expense list and filtering*/
@@ -257,6 +302,8 @@ public class EventOverviewCtrl implements Initializable {
         text.setFill(Color.WHITESMOKE);
         bp.setLeft(text);
 
+        BorderPane innerBp = new BorderPane();
+
         Image editImage = new Image("client/icons/pencil.png");
         ImageView edit = new ImageView();
         edit.setImage(editImage);
@@ -266,8 +313,16 @@ public class EventOverviewCtrl implements Initializable {
         edit.setPickOnBounds(true);
         edit.setFitWidth(12.0);
         BorderPane.setMargin(edit, insets);
+        innerBp.setRight(edit);
 
-        bp.setRight(edit);
+        HBox hbox = new HBox();
+        List<BorderPane> tags = e.getTags().stream().map(this::pretty).toList();
+        hbox.getChildren().addAll(tags);
+        hbox.setSpacing(5.0);
+        hbox.setPadding(insets);
+        innerBp.setLeft(hbox);
+
+        bp.setRight(innerBp);
         return bp;
     }
 
@@ -278,7 +333,8 @@ public class EventOverviewCtrl implements Initializable {
     public void changeLanguage(){
         switch (this.mainCtrl.getUser().getLanguage()){
             case "english" -> this.mainCtrl.switchToDutch();
-            case "dutch" -> this.mainCtrl.switchToEnglish();
+            case "dutch" -> this.mainCtrl.switchToRomanian();
+            case "romanian" -> this.mainCtrl.switchToEnglish();
             default -> System.out.println("Unsupported language "+this.mainCtrl.getUser().getLanguage());
         }
     }
@@ -347,5 +403,30 @@ public class EventOverviewCtrl implements Initializable {
 //        }
 //        return outgoing;
 //    }
+    public BorderPane pretty(Tag t) {
+        Insets insets = new Insets(2.0, 5.0, 2.0, 5.0);
+
+        BorderPane bp = new BorderPane();
+        bp.setBackground(Background.fill(Color.web(t.getColor())));
+        String style = """
+                -fx-background-radius: 30;
+                -fx-border-radius: 30;
+                -fx-border-width:0.8;
+                -fx-border-color: #F5F5F5;
+                """;
+        style = style + "-fx-background-color: " + t.getColor();
+        bp.setStyle(style);
+        bp.setMinHeight(8.0);
+        bp.setMaxWidth(300.0);
+
+        Text name = new Text(t.getTag());
+        name.setFill(Color.WHITESMOKE);
+        name.setCursor(Cursor.HAND);
+        BorderPane.setMargin(name, insets);
+
+        bp.setLeft(name);
+
+        return bp;
+    }
 
 }

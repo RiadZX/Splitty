@@ -1,9 +1,11 @@
 package commons;
 
-import com.google.gson.annotations.Expose;
-import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
+import com.google.gson.annotations.Expose;
+import jakarta.persistence.*;
 
 import java.time.Instant;
 import java.util.List;
@@ -17,6 +19,7 @@ public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "expense_id")
+    @Expose
     private UUID id;
 
     @Expose
@@ -26,6 +29,7 @@ public class Expense {
     private double amount;
 
     @Expose
+    @JsonSerialize(using = InstantSerializer.class)
     private Instant date;
 
     @Expose
@@ -33,6 +37,7 @@ public class Expense {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "participant_id")
+    @Expose
     private Participant paidBy;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -40,12 +45,12 @@ public class Expense {
     @JsonBackReference("event-expenses")
     private Event event;
 
-    @OneToMany(mappedBy = "expense", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "expense", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference ("expense-debts")
     @Expose
     private List<Debt> debts;
 
-    @ManyToMany
+    @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(
             name = "expense_tag",
             joinColumns = @JoinColumn(name = "expense_id"),

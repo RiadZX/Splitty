@@ -55,11 +55,7 @@ public class AddExpenseCtrl implements Initializable {
     @FXML
     private Text how;
     @FXML
-    private Text what;
-    @FXML
     private Button abortButton;
-    @FXML
-    private Button createButton;
 
 
 
@@ -76,9 +72,7 @@ public class AddExpenseCtrl implements Initializable {
         I18N.update(when);
         I18N.update(amount);
         I18N.update(how);
-        I18N.update(what);
         I18N.update(abortButton);
-        I18N.update(createButton);
         I18N.update(allBox);
         I18N.update(someBox);
         this.prepareTagDialog();
@@ -269,24 +263,28 @@ public class AddExpenseCtrl implements Initializable {
                 paidBy,
                 event,
                 debts,
-                new ArrayList<>());
-        for (Debt d : newExpense.getDebts()) {
+                tags
+                );
+        for (Debt d : newExpense.getDebts()){
             d.setExpense(newExpense); //setup each debt's expense pointer
         }
+
+        Expense e;
         if (expense == null) {
-            server.addExpense(event.getId(), newExpense);
+            expense = server.addExpense(event.getId(), newExpense);
         } else {
             server.updateExpense(event.getId(), expense.getId(), newExpense);
         }
+        for (Tag t : tags) {
+            server.addExpenseTag(event.getId(), t.getId(), expense.getId());
+        }
+        server.send("/app/events", event);
         mainCtrl.showEventOverviewScene(event);
     }
-
-
-
     private List<Debt> createDebts(double amount, List<Participant> participants){
         List<Debt> debts = new ArrayList<>();
         for (Participant p : participants) {
-            debts.add(new Debt(new Expense(), p, amount/participants.size() + 1));
+            debts.add(new Debt(new Expense(), p, amount/(participants.size()+1)));
         }
         return debts;
     }
@@ -338,5 +336,9 @@ public class AddExpenseCtrl implements Initializable {
             }
         }
         return t;
+    }
+
+    public Event getEvent() {
+        return event;
     }
 }

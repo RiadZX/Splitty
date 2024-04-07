@@ -23,6 +23,7 @@ import client.utils.User;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import commons.Tag;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -70,12 +71,21 @@ public class MainCtrl {
 
     private LanguageCtrl languageCtrl;
     private Scene languages;
+    private Scene statistics;
+    private StatisticsCtrl statisticsCtrl;
 
     private DebtResolveCtrl debtResolveCtrl;
     private Scene debtResolve;
 
     private AdminEventsCtrl adminEventsCtrl;
     private Scene adminEvents;
+
+    private AddTagCtrl addTagCtrl;
+    private Scene addTag;
+
+    private EditTagCtrl editTagCtrl;
+    private Scene editTag;
+
     private NotificationService notificationService;
 
     public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime,
@@ -88,9 +98,11 @@ public class MainCtrl {
                            Pair<UserSettingsCtrl, Parent> userSettings,
                            Pair<SettingsCtrl, Parent> settings,
                            Pair<AdminEventsCtrl, Parent> adminEvents,
+                           Pair<AddTagCtrl, Parent> addTag,
+                           Pair<EditTagCtrl, Parent> editTag,
                            Pair<LanguageCtrl, Parent> languages,
-                           Pair<DebtResolveCtrl, Parent> debtResolve,
-                           boolean adminMode
+                           boolean adminMode,
+                            Pair<StatisticsCtrl, Parent> statistics
     ) {
         this.admin=false;
         this.user = new User();
@@ -133,6 +145,15 @@ public class MainCtrl {
         this.adminEventsCtrl = adminEvents.getKey();
         this.adminEvents = new Scene(adminEvents.getValue());
 
+        this.addTagCtrl = addTag.getKey();
+        this.addTag = new Scene(addTag.getValue());
+
+        this.editTagCtrl = editTag.getKey();
+        this.editTag = new Scene(editTag.getValue());
+
+        this.statisticsCtrl = statistics.getKey();
+        this.statistics = new Scene(statistics.getValue());
+
         primaryStage.getIcons().add(new Image("client/icons/app-icon.png"));
         this.debtResolveCtrl = debtResolve.getKey();
         this.debtResolve = new Scene(debtResolve.getValue());
@@ -143,18 +164,56 @@ public class MainCtrl {
         eventOverview.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (event.isAltDown() && event.getCode() == KeyCode.DIGIT1) {
-                    showStartScene();
+                if (event.isAltDown()){
+                    switch (event.getCode()) {
+                        case KeyCode.DIGIT1, KeyCode.HOME -> showStartScene();
+                        case KeyCode.S -> showSettings();
+                        case KeyCode.E -> showAddExpense();
+                        case KeyCode.P -> showAddParticipantScene(eventOverviewCtrl.getEvent());
+                        case KeyCode.I -> {
+                            inviteViewCtrl.setEvent(eventOverviewCtrl.getEvent());
+                            showInviteView(eventOverviewCtrl.getEvent());
+                        }
+                        case KeyCode.T -> showStatistics(eventOverviewCtrl.getEvent());
+                        default -> {
+                        }
+                    }
+
                 }
             }
         });
+        initShortcuts(start, settings, inviteView, userSettings, addParticipant, editParticipant, languages, addExpense, statistics);
+        this.notificationService = new NotificationHelper();
+    }
 
+    private void initShortcuts(
+            Pair<StartCtrl, Parent> start,
+            Pair<SettingsCtrl, Parent> settings,
+            Pair<InviteViewCtrl, Parent> inviteView,
+            Pair<UserSettingsCtrl, Parent> userSettings,
+            Pair<AddParticipantCtrl, Parent> addParticipant,
+            Pair<EditParticipantCtrl, Parent> editParticipant,
+            Pair<LanguageCtrl, Parent> languages,
+            Pair<AddExpenseCtrl, Parent> addExpense,
+            Pair<StatisticsCtrl, Parent> statistics
+    ) {
+        statistics.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showEventOverviewScene(statisticsCtrl.getEvent());
+                }
+            }
+        });
         // in start, press alt+s to go to settings
         start.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 if (event.isAltDown() && event.getCode() == KeyCode.S) {
                     showSettings();
+                }
+                if (event.isAltDown() && event.getCode() == KeyCode.H) {
+                    startCtrl.shortCuts();
                 }
             }
         });
@@ -163,12 +222,74 @@ public class MainCtrl {
         settings.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (event.isAltDown() && event.getCode() == KeyCode.DIGIT1) {
+                if (event.isAltDown() && event.getCode() == KeyCode.ESCAPE) {
                     showStartScene();
                 }
             }
         });
-        this.notificationService = new NotificationHelper();
+        inviteView.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showEventOverviewScene(inviteViewCtrl.getEvent());
+                }
+            }
+        });
+
+        userSettings.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showSettings();
+                }
+            }
+        });
+
+        editParticipant.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showEventOverviewScene(editParticipantCtrl.getEvent());
+                }
+            }
+        });
+        settings.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showStartScene();
+                }
+            }
+        });
+
+        addParticipant.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showEventOverviewScene(addParticipantCtrl.getEvent());
+                }
+            }
+        });
+
+
+        addExpense.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showEventOverviewScene(addExpenseCtrl.getEvent());
+                }
+            }
+        });
+
+        languages.getValue().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    showSettings();
+                }
+            }
+        });
+
     }
 
     public void showInviteView(Event event){
@@ -244,6 +365,15 @@ public class MainCtrl {
         Config.writeUserConfigFile(this.user);
     }
 
+    public void switchToRomanian(){
+        Locale romanian = I18N.getSupportedLocales().get(2);
+        I18N.setLocale(romanian);
+        eventOverviewCtrl.setFlag("romanian");
+        eventOverviewCtrl.refreshLanguage();
+        this.user.setLanguage("romanian");
+        Config.writeUserConfigFile(this.user);
+    }
+
     public void uponLanguageSwitch(){
         primaryStage.setTitle(I18N.get("window.settings.language"));
         String switchLanguageHeader = I18N.get("language.infoLanguages");
@@ -287,6 +417,19 @@ public class MainCtrl {
         adminEventsCtrl.populateList();
         primaryStage.setScene(adminEvents);
     }
+
+    public void showAddTagScene(Event e) {
+        primaryStage.setTitle(I18N.get("window.tags"));
+        addTagCtrl.setUp(e.getId());
+        primaryStage.setScene(addTag);
+    }
+
+    public void showEditTagScene(Tag t, Event e) {
+        primaryStage.setTitle(I18N.get("window.edit.tags"));
+        editTagCtrl.setUp(t, e);
+        primaryStage.setScene(editTag);
+    }
+
     public Stage getPrimaryStage() {
         return primaryStage;
     }
@@ -298,6 +441,13 @@ public class MainCtrl {
     public  void setUser(User user){
         this.user=user;
         Config.writeUserConfigFile(user);
+    }
+
+    public void showStatistics(Event event){
+        primaryStage.setTitle("Statistics");
+        statisticsCtrl.setEvent(event);
+        statisticsCtrl.refresh();
+        primaryStage.setScene(statistics);
     }
 
     public void addUserEvent(UUID event, UUID participant){

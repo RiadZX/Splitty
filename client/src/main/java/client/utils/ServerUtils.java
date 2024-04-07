@@ -15,25 +15,33 @@
  */
 package client.utils;
 
+import client.services.GsonInstantTypeAdapter;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.moandjiezana.toml.Toml;
-import commons.Event;
-import commons.EventLongPollingWrapper;
-import commons.Expense;
-import commons.Participant;
-import commons.Quote;
+import commons.*;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.messaging.converter.GsonMessageConverter;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
-import java.io.*;
+import java.io.File;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -287,5 +295,96 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)//
                 .accept(APPLICATION_JSON)//
                 .post(Entity.entity(body.toString(), APPLICATION_JSON), Double.class);
+    }
+
+
+
+    public List<Tag> getTagsFromEvent(UUID eventId) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverAddress).path("api/events/" + eventId + "/tags")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Tag>>(){});
+    }
+
+    public Tag getTag(UUID eventId, UUID id) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverAddress).path("api/events/" + eventId + "/tags/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<Tag>(){});
+    }
+
+    public Tag addTag(UUID eventId, Tag t) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverAddress).path("api/events/" + eventId + "/tags/")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(t, APPLICATION_JSON), Tag.class);
+    }
+
+    public void removeTag(UUID eventId, UUID id) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(serverAddress).path("api/events/" + eventId + "/tags/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
+
+    public Tag updateTag(UUID eventId, UUID id, Tag t) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverAddress).path("api/events/" + eventId + "/tags/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(t, APPLICATION_JSON), Tag.class);
+    }
+
+    public void addExpenseTag(UUID eventId, UUID id, UUID expenseId) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(serverAddress).path("api/events/" + eventId + "/tags/" + id + "/expenses")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(expenseId, APPLICATION_JSON), Tag.class);
+    }
+
+
+    private StompSession session = connect("ws://localhost:8080/websocket");
+
+    private StompSession connect(String url){
+        var client = new StandardWebSocketClient();
+        var stomp = new WebSocketStompClient(client);
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .excludeFieldsWithoutExposeAnnotation()
+                .registerTypeAdapter(Instant.class, new GsonInstantTypeAdapter())
+                .create();
+        stomp.setMessageConverter(new GsonMessageConverter(gson));
+        try {
+            return stomp.connect(url, new StompSessionHandlerAdapter() {}).get();
+        } catch (InterruptedException e){
+            Thread.currentThread().interrupt();
+        } catch (ExecutionException e){
+            throw new RuntimeException();
+        }
+        throw new IllegalStateException();
+    }
+
+    public void registerForMessages(String dest, Consumer<Event> consumer){
+        session.subscribe(dest, new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return Event.class;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders headers, Object payload) {
+                consumer.accept((Event) payload);
+            }
+        });
+    }
+
+    public void send(String dest, Event e){
+        System.out.println("I send message to " + dest + " for " + e.getTitle() + " with id " + e.getId());
+        session.send(dest, e);
     }
 }
