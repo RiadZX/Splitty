@@ -2,14 +2,10 @@ package client.scenes;
 
 import client.services.NotificationService;
 import client.utils.DebtResolve;
-import client.utils.DebtResolveResult;
 import client.utils.ServerUtils;
 import client.utils.DebtResolveTableEntry;
 import com.google.inject.Inject;
-import commons.Debt;
 import commons.Event;
-import commons.Expense;
-import commons.Participant;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,9 +15,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
 
