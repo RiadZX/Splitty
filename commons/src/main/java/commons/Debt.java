@@ -92,7 +92,7 @@ public class Debt {
         return "Debt{"
                 + "debt_id="
                 + id
-                + ", amount="
+                + ", expense="
                 + amount
                 + ", paid="
                 + paid

@@ -74,6 +74,9 @@ public class MainCtrl {
     private Scene statistics;
     private StatisticsCtrl statisticsCtrl;
 
+    private DebtResolveCtrl debtResolveCtrl;
+    private Scene debtResolve;
+
     private AdminEventsCtrl adminEventsCtrl;
     private Scene adminEvents;
 
@@ -152,6 +155,7 @@ public class MainCtrl {
         this.statistics = new Scene(statistics.getValue());
 
         primaryStage.getIcons().add(new Image("client/icons/app-icon.png"));
+
         chooseFirstPage(adminMode);
 
         // in eventoverview, press alt+1 to go back to start
@@ -468,6 +472,13 @@ public class MainCtrl {
         primaryStage.setTitle("Splitty: Edit Expense");
         addExpenseCtrl.setup(eventOverviewCtrl.getEvent(), e);
         primaryStage.setScene(addExpense);
+    }
+
+    public void showSettleDebt(Event event) {
+        primaryStage.setTitle(I18N.get("window.debt"));
+        debtResolveCtrl.setEvent(event);
+        debtResolveCtrl.refresh();
+        primaryStage.setScene(debtResolve);
     }
 
     public void deleteAllData(){
