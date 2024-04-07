@@ -26,7 +26,11 @@ public class I18N {
             new Locale.Builder()
                     .setLanguage("ro")
                     .setScript("Latn")
-                    .setRegion("ro").build()
+                    .setRegion("ro").build(),
+            new Locale.Builder()
+                    .setLanguage("user")
+                    .setScript("Latn")
+                    .build()
     ));
 
     static {

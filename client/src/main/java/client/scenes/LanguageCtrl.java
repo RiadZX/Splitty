@@ -7,8 +7,14 @@ import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ResourceBundle;
 
 public class LanguageCtrl implements Initializable {
@@ -21,6 +27,10 @@ public class LanguageCtrl implements Initializable {
     private Button dutchButton;
     @FXML
     private Button romanianButton;
+    @FXML
+    private Button userLanguageButton;
+    @FXML
+    private Button customLanguageButton;
     @FXML
     private Label languageLabel;
     @FXML
@@ -38,6 +48,8 @@ public class LanguageCtrl implements Initializable {
         I18N.update(englishButton);
         I18N.update(dutchButton);
         I18N.update(romanianButton);
+        I18N.update(userLanguageButton);
+        I18N.update(customLanguageButton);
         I18N.update(languageLabel);
         I18N.update(backButtonLabel);
     }
@@ -59,5 +71,31 @@ public class LanguageCtrl implements Initializable {
     public void switchToRomanian(){
         this.mainCtrl.switchToRomanian();
         this.mainCtrl.uponLanguageSwitch();
+    }
+
+    public void switchToUserLanguage(){
+        this.mainCtrl.switchToUserLanguage();
+        this.mainCtrl.uponLanguageSwitch();
+    }
+
+    public void addLanguage(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(I18N.get("language.addLanguagePrompt"));
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Properties", "*.properties"));
+        File selectedFile = fileChooser.showOpenDialog(mainCtrl.getPrimaryStage());
+        if (selectedFile == null) {
+            notificationService.showError(I18N.get("admin.event.import.error"), I18N.get("language.addLanguage.error"));
+            return;
+        }
+        String languageResourceBundle = "client/src/main/resources/languages_user.properties";
+        Path targetPath = new File(languageResourceBundle).toPath();
+
+        try {
+            Files.copy(selectedFile.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+
+        } catch (IOException e) {
+            notificationService.showError(I18N.get("admin.event.import.error.readFile"), I18N.get("language.addLanguage.errorMessage"));
+        }
     }
 }

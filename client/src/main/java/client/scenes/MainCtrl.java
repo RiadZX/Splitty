@@ -368,6 +368,14 @@ public class MainCtrl {
         Config.writeUserConfigFile(this.user);
     }
 
+    public void switchToUserLanguage() {
+        Locale userLang = I18N.getSupportedLocales().get(3);
+        I18N.setLocale(userLang);
+        eventOverviewCtrl.refreshLanguage();
+        this.user.setLanguage("Custom Language");
+        Config.writeUserConfigFile(this.user);
+    }
+
     public void uponLanguageSwitch(){
         primaryStage.setTitle(I18N.get("window.settings.language"));
         String switchLanguageHeader = I18N.get("language.infoLanguages");
