@@ -5,7 +5,6 @@ import commons.Expense;
 import commons.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import server.database.ExpenseRepository;
 import server.database.TagRepository;
 
 import java.util.List;

@@ -241,7 +241,7 @@ public class AdminEventsCtrl implements Initializable {
             Event savedEvent = server.addEvent(toAdd);
 
             Map<UUID, UUID> participantIdLinking = new HashMap<>();
-            for(Participant p : e.getParticipants()) {
+            for (Participant p : e.getParticipants()) {
                 Participant toAddParticipant = new Participant();
                 toAddParticipant.setName(p.getName());
                 toAddParticipant.setEmail(p.getEmail());
@@ -252,7 +252,7 @@ public class AdminEventsCtrl implements Initializable {
             }
 
             Map<UUID, UUID> tagIdLinking = new HashMap<>();
-            for(Tag t : e.getTags()) {
+            for (Tag t : e.getTags()) {
                 Tag toAddTag = new Tag();
                 toAddTag.setTag(t.getTag());
                 toAddTag.setColor(t.getColor());
@@ -260,7 +260,7 @@ public class AdminEventsCtrl implements Initializable {
                 tagIdLinking.put(t.getId(), savedTag.getId());
             }
 
-            for(Expense ex : e.getExpenses()) {
+            for (Expense ex : e.getExpenses()) {
                 Expense toAddExpense = new Expense();
                 toAddExpense.setTitle(ex.getTitle());
                 toAddExpense.setAmount(ex.getAmount());
@@ -273,7 +273,7 @@ public class AdminEventsCtrl implements Initializable {
                 server.updateExpense(savedEvent.getId(), savedExpense.getId(), savedExpense);
 
                 savedExpense.setTags(new ArrayList<>());
-                for(Tag t : ex.getTags()) {
+                for (Tag t : ex.getTags()) {
                     Tag toAddTag = server.getTag(savedEvent.getId(), tagIdLinking.get(t.getId()));
                     savedExpense.addTag(toAddTag);
                 }
