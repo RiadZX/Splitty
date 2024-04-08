@@ -34,7 +34,7 @@ public class NotificationHelper implements NotificationService {
         feedbackAlert.setTitle(header);
         feedbackAlert.setHeaderText(title);
         feedbackAlert.setContentText(message);
-        feedbackAlert.showAndWait();
+        feedbackAlert.show();
     }
 
     /**

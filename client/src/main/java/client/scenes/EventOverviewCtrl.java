@@ -224,7 +224,7 @@ public class EventOverviewCtrl implements Initializable {
         this.event.setName(this.eventTitle.getText());
         try {
             Event updatedEvent = this.server.updateEvent(this.event);
-            notificationService.showConfirmation("Title Change", "The title has been successfully changed!");
+            notificationService.informUser("Title Change", "The title has been successfully changed!", "Success");
             server.send("/app/events", updatedEvent);
         }
         catch (WebApplicationException e){
