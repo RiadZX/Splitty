@@ -112,7 +112,6 @@ public class AddParticipantCtrl implements Initializable {
                 p
         );
         this.event.addParticipant(p);
-        //server.updateEvent(event);
         server.send("/app/events", this.event);
         name.clear();
         email.clear();
