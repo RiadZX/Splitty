@@ -384,7 +384,7 @@ public class ServerUtils {
     }
 
     public void send(String dest, Event e){
-        System.out.println("I send message to " + dest + " for " + e.getTitle() + " with id " + e.getId());
+        System.out.println("I send message to " + dest + " for " + e.getTitle() + " with " + e.getParticipants().size() + " participants");
         session.send(dest, e);
     }
 }

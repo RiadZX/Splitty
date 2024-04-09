@@ -122,6 +122,8 @@ public class EditParticipantCtrl implements Initializable {
                 event,
                 p
         );
+        this.event.addParticipant(p);
+        server.send("/app/events", this.event);
         returnToOverview();
     }
 
@@ -135,6 +137,7 @@ public class EditParticipantCtrl implements Initializable {
         }
         try {
             server.removeParticipant(event, p);
+            server.send("/app/events", this.event);
         } catch (WebApplicationException e) {
             String warningMessage = I18N.get("participant.remove.error");
             notificationHelper.showError(I18N.get("general.warning"), warningMessage);
