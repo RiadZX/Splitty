@@ -73,7 +73,14 @@ public class StatisticsCtrl implements Initializable {
     /**
      * Updates the Table for the shares per person.
      */
-    public void updateShares(){}
+    public void updateShares(){
+        sharesTable.getItems().clear();
+        ObservableList<ShareRow> data = FXCollections.observableArrayList();
+        for (Participant p : event.getParticipants()){
+            data.add(new ShareRow(p.getName(), getSharePerParticipant(p)));
+        }
+        sharesTable.setItems(data);
+    }
 
     public void updatePieChart() {
         PieChart pieStats = new PieChart();
@@ -204,8 +211,9 @@ public class StatisticsCtrl implements Initializable {
                         total+=server.convert(debtor.getAmount(), expense.getCurrency(),  String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), expense.getDate());
                     }
                 }
+            }else {
+                total+=server.convert(expense.getAmount(), expense.getCurrency(),  String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), expense.getDate()); //add the money this participant paid.
             }
-            total+=server.convert(expense.getAmount(), expense.getCurrency(),  String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), expense.getDate()); //add the money this participant paid.
         }
         return total;
     }
@@ -231,6 +239,7 @@ public class StatisticsCtrl implements Initializable {
         updatePieChart();
         setSumOfExpenses();
         setParticipantStats();
+        updateShares();
     }
 
     public Event getEvent() {
