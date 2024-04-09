@@ -11,9 +11,9 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="608.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StatisticsCtrl">
 
-    <Text layoutX="526.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Distribution of tags across expenses" textAlignment="CENTER" wrappingWidth="360.0">
+    <Text layoutX="401.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Distribution of tags across expenses" textAlignment="CENTER" wrappingWidth="360.0">
         <font>
-            <Font size="19.0" />
+            <Font size="16.0" />
         </font>
     </Text>
     <Label fx:id="expenseLabel" layoutX="304.0" layoutY="537.0" text="Total Event costs: ">
@@ -36,5 +36,16 @@
           <Font size="21.0" />
         </font>
     </Label>
-   <Pane fx:id="piechartPane" layoutX="460.0" layoutY="96.0" prefHeight="356.0" prefWidth="360.0" />
+   <Pane fx:id="piechartPane" layoutX="465.0" layoutY="86.0" prefHeight="253.0" prefWidth="256.0" />
+   <TableView layoutX="733.0" layoutY="86.0" prefHeight="385.0" prefWidth="256.0" fx:id="sharesTable">
+     <columns>
+       <TableColumn prefWidth="150.0" text="Participant" fx:id="tParticipantShare"/>
+       <TableColumn prefWidth="105.0" text="Share" fx:id="tShare"/>
+     </columns>
+   </TableView>
+   <Text layoutX="774.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Share per participant" wrappingWidth="196.3359375">
+      <font>
+         <Font size="15.0" />
+      </font>
+   </Text>
 </AnchorPane>

@@ -3,10 +3,7 @@ package client.scenes;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.Debt;
-import commons.Event;
-import commons.Expense;
-import commons.Tag;
+import commons.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -39,6 +36,12 @@ public class StatisticsCtrl implements Initializable {
     public TableView<StatsRow> tableView;
     @FXML
     public Pane piechartPane;
+    @FXML
+    public TableView sharesTable;
+    @FXML
+    public TableColumn tParticipantShare;
+    @FXML
+    public TableColumn tShare;
     private Event event;
 
 //    @FXML
@@ -46,10 +49,14 @@ public class StatisticsCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        //Debts table
         tFrom.setCellValueFactory(new PropertyValueFactory<>("from"));
         tTo.setCellValueFactory(new PropertyValueFactory<>("to"));
         tAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
         tExpenseName.setCellValueFactory(new PropertyValueFactory<>("expenseName"));
+        //Share table
+        tShare.setCellValueFactory(new PropertyValueFactory<>("shareAmount"));
+        tParticipantShare.setCellValueFactory(new PropertyValueFactory<>("shareFrom"));
     }
 
     @Inject
@@ -62,6 +69,11 @@ public class StatisticsCtrl implements Initializable {
     public void setEvent(Event event) {
         this.event = event;
     }
+
+    /**
+     * Updates the Table for the shares per person.
+     */
+    public void updateShares(){}
 
     public void updatePieChart() {
         PieChart pieStats = new PieChart();
@@ -173,6 +185,31 @@ public class StatisticsCtrl implements Initializable {
 
     }
 
+    /**
+     * Share per participant is defined as : Expenses paid by p + debts to be paid by p.
+     * @param p participant to check the share for.
+     * @return total in user preferred currency
+     *
+     */
+    public double getSharePerParticipant(Participant p){
+        //For p
+        //Sum of expenses this participant paid.
+        //+ How much this person owes others.
+        double total = 0; //in user preferred currency.
+        for (Expense expense : event.getExpenses()){
+            if (!expense.getPaidBy().getId().equals(p.getId())){
+                //check for debts by this participant.
+                for (Debt debtor : expense.getDebts()){
+                    if (debtor.getParticipant().getId().equals(p.getId())){ //if this debt belongs to this participant then add it to his share.
+                        total+=server.convert(debtor.getAmount(), expense.getCurrency(),  String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), expense.getDate());
+                    }
+                }
+            }
+            total+=server.convert(expense.getAmount(), expense.getCurrency(),  String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), expense.getDate()); //add the money this participant paid.
+        }
+        return total;
+    }
+
     public void setSumOfExpenses() {
         double sum = 0;
         for (Expense e : event.getExpenses()) {
@@ -198,6 +235,23 @@ public class StatisticsCtrl implements Initializable {
 
     public Event getEvent() {
         return event;
+    }
+
+    public class ShareRow{
+        private final String shareFrom;
+        private final double shareAmount;
+        public ShareRow(String shareFrom, double shareAmount){
+            this.shareFrom=shareFrom;
+            this.shareAmount=shareAmount;
+        }
+
+        public String getShareFrom() {
+            return shareFrom;
+        }
+
+        public double getShareAmount() {
+            return shareAmount;
+        }
     }
 
     public class StatsRow {
