@@ -88,7 +88,7 @@ public class StatisticsCtrl implements Initializable {
                 -fx-text-fill: white;
                 -fx-border-width: 0;
                 -fx-padding: 0;
-                -fx-background-color: #ffffff
+                -fx-background-color: #f4f4f4
                 """);
         //set colors for the pie chart slices
         pieStats.setCache(false);
@@ -106,21 +106,30 @@ public class StatisticsCtrl implements Initializable {
                 stats.put(t.getTag(), stats.getOrDefault(t.getTag(), 0.0) + amount);
             }
         }
-        //use the colors from the tags
         for (Map.Entry<String, Double> entry : stats.entrySet()) {
-            pieChartData.add(new PieChart.Data(entry.getKey(), entry.getValue()));
+            pieChartData.add(new PieChart.Data(entry.getKey() + ":" +
+                  Math.round(entry.getValue() / getTotalSumOfExpenses() * 100.0)+
+                    "%", entry.getValue()));
         }
         pieStats.setData(pieChartData);
         //set colors for the pie chart slices
         for (int i = 0; i < pieChartData.size(); i++) {
             PieChart.Data data = pieChartData.get(i);
-            data.getNode().setStyle("-fx-pie-color: " + event.getTags().get(i).getColor());
+            data.getNode().setStyle("-fx-pie-color: " + searchColor(data.getName().split(":")[0], event.getTags()));
         }
 
         pieStats.setLabelsVisible(true);
         pieStats.setLegendVisible(false);
         piechartPane.getChildren().clear();
         piechartPane.getChildren().add(pieStats);
+    }
+    public String searchColor(String tagName, List<Tag> tags){
+        for (Tag t : tags){
+            if (t.getTag().equals(tagName)){
+                return t.getColor();
+            }
+        }
+        return "#000000";
     }
 
     public void setParticipantStats() {
@@ -207,7 +216,18 @@ public class StatisticsCtrl implements Initializable {
         }
         return total;
     }
-
+    public double getTotalSumOfExpenses(){
+        double sum = 0;
+        for (Expense e : event.getExpenses()) {
+            if (e.getCurrency().equals(String.valueOf(mainCtrl.getUser().getPrefferedCurrency()))){
+                sum += e.getAmount();
+                continue;
+            }
+            double convertedAmount = server.convert(e.getAmount(), e.getCurrency(), String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), e.getDate());
+            sum += convertedAmount;
+        }
+        return sum;
+    }
     public void setSumOfExpenses() {
         double sum = 0;
         for (Expense e : event.getExpenses()) {
