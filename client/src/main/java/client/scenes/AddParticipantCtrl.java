@@ -67,34 +67,24 @@ public class AddParticipantCtrl implements Initializable {
         String participantEmail = email.getText();
         String participantIban = iban.getText();
         String participantBic = bic.getText();
-        if (participantName.isEmpty() || participantEmail.isEmpty() || participantIban.isEmpty()
-                || participantBic.isEmpty()) {
+        if (participantName.isEmpty()) {
             NotificationHelper notificationHelper = new NotificationHelper();
             String warningMessage = I18N.get("participant.add.error");
             if (participantName.isEmpty()){
                 warningMessage += I18N.get("participant.add.error.name") + " ";
-            }
-            if (participantEmail.isEmpty()){
-                warningMessage += "email ";
-            }
-            if (participantIban.isEmpty()){
-                warningMessage += "iban ";
-            }
-            if (participantBic.isEmpty()){
-                warningMessage += "bic";
             }
             warningMessage += ")";
             notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
 
-        if (!participantEmail.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+        if (!participantEmail.isBlank()&&!participantEmail.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
             String warningMessage = I18N.get("participant.add.error.message.email");
             NotificationHelper notificationHelper = new NotificationHelper();
             notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
-        if (participantIban.length() != 34) {
+        if (!participantIban.isBlank()&&participantIban.length() != 34) {
             String warningMessage = I18N.get("participant.add.error.message.iban");
             NotificationHelper notificationHelper = new NotificationHelper();
             notificationHelper.showError(I18N.get("general.warning"), warningMessage);

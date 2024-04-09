@@ -34,6 +34,7 @@ public class User implements Serializable {
 
 
     public User(){
+        this.name="newUser";
         this.email="";
         this.iban="";
         this.bic="";
@@ -53,7 +54,9 @@ public class User implements Serializable {
 
     public User(String name, String preferredCurrency){
         this();
-        this.name=name;
+        if (!name.isBlank()) {
+            this.name = name;
+        }
         this.prefferedCurrency = Currency.valueOf(preferredCurrency);
     }
 
