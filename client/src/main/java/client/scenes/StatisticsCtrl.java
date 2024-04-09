@@ -3,10 +3,7 @@ package client.scenes;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.Debt;
-import commons.Event;
-import commons.Expense;
-import commons.Tag;
+import commons.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -39,6 +36,16 @@ public class StatisticsCtrl implements Initializable {
     public TableView<StatsRow> tableView;
     @FXML
     public Pane piechartPane;
+    @FXML
+    public TableView sharesTable;
+    @FXML
+    public TableColumn tParticipantShare;
+    @FXML
+    public TableColumn tShare;
+    @FXML
+    public TableColumn tOwes;
+    @FXML
+    public TableColumn tOwed;
     private Event event;
 
 //    @FXML
@@ -46,10 +53,16 @@ public class StatisticsCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        //Debts table
         tFrom.setCellValueFactory(new PropertyValueFactory<>("from"));
         tTo.setCellValueFactory(new PropertyValueFactory<>("to"));
         tAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
         tExpenseName.setCellValueFactory(new PropertyValueFactory<>("expenseName"));
+        //Share table
+        tShare.setCellValueFactory(new PropertyValueFactory<>("shareAmount"));
+        tParticipantShare.setCellValueFactory(new PropertyValueFactory<>("shareFrom"));
+        tOwes.setCellValueFactory(new PropertyValueFactory<>("owes"));
+        tOwed.setCellValueFactory(new PropertyValueFactory<>("owed"));
     }
 
     @Inject
@@ -63,13 +76,62 @@ public class StatisticsCtrl implements Initializable {
         this.event = event;
     }
 
+    /**
+     * Updates the Table for the shares per person.
+     */
+    public void updateShares(){
+        sharesTable.getItems().clear();
+        ObservableList<ShareRow> data = FXCollections.observableArrayList();
+        for (Participant p : event.getParticipants()){
+            data.add(new ShareRow(p.getName(), getSharePerParticipant(p), calculateOutgoing(p), calculateIncoming(p)));
+        }
+        sharesTable.setItems(data);
+    }
+
+    public double calculateIncoming(Participant p){
+        double incoming = 0;
+        for (Expense e : event.getExpenses()){
+            if (!e.getPaidBy().getId().equals(p.getId())){
+                continue;
+            }
+            List<Debt> debts = e.getDebts();
+            for (Debt d : debts) {
+                if (d.isPaid()) {
+                    continue;
+                }
+                incoming += server.convert(d.getAmount(), e.getCurrency(), String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), e.getDate());
+            }
+        }
+        return incoming;
+    }
+
+    public double calculateOutgoing(Participant p){
+        double outgoing = 0;
+        for (Expense e : event.getExpenses()){
+            if (e.getPaidBy().getId().equals(p.getId())){
+                continue;
+            }
+            List<Debt> debts = e.getDebts();
+            for (Debt d : debts) {
+                if (d.isPaid()) {
+                    continue;
+                }
+                if (d.getParticipant().getId().equals(p.getId())){
+                    outgoing+=server.convert(d.getAmount(), e.getCurrency(), String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), e.getDate());
+                }
+            }
+        }
+        return outgoing;
+    }
+
+
     public void updatePieChart() {
         PieChart pieStats = new PieChart();
         pieStats.setStyle("""
                 -fx-text-fill: white;
                 -fx-border-width: 0;
                 -fx-padding: 0;
-                -fx-background-color: #ffffff
+                -fx-background-color: #f4f4f4
                 """);
         //set colors for the pie chart slices
         pieStats.setCache(false);
@@ -87,31 +149,30 @@ public class StatisticsCtrl implements Initializable {
                 stats.put(t.getTag(), stats.getOrDefault(t.getTag(), 0.0) + amount);
             }
         }
-        List<String> colors = Arrays.asList(
-                "#FF6347",
-                "#FFD700",
-                "#40E0D0",
-                "#EE82EE",
-                "#ADFF2F");
-        int colorIndex = 0;
         for (Map.Entry<String, Double> entry : stats.entrySet()) {
-            PieChart.Data data = new PieChart.Data(entry.getKey(), entry.getValue());
-            pieChartData.add(data);
-            colorIndex++;
+            pieChartData.add(new PieChart.Data(entry.getKey() + ": " +
+                  Math.round(entry.getValue() / getTotalSumOfExpenses() * 100.0)+
+                    "%", entry.getValue()));
         }
         pieStats.setData(pieChartData);
-
-        // we can set the color for each slice.
-        colorIndex = 0;
-        for (PieChart.Data data : pieStats.getData()) {
-            data.getNode().setStyle("-fx-pie-color: " + colors.get(colorIndex % colors.size()) + ";");
-            colorIndex++;
+        //set colors for the pie chart slices
+        for (int i = 0; i < pieChartData.size(); i++) {
+            PieChart.Data data = pieChartData.get(i);
+            data.getNode().setStyle("-fx-pie-color: " + searchColor(data.getName().split(":")[0], event.getTags()));
         }
 
         pieStats.setLabelsVisible(true);
         pieStats.setLegendVisible(false);
         piechartPane.getChildren().clear();
         piechartPane.getChildren().add(pieStats);
+    }
+    public String searchColor(String tagName, List<Tag> tags){
+        for (Tag t : tags){
+            if (t.getTag().equals(tagName)){
+                return t.getColor();
+            }
+        }
+        return "#000000";
     }
 
     public void setParticipantStats() {
@@ -173,6 +234,35 @@ public class StatisticsCtrl implements Initializable {
 
     }
 
+    /**
+     * Share per participant is defined as : Expenses paid by p + debts to be paid by p.
+     * @param p participant to check the share for.
+     * @return total in user preferred currency
+     *
+     */
+    public double getSharePerParticipant(Participant p){
+        //For p
+        //Sum of expenses this participant paid.
+        double total = 0; //in user preferred currency.
+        for (Expense expense : event.getExpenses()){
+            if (expense.getPaidBy().getId().equals(p.getId())){
+                total+=server.convert(expense.getAmount(), expense.getCurrency(),  String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), expense.getDate()); //add the money this participant paid.
+            }
+        }
+        return total;
+    }
+    public double getTotalSumOfExpenses(){
+        double sum = 0;
+        for (Expense e : event.getExpenses()) {
+            if (e.getCurrency().equals(String.valueOf(mainCtrl.getUser().getPrefferedCurrency()))){
+                sum += e.getAmount();
+                continue;
+            }
+            double convertedAmount = server.convert(e.getAmount(), e.getCurrency(), String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), e.getDate());
+            sum += convertedAmount;
+        }
+        return sum;
+    }
     public void setSumOfExpenses() {
         double sum = 0;
         for (Expense e : event.getExpenses()) {
@@ -194,22 +284,50 @@ public class StatisticsCtrl implements Initializable {
         updatePieChart();
         setSumOfExpenses();
         setParticipantStats();
+        updateShares();
     }
 
     public Event getEvent() {
         return event;
     }
 
+    public class ShareRow{
+        private final String shareFrom;
+        private final String shareAmount;
+        private final String owes;
+        private final String owed;
+        public ShareRow(String shareFrom, double shareAmount, double owes, double owed){
+            this.shareFrom=shareFrom;
+            this.shareAmount= shareAmount + " " + mainCtrl.getUser().getPrefferedCurrency();
+            this.owes = owes + " " + mainCtrl.getUser().getPrefferedCurrency();
+            this.owed = owed + " " + mainCtrl.getUser().getPrefferedCurrency();
+        }
+
+        public String getShareFrom() {
+            return shareFrom;
+        }
+
+        public String getShareAmount() {
+            return shareAmount;
+        }
+        public String getOwes() {
+            return owes;
+        }
+        public String getOwed() {
+            return owed;
+        }
+    }
+
     public class StatsRow {
         private final String from;
         private final String to;
-        private final double amount;
+        private final String amount;
         private final String expenseName;
 
         public StatsRow(String name, String to, double amount, String expenseName) {
             this.from = name;
             this.to = to;
-            this.amount = Math.round(amount * 100.0) / 100.0;
+            this.amount = (Math.round(amount * 100.0) / 100.0) + " " + mainCtrl.getUser().getPrefferedCurrency();
             this.expenseName = expenseName;
         }
 
@@ -221,7 +339,7 @@ public class StatisticsCtrl implements Initializable {
             return to;
         }
 
-        public double getAmount() {
+        public String getAmount() {
             return amount;
         }
 

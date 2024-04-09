@@ -9,11 +9,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="608.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StatisticsCtrl">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="608.0" prefWidth="1224.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StatisticsCtrl">
 
-    <Text layoutX="526.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Distribution of tags across expenses" textAlignment="CENTER" wrappingWidth="360.0">
+    <Text layoutX="401.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Distribution of tags across expenses" textAlignment="CENTER" wrappingWidth="360.0">
         <font>
-            <Font size="19.0" />
+            <Font size="16.0" />
         </font>
     </Text>
     <Label fx:id="expenseLabel" layoutX="304.0" layoutY="537.0" text="Total Event costs: ">
@@ -21,20 +21,33 @@
             <Font size="35.0" />
         </font>
     </Label>
-    <TableView fx:id="tableView" layoutX="14.0" layoutY="73.0" prefHeight="402.0" prefWidth="409.0">
-      <columns>
-          <TableColumn fx:id="tFrom" prefWidth="89.0" text="From" />
-          <TableColumn fx:id="tTo" prefWidth="115.0" text="To" />
-          <TableColumn fx:id="tAmount" prefWidth="61.0" text="Amount" />
-          <TableColumn fx:id="tExpenseName" prefWidth="143.0" text="Expense" />
+    <TableView fx:id="tableView" layoutX="14.0" layoutY="73.0" prefHeight="402.0" prefWidth="360.0">
+        <columns>
+            <TableColumn fx:id="tFrom" prefWidth="82.0" text="From" />
+            <TableColumn fx:id="tTo" prefWidth="106.0" text="To" />
+            <TableColumn fx:id="tAmount" prefWidth="65.0" text="Amount" />
+            <TableColumn fx:id="tExpenseName" prefWidth="103.0" text="Expense" />
 
-      </columns>
+        </columns>
     </TableView>
     <Button layoutX="22.0" layoutY="12.0" mnemonicParsing="false" onAction="#back" text="Back" />
     <Label alignment="CENTER" layoutX="206.0" layoutY="37.0" prefHeight="21.0" prefWidth="104.0" text="Debts">
         <font>
-          <Font size="21.0" />
+            <Font size="21.0" />
         </font>
     </Label>
-   <Pane fx:id="piechartPane" layoutX="460.0" layoutY="96.0" prefHeight="356.0" prefWidth="360.0" />
+    <Pane fx:id="piechartPane" layoutX="374.0" layoutY="100.0" prefHeight="367.0" prefWidth="368.0" />
+    <TableView fx:id="sharesTable" layoutX="822.0" layoutY="91.0" prefHeight="385.0" prefWidth="388.0">
+        <columns>
+            <TableColumn fx:id="tParticipantShare" prefWidth="118.0" text="Participant" />
+            <TableColumn fx:id="tShare" prefWidth="71.0" text="Share" />
+            <TableColumn fx:id="tOwes" prefWidth="92.0" text="Owes" />
+            <TableColumn fx:id="tOwed" prefWidth="130.0" text="Owed" />
+        </columns>
+    </TableView>
+    <Text layoutX="935.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Share per participant" wrappingWidth="196.3359375">
+        <font>
+            <Font size="15.0" />
+        </font>
+    </Text>
 </AnchorPane>
