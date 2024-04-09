@@ -106,25 +106,15 @@ public class StatisticsCtrl implements Initializable {
                 stats.put(t.getTag(), stats.getOrDefault(t.getTag(), 0.0) + amount);
             }
         }
-        List<String> colors = Arrays.asList(
-                "#FF6347",
-                "#FFD700",
-                "#40E0D0",
-                "#EE82EE",
-                "#ADFF2F");
-        int colorIndex = 0;
+        //use the colors from the tags
         for (Map.Entry<String, Double> entry : stats.entrySet()) {
-            PieChart.Data data = new PieChart.Data(entry.getKey(), entry.getValue());
-            pieChartData.add(data);
-            colorIndex++;
+            pieChartData.add(new PieChart.Data(entry.getKey(), entry.getValue()));
         }
         pieStats.setData(pieChartData);
-
-        // we can set the color for each slice.
-        colorIndex = 0;
-        for (PieChart.Data data : pieStats.getData()) {
-            data.getNode().setStyle("-fx-pie-color: " + colors.get(colorIndex % colors.size()) + ";");
-            colorIndex++;
+        //set colors for the pie chart slices
+        for (int i = 0; i < pieChartData.size(); i++) {
+            PieChart.Data data = pieChartData.get(i);
+            data.getNode().setStyle("-fx-pie-color: " + event.getTags().get(i).getColor());
         }
 
         pieStats.setLabelsVisible(true);
