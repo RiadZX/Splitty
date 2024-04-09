@@ -35,13 +35,13 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <Button fx:id="sneButton" id="confirmBtn" layoutX="195.0" layoutY="391.0" mnemonicParsing="false" onAction="#save" prefHeight="27.0" text="settings.profile.save_and_exit">
+      <Button id="confirmBtn" fx:id="sneButton" layoutX="195.0" layoutY="391.0" mnemonicParsing="false" onAction="#save" prefHeight="27.0" text="settings.profile.save_and_exit">
          <cursor>
-            <Cursor fx:constant="CLOSED_HAND" />
+            <Cursor fx:constant="HAND" />
          </cursor></Button>
-      <Button fx:id="cancelButton" id="cancelBtn" layoutX="124.0" layoutY="391.0" mnemonicParsing="false" onAction="#back" text="settings.profile.cancel">
+      <Button id="cancelBtn" fx:id="cancelButton" layoutX="124.0" layoutY="391.0" mnemonicParsing="false" onAction="#back" text="settings.profile.cancel">
          <cursor>
-            <Cursor fx:constant="CLOSED_HAND" />
+            <Cursor fx:constant="HAND" />
          </cursor></Button>
       <ComboBox fx:id="currencyComboBox" layoutX="125.0" layoutY="345.0" prefHeight="24.0" prefWidth="91.0" />
       <Label fx:id="currencyOption" layoutX="37.0" layoutY="347.0" text="settings.profile.currency">
