@@ -14,28 +14,34 @@
                 <Font name="Comfortaa Medium" size="30.0" />
             </font>
         </Label>
-        <Button fx:id="englishButton" layoutX="118.0" layoutY="122.0" mnemonicParsing="false" onAction="#switchToEnglish" prefHeight="31.0" prefWidth="122.0" text="language.English">
+        <Button fx:id="englishButton" layoutX="103.0" layoutY="122.0" mnemonicParsing="false" onAction="#switchToEnglish" prefHeight="31.0" prefWidth="147.0" text="language.English">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
-        <Button fx:id="dutchButton" layoutX="118.0" layoutY="175.0" mnemonicParsing="false" onAction="#switchToDutch" prefHeight="27.0" prefWidth="122.0" text="language.Dutch">
+        <Button fx:id="dutchButton" layoutX="104.0" layoutY="175.0" mnemonicParsing="false" onAction="#switchToDutch" prefHeight="29.0" prefWidth="147.0" text="language.Dutch">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
-        <Button fx:id="romanianButton" layoutX="118.0" layoutY="219.0" mnemonicParsing="false" onAction="#switchToRomanian" prefHeight="27.0" prefWidth="122.0" text="language.Romanian">
+        <Button fx:id="romanianButton" layoutX="104.0" layoutY="219.0" mnemonicParsing="false" onAction="#switchToRomanian" prefHeight="29.0" prefWidth="147.0" text="language.Romanian">
             <cursor>
                 <Cursor fx:constant="HAND" />
             </cursor>
         </Button>
-        <Button fx:id="customLanguageButton" layoutX="118.0" layoutY="264.0" mnemonicParsing="false" onAction="#switchToUserLanguage" prefHeight="27.0" prefWidth="122.0" text="language.userLanguage">
+        <Button fx:id="customLanguageButton" layoutX="104.0" layoutY="264.0" mnemonicParsing="false" onAction="#switchToUserLanguage" prefHeight="27.0" prefWidth="147.0" text="language.userLanguage">
             <cursor>
                 <Cursor fx:constant="HAND" />
             </cursor>
+         <font>
+            <Font size="11.0" />
+         </font>
         </Button>
-        <Button fx:id="userLanguageButton" layoutX="118.0" layoutY="309.0" mnemonicParsing="false" onAction="#addLanguage" prefHeight="27.0" prefWidth="122.0" text="language.addLanguage">
+        <Button fx:id="userLanguageButton" layoutX="105.0" layoutY="309.0" mnemonicParsing="false" onAction="#addLanguage" prefHeight="27.0" prefWidth="147.0" text="language.addLanguage">
             <cursor>
                 <Cursor fx:constant="HAND" />
             </cursor>
+         <font>
+            <Font size="11.0" />
+         </font>
         </Button>
         <Pane layoutX="7.0" layoutY="10.0" onMouseClicked="#backAction" prefHeight="27.0" prefWidth="75.0" styleClass="back-pane">
             <children>
@@ -54,6 +60,14 @@
             <Cursor fx:constant="CLOSED_HAND" />
          </cursor>
         </Pane>
+      <Button fx:id="downloadTemplateButton" layoutX="106.0" layoutY="356.0" mnemonicParsing="false" onAction="#downloadTemplate" prefHeight="27.0" prefWidth="147.0" text="language.downloadTemplate">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font size="11.0" />
+         </font>
+      </Button>
     </children>
 
 </AnchorPane>
