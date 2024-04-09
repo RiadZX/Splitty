@@ -107,7 +107,7 @@ public class StatisticsCtrl implements Initializable {
             }
         }
         for (Map.Entry<String, Double> entry : stats.entrySet()) {
-            pieChartData.add(new PieChart.Data(entry.getKey() + ":" +
+            pieChartData.add(new PieChart.Data(entry.getKey() + ": " +
                   Math.round(entry.getValue() / getTotalSumOfExpenses() * 100.0)+
                     "%", entry.getValue()));
         }
@@ -258,17 +258,17 @@ public class StatisticsCtrl implements Initializable {
 
     public class ShareRow{
         private final String shareFrom;
-        private final double shareAmount;
+        private final String shareAmount;
         public ShareRow(String shareFrom, double shareAmount){
             this.shareFrom=shareFrom;
-            this.shareAmount=shareAmount;
+            this.shareAmount= shareAmount + " " + mainCtrl.getUser().getPrefferedCurrency();
         }
 
         public String getShareFrom() {
             return shareFrom;
         }
 
-        public double getShareAmount() {
+        public String getShareAmount() {
             return shareAmount;
         }
     }
@@ -276,13 +276,13 @@ public class StatisticsCtrl implements Initializable {
     public class StatsRow {
         private final String from;
         private final String to;
-        private final double amount;
+        private final String amount;
         private final String expenseName;
 
         public StatsRow(String name, String to, double amount, String expenseName) {
             this.from = name;
             this.to = to;
-            this.amount = Math.round(amount * 100.0) / 100.0;
+            this.amount = (Math.round(amount * 100.0) / 100.0) + " " + mainCtrl.getUser().getPrefferedCurrency();
             this.expenseName = expenseName;
         }
 
@@ -294,7 +294,7 @@ public class StatisticsCtrl implements Initializable {
             return to;
         }
 
-        public double getAmount() {
+        public String getAmount() {
             return amount;
         }
 
