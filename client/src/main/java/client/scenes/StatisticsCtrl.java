@@ -243,17 +243,9 @@ public class StatisticsCtrl implements Initializable {
     public double getSharePerParticipant(Participant p){
         //For p
         //Sum of expenses this participant paid.
-        //+ How much this person owes others.
         double total = 0; //in user preferred currency.
         for (Expense expense : event.getExpenses()){
-            if (!expense.getPaidBy().getId().equals(p.getId())){
-                //check for debts by this participant.
-                for (Debt debtor : expense.getDebts()){
-                    if (debtor.getParticipant().getId().equals(p.getId())){ //if this debt belongs to this participant then add it to his share.
-                        total+=server.convert(debtor.getAmount(), expense.getCurrency(),  String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), expense.getDate());
-                    }
-                }
-            }else {
+            if (expense.getPaidBy().getId().equals(p.getId())){
                 total+=server.convert(expense.getAmount(), expense.getCurrency(),  String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), expense.getDate()); //add the money this participant paid.
             }
         }
