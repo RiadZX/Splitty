@@ -42,6 +42,10 @@ public class StatisticsCtrl implements Initializable {
     public TableColumn tParticipantShare;
     @FXML
     public TableColumn tShare;
+    @FXML
+    public TableColumn tOwes;
+    @FXML
+    public TableColumn tOwed;
     private Event event;
 
 //    @FXML
@@ -57,6 +61,8 @@ public class StatisticsCtrl implements Initializable {
         //Share table
         tShare.setCellValueFactory(new PropertyValueFactory<>("shareAmount"));
         tParticipantShare.setCellValueFactory(new PropertyValueFactory<>("shareFrom"));
+        tOwes.setCellValueFactory(new PropertyValueFactory<>("owes"));
+        tOwed.setCellValueFactory(new PropertyValueFactory<>("owed"));
     }
 
     @Inject
@@ -77,10 +83,47 @@ public class StatisticsCtrl implements Initializable {
         sharesTable.getItems().clear();
         ObservableList<ShareRow> data = FXCollections.observableArrayList();
         for (Participant p : event.getParticipants()){
-            data.add(new ShareRow(p.getName(), getSharePerParticipant(p)));
+            data.add(new ShareRow(p.getName(), getSharePerParticipant(p), calculateOutgoing(p), calculateIncoming(p)));
         }
         sharesTable.setItems(data);
     }
+
+    public double calculateIncoming(Participant p){
+        double incoming = 0;
+        for (Expense e : event.getExpenses()){
+            if (!e.getPaidBy().getId().equals(p.getId())){
+                continue;
+            }
+            List<Debt> debts = e.getDebts();
+            for (Debt d : debts) {
+                if (d.isPaid()) {
+                    continue;
+                }
+                incoming += server.convert(d.getAmount(), e.getCurrency(), String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), e.getDate());
+            }
+        }
+        return incoming;
+    }
+
+    public double calculateOutgoing(Participant p){
+        double outgoing = 0;
+        for (Expense e : event.getExpenses()){
+            if (e.getPaidBy().getId().equals(p.getId())){
+                continue;
+            }
+            List<Debt> debts = e.getDebts();
+            for (Debt d : debts) {
+                if (d.isPaid()) {
+                    continue;
+                }
+                if (d.getParticipant().getId().equals(p.getId())){
+                    outgoing+=server.convert(d.getAmount(), e.getCurrency(), String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), e.getDate());
+                }
+            }
+        }
+        return outgoing;
+    }
+
 
     public void updatePieChart() {
         PieChart pieStats = new PieChart();
@@ -259,9 +302,13 @@ public class StatisticsCtrl implements Initializable {
     public class ShareRow{
         private final String shareFrom;
         private final String shareAmount;
-        public ShareRow(String shareFrom, double shareAmount){
+        private final String owes;
+        private final String owed;
+        public ShareRow(String shareFrom, double shareAmount, double owes, double owed){
             this.shareFrom=shareFrom;
             this.shareAmount= shareAmount + " " + mainCtrl.getUser().getPrefferedCurrency();
+            this.owes = owes + " " + mainCtrl.getUser().getPrefferedCurrency();
+            this.owed = owed + " " + mainCtrl.getUser().getPrefferedCurrency();
         }
 
         public String getShareFrom() {
@@ -270,6 +317,12 @@ public class StatisticsCtrl implements Initializable {
 
         public String getShareAmount() {
             return shareAmount;
+        }
+        public String getOwes() {
+            return owes;
+        }
+        public String getOwed() {
+            return owed;
         }
     }
 

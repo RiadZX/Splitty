@@ -22,30 +22,32 @@
         </font>
     </Label>
     <TableView fx:id="tableView" layoutX="14.0" layoutY="73.0" prefHeight="402.0" prefWidth="360.0">
-      <columns>
-          <TableColumn fx:id="tFrom" prefWidth="82.0" text="From" />
-          <TableColumn fx:id="tTo" prefWidth="106.0" text="To" />
-          <TableColumn fx:id="tAmount" prefWidth="65.0" text="Amount" />
-          <TableColumn fx:id="tExpenseName" prefWidth="103.0" text="Expense" />
+        <columns>
+            <TableColumn fx:id="tFrom" prefWidth="82.0" text="From" />
+            <TableColumn fx:id="tTo" prefWidth="106.0" text="To" />
+            <TableColumn fx:id="tAmount" prefWidth="65.0" text="Amount" />
+            <TableColumn fx:id="tExpenseName" prefWidth="103.0" text="Expense" />
 
-      </columns>
+        </columns>
     </TableView>
     <Button layoutX="22.0" layoutY="12.0" mnemonicParsing="false" onAction="#back" text="Back" />
     <Label alignment="CENTER" layoutX="206.0" layoutY="37.0" prefHeight="21.0" prefWidth="104.0" text="Debts">
         <font>
-          <Font size="21.0" />
+            <Font size="21.0" />
         </font>
     </Label>
-   <Pane fx:id="piechartPane" layoutX="374.0" layoutY="100.0" prefHeight="367.0" prefWidth="368.0" />
-   <TableView fx:id="sharesTable" layoutX="853.0" layoutY="100.0" prefHeight="385.0" prefWidth="360.0">
-     <columns>
-       <TableColumn fx:id="tParticipantShare" prefWidth="194.0" text="Participant" />
-       <TableColumn fx:id="tShare" prefWidth="164.0" text="Share" />
-     </columns>
-   </TableView>
-   <Text layoutX="935.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Share per participant" wrappingWidth="196.3359375">
-      <font>
-         <Font size="15.0" />
-      </font>
-   </Text>
+    <Pane fx:id="piechartPane" layoutX="374.0" layoutY="100.0" prefHeight="367.0" prefWidth="368.0" />
+    <TableView fx:id="sharesTable" layoutX="822.0" layoutY="91.0" prefHeight="385.0" prefWidth="388.0">
+        <columns>
+            <TableColumn fx:id="tParticipantShare" prefWidth="118.0" text="Participant" />
+            <TableColumn fx:id="tShare" prefWidth="71.0" text="Share" />
+            <TableColumn fx:id="tOwes" prefWidth="92.0" text="Owes" />
+            <TableColumn fx:id="tOwed" prefWidth="130.0" text="Owed" />
+        </columns>
+    </TableView>
+    <Text layoutX="935.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Share per participant" wrappingWidth="196.3359375">
+        <font>
+            <Font size="15.0" />
+        </font>
+    </Text>
 </AnchorPane>
