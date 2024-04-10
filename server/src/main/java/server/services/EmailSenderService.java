@@ -21,6 +21,9 @@ public class EmailSenderService {
                           int port,
                           boolean smtpAuth,
                           boolean startTls) {
+        System.out.println(password);
+        System.out.println(host);
+        System.out.println(senderEmail);
         mailSender.setHost(host);
         mailSender.setPort(port);
         mailSender.setPassword(password);

@@ -23,7 +23,7 @@ public class EmailController {
     public ResponseEntity<Void> sendEmail(@RequestBody String contents) {
         JsonObject body = JsonParser.parseString(contents).getAsJsonObject();
 
-        emailSender.sendInvitationEmail(body.get("senderEmail").toString(),
+        emailSender.sendInvitationEmail(body.get("senderEmail").toString().replaceAll("\"", ""),
                 body.get("toEmail").toString(),
                 body.get("inviteCode").toString(),
                 body.get("creator").toString(),

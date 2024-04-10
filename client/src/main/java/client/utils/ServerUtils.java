@@ -278,6 +278,12 @@ public class ServerUtils {
         body.addProperty("toEmail", toEmail);
         body.addProperty("inviteCode", inviteCode);
         body.addProperty("creator", creator);
+        body.addProperty("password", mailConfig.getPassword());
+        body.addProperty("host", mailConfig.getHost());
+        body.addProperty("port", mailConfig.getPort());
+        body.addProperty("smtpAuth", mailConfig.isSmtpAuth());
+        body.addProperty("startTls", mailConfig.isStartTls());
+
         System.out.println(body);
         ClientBuilder.newClient(new ClientConfig())//
                 .target(serverAddress).path("api/mail")//
