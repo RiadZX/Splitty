@@ -62,8 +62,8 @@ public class InviteViewCtrl implements Initializable {
         this.cancelBtn.setOnAction(event -> backToEvent());
     }
 
-    private void testEmail() {
-
+    public void testEmail() {
+        server.sendEmail(server.getMailConfig().getUsername(), "Test", "This is a test email. If you see it, then everything works fine!");
     }
 
     private void sendInvite() {

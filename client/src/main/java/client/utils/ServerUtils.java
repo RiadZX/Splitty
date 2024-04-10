@@ -53,6 +53,11 @@ public class ServerUtils {
     private final String serverAddress;
     private final AppConfig appConfig;
     private final MailConfig mailConfig;
+
+    public MailConfig getMailConfig() {
+        return mailConfig;
+    }
+
     private ExecutorService exec = Executors.newSingleThreadExecutor();
     private StompSession session;
 
