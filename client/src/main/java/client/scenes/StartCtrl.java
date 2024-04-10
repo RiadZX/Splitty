@@ -143,6 +143,7 @@ public class StartCtrl implements Initializable {
                 Participant participant = this.mainCtrl.getUser().createParticipant();
                 participant = server.addParticipant(joined.getId(), participant);
                 mainCtrl.addUserEvent(joined.getId(), participant.getId());
+                server.send("/app/events", joined);
             }
             //move to correct scene
             mainCtrl.showEventOverviewScene(joined);

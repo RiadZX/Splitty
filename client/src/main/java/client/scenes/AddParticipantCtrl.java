@@ -100,16 +100,19 @@ public class AddParticipantCtrl implements Initializable {
             notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
+        Participant p = new Participant(
+                participantName,
+                this.event,
+                participantIban,
+                participantEmail,
+                participantBic
+        );
         server.addParticipant(
                 event.getId(),
-                new Participant(
-                        participantName,
-                        this.event,
-                        participantIban,
-                        participantEmail,
-                        participantBic
-                )
+                p
         );
+        this.event.addParticipant(p);
+        server.send("/app/events", this.event);
         name.clear();
         email.clear();
         iban.clear();

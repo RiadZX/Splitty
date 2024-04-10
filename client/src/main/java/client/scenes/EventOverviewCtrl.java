@@ -133,6 +133,7 @@ public class EventOverviewCtrl implements Initializable {
             System.out.println("MESSAGE RECEIVED");
             System.out.println("EXPENSES FROM WS: " + e.getExpenses());
             System.out.println("MY ID : " + event.getId());
+            System.out.println("PARTICIPANTS: " + event.getParticipants().size());
             System.out.println("MESSAGE ID: " + e.getId());
             if (e.getId().equals(this.event.getId())){
                 setEvent(e);
