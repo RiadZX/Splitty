@@ -45,8 +45,12 @@ public class MailConfig {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         MailConfig that = (MailConfig) o;
         return port == that.port && smtpAuth == that.smtpAuth && startTls == that.startTls && Objects.equals(username, that.username) && Objects.equals(password, that.password) && Objects.equals(host, that.host);
     }

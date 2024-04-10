@@ -1,8 +1,6 @@
 package server.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +8,7 @@ import java.util.Properties;
 
 @Service
 public class EmailSenderService {
-    private static final JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+    private static JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
     public void sendEmail(String senderEmail,
                                     String toEmail,
