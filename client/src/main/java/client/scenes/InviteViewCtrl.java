@@ -34,6 +34,8 @@ public class InviteViewCtrl implements Initializable {
     @FXML
     public Button cancelBtn;
     @FXML
+    public Button testBtn;
+    @FXML
     public Labeled inviteInstr;
     @FXML
     public Labeled emailLabel;
@@ -54,9 +56,14 @@ public class InviteViewCtrl implements Initializable {
         I18N.update(emailLabel);
         I18N.update(sendInviteBtn);
         I18N.update(cancelBtn);
+        I18N.update(testBtn);
         this.copyToClipboardBtn.setOnAction(event -> copyToClipboard());
         this.sendInviteBtn.setOnAction(event -> sendInvite());
         this.cancelBtn.setOnAction(event -> backToEvent());
+    }
+
+    private void testEmail() {
+
     }
 
     private void sendInvite() {
