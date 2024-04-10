@@ -43,7 +43,11 @@ public class AddExpenseCtrl implements Initializable {
     private DatePicker whenField;
     @FXML
     private VBox tagSelector, partialPaidSelector;
+    @FXML
+    private TextField titleField;
 
+    @FXML
+    private Text title;
     @FXML
     private Text paid;
     @FXML
@@ -73,6 +77,7 @@ public class AddExpenseCtrl implements Initializable {
         I18N.update(abortButton);
         I18N.update(allBox);
         I18N.update(someBox);
+        I18N.update(title);
 //        this.prepareTagDialog();
     }
     @FXML
@@ -250,9 +255,12 @@ public class AddExpenseCtrl implements Initializable {
             return;
         }
          */
-
+        String title=titleField.getText();
+        if (title.isBlank()){
+            title=paidBy.getName() + " paid";
+        }
         //create the expense, TODO : changed the name of event because event tags are not implemented yet
-        Expense newExpense = new Expense(paidBy.getName() + " paid for " + "EXPENSE TEMPLATE",
+        Expense newExpense = new Expense(title,
                 Double.parseDouble(howMuchField.getText()),
                 currencySelector.getValue(),
                 Instant.from(date.atStartOfDay(
