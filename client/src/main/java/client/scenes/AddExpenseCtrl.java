@@ -12,7 +12,6 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.scene.control.TextInputDialog;
 
 import java.net.URL;
 import java.time.Instant;
@@ -20,7 +19,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
@@ -75,7 +73,7 @@ public class AddExpenseCtrl implements Initializable {
         I18N.update(abortButton);
         I18N.update(allBox);
         I18N.update(someBox);
-        this.prepareTagDialog();
+//        this.prepareTagDialog();
     }
     @FXML
     public void backToOverview(){
@@ -270,6 +268,7 @@ public class AddExpenseCtrl implements Initializable {
         }
 
         Expense e;
+        System.out.println(newExpense);
         if (expense == null) {
             expense = server.addExpense(event.getId(), newExpense);
         } else {
@@ -278,6 +277,7 @@ public class AddExpenseCtrl implements Initializable {
         for (Tag t : tags) {
             server.addExpenseTag(event.getId(), t.getId(), expense.getId());
         }
+
         server.send("/app/events", event);
         mainCtrl.showEventOverviewScene(event);
     }
@@ -304,19 +304,19 @@ public class AddExpenseCtrl implements Initializable {
         tagSelector.getChildren().add(new CheckBox(tag.getTag()));
     }
 
-    public void openTagDialog(){
-        tagDialog.getEditor().clear();
-        Optional<String> result = tagDialog.showAndWait();
-        result.ifPresent(this::createTag); // if ok is pressed check password
-    }
+//    public void openTagDialog(){
+//        tagDialog.getEditor().clear();
+//        Optional<String> result = tagDialog.showAndWait();
+//        result.ifPresent(this::createTag); // if ok is pressed check password
+//    }
 
-    public void prepareTagDialog(){
-        tagDialog=new TextInputDialog();
-        tagDialog.setTitle(I18N.get("expense.add.createTag"));
-        tagDialog.setContentText(I18N.get("expense.add.createTagText"));
-        tagDialog.setHeaderText("");
-        tagDialog.setGraphic(null);
-    }
+//    public void prepareTagDialog(){
+//        tagDialog=new TextInputDialog();
+//        tagDialog.setTitle(I18N.get("expense.add.createTag"));
+//        tagDialog.setContentText(I18N.get("expense.add.createTagText"));
+//        tagDialog.setHeaderText("");
+//        tagDialog.setGraphic(null);
+//    }
 
     public Participant findParticipant(String name){
         Participant r = null;

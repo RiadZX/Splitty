@@ -278,7 +278,6 @@ public class ServerUtils {
         body.addProperty("toEmail", toEmail);
         body.addProperty("inviteCode", inviteCode);
         body.addProperty("creator", creator);
-        System.out.println(body);
         ClientBuilder.newClient(new ClientConfig())//
                 .target(serverAddress).path("api/mail")//
                 .request(APPLICATION_JSON)//
@@ -292,7 +291,6 @@ public class ServerUtils {
         body.addProperty("from", from);
         body.addProperty("to", to);
         body.addProperty("when", when.toString());
-        System.out.println(body);
         return ClientBuilder.newClient(new ClientConfig())//
                 .target(serverAddress).path("api/convert")//
                 .request(APPLICATION_JSON)//
