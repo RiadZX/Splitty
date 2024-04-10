@@ -261,6 +261,14 @@ public class EventOverviewCtrl implements Initializable {
         mainCtrl.showEditExpense(e);
     }
 
+    public void removeExpenseAction(Expense e){
+        if (!notificationService.showConfirmation(I18N.get("event.overview.delete.event"), I18N.get("event.overview.delete.event.notification"))) {
+            return;
+        }
+        server.removeExpense(event.getId(), e);
+        this.refresh();
+    }
+
 
     @SuppressWarnings("checkstyle:RegexpSingleline")
     public void refresh(){
@@ -302,7 +310,7 @@ public class EventOverviewCtrl implements Initializable {
                         + mainCtrl.getUser().getPrefferedCurrency());
         text.setFill(Color.WHITESMOKE);
         bp.setLeft(text);
-
+        BorderPane inner2Bp= new BorderPane();
         BorderPane innerBp = new BorderPane();
 
         Image editImage = new Image("client/icons/pencil.png");
@@ -314,7 +322,18 @@ public class EventOverviewCtrl implements Initializable {
         edit.setPickOnBounds(true);
         edit.setFitWidth(12.0);
         BorderPane.setMargin(edit, insets);
-        innerBp.setRight(edit);
+        inner2Bp.setLeft(edit);
+
+        Image removeImage = new Image("client/icons/bin-red.png");
+        ImageView remove = new ImageView();
+        remove.setImage(removeImage);
+        remove.setOnMouseClicked(x -> removeExpenseAction(e));
+        remove.cursorProperty().set(Cursor.HAND);
+        remove.setFitHeight(12.0);
+        remove.setPickOnBounds(true);
+        remove.setFitWidth(12.0);
+        inner2Bp.setRight(remove);
+        BorderPane.setMargin(remove, insets);
 
         HBox hbox = new HBox();
         List<BorderPane> tags = e.getTags().stream().map(this::pretty).toList();
@@ -322,7 +341,7 @@ public class EventOverviewCtrl implements Initializable {
         hbox.setSpacing(5.0);
         hbox.setPadding(insets);
         innerBp.setLeft(hbox);
-
+        innerBp.setRight(inner2Bp);
         bp.setRight(innerBp);
         return bp;
     }
