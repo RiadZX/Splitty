@@ -12,6 +12,33 @@ import java.util.Properties;
 public class EmailSenderService {
     private static final JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
+    public void sendEmail(String senderEmail,
+                                    String toEmail,
+                                    String password,
+                                    String host,
+                                    int port,
+                                    boolean smtpAuth,
+                                    boolean startTls,
+                          String body,
+                          String subject) {
+        mailSender.setHost(host);
+        mailSender.setPort(port);
+        mailSender.setPassword(password);
+        mailSender.setUsername(senderEmail);
+
+        Properties props = mailSender.getJavaMailProperties();
+        props.put("mail.smtp.auth", smtpAuth);
+        props.put("mail.smtp.starttls.enable", startTls);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(senderEmail);
+        message.setCc(senderEmail);
+        message.setTo(toEmail);
+        message.setText(body);
+        message.setSubject(subject);
+
+        mailSender.send(message);
+    }
     public void sendInvitationEmail(String senderEmail,
                           String toEmail,
                           String inviteCode,
@@ -21,9 +48,6 @@ public class EmailSenderService {
                           int port,
                           boolean smtpAuth,
                           boolean startTls) {
-        System.out.println(password);
-        System.out.println(host);
-        System.out.println(senderEmail);
         mailSender.setHost(host);
         mailSender.setPort(port);
         mailSender.setPassword(password);

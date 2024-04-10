@@ -80,7 +80,7 @@ public class InviteViewCtrl implements Initializable {
             }
         }
         for (String email : addresses) {
-            server.sendEmail(email, eventCode.getText(), mainCtrl.getUser().getName());
+            server.sendEmailInvitation(email, eventCode.getText(), mainCtrl.getUser().getName());
         }
         backToEvent();
     }
