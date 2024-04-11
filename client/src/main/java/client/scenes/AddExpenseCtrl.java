@@ -280,6 +280,10 @@ public class AddExpenseCtrl implements Initializable {
         if (expense == null) {
             expense = server.addExpense(event.getId(), newExpense);
         } else {
+            System.out.println("-------------------------------");
+            System.out.println(newExpense);
+            System.out.println("-------------------------------");
+
             server.updateExpense(event.getId(), expense.getId(), newExpense);
         }
         for (Tag t : tags) {
