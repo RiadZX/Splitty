@@ -48,6 +48,8 @@ public class UserSettingsCtrl implements Initializable {
     private Labeled cancelButton;
     @FXML
     private Labeled currencyOption;
+
+    private final I18N i18n = new I18N();
     @Inject
     public UserSettingsCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
         this.server = server;
@@ -68,14 +70,14 @@ public class UserSettingsCtrl implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         List<String> currencies = Arrays.stream(User.Currency.values()).map(Enum::toString).toList();
         currencyComboBox.getItems().addAll(currencies);
-        I18N.update(profileSettings);
-        I18N.update(nameLabel);
-        I18N.update(emailLabel);
-        I18N.update(ibanLabel);
-        I18N.update(bicLabel);
-        I18N.update(sneButton);
-        I18N.update(cancelButton);
-        I18N.update(currencyOption);
+        i18n.update(profileSettings);
+        i18n.update(nameLabel);
+        i18n.update(emailLabel);
+        i18n.update(ibanLabel);
+        i18n.update(bicLabel);
+        i18n.update(sneButton);
+        i18n.update(cancelButton);
+        i18n.update(currencyOption);
     }
 
     public void back(){

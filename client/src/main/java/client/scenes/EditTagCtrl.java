@@ -42,6 +42,8 @@ public class EditTagCtrl implements Initializable {
 
     private Event event;
 
+    private final I18N i18n = new I18N();
+
     @Inject
     public EditTagCtrl(MainCtrl mainCtrl, ServerUtils server, NotificationService notificationService, Tag tag) {
         this.mainCtrl = mainCtrl;
@@ -62,14 +64,14 @@ public class EditTagCtrl implements Initializable {
         String name = tagName.getText();
 
         if (name.isEmpty()) {
-            String warningMessage = I18N.get("tag.add.error");
-            notificationService.showError(I18N.get("general.warning"), warningMessage);
+            String warningMessage = i18n.get("tag.add.error");
+            notificationService.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
 
         if (event.getTags().stream().map(t -> t.getTag()).toList().contains(name) && !tag.getTag().equals(name)) {
-            String warningMessage = I18N.get("tag.add.exists");
-            notificationService.showError(I18N.get("general.warning"), warningMessage);
+            String warningMessage = i18n.get("tag.add.exists");
+            notificationService.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
         tag.setColor(AddTagCtrl.toRGBCode(colorPicker.getValue()));
@@ -90,7 +92,7 @@ public class EditTagCtrl implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        I18N.update(backButtonLabel);
-        I18N.update(createTagLabel);
+        i18n.update(backButtonLabel);
+        i18n.update(createTagLabel);
     }
 }

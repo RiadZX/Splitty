@@ -32,6 +32,8 @@ public class FirstTimeCtrl implements Initializable{
     @FXML
     private Labeled setup;
 
+    private final I18N i18n = new I18N();
+
 
     @Inject
     public FirstTimeCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -39,8 +41,8 @@ public class FirstTimeCtrl implements Initializable{
         this.mainCtrl = mainCtrl;
     }
     public void initialize(URL location, ResourceBundle resources) {
-        I18N.update(start);
-        I18N.update(setup);
+        i18n.update(start);
+        i18n.update(setup);
         List<String> currencies = Arrays.stream(Currency.values()).map(Enum::toString).toList();
 
         this.currency.getItems().addAll(currencies);

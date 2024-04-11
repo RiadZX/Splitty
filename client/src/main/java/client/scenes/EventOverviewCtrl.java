@@ -92,6 +92,8 @@ public class EventOverviewCtrl implements Initializable {
 
     private int filter;
 
+    private final I18N i18n = new I18N();
+
     @Inject
     public EventOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
         this.server = server;
@@ -115,14 +117,14 @@ public class EventOverviewCtrl implements Initializable {
         this.sendInvite.setOnAction(event -> sendInvite());
 
         this.statsBtn.setOnAction(e -> mainCtrl.showStatistics(this.event));
-        I18N.update(sendInvite);
-        I18N.update(addExpense);
-        I18N.update(addTag);
-        I18N.update(settleDebt);
-        I18N.update(expenseLabel);
-        I18N.update(participantLabel);
-        I18N.update(eventTitle);
-        I18N.update(backButtonLabel);
+        i18n.update(sendInvite);
+        i18n.update(addExpense);
+        i18n.update(addTag);
+        i18n.update(settleDebt);
+        i18n.update(expenseLabel);
+        i18n.update(participantLabel);
+        i18n.update(eventTitle);
+        i18n.update(backButtonLabel);
         this.sendInvite.setOnAction(event -> sendInvite());
 
         payerSelector.setCellFactory(param -> getPayerListCell());
@@ -285,7 +287,7 @@ public class EventOverviewCtrl implements Initializable {
             * - refresh all data related to the event
             * - add functionality to the expense list and filtering*/
         }catch (WebApplicationException e) {
-            notificationService.showError(I18N.get("event.overview.showRefreshingEvent"), I18N.get("event.overview.showRefreshingEventMessage"));
+            notificationService.showError(i18n.get("event.overview.showRefreshingEvent"), i18n.get("event.overview.showRefreshingEventMessage"));
         }
     }
 
@@ -340,9 +342,9 @@ public class EventOverviewCtrl implements Initializable {
         }
     }
     public void refreshLanguage(){
-        this.allFilter.setText(I18N.get("general.all"));
-        this.fromFilter.setText(I18N.get("general.from"));
-        this.toFilter.setText(I18N.get("general.to"));
+        this.allFilter.setText(i18n.get("general.all"));
+        this.fromFilter.setText(i18n.get("general.from"));
+        this.toFilter.setText(i18n.get("general.to"));
     }
 
     public void setToFilter(){

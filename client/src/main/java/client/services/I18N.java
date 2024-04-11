@@ -17,7 +17,7 @@ import java.util.concurrent.Callable;
 public class I18N {
     private static final ObjectProperty<Locale> LOCALE;
 
-    private static List<Locale> localeList = new ArrayList<>(Arrays.asList(
+    private static final List<Locale> localeList = new ArrayList<>(Arrays.asList(
             Locale.ENGLISH,
             new Locale.Builder()
                     .setLanguage("nl")
@@ -38,7 +38,7 @@ public class I18N {
         LOCALE.addListener((observable, oldVal, newVal) -> Locale.setDefault(newVal));
     }
 
-    public static void createLocale(String language, String script, String region){
+    public void createLocale(String language, String script, String region){
         Locale newLocale = new Locale.Builder()
                                      .setLanguage(language)
                                      .setScript(script)
@@ -66,16 +66,16 @@ public class I18N {
         return getSupportedLocales().contains(sysDefault) ? sysDefault : Locale.ENGLISH;
     }
 
-    public static Locale getLocale() {
+    public Locale getLocale() {
         return LOCALE.get();
     }
 
-    public static void setLocale(Locale locale) {
+    public void setLocale(Locale locale) {
         localeProperty().set(locale);
         Locale.setDefault(locale);
     }
 
-    public static ObjectProperty<Locale> localeProperty() {
+    public ObjectProperty<Locale> localeProperty() {
         return LOCALE;
     }
 
@@ -90,7 +90,7 @@ public class I18N {
      *         optional arguments for the message
      * @return localized formatted string
      */
-    public static String get(final String key, final Object... args) {
+    public String get(final String key, final Object... args) {
         ResourceBundle bundle = ResourceBundle.getBundle("languages", getLocale());
         String retStr;
         try {
@@ -115,7 +115,7 @@ public class I18N {
      *         function called on every change
      * @return StringBinding
      */
-    public static StringBinding createStringBinding(Callable<String> func) {
+    public StringBinding createStringBinding(Callable<String> func) {
         return Bindings.createStringBinding(func, LOCALE);
     }
 
@@ -126,27 +126,27 @@ public class I18N {
      *         key
      * @return String binding
      */
-    public static StringBinding createStringBinding(final String key, Object... args) {
+    public StringBinding createStringBinding(final String key, Object... args) {
         return Bindings.createStringBinding(() -> get(key, args), LOCALE);
     }
 
-    public static void update(Labeled entity) {
+    public void update(Labeled entity) {
         entity.textProperty().bind(createStringBinding(entity.getText()));
     }
 
-    public static void update(Labeled entity, String textToBind) {
+    public void update(Labeled entity, String textToBind) {
         entity.textProperty().bind(createStringBinding(textToBind));
     }
 
-    public static void update(TableColumn entity) {
+    public void update(TableColumn entity) {
         entity.textProperty().bind(createStringBinding(entity.getText()));
     }
 
-    public static void update(Text entity) {
+    public void update(Text entity) {
         entity.textProperty().bind(createStringBinding(entity.getText()));
     }
 
-    public static void update(TextField entity) {
+    public void update(TextField entity) {
         entity.promptTextProperty().bind(createStringBinding(entity.getPromptText()));
     }
 }

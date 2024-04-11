@@ -39,6 +39,8 @@ public class InviteViewCtrl implements Initializable {
     public Labeled emailLabel;
     private Event event;
 
+    private final I18N i18n = new I18N();
+
 
     @Inject
     public InviteViewCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
@@ -49,11 +51,11 @@ public class InviteViewCtrl implements Initializable {
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        I18N.update(copyToClipboardBtn);
-        I18N.update(inviteInstr);
-        I18N.update(emailLabel);
-        I18N.update(sendInviteBtn);
-        I18N.update(cancelBtn);
+        i18n.update(copyToClipboardBtn);
+        i18n.update(inviteInstr);
+        i18n.update(emailLabel);
+        i18n.update(sendInviteBtn);
+        i18n.update(cancelBtn);
         this.copyToClipboardBtn.setOnAction(event -> copyToClipboard());
         this.sendInviteBtn.setOnAction(event -> sendInvite());
         this.cancelBtn.setOnAction(event -> backToEvent());

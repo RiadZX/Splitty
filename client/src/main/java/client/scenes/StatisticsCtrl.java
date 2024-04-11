@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.services.I18N;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -47,6 +48,8 @@ public class StatisticsCtrl implements Initializable {
     @FXML
     public TableColumn tOwed;
     private Event event;
+
+    private final I18N i18n = new I18N();
 
 //    @FXML
 //    private PieChart pieStats;

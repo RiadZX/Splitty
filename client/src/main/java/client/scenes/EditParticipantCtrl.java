@@ -50,6 +50,9 @@ public class EditParticipantCtrl implements Initializable {
     public Label editParticipant;
     private Event event;
     private Participant p;
+
+    private final I18N i18n = new I18N();
+
     public Event getEvent() {
         return event;
     }
@@ -70,11 +73,11 @@ public class EditParticipantCtrl implements Initializable {
         bin.setFitHeight(15);
 
         deleteButton.setGraphic(bin);
-        I18N.update(cancelButton2);
-        I18N.update(editButton);
-        I18N.update(deleteButton);
-        I18N.update(nameLabel2);
-        I18N.update(editParticipant);
+        i18n.update(cancelButton2);
+        i18n.update(editButton);
+        i18n.update(deleteButton);
+        i18n.update(nameLabel2);
+        i18n.update(editParticipant);
     }
     public void setEvent(Event event) {
         this.event = event;
@@ -87,9 +90,9 @@ public class EditParticipantCtrl implements Initializable {
     public void editParticipantButton() {
         if (name.getText().isEmpty() || email.getText().isEmpty() || iban.getText().isEmpty()
                 || bic.getText().isEmpty()) {
-            String warningMessage = I18N.get("participant.add.error");
+            String warningMessage = i18n.get("participant.add.error");
             if (name.getText().isEmpty()){
-                warningMessage += I18N.get("participant.add.error.name") + " ";
+                warningMessage += i18n.get("participant.add.error.name") + " ";
             }
             if (email.getText().isEmpty()){
                 warningMessage += "email ";
@@ -101,17 +104,17 @@ public class EditParticipantCtrl implements Initializable {
                 warningMessage += "bic";
             }
             warningMessage += ")";
-            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
+            notificationHelper.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
         if (!email.getText().matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            String warningMessage = I18N.get("participant.add.error.message.email");
-            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
+            String warningMessage = i18n.get("participant.add.error.message.email");
+            notificationHelper.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
         if (iban.getText().length() != 34){
-            String warningMessage = I18N.get("participant.add.error.message.iban");
-            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
+            String warningMessage = i18n.get("participant.add.error.message.iban");
+            notificationHelper.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
         p.setName(name.getText());
@@ -132,15 +135,15 @@ public class EditParticipantCtrl implements Initializable {
     }
 
     public void removeParticipant() {
-        if (!notificationHelper.showConfirmation(I18N.get("participant.remove.notification_title"), I18N.get("participant.remove.notification"))) {
+        if (!notificationHelper.showConfirmation(i18n.get("participant.remove.notification_title"), i18n.get("participant.remove.notification"))) {
             return;
         }
         try {
             server.removeParticipant(event, p);
             server.send("/app/events", this.event);
         } catch (WebApplicationException e) {
-            String warningMessage = I18N.get("participant.remove.error");
-            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
+            String warningMessage = i18n.get("participant.remove.error");
+            notificationHelper.showError(i18n.get("general.warning"), warningMessage);
 
         } finally {
             returnToOverview();

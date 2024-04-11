@@ -42,6 +42,8 @@ public class AddParticipantCtrl implements Initializable {
     private Label addParticipant;
     private Event event;
 
+    private final I18N i18n = new I18N();
+
     @Inject
     public AddParticipantCtrl(MainCtrl mainCtrl, Event event, ServerUtils server) {
         this.mainCtrl = mainCtrl;
@@ -51,10 +53,10 @@ public class AddParticipantCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        I18N.update(addButton);
-        I18N.update(cancelButton);
-        I18N.update(nameLabel);
-        I18N.update(addParticipant);
+        i18n.update(addButton);
+        i18n.update(cancelButton);
+        i18n.update(nameLabel);
+        i18n.update(addParticipant);
     }
 
     public void setEvent(Event event) {
@@ -70,9 +72,9 @@ public class AddParticipantCtrl implements Initializable {
         if (participantName.isEmpty() || participantEmail.isEmpty() || participantIban.isEmpty()
                 || participantBic.isEmpty()) {
             NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = I18N.get("participant.add.error");
+            String warningMessage = i18n.get("participant.add.error");
             if (participantName.isEmpty()){
-                warningMessage += I18N.get("participant.add.error.name") + " ";
+                warningMessage += i18n.get("participant.add.error.name") + " ";
             }
             if (participantEmail.isEmpty()){
                 warningMessage += "email ";
@@ -84,20 +86,20 @@ public class AddParticipantCtrl implements Initializable {
                 warningMessage += "bic";
             }
             warningMessage += ")";
-            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
+            notificationHelper.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
 
         if (!participantEmail.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            String warningMessage = I18N.get("participant.add.error.message.email");
+            String warningMessage = i18n.get("participant.add.error.message.email");
             NotificationHelper notificationHelper = new NotificationHelper();
-            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
+            notificationHelper.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
         if (participantIban.length() != 34) {
-            String warningMessage = I18N.get("participant.add.error.message.iban");
+            String warningMessage = i18n.get("participant.add.error.message.iban");
             NotificationHelper notificationHelper = new NotificationHelper();
-            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
+            notificationHelper.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
         Participant p = new Participant(

@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.services.I18N;
 import client.services.NotificationService;
 import client.utils.DebtResolve;
 import client.utils.ServerUtils;
@@ -34,6 +35,8 @@ public class DebtResolveCtrl implements Initializable {
     private TableColumn<DebtResolveTableEntry, Double> amountColumn;
 
     private ObservableList<DebtResolveTableEntry> tableEntries = FXCollections.observableArrayList();
+
+    private final I18N i18n = new I18N();
 
     @Inject
     public DebtResolveCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {

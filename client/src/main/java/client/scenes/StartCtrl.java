@@ -42,6 +42,8 @@ public class StartCtrl implements Initializable {
     private Labeled joinButton;
     @FXML
     private Labeled recent;
+
+    private final I18N i18n = new I18N();
     @Inject
     public StartCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
         this.server = server;
@@ -51,11 +53,11 @@ public class StartCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        I18N.update(newEventLabel);
-        I18N.update(buttonCreate);
-        I18N.update(joinEvent);
-        I18N.update(joinButton);
-        I18N.update(recent);
+        i18n.update(newEventLabel);
+        i18n.update(buttonCreate);
+        i18n.update(joinEvent);
+        i18n.update(joinButton);
+        i18n.update(recent);
         createEventField.setOnKeyPressed((event -> {
             switch (event.getCode()) {
                 case ENTER -> createEvent();

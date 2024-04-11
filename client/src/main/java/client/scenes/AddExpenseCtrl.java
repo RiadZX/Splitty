@@ -57,6 +57,8 @@ public class AddExpenseCtrl implements Initializable {
     @FXML
     private Button abortButton;
 
+    private final I18N i18n = new I18N();
+
 
 
     @Inject
@@ -68,13 +70,13 @@ public class AddExpenseCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        I18N.update(paid);
-        I18N.update(when);
-        I18N.update(amount);
-        I18N.update(how);
-        I18N.update(abortButton);
-        I18N.update(allBox);
-        I18N.update(someBox);
+        i18n.update(paid);
+        i18n.update(when);
+        i18n.update(amount);
+        i18n.update(how);
+        i18n.update(abortButton);
+        i18n.update(allBox);
+        i18n.update(someBox);
         this.prepareTagDialog();
     }
     @FXML
@@ -128,11 +130,11 @@ public class AddExpenseCtrl implements Initializable {
     }
 
     private void showNewExpense() {
-        I18N.update(submitButton, "general.add");
+        i18n.update(submitButton, "general.add");
     }
 
     private void setupExistingExpense(Expense expense){
-        I18N.update(submitButton, "general.save");
+        i18n.update(submitButton, "general.save");
 
         paidBySelector.setValue(expense.getPaidBy().getName());
         howMuchField.setText(String.valueOf(expense.getAmount()));
@@ -187,23 +189,23 @@ public class AddExpenseCtrl implements Initializable {
         Participant paidBy = findParticipant(paidBySelector.getValue());
         if (paidBy == null) {
             NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = I18N.get("expense.add.error.emptyPayee");
-            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
+            String warningMessage = i18n.get("expense.add.error.emptyPayee");
+            notificationHelper.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
 
         LocalDate date = whenField.getValue();
         if (date == null){
             NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = I18N.get("expense.add.error.emptyDate");
-            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
+            String warningMessage = i18n.get("expense.add.error.emptyDate");
+            notificationHelper.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
 
         if (!someBox.isSelected() && !allBox.isSelected()){
             NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = I18N.get("expense.add.error.emptySplit");
-            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
+            String warningMessage = i18n.get("expense.add.error.emptySplit");
+            notificationHelper.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
 
@@ -219,15 +221,15 @@ public class AddExpenseCtrl implements Initializable {
 
         if (howMuchField.getText() == null || howMuchField.getText().isEmpty()){
             NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = I18N.get("expense.add.error.emptyAmount");
-            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
+            String warningMessage = i18n.get("expense.add.error.emptyAmount");
+            notificationHelper.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
 
         if (Double.parseDouble(howMuchField.getText()) < 0.0){
             NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = I18N.get("expense.add.error.negativeAmount");
-            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
+            String warningMessage = i18n.get("expense.add.error.negativeAmount");
+            notificationHelper.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
 
@@ -312,8 +314,8 @@ public class AddExpenseCtrl implements Initializable {
 
     public void prepareTagDialog(){
         tagDialog=new TextInputDialog();
-        tagDialog.setTitle(I18N.get("expense.add.createTag"));
-        tagDialog.setContentText(I18N.get("expense.add.createTagText"));
+        tagDialog.setTitle(i18n.get("expense.add.createTag"));
+        tagDialog.setContentText(i18n.get("expense.add.createTagText"));
         tagDialog.setHeaderText("");
         tagDialog.setGraphic(null);
     }

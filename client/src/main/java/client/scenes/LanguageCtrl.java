@@ -36,6 +36,8 @@ public class LanguageCtrl implements Initializable {
     @FXML
     private Label backButtonLabel;
 
+    private final I18N i18n = new I18N();
+
     @Inject
     public LanguageCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
         this.server = server;
@@ -45,13 +47,13 @@ public class LanguageCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        I18N.update(englishButton);
-        I18N.update(dutchButton);
-        I18N.update(romanianButton);
-        I18N.update(userLanguageButton);
-        I18N.update(customLanguageButton);
-        I18N.update(languageLabel);
-        I18N.update(backButtonLabel);
+        i18n.update(englishButton);
+        i18n.update(dutchButton);
+        i18n.update(romanianButton);
+        i18n.update(userLanguageButton);
+        i18n.update(customLanguageButton);
+        i18n.update(languageLabel);
+        i18n.update(backButtonLabel);
     }
 
     public void backAction(){
@@ -80,12 +82,12 @@ public class LanguageCtrl implements Initializable {
 
     public void addLanguage(){
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(I18N.get("language.addLanguagePrompt"));
+        fileChooser.setTitle(i18n.get("language.addLanguagePrompt"));
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Properties", "*.properties"));
         File selectedFile = fileChooser.showOpenDialog(mainCtrl.getPrimaryStage());
         if (selectedFile == null) {
-            notificationService.showError(I18N.get("admin.event.import.error"), I18N.get("language.addLanguage.error"));
+            notificationService.showError(i18n.get("admin.event.import.error"), i18n.get("language.addLanguage.error"));
             return;
         }
         String languageResourceBundle = "client/src/main/resources/languages_user.properties";
@@ -95,7 +97,7 @@ public class LanguageCtrl implements Initializable {
             Files.copy(selectedFile.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
 
         } catch (IOException e) {
-            notificationService.showError(I18N.get("admin.event.import.error.readFile"), I18N.get("language.addLanguage.errorMessage"));
+            notificationService.showError(i18n.get("admin.event.import.error.readFile"), i18n.get("language.addLanguage.errorMessage"));
         }
     }
 }
