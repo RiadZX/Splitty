@@ -17,7 +17,7 @@ import java.util.concurrent.Callable;
 public class I18N {
     private static final ObjectProperty<Locale> LOCALE;
 
-    private static final List<Locale> localeList = new ArrayList<>(Arrays.asList(
+    private static final List<Locale> LOCALE_LIST = new ArrayList<>(Arrays.asList(
             Locale.ENGLISH,
             new Locale.Builder()
                     .setLanguage("nl")
@@ -44,7 +44,7 @@ public class I18N {
                                      .setScript(script)
                                      .setRegion(region)
                                      .build();
-        localeList.add(newLocale);
+        LOCALE_LIST.add(newLocale);
     }
 
     /**
@@ -53,7 +53,7 @@ public class I18N {
      * @return List of all locales supported by the application.
      */
     public static List<Locale> getSupportedLocales() {
-        return localeList;
+        return LOCALE_LIST;
     }
 
     /**
