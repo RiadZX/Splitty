@@ -4,13 +4,15 @@ import client.services.I18N;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Event;
 import commons.Participant;
 import commons.Tag;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import commons.Event;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
@@ -42,6 +44,8 @@ public class StartCtrl implements Initializable {
     private Labeled joinButton;
     @FXML
     private Labeled recent;
+    @FXML
+    private ImageView flagView;
     @Inject
     public StartCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
         this.server = server;
@@ -192,7 +196,9 @@ public class StartCtrl implements Initializable {
                         """,
                 "Shortcuts");
     }
-
+    public void setFlag(String language){
+        this.flagView.setImage(new Image("client/icons/flag-"+language+".png"));
+    }
     public void changeLanguage(){
         switch (this.mainCtrl.getUser().getLanguage()){
             case "english" -> this.mainCtrl.switchToDutch();
