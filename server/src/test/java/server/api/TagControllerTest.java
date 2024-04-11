@@ -55,44 +55,44 @@ public class TagControllerTest {
 
     @Test
     void testGetByIdExistingTag() {
-        UUID TagId = UUID.randomUUID();
+        UUID tagId = UUID.randomUUID();
         Tag tag = new Tag("Tag 1");
         tag.setId(UUID.randomUUID());
-        when(service.getTag(TagId)).thenReturn(tag);
+        when(service.getTag(tagId)).thenReturn(tag);
 
-        ResponseEntity<Tag> responseEntity = tagController.getTag(TagId);
+        ResponseEntity<Tag> responseEntity = tagController.getTag(tagId);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(tag, responseEntity.getBody());
     }
 
     @Test
     void testGetByIdNonExistingTag() {
-        UUID TagId = UUID.randomUUID();
-        when(service.getTag(TagId)).thenReturn(null);
+        UUID tagId = UUID.randomUUID();
+        when(service.getTag(tagId)).thenReturn(null);
 
-        ResponseEntity<Tag> responseEntity = tagController.getTag(TagId);
+        ResponseEntity<Tag> responseEntity = tagController.getTag(tagId);
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @Test
     void testRemoveExistingTag() {
-        UUID TagId = UUID.randomUUID();
-        Tag Tag = new Tag("Tag 1");
-        Tag.setId(UUID.randomUUID());
-        when(service.deleteTag(TagId)).thenReturn(Tag);
+        UUID tagId = UUID.randomUUID();
+        Tag tag = new Tag("Tag 1");
+        tag.setId(UUID.randomUUID());
+        when(service.deleteTag(tagId)).thenReturn(tag);
 
-        ResponseEntity<Void> responseEntity = tagController.remove(TagId);
+        ResponseEntity<Void> responseEntity = tagController.remove(tagId);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
-        verify(service, times(1)).deleteTag(TagId);
+        verify(service, times(1)).deleteTag(tagId);
     }
 
     @Test
     void testRemoveNonExistingTag() {
-        UUID TagId = UUID.randomUUID();
-        when(service.deleteTag(TagId)).thenReturn(null);
+        UUID tagId = UUID.randomUUID();
+        when(service.deleteTag(tagId)).thenReturn(null);
 
-        ResponseEntity<Void> responseEntity = tagController.remove(TagId);
+        ResponseEntity<Void> responseEntity = tagController.remove(tagId);
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
@@ -101,15 +101,15 @@ public class TagControllerTest {
         Event e = new Event();
         UUID eId = UUID.randomUUID();
         e.setId(eId);
-        UUID TagId = UUID.randomUUID();
-        Tag Tag = new Tag("Tag 1");
-        Tag.setId(TagId);
-        Tag.setEvent(e);
-        service.addTag(Tag, eId);
-        Tag newTag = new Tag ("Tag 2");
-        when(service.updateTag(eId, TagId, new Tag("Tag 2"))).thenReturn(newTag);
+        UUID tagId = UUID.randomUUID();
+        Tag tag = new Tag("Tag 1");
+        tag.setId(tagId);
+        tag.setEvent(e);
+        service.addTag(tag, eId);
+        Tag newTag = new Tag("Tag 2");
+        when(service.updateTag(eId, tagId, new Tag("Tag 2"))).thenReturn(newTag);
 
-        ResponseEntity<Tag> responseEntity = tagController.updateTag(eId, TagId, newTag);
+        ResponseEntity<Tag> responseEntity = tagController.updateTag(eId, tagId, newTag);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(newTag, responseEntity.getBody());
     }
@@ -119,13 +119,13 @@ public class TagControllerTest {
         Event e = new Event();
         UUID eId = UUID.randomUUID();
         e.setId(eId);
-        UUID TagId = UUID.randomUUID();
-        Tag Tag = new Tag("Tag 1");
-        Tag.setId(TagId);
-        Tag.setEvent(e);
-        when(service.getTag(TagId)).thenReturn(null);
+        UUID tagId = UUID.randomUUID();
+        Tag tag = new Tag("Tag 1");
+        tag.setId(tagId);
+        tag.setEvent(e);
+        when(service.getTag(tagId)).thenReturn(null);
 
-        ResponseEntity<Tag> responseEntity = tagController.updateTag(eId, TagId, Tag);
+        ResponseEntity<Tag> responseEntity = tagController.updateTag(eId, tagId, tag);
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
