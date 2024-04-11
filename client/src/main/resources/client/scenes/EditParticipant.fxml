@@ -16,14 +16,14 @@
         <Label layoutX="51.0" layoutY="108.0" text="Email" />
         <Label layoutX="50.0" layoutY="145.0" text="IBAN" />
         <Label layoutX="55.0" layoutY="182.0" text="BIC" />
-        <Button fx:id="cancelButton2" id="cancelBtn" layoutX="55.0" layoutY="233.0" mnemonicParsing="false" onAction="#returnToOverview" text="general.cancel">
+        <Button id="cancelBtn" fx:id="cancelButton2" layoutX="55.0" layoutY="233.0" mnemonicParsing="false" onAction="#returnToOverview" text="general.cancel">
          <cursor>
-            <Cursor fx:constant="CLOSED_HAND" />
+            <Cursor fx:constant="HAND" />
          </cursor></Button>
         <ButtonBar prefHeight="40.0" prefWidth="200.0" />
-        <Button fx:id="editButton" id="confirmBtn" layoutX="174.0" layoutY="233.0" mnemonicParsing="false" onAction="#editParticipantButton" prefHeight="29.0" prefWidth="92.0" text="general.edit">
+        <Button id="confirmBtn" fx:id="editButton" layoutX="174.0" layoutY="233.0" mnemonicParsing="false" onAction="#editParticipantButton" prefHeight="29.0" prefWidth="92.0" text="general.edit">
             <cursor>
-                <Cursor fx:constant="CLOSED_HAND" />
+                <Cursor fx:constant="HAND" />
             </cursor>
         </Button>
         <TextField fx:id="name" layoutX="102.0" layoutY="67.0" prefHeight="26.0" prefWidth="243.0" promptText="e.g. Noah Martin" />
@@ -32,7 +32,7 @@
         <TextField fx:id="bic" layoutX="102.0" layoutY="178.0" prefHeight="26.0" prefWidth="243.0" promptText="HBUKGB4B" />
       <Button fx:id="deleteButton" layoutX="287.0" layoutY="233.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#removeParticipant" prefHeight="29.0" prefWidth="117.0" style="-fx-text-fill: #ac0000;" text="general.delete">
          <cursor>
-            <Cursor fx:constant="CLOSED_HAND" />
+            <Cursor fx:constant="HAND" />
          </cursor></Button>
     </children>
 </Pane>

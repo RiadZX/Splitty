@@ -16,14 +16,14 @@
       <Label layoutX="51.0" layoutY="108.0" text="email" />
       <Label layoutX="50.0" layoutY="145.0" text="IBAN" />
       <Label layoutX="55.0" layoutY="182.0" text="BIC" />
-      <Button fx:id="cancelButton" id="cancelBtn" layoutX="70.0" layoutY="233.0" mnemonicParsing="false" onAction="#returnToOverview" text="general.cancel">
+      <Button id="cancelBtn" fx:id="cancelButton" layoutX="70.0" layoutY="233.0" mnemonicParsing="false" onAction="#returnToOverview" text="general.cancel">
          <cursor>
-            <Cursor fx:constant="CLOSED_HAND" />
+            <Cursor fx:constant="HAND" />
          </cursor></Button>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" />
-      <Button fx:id="addButton" id="confirmBtn" layoutX="237.0" layoutY="233.0" mnemonicParsing="false" onAction="#addParticipantButton" prefHeight="29.0" prefWidth="108.0" text="general.add">
+      <Button id="confirmBtn" fx:id="addButton" layoutX="237.0" layoutY="233.0" mnemonicParsing="false" onAction="#addParticipantButton" prefHeight="29.0" prefWidth="108.0" text="general.add">
          <cursor>
-            <Cursor fx:constant="CLOSED_HAND" />
+            <Cursor fx:constant="HAND" />
          </cursor></Button>
       <TextField fx:id="name" layoutX="102.0" layoutY="67.0" prefHeight="26.0" prefWidth="243.0" promptText="Noah Martin" />
       <TextField fx:id="email" layoutX="102.0" layoutY="104.0" prefHeight="26.0" prefWidth="243.0" promptText="Noah@Martin.net" />

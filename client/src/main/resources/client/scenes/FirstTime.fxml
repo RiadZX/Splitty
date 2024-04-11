@@ -24,12 +24,12 @@
             <Font size="15.0" />
          </font>
          <cursor>
-            <Cursor fx:constant="CLOSED_HAND" />
+            <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
       <ComboBox fx:id="currency" layoutX="85.0" layoutY="181.0" prefHeight="33.0" prefWidth="78.0" promptText="Preferred Currency">
          <cursor>
-            <Cursor fx:constant="CLOSED_HAND" />
+            <Cursor fx:constant="HAND" />
          </cursor></ComboBox>
    </children>
 </AnchorPane>

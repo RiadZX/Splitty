@@ -6,13 +6,15 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ResourceBundle;
@@ -31,6 +33,8 @@ public class LanguageCtrl implements Initializable {
     private Button userLanguageButton;
     @FXML
     private Button customLanguageButton;
+    @FXML
+    private Button downloadTemplateButton;
     @FXML
     private Label languageLabel;
     @FXML
@@ -52,6 +56,7 @@ public class LanguageCtrl implements Initializable {
         I18N.update(customLanguageButton);
         I18N.update(languageLabel);
         I18N.update(backButtonLabel);
+        I18N.update(downloadTemplateButton);
     }
 
     public void backAction(){
@@ -97,5 +102,26 @@ public class LanguageCtrl implements Initializable {
         } catch (IOException e) {
             notificationService.showError(I18N.get("admin.event.import.error.readFile"), I18N.get("language.addLanguage.errorMessage"));
         }
+    }
+
+    public  void  downloadTemplate(){
+        File selectedDirectory = getDirectory();
+        String path = selectedDirectory.getAbsolutePath()
+                + (System.getProperty("os.name").startsWith("Windows") ? "\\" : "/")
+                + "template.properties";
+        Path newFile = new File(path).toPath();
+        Path templatePath=new File("client/src/main/resources/template.properties").toPath();
+        try {
+            Files.copy(templatePath, newFile, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException exception) {
+            notificationService.showError(I18N.get("admin.event.import.error.writeFile"), I18N.get("admin.event.import.errorMessage.writeFile") + exception);
+        }
+    }
+
+    private File getDirectory() {
+        DirectoryChooser chooser = new DirectoryChooser();
+        chooser.setTitle(I18N.get("admin.chooser.title"));
+        File dir = chooser.showDialog(mainCtrl.getPrimaryStage());
+        return dir;
     }
 }

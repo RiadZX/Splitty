@@ -18,9 +18,9 @@
             <Font size="24.0" />
          </font>
       </Text>
-      <Button fx:id="copyToClipboardBtn" layoutX="185.0" layoutY="71.0" mnemonicParsing="false" text="invite.copy" id="actionBtn">
+      <Button id="actionBtn" fx:id="copyToClipboardBtn" layoutX="185.0" layoutY="71.0" mnemonicParsing="false" text="invite.copy">
          <cursor>
-            <Cursor fx:constant="CLOSED_HAND" />
+            <Cursor fx:constant="HAND" />
          </cursor></Button>
       <Label fx:id="emailLabel" layoutX="18.0" layoutY="130.0" text="invite.email">
          <font>
@@ -31,13 +31,13 @@
          <padding>
             <Insets bottom="5.0" left="2.0" top="5.0" />
          </padding></TextArea>
-      <Button fx:id="sendInviteBtn" id="confirmBtn" layoutX="328.0" layoutY="428.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="98.0" text="invite.send">
+      <Button id="confirmBtn" fx:id="sendInviteBtn" layoutX="328.0" layoutY="428.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="98.0" text="invite.send">
          <cursor>
-            <Cursor fx:constant="CLOSED_HAND" />
+            <Cursor fx:constant="HAND" />
          </cursor></Button>
-      <Button fx:id="cancelBtn" id="cancelBtn" layoutX="18.0" layoutY="428.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="98.0" text="invite.cancel">
+      <Button id="cancelBtn" fx:id="cancelBtn" layoutX="18.0" layoutY="428.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="98.0" text="invite.cancel">
          <cursor>
-            <Cursor fx:constant="CLOSED_HAND" />
+            <Cursor fx:constant="HAND" />
          </cursor></Button>
    </children>
 </AnchorPane>

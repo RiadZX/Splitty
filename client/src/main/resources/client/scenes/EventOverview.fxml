@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.TextFlow?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="541.0" prefWidth="489.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EventOverviewCtrl">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="541.0" prefWidth="489.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EventOverviewCtrl">
    <children>
       <TextField fx:id="eventTitle" focusTraversable="false" layoutX="29.0" layoutY="50.0" prefHeight="31.0" prefWidth="211.0" promptText="event.overview.eventTitle">
          <font>
@@ -23,7 +16,7 @@
       </TextField>
       <Button fx:id="sendInvite" layoutX="258.0" layoutY="51.0" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="29.0" prefWidth="115.0" text="event.overview.sendInvite">
          <cursor>
-            <Cursor fx:constant="CLOSED_HAND" />
+            <Cursor fx:constant="HAND" />
          </cursor></Button>
        <Label fx:id="participantLabel" layoutX="29.0" layoutY="102.0" text="event.overview.participant">
          <font>
@@ -37,22 +30,22 @@
       </Label>
       <ComboBox fx:id="payerSelector" layoutX="179.0" layoutY="197.0" prefHeight="23.0" prefWidth="122.0">
          <cursor>
-            <Cursor fx:constant="CLOSED_HAND" />
+            <Cursor fx:constant="HAND" />
          </cursor></ComboBox>
       <Button fx:id="addExpense" layoutX="24.0" layoutY="489.0" mnemonicParsing="false" onAction="#addExpense" text="event.overview.addExpense">
          <cursor>
-            <Cursor fx:constant="CLOSED_HAND" />
+            <Cursor fx:constant="HAND" />
          </cursor></Button>
       <Button fx:id="settleDebt" layoutX="334.0" layoutY="489.0" mnemonicParsing="false" text="event.overview.settleDebt">
          <cursor>
-            <Cursor fx:constant="CLOSED_HAND" />
+            <Cursor fx:constant="HAND" />
          </cursor></Button>
       <ImageView fitHeight="17.0" fitWidth="17.0" layoutX="134.0" layoutY="106.0" onMouseClicked="#addParticipant" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@/client/icons/add-user-white.png" />
          </image>
          <cursor>
-            <Cursor fx:constant="CLOSED_HAND" />
+            <Cursor fx:constant="HAND" />
          </cursor>
       </ImageView>
       <TextFlow fx:id="textFlow" layoutX="31.0" layoutY="136.0" prefHeight="23.0" prefWidth="360.0" />
@@ -72,6 +65,9 @@
                </cursor>
             </Label>
          </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </Pane>
       <ListView fx:id="expensesList" layoutX="24.0" layoutY="273.0" prefHeight="184.0" prefWidth="442.0">
          <padding>
@@ -89,7 +85,7 @@
             <Image url="@/client/icons/flag-english.png" />
          </image>
          <cursor>
-            <Cursor fx:constant="CLOSED_HAND" />
+            <Cursor fx:constant="HAND" />
          </cursor>
       </ImageView>
       <Pane layoutX="174.0" layoutY="261.0" prefHeight="20.0" prefWidth="132.0" style="-fx-background-color: #101010;">
@@ -99,18 +95,18 @@
                   <Insets left="3.0" right="3.0" />
                </padding>
                <cursor>
-                  <Cursor fx:constant="CLOSED_HAND" />
+                  <Cursor fx:constant="HAND" />
                </cursor></Label>
             <Label fx:id="fromFilter" layoutX="91.0" onMouseClicked="#setFromFilter" prefHeight="18.0" prefWidth="45.0" style="-fx-text-alignment: center;" text="general.from" textAlignment="CENTER">
                <padding>
                   <Insets left="3.0" right="3.0" />
                </padding>
                <cursor>
-                  <Cursor fx:constant="CLOSED_HAND" />
+                  <Cursor fx:constant="HAND" />
                </cursor></Label>
             <Label fx:id="toFilter" layoutX="46.0" layoutY="1.0" onMouseClicked="#setToFilter" prefHeight="18.0" prefWidth="45.0" style="-fx-text-alignment: center;" text="general.to" textAlignment="CENTER">
                <cursor>
-                  <Cursor fx:constant="CLOSED_HAND" />
+                  <Cursor fx:constant="HAND" />
                </cursor>
                <padding>
                   <Insets left="3.0" right="3.0" />
@@ -121,7 +117,13 @@
             <Insets bottom="15.0" left="15.0" right="15.0" top="5.0" />
          </padding>
       </Pane>
-      <Button fx:id="addTag" layoutX="182.0" layoutY="489.0" mnemonicParsing="false" onAction="#addTag" text="event.overview.addTag" />
-      <Button fx:id="statsBtn" layoutX="302.0" layoutY="114.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Statistics" />
+      <Button fx:id="addTag" layoutX="182.0" layoutY="489.0" mnemonicParsing="false" onAction="#addTag" text="event.overview.addTag">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button fx:id="statsBtn" layoutX="302.0" layoutY="114.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Statistics">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
    </children>
 </AnchorPane>
