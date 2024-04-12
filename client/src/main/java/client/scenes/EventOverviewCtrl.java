@@ -200,7 +200,6 @@ public class EventOverviewCtrl implements Initializable {
         mainCtrl.showSettleDebt(this.event);
     }
 
-
     public void reassignParticipants(List<Participant> participantList){
         System.out.println(participantList.stream().map(Participant::getName).toList());
         Platform.runLater(() -> {
