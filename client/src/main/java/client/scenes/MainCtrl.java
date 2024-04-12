@@ -484,10 +484,7 @@ public class MainCtrl {
     public void showSettleDebt(Event event) {
         primaryStage.setTitle(I18N.get("window.debt"));
         debtResolveCtrl.setEvent(event);
-<<<<<<< HEAD
         debtResolveCtrl.refresh();
-=======
->>>>>>> 11e39f0 (the window opens and no errors appear)
         primaryStage.setScene(debtResolve);
     }
 
