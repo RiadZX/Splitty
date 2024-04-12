@@ -69,7 +69,7 @@ public class Expense {
                 + ", debts=" + debts
                 + '}';
     }
-    
+
     public Expense() {
         // For JPA
     }
