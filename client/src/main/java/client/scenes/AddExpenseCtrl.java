@@ -95,12 +95,7 @@ public class AddExpenseCtrl implements Initializable {
     public void checkSome(){
         System.out.println(paidBySelector.getValue());
         allBox.setSelected(false);
-        if (someBox.isSelected()){
-            partialPaidSelector.setVisible(true);
-        }
-        else{
-            partialPaidSelector.setVisible(false);
-        }
+        partialPaidSelector.setVisible(someBox.isSelected());
     }
 
     public void setup(Event event, Expense e){
