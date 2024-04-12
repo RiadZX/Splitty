@@ -4,12 +4,15 @@ import client.services.I18N;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Event;
 import commons.Participant;
+import commons.Tag;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import commons.Event;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
@@ -41,6 +44,8 @@ public class StartCtrl implements Initializable {
     private Labeled joinButton;
     @FXML
     private Labeled recent;
+    @FXML
+    private ImageView flagView;
     @Inject
     public StartCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
         this.server = server;
@@ -85,8 +90,14 @@ public class StartCtrl implements Initializable {
 
         Participant creator=new Participant(this.mainCtrl.getUser().getName());
         Event newEvent= new Event(title, creator);
+        Tag food = new Tag("food", "#8DE137", newEvent);
+        Tag entraceFees = new Tag("entrance fees", "#38C4D5", newEvent);
+        Tag travel = new Tag("travel", "#D53838", newEvent);
         try {
             newEvent=server.addEvent(newEvent);
+            server.addTag(newEvent.getId(), food);
+            server.addTag(newEvent.getId(), entraceFees);
+            server.addTag(newEvent.getId(), travel);
         } catch (WebApplicationException e) {
             notificationService.showError("Error creating event", e.getMessage());
             return;
@@ -136,6 +147,7 @@ public class StartCtrl implements Initializable {
                 Participant participant = this.mainCtrl.getUser().createParticipant();
                 participant = server.addParticipant(joined.getId(), participant);
                 mainCtrl.addUserEvent(joined.getId(), participant.getId());
+                server.send("/app/events", joined);
             }
             //move to correct scene
             mainCtrl.showEventOverviewScene(joined);
@@ -155,7 +167,6 @@ public class StartCtrl implements Initializable {
         mainCtrl.showEventOverviewScene(currEvent);
         clearFields();
     }
-
     /**
      * Move to the Settings scene when the icon is pressed
      */
@@ -169,6 +180,33 @@ public class StartCtrl implements Initializable {
     public  void clearFields(){
         this.createEventField.clear();
         this.joinEventField.clear();
+    }
+
+    public void shortCuts(){
+        notificationService.informUser("Shortcuts",
+                """
+                        ALT + H  |  show this help message
+                        ESCAPE   |  abort an action, go back to the previous scene
+                        ALT + S  |  go to the settings scene
+                        ALT + 1  |  (if in event overview) go to the main scene
+                        ALT + E  |  (if in event overview) create new expense
+                        ALT + P  |  (if in event overview) create new participant
+                        ALT + I  |  (if in event overview) open invite code dialog
+                        ALT + T  |  (if in event overview) open statistics
+                        HOME KEY |  exit the event overview page
+                        """,
+                "Shortcuts");
+    }
+    public void setFlag(String language){
+        this.flagView.setImage(new Image("client/icons/flag-"+language+".png"));
+    }
+    public void changeLanguage(){
+        switch (this.mainCtrl.getUser().getLanguage()){
+            case "english" -> this.mainCtrl.switchToDutch();
+            case "dutch" -> this.mainCtrl.switchToRomanian();
+            case "romanian" -> this.mainCtrl.switchToEnglish();
+            default -> System.out.println("Unsupported language "+this.mainCtrl.getUser().getLanguage());
+        }
     }
 
 }

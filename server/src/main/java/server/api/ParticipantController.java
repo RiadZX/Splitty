@@ -16,8 +16,6 @@ public class ParticipantController {
 
     private final ParticipantService service;
 
-
-
     public ParticipantController(ParticipantService service) {
         this.service = service;
     }
@@ -58,7 +56,9 @@ public class ParticipantController {
      */
     @PostMapping(path = {"", "/"})
     public @ResponseBody ResponseEntity<Participant> add(@RequestBody Participant participant, @PathVariable("eventId") UUID eventId) {
+        System.out.println(participant);
         Participant p = service.add(participant, eventId);
+        System.out.println(p);
         if (p==null) {
             return ResponseEntity.badRequest().build();
         }

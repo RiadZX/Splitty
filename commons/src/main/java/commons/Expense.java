@@ -1,9 +1,11 @@
 package commons;
 
-import com.google.gson.annotations.Expose;
-import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
+import com.google.gson.annotations.Expose;
+import jakarta.persistence.*;
 
 import java.time.Instant;
 import java.util.List;
@@ -17,6 +19,7 @@ public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "expense_id")
+    @Expose
     private UUID id;
 
     @Expose
@@ -26,18 +29,32 @@ public class Expense {
     private double amount;
 
     @Expose
+    @JsonSerialize(using = InstantSerializer.class)
     private Instant date;
+
+    @Expose
+    private String currency;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "participant_id")
+    @Expose
     private Participant paidBy;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "event_id")
     @JsonBackReference("event-expenses")
     private Event event;
 
-    @ManyToMany
+    @OneToMany(mappedBy = "expense", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference ("expense-debts")
+    @Expose
+    private List<Debt> debts;
+
+    @ManyToMany (fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "expense_tag",
+            joinColumns = @JoinColumn(name = "expense_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
     @Expose
     private List<Tag> tags;
 
@@ -52,11 +69,6 @@ public class Expense {
                 + ", debts=" + debts
                 + '}';
     }
-
-    @OneToMany(mappedBy = "expense", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    @JsonManagedReference ("expense-debts")
-    @Expose
-    private List<Debt> debts;
 
     public Expense() {
         // For JPA
@@ -74,10 +86,19 @@ public class Expense {
     }
 
 
-    public Expense(String title, double amount, Instant date,
-                   Participant paidBy, Event event, UUID eventId, List<Debt> debts, List<Tag> tags) {
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public Expense(String title, double amount, String currency, Instant date,
+                   Participant paidBy, Event event, List<Debt> debts, List<Tag> tags) {
         this.title = title;
         this.amount = amount;
+        this.currency = currency;
         this.date = date;
         this.paidBy = paidBy;
         this.event = event;
@@ -109,10 +130,6 @@ public class Expense {
         this.amount = amount;
     }
 
-    public Instant getDate() {
-        return date;
-    }
-
     public Participant getPaidBy() {
         return paidBy;
     }
@@ -137,6 +154,25 @@ public class Expense {
         this.debts = debts;
     }
 
+    public Instant getDate() {
+        return date;
+    }
+
+    public void setDate(Instant date) {
+        this.date = date;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public void addTag(Tag tag) {
+        this.tags.add(tag);
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -159,17 +195,5 @@ public class Expense {
     @Override
     public int hashCode() {
         return Objects.hash(id, title, amount, date, paidBy, event, debts, tags);
-    }
-
-    public void setDate(Instant date) {
-        this.date = date;
-    }
-
-    public List<Tag> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
     }
 }

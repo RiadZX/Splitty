@@ -1,17 +1,18 @@
 package commons;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
 import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ValueGenerationType;
 
 import java.lang.annotation.Retention;
-import java.security.SecureRandom;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.time.Instant;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -21,40 +22,40 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "event_id")
+    @Expose
     private UUID id;
 
     @Expose
     private String name;
 
     @Column(nullable = false)
+    @Expose
     @INVITECODE String inviteCode;
     @Expose
     private String title; //fix response issue for now
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference ("event-participants")
     @Expose
     private List<Participant> participants;
 
-    @OneToMany(mappedBy = "event", orphanRemoval = true)
-    @JsonManagedReference("event-expenses")
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference ("event-expenses")
     @Expose
     private List<Expense> expenses;
 
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("event-tags")
     @Expose
     private List<Tag> tags;
 
     @Expose
+    @JsonSerialize(using = InstantSerializer.class)
     private Instant creationTime;
 
     @Expose
+    @JsonSerialize(using = InstantSerializer.class)
     private Instant lastActivityTime;
-
-    public Event(UUID id) {
-        this.id = id;
-    }
 
     public Event() {
         this.participants=new ArrayList<>();
@@ -62,6 +63,11 @@ public class Event {
         this.tags = new ArrayList<>();
         this.creationTime= Instant.now();
         this.lastActivityTime=Instant.now();
+    }
+
+    public Event(UUID id) {
+        this();
+        this.id = id;
     }
 
     public Event(String name){
@@ -94,6 +100,11 @@ public class Event {
     public void setId(UUID id) {
         this.id = id;
     }
+
+    public List<Participant> getParticipants(){
+        return this.participants;
+    }
+
     /**
      * Sets all participants,
      * may be used by creator while event is being created
@@ -110,10 +121,6 @@ public class Event {
 
     public void removeParticipant(Participant participant){
         this.participants.remove(participant);
-    }
-
-    public List<Participant> getParticipants(){
-        return this.participants;
     }
 
     public List<Tag> getTags() {
@@ -204,17 +211,6 @@ public class Event {
                 getParticipants(),
                 getExpenses(),
                 getTags());
-    }
-
-    public static String generateInviteCode(){
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        StringBuilder codeBuilder = new StringBuilder(8);
-        SecureRandom secureRandom = new SecureRandom();
-        for (int i = 0; i < 8; i++) {
-            int randomIndex = secureRandom.nextInt(characters.length());
-            codeBuilder.append(characters.charAt(randomIndex));
-        }
-        return codeBuilder.toString();
     }
 
     @Override

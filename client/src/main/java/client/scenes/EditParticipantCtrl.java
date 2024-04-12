@@ -1,20 +1,30 @@
 package client.scenes;
 
-import client.services.NotificationHelper;
+import client.services.I18N;
+import client.services.NotificationService;
+import client.utils.ServerUtils;
 import commons.Event;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
-import client.utils.ServerUtils;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import javax.inject.Inject;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-import javafx.scene.control.TextField;
-
-public class EditParticipantCtrl {
+public class EditParticipantCtrl implements Initializable {
     private final MainCtrl mainCtrl;
 
     private final ServerUtils server;
+
+    private final NotificationService notificationHelper;
+
 
     @FXML
     private TextField email;
@@ -28,17 +38,44 @@ public class EditParticipantCtrl {
     @FXML
     private TextField bic;
 
+    @FXML
+    public Button cancelButton2;
+    @FXML
+    public Button editButton;
+    @FXML
+    public Button deleteButton;
+    @FXML
+    public Label nameLabel2;
+    @FXML
+    public Label editParticipant;
     private Event event;
     private Participant p;
+    public Event getEvent() {
+        return event;
+    }
 
     @Inject
-    public EditParticipantCtrl(MainCtrl mainCtrl, Event event, Participant p, ServerUtils server) {
+    public EditParticipantCtrl(MainCtrl mainCtrl, Event event, Participant p, ServerUtils server, NotificationService notificationService) {
         this.mainCtrl = mainCtrl;
         this.event = event;
         this.p = p;
         this.server = server;
+        this.notificationHelper = notificationService;
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        ImageView bin=new ImageView(new Image("client/icons/bin-red.png"));
+        bin.setPreserveRatio(true);
+        bin.setFitHeight(15);
+
+        deleteButton.setGraphic(bin);
+        I18N.update(cancelButton2);
+        I18N.update(editButton);
+        I18N.update(deleteButton);
+        I18N.update(nameLabel2);
+        I18N.update(editParticipant);
+    }
     public void setEvent(Event event) {
         this.event = event;
     }
@@ -48,44 +85,23 @@ public class EditParticipantCtrl {
     }
 
     public void editParticipantButton() {
-        if (name.getText().isEmpty() || email.getText().isEmpty() || iban.getText().isEmpty()
-                || bic.getText().isEmpty()) {
-            NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = "You have not properly filled in the following fields: ( ";
+        if (name.getText().isEmpty()) {
+            String warningMessage = I18N.get("participant.add.error");
             if (name.getText().isEmpty()){
-                warningMessage += "name ";
-            }
-            if (email.getText().isEmpty()){
-                warningMessage += "email ";
-            }
-            if (iban.getText().isEmpty()){
-                warningMessage += "iban ";
-            }
-            if (bic.getText().isEmpty()){
-                warningMessage += "bic";
+                warningMessage += I18N.get("participant.add.error.name") + " ";
             }
             warningMessage += ")";
-            notificationHelper.showError("Warning!", warningMessage);
+            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
-        if (!email.getText().matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            String warningMessage = """
-                    The email address you have filled in is not valid,
-                    please type in an email address with the correct format
-                    (i.e john.smith@emailprovide.com)
-                    """;
-            NotificationHelper notificationHelper = new NotificationHelper();
-            notificationHelper.showError("Warning!", warningMessage);
+        if (!email.getText().isBlank()&&!email.getText().matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            String warningMessage = I18N.get("participant.add.error.message.email");
+            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
-        if (iban.getText().length() != 34){
-            String warningMessage = """
-                    The IBAN address you have filled in is not valid,
-                    please type in an Iban with the correct format
-                    (i.e format with length 34)
-                    """;
-            NotificationHelper notificationHelper = new NotificationHelper();
-            notificationHelper.showError("Warning!", warningMessage);
+        if (!iban.getText().isBlank()&&iban.getText().length() != 34){
+            String warningMessage = I18N.get("participant.add.error.message.iban");
+            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
         p.setName(name.getText());
@@ -96,6 +112,8 @@ public class EditParticipantCtrl {
                 event,
                 p
         );
+        this.event.addParticipant(p);
+        server.send("/app/events", this.event);
         returnToOverview();
     }
 
@@ -104,14 +122,15 @@ public class EditParticipantCtrl {
     }
 
     public void removeParticipant() {
+        if (!notificationHelper.showConfirmation(I18N.get("participant.remove.notification_title"), I18N.get("participant.remove.notification"))) {
+            return;
+        }
         try {
             server.removeParticipant(event, p);
+            server.send("/app/events", this.event);
         } catch (WebApplicationException e) {
-            String warningMessage = """
-                    Unable to delete the participant.
-                    """;
-            NotificationHelper notificationHelper = new NotificationHelper();
-            notificationHelper.showError("Warning!", warningMessage);
+            String warningMessage = I18N.get("participant.remove.error");
+            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
 
         } finally {
             returnToOverview();

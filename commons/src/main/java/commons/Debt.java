@@ -13,16 +13,16 @@ import java.util.UUID;
 public class Debt {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Expose
     private UUID id;
 
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne (fetch = FetchType.EAGER)
     @JoinColumn(name = "expense_id")
     @JsonBackReference ("expense-debts")
     private Expense expense;
 
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne (fetch = FetchType.EAGER)
     @JoinColumn(name = "participant_id")
-    @JsonBackReference ("participant-debts")
     private Participant participant;
 
     @Expose
@@ -33,6 +33,7 @@ public class Debt {
 
     public Debt() {}
     public Debt(Expense expense, Participant participant, double amount) {
+        this();
         this.expense = expense;
         this.participant = participant;
         this.amount = amount;

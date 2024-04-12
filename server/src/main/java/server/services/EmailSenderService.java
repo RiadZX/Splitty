@@ -1,21 +1,63 @@
 package server.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
+
+import java.util.Properties;
 
 @Service
 public class EmailSenderService {
-    @Autowired
-    private JavaMailSender mailSender;
+    private static JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
-    public void sendEmail(String toEmail,
-                          String inviteCode,
-                          String creator) {
+    public void sendEmail(String senderEmail,
+                                    String toEmail,
+                                    String password,
+                                    String host,
+                                    int port,
+                                    boolean smtpAuth,
+                                    boolean startTls,
+                          String body,
+                          String subject) {
+        mailSender.setHost(host);
+        mailSender.setPort(port);
+        mailSender.setPassword(password);
+        mailSender.setUsername(senderEmail);
+
+        Properties props = mailSender.getJavaMailProperties();
+        props.put("mail.smtp.auth", smtpAuth);
+        props.put("mail.smtp.starttls.enable", startTls);
+
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("splitty35@gmail.com");
-        message.setCc("splitty35@gmail.com");
+        message.setFrom(senderEmail);
+        message.setCc(senderEmail);
+        message.setTo(toEmail);
+        message.setText(body);
+        message.setSubject(subject);
+
+        mailSender.send(message);
+    }
+    public void sendInvitationEmail(String senderEmail,
+                          String toEmail,
+                          String inviteCode,
+                          String creator,
+                          String password,
+                          String host,
+                          int port,
+                          boolean smtpAuth,
+                          boolean startTls) {
+        mailSender.setHost(host);
+        mailSender.setPort(port);
+        mailSender.setPassword(password);
+        mailSender.setUsername(senderEmail);
+
+        Properties props = mailSender.getJavaMailProperties();
+        props.put("mail.smtp.auth", smtpAuth);
+        props.put("mail.smtp.starttls.enable", startTls);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(senderEmail);
+        message.setCc(senderEmail);
         message.setTo(toEmail);
         String body = "  Good evening,\n \n  You have been invited to a new event on Splitty by "
                 + creator

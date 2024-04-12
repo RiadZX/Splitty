@@ -10,6 +10,16 @@ import java.util.List;
 import java.util.UUID;
 
 public class User implements Serializable {
+
+    public enum Currency {
+        EUR,
+        USD,
+        CHF,
+        RON,
+    }
+
+    private Currency prefferedCurrency;
+
     private String name;
 
     private String email;
@@ -17,11 +27,20 @@ public class User implements Serializable {
     private String iban;
 
     private  String bic;
+
     private LinkedHashMap<UUID, UUID> eventParticipant;
+
+    private String language;
 
 
     public User(){
-        eventParticipant=new LinkedHashMap<UUID, UUID>();
+        this.name="newUser";
+        this.email="";
+        this.iban="";
+        this.bic="";
+        this.language="english";
+        this.eventParticipant=new LinkedHashMap<UUID, UUID>();
+        this.prefferedCurrency=Currency.EUR;
     }
 
     /**
@@ -31,10 +50,16 @@ public class User implements Serializable {
     public User(String name){
         this();
         this.name=name;
-        this.email="test@test.com";
-        this.iban="GB12ABCD10203012345678";
-        this.bic="AAAABBCCDD";
     }
+
+    public User(String name, String preferredCurrency){
+        this();
+        if (!name.isBlank()) {
+            this.name = name;
+        }
+        this.prefferedCurrency = Currency.valueOf(preferredCurrency);
+    }
+
     public User(String name, String email, String iban, String bic){
         this();
         this.name=name;
@@ -43,8 +68,33 @@ public class User implements Serializable {
         this.bic=bic;
     }
 
-    public Participant createParticipant(){
+    public User(String name, String email, String iban, String bic, String language) {
+        this(name, email, iban, bic);
+        this.language = language;
+    }
+
+    public Participant createParticipant() {
         return new Participant(name, null, iban, email, bic);
+    }
+
+    public Currency getPrefferedCurrency() {
+        return prefferedCurrency;
+    }
+
+    public void setPrefferedCurrency(Currency prefferedCurrency) {
+        this.prefferedCurrency = prefferedCurrency;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
+
+    public void setBic(String bic) {
+        this.bic = bic;
     }
 
     public String getName() {
@@ -85,6 +135,14 @@ public class User implements Serializable {
 
     public void addEventParticipant(UUID event, UUID participant){
         this.eventParticipant.put(event, participant);
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     @Override

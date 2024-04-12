@@ -1,0 +1,11 @@
+address = "http://localhost"
+websocket = "ws://localhost"
+port = 8080
+
+[mailConfig]
+    username = "splitty35@gmail.com"
+    password = "kjikyqisguiaqtxt"
+    host = "smtp.gmail.com"
+    port = 587
+    smtpAuth = true
+    startTls = true

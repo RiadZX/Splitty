@@ -6,6 +6,9 @@ import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Labeled;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 
 import java.text.MessageFormat;
 import java.util.*;
@@ -14,9 +17,34 @@ import java.util.concurrent.Callable;
 public class I18N {
     private static final ObjectProperty<Locale> LOCALE;
 
+    private static List<Locale> localeList = new ArrayList<>(Arrays.asList(
+            Locale.ENGLISH,
+            new Locale.Builder()
+                    .setLanguage("nl")
+                    .setScript("Latn")
+                    .setRegion("nl").build(),
+            new Locale.Builder()
+                    .setLanguage("ro")
+                    .setScript("Latn")
+                    .setRegion("ro").build(),
+            new Locale.Builder()
+                    .setLanguage("user")
+                    .setScript("Latn")
+                    .build()
+    ));
+
     static {
         LOCALE = new SimpleObjectProperty<>(getDefaultLocale());
         LOCALE.addListener((observable, oldVal, newVal) -> Locale.setDefault(newVal));
+    }
+
+    public static void createLocale(String language, String script, String region){
+        Locale newLocale = new Locale.Builder()
+                                     .setLanguage(language)
+                                     .setScript(script)
+                                     .setRegion(region)
+                                     .build();
+        localeList.add(newLocale);
     }
 
     /**
@@ -25,13 +53,7 @@ public class I18N {
      * @return List of all locales supported by the application.
      */
     public static List<Locale> getSupportedLocales() {
-        return new ArrayList<>(Arrays.asList(
-                Locale.ENGLISH,
-                new Locale.Builder()
-                    .setLanguage("nl")
-                    .setScript("Latn")
-                    .setRegion("nl").build()
-        ));
+        return localeList;
     }
 
     /**
@@ -69,7 +91,6 @@ public class I18N {
      * @return localized formatted string
      */
     public static String get(final String key, final Object... args) {
-        System.out.println(getLocale());
         ResourceBundle bundle = ResourceBundle.getBundle("languages", getLocale());
         String retStr;
         try {
@@ -111,5 +132,21 @@ public class I18N {
 
     public static void update(Labeled entity) {
         entity.textProperty().bind(createStringBinding(entity.getText()));
+    }
+
+    public static void update(Labeled entity, String textToBind) {
+        entity.textProperty().bind(createStringBinding(textToBind));
+    }
+
+    public static void update(TableColumn entity) {
+        entity.textProperty().bind(createStringBinding(entity.getText()));
+    }
+
+    public static void update(Text entity) {
+        entity.textProperty().bind(createStringBinding(entity.getText()));
+    }
+
+    public static void update(TextField entity) {
+        entity.promptTextProperty().bind(createStringBinding(entity.getPromptText()));
     }
 }

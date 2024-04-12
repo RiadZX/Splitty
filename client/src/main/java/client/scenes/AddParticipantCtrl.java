@@ -1,15 +1,21 @@
 package client.scenes;
 
+import client.services.I18N;
 import client.services.NotificationHelper;
+import client.utils.ServerUtils;
 import commons.Event;
 import commons.Participant;
 import javafx.fxml.FXML;
-import client.utils.ServerUtils;
-
-import javax.inject.Inject;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-public class AddParticipantCtrl {
+import javax.inject.Inject;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class AddParticipantCtrl implements Initializable {
     private final MainCtrl mainCtrl;
 
     private final ServerUtils server;
@@ -26,6 +32,14 @@ public class AddParticipantCtrl {
     @FXML
     private TextField bic;
 
+    @FXML
+    private Button addButton;
+    @FXML
+    private Button cancelButton;
+    @FXML
+    private Label nameLabel;
+    @FXML
+    private Label addParticipant;
     private Event event;
 
     @Inject
@@ -33,6 +47,14 @@ public class AddParticipantCtrl {
         this.mainCtrl = mainCtrl;
         this.event = event;
         this.server = server;
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        I18N.update(addButton);
+        I18N.update(cancelButton);
+        I18N.update(nameLabel);
+        I18N.update(addParticipant);
     }
 
     public void setEvent(Event event) {
@@ -45,57 +67,42 @@ public class AddParticipantCtrl {
         String participantEmail = email.getText();
         String participantIban = iban.getText();
         String participantBic = bic.getText();
-        if (participantName.isEmpty() || participantEmail.isEmpty() || participantIban.isEmpty()
-                || participantBic.isEmpty()) {
+        if (participantName.isEmpty()) {
             NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = "You haven't filled in the following fields: ( ";
+            String warningMessage = I18N.get("participant.add.error");
             if (participantName.isEmpty()){
-                warningMessage += "name ";
-            }
-            if (participantEmail.isEmpty()){
-                warningMessage += "email ";
-            }
-            if (participantIban.isEmpty()){
-                warningMessage += "iban ";
-            }
-            if (participantBic.isEmpty()){
-                warningMessage += "bic";
+                warningMessage += I18N.get("participant.add.error.name") + " ";
             }
             warningMessage += ")";
-            notificationHelper.showError("Warning!", warningMessage);
+            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
 
-        if (!participantEmail.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            String warningMessage = """
-                    The email address you have filled in is not valid,
-                    please type in an email address with the correct format
-                    (i.e john.smith@emailprovide.com)
-                    """;
+        if (!participantEmail.isBlank()&&!participantEmail.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            String warningMessage = I18N.get("participant.add.error.message.email");
             NotificationHelper notificationHelper = new NotificationHelper();
-            notificationHelper.showError("Warning!", warningMessage);
+            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
-        if (participantIban.length() != 34) {
-            String warningMessage = """
-                    The IBAN address you have filled in is not valid,
-                    please type in an Iban with the correct format
-                    (i.e format with length 34)
-                    """;
+        if (!participantIban.isBlank()&&participantIban.length() != 34) {
+            String warningMessage = I18N.get("participant.add.error.message.iban");
             NotificationHelper notificationHelper = new NotificationHelper();
-            notificationHelper.showError("Warning!", warningMessage);
+            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
+        Participant p = new Participant(
+                participantName,
+                this.event,
+                participantIban,
+                participantEmail,
+                participantBic
+        );
         server.addParticipant(
                 event.getId(),
-                new Participant(
-                        participantName,
-                        this.event,
-                        participantIban,
-                        participantEmail,
-                        participantBic
-                )
+                p
         );
+        this.event.addParticipant(p);
+        server.send("/app/events", this.event);
         name.clear();
         email.clear();
         iban.clear();
@@ -106,5 +113,9 @@ public class AddParticipantCtrl {
 
     public void returnToOverview() {
         mainCtrl.showEventOverviewScene(event);
+    }
+
+    public Event getEvent() {
+        return event;
     }
 }
