@@ -61,7 +61,6 @@ public class InviteViewCtrl implements Initializable {
         i18n.update(emailLabel);
         i18n.update(sendInviteBtn);
         i18n.update(cancelBtn);
-        i18n.update(cancelBtn);
         i18n.update(testBtn);
         this.copyToClipboardBtn.setOnAction(event -> copyToClipboard());
         this.sendInviteBtn.setOnAction(event -> sendInvite());
