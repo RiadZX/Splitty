@@ -58,6 +58,8 @@ public class EventOverviewCtrl implements Initializable {
     @FXML
     public Label expenseLabel;
     @FXML
+    public Label filterParticipantLabel;
+    @FXML
     public Label participantLabel;
     @FXML
     public Label backButtonLabel;
@@ -119,9 +121,11 @@ public class EventOverviewCtrl implements Initializable {
 
         this.statsBtn.setOnAction(e -> mainCtrl.showStatistics(this.event));
         i18n.update(sendInvite);
+        i18n.update(filterParticipantLabel);
         i18n.update(addExpense);
         i18n.update(addTag);
         i18n.update(settleDebt);
+        i18n.update(statsBtn);
         i18n.update(expenseLabel);
         i18n.update(participantLabel);
         i18n.update(eventTitle);
