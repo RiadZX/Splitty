@@ -88,31 +88,21 @@ public class EditParticipantCtrl implements Initializable {
     }
 
     public void editParticipantButton() {
-        if (name.getText().isEmpty() || email.getText().isEmpty() || iban.getText().isEmpty()
-                || bic.getText().isEmpty()) {
+        if (name.getText().isEmpty()) {
             String warningMessage = i18n.get("participant.add.error");
             if (name.getText().isEmpty()){
                 warningMessage += i18n.get("participant.add.error.name") + " ";
-            }
-            if (email.getText().isEmpty()){
-                warningMessage += "email ";
-            }
-            if (iban.getText().isEmpty()){
-                warningMessage += "iban ";
-            }
-            if (bic.getText().isEmpty()){
-                warningMessage += "bic";
             }
             warningMessage += ")";
             notificationHelper.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
-        if (!email.getText().matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+        if (!email.getText().isBlank()&&!email.getText().matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
             String warningMessage = i18n.get("participant.add.error.message.email");
             notificationHelper.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
-        if (iban.getText().length() != 34){
+        if (!iban.getText().isBlank()&&iban.getText().length() != 34){
             String warningMessage = i18n.get("participant.add.error.message.iban");
             notificationHelper.showError(i18n.get("general.warning"), warningMessage);
             return;

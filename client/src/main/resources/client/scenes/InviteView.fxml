@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="483.0" prefWidth="477.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.InviteViewCtrl">
+<AnchorPane prefHeight="483.0" prefWidth="477.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.InviteViewCtrl">
    <children>
       <Label fx:id="inviteInstr" layoutX="23.0" layoutY="28.0" text="invite.invite_instr">
          <font>
@@ -18,9 +21,9 @@
             <Font size="24.0" />
          </font>
       </Text>
-      <Button fx:id="copyToClipboardBtn" layoutX="185.0" layoutY="71.0" mnemonicParsing="false" text="invite.copy" id="actionBtn">
+      <Button id="actionBtn" fx:id="copyToClipboardBtn" layoutX="185.0" layoutY="71.0" mnemonicParsing="false" text="invite.copy">
          <cursor>
-            <Cursor fx:constant="CLOSED_HAND" />
+            <Cursor fx:constant="HAND" />
          </cursor></Button>
       <Label fx:id="emailLabel" layoutX="18.0" layoutY="130.0" text="invite.email">
          <font>
@@ -31,13 +34,14 @@
          <padding>
             <Insets bottom="5.0" left="2.0" top="5.0" />
          </padding></TextArea>
-      <Button fx:id="sendInviteBtn" id="confirmBtn" layoutX="328.0" layoutY="428.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="98.0" text="invite.send">
+      <Button id="confirmBtn" fx:id="sendInviteBtn" layoutX="328.0" layoutY="428.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="98.0" text="invite.send">
          <cursor>
-            <Cursor fx:constant="CLOSED_HAND" />
+            <Cursor fx:constant="HAND" />
          </cursor></Button>
-      <Button fx:id="cancelBtn" id="cancelBtn" layoutX="18.0" layoutY="428.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="98.0" text="invite.cancel">
+      <Button id="cancelBtn" fx:id="cancelBtn" layoutX="18.0" layoutY="428.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="98.0" text="invite.cancel">
          <cursor>
-            <Cursor fx:constant="CLOSED_HAND" />
+            <Cursor fx:constant="HAND" />
          </cursor></Button>
+      <Button fx:id="testBtn" layoutX="196.0" layoutY="429.0" mnemonicParsing="false" onAction="#testEmail" text="invite.test" />
    </children>
 </AnchorPane>

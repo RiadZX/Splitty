@@ -265,9 +265,8 @@ public class AddExpenseCtrl implements Initializable {
                 paidBy,
                 event,
                 debts,
-                tags
-                );
-        for (Debt d : newExpense.getDebts()){
+                new ArrayList<>());
+        for (Debt d : newExpense.getDebts()) {
             d.setExpense(newExpense); //setup each debt's expense pointer
         }
 

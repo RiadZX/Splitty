@@ -76,7 +76,6 @@ public class MainCtrl {
 
     private DebtResolveCtrl debtResolveCtrl;
     private Scene debtResolve;
-
     private AdminEventsCtrl adminEventsCtrl;
     private Scene adminEvents;
 
@@ -103,8 +102,9 @@ public class MainCtrl {
                            Pair<AddTagCtrl, Parent> addTag,
                            Pair<EditTagCtrl, Parent> editTag,
                            Pair<LanguageCtrl, Parent> languages,
+                           Pair<DebtResolveCtrl, Parent> debtResolve,
                            boolean adminMode,
-                            Pair<StatisticsCtrl, Parent> statistics
+                           Pair<StatisticsCtrl, Parent> statistics
     ) {
         this.admin=false;
         this.user = new User();
@@ -147,6 +147,9 @@ public class MainCtrl {
         this.adminEventsCtrl = adminEvents.getKey();
         this.adminEvents = new Scene(adminEvents.getValue());
 
+        this.debtResolveCtrl = debtResolve.getKey();
+        this.debtResolve = new Scene(debtResolve.getValue());
+
         this.addTagCtrl = addTag.getKey();
         this.addTag = new Scene(addTag.getValue());
 
@@ -157,6 +160,7 @@ public class MainCtrl {
         this.statistics = new Scene(statistics.getValue());
 
         primaryStage.getIcons().add(new Image("client/icons/app-icon.png"));
+
 
         chooseFirstPage(adminMode);
 
@@ -350,6 +354,7 @@ public class MainCtrl {
 
     public void switchToEnglish() {
         i18n.setLocale(Locale.ENGLISH);
+        startCtrl.setFlag("english");
         eventOverviewCtrl.setFlag("english");
         eventOverviewCtrl.refreshLanguage();
         this.user.setLanguage("english");
@@ -357,9 +362,10 @@ public class MainCtrl {
     }
 
     public void switchToDutch() {
-        Locale dutch = i18n.getSupportedLocales().get(1);
+        Locale dutch = I18N.getSupportedLocales().get(1);
         i18n.setLocale(dutch);
-        eventOverviewCtrl.setFlag("dutch");
+        startCtrl.setFlag("dutch");
+        eventOverviewCtrl.s1etFlag("dutch");
         eventOverviewCtrl.refreshLanguage();
         this.user.setLanguage("dutch");
         Config.writeUserConfigFile(this.user);
@@ -368,6 +374,7 @@ public class MainCtrl {
     public void switchToRomanian(){
         Locale romanian = i18n.getSupportedLocales().get(2);
         i18n.setLocale(romanian);
+        startCtrl.setFlag("romanian");
         eventOverviewCtrl.setFlag("romanian");
         eventOverviewCtrl.refreshLanguage();
         this.user.setLanguage("romanian");

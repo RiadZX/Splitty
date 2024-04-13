@@ -59,6 +59,8 @@ public class FirstTimeCtrl implements Initializable{
 
     public void moveToStart(){
         User user=new User(nameField.getText(), currency.getValue());
+        nameField.clear();
+        this.currency.getSelectionModel().selectFirst();
         this.mainCtrl.setUser(user);
         this.mainCtrl.showStartScene();
     }

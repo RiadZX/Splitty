@@ -18,14 +18,40 @@ public class EmailController {
         this.emailSender = emailSender;
     }
 
-    @PostMapping(path = {"", "/"})
+    @PostMapping(path = "/custom")
     public ResponseEntity<Void> sendEmail(@RequestBody String contents) {
         JsonObject body = JsonParser.parseString(contents).getAsJsonObject();
 
-        emailSender.sendEmail(body.get("senderEmail").toString(),
+        emailSender.sendEmail(body.get("senderEmail").toString().replaceAll("\"", ""),
+                body.get("toEmail").toString(),
+                body.get("password").toString().replaceAll("\"", ""),
+                body.get("host").toString().replaceAll("\"", ""),
+                Integer.parseInt(body.get("port").toString().replaceAll("\"", "")),
+                Boolean.parseBoolean(body.get("smtpAuth").toString().replaceAll("\"", "")),
+                Boolean.parseBoolean(body.get("startTls").toString().replaceAll("\"", "")),
+                body.get("body").toString().replaceAll("\"", ""),
+                body.get("subject").toString().replaceAll("\"", ""));
+
+
+        return ResponseEntity.ok().build();
+
+    }
+    @PostMapping(path = {"", "/"})
+    public ResponseEntity<Void> sendEmailInvitation(@RequestBody String contents) {
+        JsonObject body = JsonParser.parseString(contents).getAsJsonObject();
+
+        emailSender.sendInvitationEmail(body.get("senderEmail").toString().replaceAll("\"", ""),
                 body.get("toEmail").toString(),
                 body.get("inviteCode").toString(),
-                body.get("creator").toString());
+                body.get("creator").toString(),
+        body.get("password").toString().replaceAll("\"", ""),
+                body.get("host").toString().replaceAll("\"", ""),
+                Integer.parseInt(body.get("port").toString().replaceAll("\"", "")),
+                Boolean.parseBoolean(body.get("smtpAuth").toString().replaceAll("\"", "")),
+                Boolean.parseBoolean(body.get("startTls").toString().replaceAll("\"", "")));
+
         return ResponseEntity.ok().build();
     }
+
+
 }
