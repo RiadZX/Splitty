@@ -5,6 +5,7 @@ import client.services.NotificationHelper;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.*;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,7 +13,6 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.scene.control.TextInputDialog;
 
 import java.net.URL;
 import java.time.Instant;
@@ -40,7 +40,7 @@ public class AddExpenseCtrl implements Initializable {
     @FXML
     private ComboBox<String> paidBySelector, currencySelector;
     @FXML
-    private TextField howMuchField;
+    private TextField howMuchField, titleField;
     @FXML
     private DatePicker whenField;
     @FXML
@@ -55,6 +55,8 @@ public class AddExpenseCtrl implements Initializable {
     @FXML
     private Text how;
     @FXML
+    private Text title;
+    @FXML
     private Button abortButton;
 
 
@@ -68,6 +70,7 @@ public class AddExpenseCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        I18N.update(title);
         I18N.update(paid);
         I18N.update(when);
         I18N.update(amount);
@@ -92,7 +95,7 @@ public class AddExpenseCtrl implements Initializable {
     public void checkSome(){
         System.out.println(paidBySelector.getValue());
         allBox.setSelected(false);
-        partialPaidSelector.setVisible(true);
+        partialPaidSelector.setVisible(someBox.isSelected());
     }
 
     public void setup(Event event, Expense e){
@@ -112,8 +115,9 @@ public class AddExpenseCtrl implements Initializable {
         tagSelector.getChildren().clear();
         for (int i = 1; i<event.getTags().size() + 1; i++){
             CheckBox checkbox = new CheckBox(event.getTags().get(i-1).getTag());
-            tagSelector.getChildren().add(checkbox);
+            Platform.runLater(() -> tagSelector.getChildren().add(checkbox));
         }
+        tagSelector.setVisible(true);
 
         partialPaidSelector.setVisible(false);
         partialPaidSelector.getChildren().clear();
@@ -134,6 +138,7 @@ public class AddExpenseCtrl implements Initializable {
     private void setupExistingExpense(Expense expense){
         I18N.update(submitButton, "general.save");
 
+        titleField.setText(expense.getTitle());
         paidBySelector.setValue(expense.getPaidBy().getName());
         howMuchField.setText(String.valueOf(expense.getAmount()));
         whenField.setValue(expense.getDate().atZone(ZoneId.systemDefault()).toLocalDate());
@@ -253,8 +258,8 @@ public class AddExpenseCtrl implements Initializable {
         }
          */
 
-        //create the expense, TODO : changed the name of event because event tags are not implemented yet
-        Expense newExpense = new Expense(paidBy.getName() + " paid for " + "EXPENSE TEMPLATE",
+        //create the expense
+        Expense newExpense = new Expense(titleField.getText(),
                 Double.parseDouble(howMuchField.getText()),
                 currencySelector.getValue(),
                 Instant.from(date.atStartOfDay(
