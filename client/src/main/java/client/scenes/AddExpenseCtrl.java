@@ -197,7 +197,7 @@ public class AddExpenseCtrl implements Initializable {
         Participant paidBy = findParticipant(paidBySelector.getValue());
         if (paidBy == null) {
             String warningMessage = i18n.get("expense.add.error.emptyPayee");
-            NotificationService.showError(i18n.get("general.warning"), warningMessage);
+            notificationService.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
 

@@ -265,7 +265,7 @@ public class EventOverviewCtrl implements Initializable {
     }
 
     public void removeExpenseAction(Expense e){
-        if (!notificationService.showConfirmation(I18N.get("event.overview.delete.event"), I18N.get("event.overview.delete.event.notification"))) {
+        if (!notificationService.showConfirmation(i18n.get("event.overview.delete.event"), i18n.get("event.overview.delete.event.notification"))) {
             return;
         }
         server.removeExpense(event.getId(), e);
