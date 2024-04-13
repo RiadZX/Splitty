@@ -47,7 +47,7 @@ public class AddParticipantCtrl implements Initializable {
     private final I18NService i18n;
 
     @Inject
-    public AddParticipantCtrl(MainCtrl mainCtrl, Event event, ServerUtils server, I18NService i18n) {
+    public AddParticipantCtrl(MainCtrl mainCtrl, Event event, ServerUtils server, NotificationService notificationService, I18NService i18n) {
         this.mainCtrl = mainCtrl;
         this.event = event;
         this.server = server;
