@@ -62,6 +62,8 @@ public class EditParticipantCtrl implements Initializable {
         return event;
     }
 
+    private boolean validEmail;
+
     @Inject
     public EditParticipantCtrl(MainCtrl mainCtrl, Event event, Participant p, ServerUtils server, NotificationService notificationService, I18NService i18n) {
         this.mainCtrl = mainCtrl;
@@ -95,7 +97,7 @@ public class EditParticipantCtrl implements Initializable {
     }
 
     public void editParticipantButton() {
-        if (name.getText().isEmpty()) {
+        if (name.getText() != null && name.getText().isEmpty()) {
             String warningMessage = i18n.get("participant.add.error");
             if (name.getText().isEmpty()){
                 warningMessage += i18n.get("participant.add.error.name") + " ";
@@ -104,7 +106,7 @@ public class EditParticipantCtrl implements Initializable {
             notificationHelper.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
-        if (!email.getText().isBlank()&&!email.getText().matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+        if (email.getText() != null && !email.getText().isBlank()&&!email.getText().matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
             String warningMessage = i18n.get("participant.add.error.message.email");
             notificationHelper.showError(i18n.get("general.warning"), warningMessage);
             return;
@@ -128,7 +130,22 @@ public class EditParticipantCtrl implements Initializable {
     }
 
     public void remind() {
-        System.out.println(calculateOutgoing(p));
+        if (!validEmail) {
+            return;
+        }
+        double invoice = calculateOutgoing(p);
+        String subject = "Hello "
+                + p.getName()
+                + "! You have an oustanding invoice of "
+                + invoice
+                + " "
+                + mainCtrl.getUser().getPrefferedCurrency().toString()
+                + " for the event "
+                + event.getName()
+                + ". Please make sure to settle your debts within the app with the other participants. Best wishes, Splitty (OOPP Team 35)";
+        server.sendEmail(p.getEmail(), "Payment Reminder", subject);
+
+        notificationHelper.informUser(i18n.get("reminder.title"), i18n.get("reminder.message"), i18n.get("reminder.header"));
     }
 
     public double calculateOutgoing(Participant p){
@@ -175,7 +192,9 @@ public class EditParticipantCtrl implements Initializable {
         this.name.setText(p.getName());
         this.iban.setText(p.getIban());
         this.bic.setText(p.getBic());
+        this.validEmail = true;
         if (server.getMailConfig() == null || p.getEmail() == null || p.getEmail().isEmpty()) {
+            this.validEmail = false;
             remind.setStyle("-fx-background-color: #808080");
         }
     }
