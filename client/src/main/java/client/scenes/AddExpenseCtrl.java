@@ -113,8 +113,8 @@ public class AddExpenseCtrl implements Initializable {
         currencySelector.setItems(FXCollections.observableList(Stream.of("EUR", "USD", "CHF", "RON").toList()));
         currencySelector.setValue("EUR");
         currencySelector.setVisible(true);
-
-        titleField.setText(e.getTitle());
+        String text=e!=null ?  e.getTitle() : "";
+        titleField.setText(text);
 
         tagSelector.getChildren().clear();
         for (int i = 1; i<event.getTags().size() + 1; i++){
