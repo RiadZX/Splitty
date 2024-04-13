@@ -194,6 +194,7 @@ public class EditParticipantCtrl implements Initializable {
         this.iban.setText(p.getIban());
         this.bic.setText(p.getBic());
         this.validEmail = true;
+        remind.setStyle("");
         if (server.getMailConfig() == null || p.getEmail() == null || p.getEmail().isEmpty()) {
             this.validEmail = false;
             remind.setStyle("-fx-background-color: #808080");
