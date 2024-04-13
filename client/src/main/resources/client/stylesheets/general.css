@@ -7,13 +7,10 @@
     -fx-text-fill: #eaeaea;
 
 }
-
-<<<<<<< HEAD
-.text-area .content{
+.text-area .content {
     -fx-background-color: #242424;
-=======
+}
 .label{
->>>>>>> 6231785 (WIP just saving progress to git)
     -fx-text-fill: #eaeaea;
 }
 

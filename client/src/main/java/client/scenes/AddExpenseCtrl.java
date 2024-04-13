@@ -1,7 +1,7 @@
 package client.scenes;
 
 import client.services.I18N;
-import client.services.NotificationHelper;
+import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.*;
@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 public class AddExpenseCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private final NotificationService notificationService;
     private Event event;
     private Expense expense;
 
@@ -62,10 +63,11 @@ public class AddExpenseCtrl implements Initializable {
 
 
     @Inject
-    public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl, Event event) {
+    public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService, Event event) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.event = event;
+        this.notificationService=notificationService;
     }
 
     @Override
@@ -111,6 +113,8 @@ public class AddExpenseCtrl implements Initializable {
         currencySelector.setItems(FXCollections.observableList(Stream.of("EUR", "USD", "CHF", "RON").toList()));
         currencySelector.setValue("EUR");
         currencySelector.setVisible(true);
+
+        titleField.setText(e.getTitle());
 
         tagSelector.getChildren().clear();
         for (int i = 1; i<event.getTags().size() + 1; i++){
@@ -189,24 +193,21 @@ public class AddExpenseCtrl implements Initializable {
         //store who paid
         Participant paidBy = findParticipant(paidBySelector.getValue());
         if (paidBy == null) {
-            NotificationHelper notificationHelper = new NotificationHelper();
             String warningMessage = I18N.get("expense.add.error.emptyPayee");
-            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
+            notificationService.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
 
         LocalDate date = whenField.getValue();
         if (date == null){
-            NotificationHelper notificationHelper = new NotificationHelper();
             String warningMessage = I18N.get("expense.add.error.emptyDate");
-            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
+            notificationService.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
 
         if (!someBox.isSelected() && !allBox.isSelected()){
-            NotificationHelper notificationHelper = new NotificationHelper();
             String warningMessage = I18N.get("expense.add.error.emptySplit");
-            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
+            notificationService.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
 
@@ -221,16 +222,14 @@ public class AddExpenseCtrl implements Initializable {
         }
 
         if (howMuchField.getText() == null || howMuchField.getText().isEmpty()){
-            NotificationHelper notificationHelper = new NotificationHelper();
             String warningMessage = I18N.get("expense.add.error.emptyAmount");
-            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
+            notificationService.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
 
         if (Double.parseDouble(howMuchField.getText()) < 0.0){
-            NotificationHelper notificationHelper = new NotificationHelper();
             String warningMessage = I18N.get("expense.add.error.negativeAmount");
-            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
+            notificationService.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
 
@@ -241,20 +240,6 @@ public class AddExpenseCtrl implements Initializable {
                 .filter(n -> n.getClass() == CheckBox.class)
                 .map(n -> ((CheckBox) n)).filter(CheckBox::isSelected)
                 .map(Labeled::getText).map(this::findTag).toList();
-
-        // TODO we leave tag implementation for next week
-
-        /*if (tags.isEmpty()){
-            NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = """
-                    You have not selected any tags
-                    please create a tag.
-                    Or select a pre-existing one.
-                    """;
-            notificationHelper.showError("Warning", warningMessage);
-            return;
-        }
-         */
         String title=titleField.getText();
         if (title.isBlank()){
             title=paidBy.getName() + " paid";
@@ -279,10 +264,6 @@ public class AddExpenseCtrl implements Initializable {
         if (expense == null) {
             expense = server.addExpense(event.getId(), newExpense);
         } else {
-            System.out.println("-------------------------------");
-            System.out.println(newExpense);
-            System.out.println("-------------------------------");
-
             server.updateExpense(event.getId(), expense.getId(), newExpense);
         }
         for (Tag t : tags) {
