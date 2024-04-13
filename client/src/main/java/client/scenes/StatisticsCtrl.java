@@ -50,7 +50,7 @@ public class StatisticsCtrl implements Initializable {
     public TableColumn tOwed;
     private Event event;
 
-    private final I18NService i18n = new I18N();
+    private final I18NService i18n;
 
 //    @FXML
 //    private PieChart pieStats;
@@ -70,10 +70,11 @@ public class StatisticsCtrl implements Initializable {
     }
 
     @Inject
-    public StatisticsCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
+    public StatisticsCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService, I18NService i18n) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.notificationService = notificationService;
+        this.i18n = i18n;
     }
 
     public void setEvent(Event event) {

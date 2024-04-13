@@ -43,15 +43,16 @@ public class InviteViewCtrl implements Initializable {
     private Event event;
     private boolean validEmailConfig;
 
-    private final I18NService i18n = new I18N();
+    private final I18NService i18n;
 
 
     @Inject
-    public InviteViewCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
+    public InviteViewCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService, I18NService i18n) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.notificationService = notificationService;
         this.event=new Event();
+        this.i18n = i18n;
         validEmailConfig = server.getMailConfig() != null;
     }
     @Override

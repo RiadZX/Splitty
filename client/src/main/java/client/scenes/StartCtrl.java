@@ -46,14 +46,15 @@ public class StartCtrl implements Initializable {
     @FXML
     private Labeled recent;
 
-    private final I18NService i18n = new I18N();
+    private final I18NService i18n;
     @FXML
     private ImageView flagView;
     @Inject
-    public StartCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
+    public StartCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService, I18NService i18n) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.notificationService = notificationService;
+        this.i18n = i18n;
     }
 
     @Override

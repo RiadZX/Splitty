@@ -33,13 +33,14 @@ public class FirstTimeCtrl implements Initializable{
     @FXML
     private Labeled setup;
 
-    private final I18NService i18n = new I18N();
+    private final I18NService i18n;
 
 
     @Inject
-    public FirstTimeCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public FirstTimeCtrl(ServerUtils server, MainCtrl mainCtrl, I18NService i18n) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.i18n = i18n;
     }
     public void initialize(URL location, ResourceBundle resources) {
         i18n.update(start);

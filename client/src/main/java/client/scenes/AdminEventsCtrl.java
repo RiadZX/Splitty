@@ -60,13 +60,14 @@ public class AdminEventsCtrl implements Initializable {
     private String sortCol;
     private int sortType;
 
-    private final I18NService i18n = new I18N();
+    private final I18NService i18n;
 
     @Inject
-    public AdminEventsCtrl(MainCtrl mainCtrl, ServerUtils server, NotificationService notificationService) {
+    public AdminEventsCtrl(MainCtrl mainCtrl, ServerUtils server, NotificationService notificationService, I18NService i18n) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.notificationService = notificationService;
+        this.i18n = i18n;
     }
 
     @Override

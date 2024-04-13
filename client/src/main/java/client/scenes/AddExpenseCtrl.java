@@ -58,15 +58,16 @@ public class AddExpenseCtrl implements Initializable {
     @FXML
     private Button abortButton;
 
-    private final I18NService i18n = new I18N();
+    private final I18NService i18n;
 
 
 
     @Inject
-    public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl, Event event) {
+    public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl, Event event, I18NService i18n) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.event = event;
+        this.i18n = i18n;
     }
 
     @Override

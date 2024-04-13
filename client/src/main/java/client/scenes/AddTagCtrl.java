@@ -55,14 +55,15 @@ public class AddTagCtrl implements Initializable {
 
     private final NotificationService notificationService;
 
-    private final I18NService i18n = new I18N();
+    private final I18NService i18n;
 
     @Inject
-    public AddTagCtrl(MainCtrl mainCtrl, Event event, ServerUtils server, NotificationService notificationService) {
+    public AddTagCtrl(MainCtrl mainCtrl, Event event, ServerUtils server, NotificationService notificationService, I18NService i18n) {
         this.mainCtrl = mainCtrl;
         this.event = event;
         this.server = server;
         this.notificationService = notificationService;
+        this.i18n = i18n;
     }
 
     @Override

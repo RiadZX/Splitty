@@ -37,12 +37,13 @@ public class DebtResolveCtrl implements Initializable {
 
     private ObservableList<DebtResolveTableEntry> tableEntries = FXCollections.observableArrayList();
 
-    private final I18NService i18n = new I18N();
+    private final I18NService i18n;
 
     @Inject
-    public DebtResolveCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
+    public DebtResolveCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService, I18NService i18n) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.i18n = i18n;
     }
 
     @Override

@@ -93,15 +93,16 @@ public class EventOverviewCtrl implements Initializable {
 
     private int filter;
 
-    private final I18NService i18n = new I18N();
+    private final I18NService i18n;
 
     @Inject
-    public EventOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
+    public EventOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService, I18NService i18n) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.notificationService = notificationService;
         this.event=new Event();
         this.filter=0;
+        this.i18n = i18n;
     }
 
     @Override

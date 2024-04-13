@@ -43,13 +43,14 @@ public class AddParticipantCtrl implements Initializable {
     private Label addParticipant;
     private Event event;
 
-    private final I18NService i18n = new I18N();
+    private final I18NService i18n;
 
     @Inject
-    public AddParticipantCtrl(MainCtrl mainCtrl, Event event, ServerUtils server) {
+    public AddParticipantCtrl(MainCtrl mainCtrl, Event event, ServerUtils server, I18NService i18n) {
         this.mainCtrl = mainCtrl;
         this.event = event;
         this.server = server;
+        this.i18n = i18n;
     }
 
     @Override

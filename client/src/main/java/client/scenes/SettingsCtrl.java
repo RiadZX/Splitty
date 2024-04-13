@@ -35,13 +35,14 @@ public class SettingsCtrl implements Initializable {
     private Labeled nukeEmData;
     @FXML
     private Labeled back;
-    private final I18NService i18n = new I18N();
+    private final I18NService i18n;
 
     @Inject
-    public SettingsCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
+    public SettingsCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService, I18NService i18n) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.notificationService = notificationService;
+        this.i18n = i18n;
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {

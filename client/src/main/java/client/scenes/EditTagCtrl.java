@@ -43,14 +43,15 @@ public class EditTagCtrl implements Initializable {
 
     private Event event;
 
-    private final I18NService i18n = new I18N();
+    private final I18NService i18n;
 
     @Inject
-    public EditTagCtrl(MainCtrl mainCtrl, ServerUtils server, NotificationService notificationService, Tag tag) {
+    public EditTagCtrl(MainCtrl mainCtrl, ServerUtils server, NotificationService notificationService, Tag tag, I18NService i18n) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.notificationService = notificationService;
         this.tag = tag;
+        this.i18n = i18n;
     }
 
     public void setUp(Tag t, Event e) {

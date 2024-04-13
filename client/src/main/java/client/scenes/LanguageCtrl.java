@@ -41,13 +41,14 @@ public class LanguageCtrl implements Initializable {
     @FXML
     private Label backButtonLabel;
 
-    private final I18NService i18n = new I18N();
+    private final I18NService i18n;
 
     @Inject
-    public LanguageCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
+    public LanguageCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService, I18NService i18n) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.notificationService = notificationService;
+        this.i18n = i18n;
     }
 
     @Override

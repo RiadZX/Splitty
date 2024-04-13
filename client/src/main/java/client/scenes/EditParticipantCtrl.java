@@ -52,19 +52,20 @@ public class EditParticipantCtrl implements Initializable {
     private Event event;
     private Participant p;
 
-    private final I18NService i18n = new I18N();
+    private final I18NService i18n;
 
     public Event getEvent() {
         return event;
     }
 
     @Inject
-    public EditParticipantCtrl(MainCtrl mainCtrl, Event event, Participant p, ServerUtils server, NotificationService notificationService) {
+    public EditParticipantCtrl(MainCtrl mainCtrl, Event event, Participant p, ServerUtils server, NotificationService notificationService, I18NService i18n) {
         this.mainCtrl = mainCtrl;
         this.event = event;
         this.p = p;
         this.server = server;
         this.notificationHelper = notificationService;
+        this.i18n = i18n;
     }
 
     @Override
