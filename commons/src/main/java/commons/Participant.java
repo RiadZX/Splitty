@@ -47,7 +47,6 @@ public class Participant {
 
     public Participant() {
         this.paidFor = new ArrayList<>();
-        this.debts = new ArrayList<>();
     }
 
     public Participant(String name) {
