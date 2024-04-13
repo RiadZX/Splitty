@@ -83,6 +83,7 @@ public class AddExpenseCtrl implements Initializable {
         i18n.update(abortButton);
         i18n.update(allBox);
         i18n.update(someBox);
+        i18n.update(title);
         //this.prepareTagDialog();
     }
     @FXML
