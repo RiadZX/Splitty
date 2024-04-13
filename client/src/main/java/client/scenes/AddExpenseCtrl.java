@@ -5,6 +5,7 @@ import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.*;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -72,6 +73,7 @@ public class AddExpenseCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        I18N.update(title);
         I18N.update(paid);
         I18N.update(when);
         I18N.update(amount);
@@ -79,8 +81,7 @@ public class AddExpenseCtrl implements Initializable {
         I18N.update(abortButton);
         I18N.update(allBox);
         I18N.update(someBox);
-        I18N.update(title);
-//        this.prepareTagDialog();
+        //this.prepareTagDialog();
     }
     @FXML
     public void backToOverview(){
@@ -97,7 +98,7 @@ public class AddExpenseCtrl implements Initializable {
     public void checkSome(){
         System.out.println(paidBySelector.getValue());
         allBox.setSelected(false);
-        partialPaidSelector.setVisible(true);
+        partialPaidSelector.setVisible(someBox.isSelected());
     }
 
     public void setup(Event event, Expense e){
@@ -113,14 +114,13 @@ public class AddExpenseCtrl implements Initializable {
         currencySelector.setItems(FXCollections.observableList(Stream.of("EUR", "USD", "CHF", "RON").toList()));
         currencySelector.setValue("EUR");
         currencySelector.setVisible(true);
-        String text=e!=null ?  e.getTitle() : "";
-        titleField.setText(text);
 
         tagSelector.getChildren().clear();
         for (int i = 1; i<event.getTags().size() + 1; i++){
             CheckBox checkbox = new CheckBox(event.getTags().get(i-1).getTag());
-            tagSelector.getChildren().add(checkbox);
+            Platform.runLater(() -> tagSelector.getChildren().add(checkbox));
         }
+        tagSelector.setVisible(true);
 
         partialPaidSelector.setVisible(false);
         partialPaidSelector.getChildren().clear();
@@ -141,6 +141,7 @@ public class AddExpenseCtrl implements Initializable {
     private void setupExistingExpense(Expense expense){
         I18N.update(submitButton, "general.save");
 
+        titleField.setText(expense.getTitle());
         paidBySelector.setValue(expense.getPaidBy().getName());
         howMuchField.setText(String.valueOf(expense.getAmount()));
         whenField.setValue(expense.getDate().atZone(ZoneId.systemDefault()).toLocalDate());
@@ -244,8 +245,8 @@ public class AddExpenseCtrl implements Initializable {
         if (title.isBlank()){
             title=paidBy.getName() + " paid";
         }
-        //create the expense, TODO : changed the name of event because event tags are not implemented yet
-        Expense newExpense = new Expense(title,
+        //create the expense
+        Expense newExpense = new Expense(titleField.getText(),
                 Double.parseDouble(howMuchField.getText()),
                 currencySelector.getValue(),
                 Instant.from(date.atStartOfDay(
@@ -254,13 +255,13 @@ public class AddExpenseCtrl implements Initializable {
                 paidBy,
                 event,
                 debts,
-                new ArrayList<>());
-        for (Debt d : newExpense.getDebts()) {
+                tags
+                );
+        for (Debt d : newExpense.getDebts()){
             d.setExpense(newExpense); //setup each debt's expense pointer
         }
 
         Expense e;
-        System.out.println(newExpense);
         if (expense == null) {
             expense = server.addExpense(event.getId(), newExpense);
         } else {
@@ -269,7 +270,6 @@ public class AddExpenseCtrl implements Initializable {
         for (Tag t : tags) {
             server.addExpenseTag(event.getId(), t.getId(), expense.getId());
         }
-
         server.send("/app/events", event);
         mainCtrl.showEventOverviewScene(event);
     }
