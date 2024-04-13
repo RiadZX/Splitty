@@ -3,7 +3,9 @@ package client.scenes;
 import client.services.I18NService;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
+import commons.Debt;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
@@ -16,6 +18,7 @@ import javafx.scene.image.ImageView;
 
 import javax.inject.Inject;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class EditParticipantCtrl implements Initializable {
@@ -41,6 +44,8 @@ public class EditParticipantCtrl implements Initializable {
     @FXML
     public Button cancelButton2;
     @FXML
+    public Button remind;
+    @FXML
     public Button editButton;
     @FXML
     public Button deleteButton;
@@ -56,6 +61,8 @@ public class EditParticipantCtrl implements Initializable {
     public Event getEvent() {
         return event;
     }
+
+    private boolean validEmail;
 
     @Inject
     public EditParticipantCtrl(MainCtrl mainCtrl, Event event, Participant p, ServerUtils server, NotificationService notificationService, I18NService i18n) {
@@ -80,6 +87,7 @@ public class EditParticipantCtrl implements Initializable {
         i18n.update(nameLabel2);
         i18n.update(editParticipant);
     }
+
     public void setEvent(Event event) {
         this.event = event;
     }
@@ -89,7 +97,7 @@ public class EditParticipantCtrl implements Initializable {
     }
 
     public void editParticipantButton() {
-        if (name.getText().isEmpty()) {
+        if (name.getText() != null && name.getText().isEmpty()) {
             String warningMessage = i18n.get("participant.add.error");
             if (name.getText().isEmpty()){
                 warningMessage += i18n.get("participant.add.error.name") + " ";
@@ -98,7 +106,7 @@ public class EditParticipantCtrl implements Initializable {
             notificationHelper.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
-        if (!email.getText().isBlank()&&!email.getText().matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+        if (email.getText() != null && !email.getText().isBlank()&&!email.getText().matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
             String warningMessage = i18n.get("participant.add.error.message.email");
             notificationHelper.showError(i18n.get("general.warning"), warningMessage);
             return;
@@ -119,6 +127,44 @@ public class EditParticipantCtrl implements Initializable {
         this.event.addParticipant(p);
         server.send("/app/events", this.event);
         returnToOverview();
+    }
+
+    public void remind() {
+        if (!validEmail) {
+            return;
+        }
+        double invoice = calculateOutgoing(p);
+        String subject = "Hello "
+                + p.getName()
+                + "! You have an oustanding invoice of "
+                + invoice
+                + " "
+                + mainCtrl.getUser().getPrefferedCurrency().toString()
+                + " for the event "
+                + event.getName()
+                + ". Please make sure to settle your debts within the app with the other participants. Best wishes, Splitty (OOPP Team 35)";
+        server.sendEmail(p.getEmail(), "Payment Reminder", subject);
+
+        notificationHelper.informUser(i18n.get("reminder.title"), i18n.get("reminder.message"), i18n.get("reminder.header"));
+    }
+
+    public double calculateOutgoing(Participant p){
+        double outgoing = 0;
+        for (Expense e : event.getExpenses()){
+            if (e.getPaidBy().getId().equals(p.getId())){
+                continue;
+            }
+            List<Debt> debts = e.getDebts();
+            for (Debt d : debts) {
+                if (d.isPaid()) {
+                    continue;
+                }
+                if (d.getParticipant().getId().equals(p.getId())){
+                    outgoing+=server.convert(d.getAmount(), e.getCurrency(), String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), e.getDate());
+                }
+            }
+        }
+        return outgoing;
     }
 
     public void returnToOverview() {
@@ -146,5 +192,10 @@ public class EditParticipantCtrl implements Initializable {
         this.name.setText(p.getName());
         this.iban.setText(p.getIban());
         this.bic.setText(p.getBic());
+        this.validEmail = true;
+        if (server.getMailConfig() == null || p.getEmail() == null || p.getEmail().isEmpty()) {
+            this.validEmail = false;
+            remind.setStyle("-fx-background-color: #808080");
+        }
     }
 }
