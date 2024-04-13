@@ -294,7 +294,8 @@ public class EventOverviewCtrl implements Initializable {
         BorderPane bp = new BorderPane();
         double convertedAmount = server.convert(e.getAmount(), e.getCurrency(), String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), e.getDate());
         DecimalFormat df = new DecimalFormat("#.00");
-        Text text=new Text((e.getTitle() == null ? "NULL" : e.getTitle()));
+        Text text=new Text((e.getTitle() == null ? "NULL" : e.getTitle() +
+                            " - " + df.format(convertedAmount) + " " + mainCtrl.getUser().getPrefferedCurrency()));
         text.setFill(Color.WHITESMOKE);
         bp.setLeft(text);
 
