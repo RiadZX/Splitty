@@ -10,11 +10,13 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.*;
@@ -24,7 +26,17 @@ public class StatisticsCtrl implements Initializable {
     private final MainCtrl mainCtrl;
     private final NotificationService notificationService;
     @FXML
-    public Label expenseLabel;
+    public Label expenseLabelSum;
+    @FXML
+    public Label expenseLabelText;
+    @FXML
+    public Label debtsLabel;
+    @FXML
+    public Text statShare;
+    @FXML
+    public Text tagDistr;
+    @FXML
+    public Button backButton;
     @FXML
     public TableColumn<StatsRow, String> tFrom;
     @FXML
@@ -61,11 +73,26 @@ public class StatisticsCtrl implements Initializable {
         tTo.setCellValueFactory(new PropertyValueFactory<>("to"));
         tAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
         tExpenseName.setCellValueFactory(new PropertyValueFactory<>("expenseName"));
+
         //Share table
         tShare.setCellValueFactory(new PropertyValueFactory<>("shareAmount"));
         tParticipantShare.setCellValueFactory(new PropertyValueFactory<>("shareFrom"));
         tOwes.setCellValueFactory(new PropertyValueFactory<>("owes"));
         tOwed.setCellValueFactory(new PropertyValueFactory<>("owed"));
+
+        i18n.update(tagDistr);
+        i18n.update(expenseLabelText);
+        i18n.update(tFrom);
+        i18n.update(tTo);
+        i18n.update(tAmount);
+        i18n.update(tExpenseName);
+        i18n.update(backButton);
+        i18n.update(debtsLabel);
+        i18n.update(tParticipantShare);
+        i18n.update(tShare);
+        i18n.update(tOwed);
+        i18n.update(tOwes);
+        i18n.update(statShare);
     }
 
     @Inject
@@ -232,7 +259,7 @@ public class StatisticsCtrl implements Initializable {
             double convertedAmount = server.convert(e.getAmount(), e.getCurrency(), String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), e.getDate());
             sum += convertedAmount;
         }
-        expenseLabel.setText("Total expenses: " + String.format("%.2f", sum) + " " + mainCtrl.getUser().getPrefferedCurrency());
+        expenseLabelSum.setText(String.format("%.2f", sum) + " " + mainCtrl.getUser().getPrefferedCurrency());
     }
 
     public void back() {

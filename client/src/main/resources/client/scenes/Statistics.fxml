@@ -11,27 +11,32 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="608.0" prefWidth="1224.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StatisticsCtrl">
 
-    <Text layoutX="401.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Distribution of tags across expenses" textAlignment="CENTER" wrappingWidth="360.0">
+    <Text layoutX="401.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="statistics.label.distributionTags" textAlignment="CENTER" wrappingWidth="360.0" fx:id="tagDistr">
         <font>
             <Font size="16.0" />
         </font>
     </Text>
-    <Label fx:id="expenseLabel" layoutX="304.0" layoutY="537.0" text="Total Event costs: ">
+    <Label fx:id="expenseLabelText" layoutX="284.0" layoutY="527.0" text="statistics.label.eventCosts">
+        <font>
+            <Font size="35.0" />
+        </font>
+    </Label>
+    <Label fx:id="expenseLabelSum" layoutX="284.0" layoutY="557.0" text="0.00 EUR">
         <font>
             <Font size="35.0" />
         </font>
     </Label>
     <TableView fx:id="tableView" layoutX="14.0" layoutY="73.0" prefHeight="402.0" prefWidth="360.0">
         <columns>
-            <TableColumn fx:id="tFrom" prefWidth="82.0" text="From" />
-            <TableColumn fx:id="tTo" prefWidth="106.0" text="To" />
-            <TableColumn fx:id="tAmount" prefWidth="65.0" text="Amount" />
-            <TableColumn fx:id="tExpenseName" prefWidth="103.0" text="Expense" />
+            <TableColumn fx:id="tFrom" prefWidth="82.0" text="statistics.from" />
+            <TableColumn fx:id="tTo" prefWidth="106.0" text="statistics.to" />
+            <TableColumn fx:id="tAmount" prefWidth="65.0" text="statistics.amount" />
+            <TableColumn fx:id="tExpenseName" prefWidth="103.0" text="statistics.expense" />
 
         </columns>
     </TableView>
-    <Button layoutX="22.0" layoutY="12.0" mnemonicParsing="false" onAction="#back" text="Back" />
-    <Label alignment="CENTER" layoutX="206.0" layoutY="37.0" prefHeight="21.0" prefWidth="104.0" text="Debts">
+    <Button fx:id="backButton" layoutX="22.0" layoutY="12.0" mnemonicParsing="false" onAction="#back" text="settings.back" />
+    <Label fx:id="debtsLabel" alignment="CENTER" layoutX="206.0" layoutY="37.0" prefHeight="21.0" prefWidth="104.0" text="statistics.debts">
         <font>
             <Font size="21.0" />
         </font>
@@ -39,13 +44,13 @@
     <Pane fx:id="piechartPane" layoutX="374.0" layoutY="100.0" prefHeight="367.0" prefWidth="368.0" />
     <TableView fx:id="sharesTable" layoutX="822.0" layoutY="91.0" prefHeight="385.0" prefWidth="388.0">
         <columns>
-            <TableColumn fx:id="tParticipantShare" prefWidth="118.0" text="Participant" />
-            <TableColumn fx:id="tShare" prefWidth="71.0" text="Share" />
-            <TableColumn fx:id="tOwes" prefWidth="92.0" text="Owes" />
-            <TableColumn fx:id="tOwed" prefWidth="130.0" text="Owed" />
+            <TableColumn fx:id="tParticipantShare" prefWidth="118.0" text="statistics.participant" />
+            <TableColumn fx:id="tShare" prefWidth="71.0" text="statistics.shares" />
+            <TableColumn fx:id="tOwes" prefWidth="92.0" text="statistics.owe" />
+            <TableColumn fx:id="tOwed" prefWidth="130.0" text="statistics.owed" />
         </columns>
     </TableView>
-    <Text layoutX="935.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Share per participant" wrappingWidth="196.3359375">
+    <Text fx:id="statShare" layoutX="935.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="statistics.participant.share" wrappingWidth="196.3359375">
         <font>
             <Font size="15.0" />
         </font>

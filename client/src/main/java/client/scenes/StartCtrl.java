@@ -184,18 +184,19 @@ public class StartCtrl implements Initializable {
     }
 
     public void shortCuts(){
-        notificationService.informUser("Shortcuts",
-                """
-                        ALT + H  |  show this help message
-                        ESCAPE   |  abort an action, go back to the previous scene
-                        ALT + S  |  go to the settings scene
-                        ALT + 1  |  (if in event overview) go to the main scene
-                        ALT + E  |  (if in event overview) create new expense
-                        ALT + P  |  (if in event overview) create new participant
-                        ALT + I  |  (if in event overview) open invite code dialog
-                        ALT + T  |  (if in event overview) open statistics
-                        HOME KEY |  exit the event overview page
-                        """,
+        String shortcutMessage = "ALT + H  |  ";
+
+        shortcutMessage += i18n.get("start.shortcut.shortcuts") + "\n";
+        shortcutMessage += "ESCAPE | " + i18n.get("start.shortcut.escape")  + "\n";
+        shortcutMessage += "ALT + S  | " + i18n.get("start.shortcut.alt.s")  + "\n";
+        shortcutMessage += "ALT + 1   | " + i18n.get("start.shortcut.alt.one")  + "\n";
+        shortcutMessage += "ALT + E  | " + i18n.get("start.shortcut.alt.e")  + "\n";
+        shortcutMessage += "ALT + P  | " + i18n.get("start.shortcut.alt.p")  + "\n";
+        shortcutMessage += "ALT + I    | " + i18n.get("start.shortcut.alt.i")  + "\n";
+        shortcutMessage += "ALT + T  | " + i18n.get("start.shortcut.alt.t")  + "\n";
+        shortcutMessage += "HOME KEY | " + i18n.get("start.shortcut.home");
+
+        notificationService.informUser("Shortcuts", shortcutMessage,
                 "Shortcuts");
     }
     public void setFlag(String language){

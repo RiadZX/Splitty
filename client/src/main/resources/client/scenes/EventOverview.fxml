@@ -73,7 +73,7 @@
          <padding>
             <Insets top="5.0" />
          </padding></ListView>
-      <Label layoutX="25.0" layoutY="198.0" text="Filter by Participant:">
+      <Label layoutX="25.0" layoutY="198.0" text="event.overview.filter" fx:id="filterParticipantLabel">
          <cursor>
             <Cursor fx:constant="DEFAULT" />
          </cursor>
@@ -121,7 +121,7 @@
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
-      <Button fx:id="statsBtn" layoutX="360.0" layoutY="232.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Statistics">
+      <Button fx:id="statsBtn" layoutX="360.0" layoutY="232.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="event.overview.statistics">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
