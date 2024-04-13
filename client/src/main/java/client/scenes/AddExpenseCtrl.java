@@ -1,6 +1,6 @@
 package client.scenes;
 
-import client.services.I18N;
+import client.services.I18NService;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -61,26 +61,28 @@ public class AddExpenseCtrl implements Initializable {
     @FXML
     private Button abortButton;
 
+    private final I18NService i18n;
+
 
 
     @Inject
-    public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService, Event event) {
+    public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl, Event event, NotificationService notificationService, I18NService i18n) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.event = event;
+        this.i18n = i18n;
         this.notificationService=notificationService;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        I18N.update(title);
-        I18N.update(paid);
-        I18N.update(when);
-        I18N.update(amount);
-        I18N.update(how);
-        I18N.update(abortButton);
-        I18N.update(allBox);
-        I18N.update(someBox);
+        i18n.update(paid);
+        i18n.update(when);
+        i18n.update(amount);
+        i18n.update(how);
+        i18n.update(abortButton);
+        i18n.update(allBox);
+        i18n.update(someBox);
         //this.prepareTagDialog();
     }
     @FXML
@@ -135,11 +137,11 @@ public class AddExpenseCtrl implements Initializable {
     }
 
     private void showNewExpense() {
-        I18N.update(submitButton, "general.add");
+        i18n.update(submitButton, "general.add");
     }
 
     private void setupExistingExpense(Expense expense){
-        I18N.update(submitButton, "general.save");
+        i18n.update(submitButton, "general.save");
 
         titleField.setText(expense.getTitle());
         paidBySelector.setValue(expense.getPaidBy().getName());
@@ -194,21 +196,21 @@ public class AddExpenseCtrl implements Initializable {
         //store who paid
         Participant paidBy = findParticipant(paidBySelector.getValue());
         if (paidBy == null) {
-            String warningMessage = I18N.get("expense.add.error.emptyPayee");
-            notificationService.showError(I18N.get("general.warning"), warningMessage);
+            String warningMessage = i18n.get("expense.add.error.emptyPayee");
+            notificationService.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
 
         LocalDate date = whenField.getValue();
         if (date == null){
-            String warningMessage = I18N.get("expense.add.error.emptyDate");
-            notificationService.showError(I18N.get("general.warning"), warningMessage);
+            String warningMessage = i18n.get("expense.add.error.emptyDate");
+            notificationService.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
 
         if (!someBox.isSelected() && !allBox.isSelected()){
-            String warningMessage = I18N.get("expense.add.error.emptySplit");
-            notificationService.showError(I18N.get("general.warning"), warningMessage);
+            String warningMessage = i18n.get("expense.add.error.emptySplit");
+            notificationService.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
 
@@ -223,14 +225,14 @@ public class AddExpenseCtrl implements Initializable {
         }
 
         if (howMuchField.getText() == null || howMuchField.getText().isEmpty()){
-            String warningMessage = I18N.get("expense.add.error.emptyAmount");
-            notificationService.showError(I18N.get("general.warning"), warningMessage);
+            String warningMessage = i18n.get("expense.add.error.emptyAmount");
+            notificationService.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
 
         if (Double.parseDouble(howMuchField.getText()) < 0.0){
-            String warningMessage = I18N.get("expense.add.error.negativeAmount");
-            notificationService.showError(I18N.get("general.warning"), warningMessage);
+            String warningMessage = i18n.get("expense.add.error.negativeAmount");
+            notificationService.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
 
