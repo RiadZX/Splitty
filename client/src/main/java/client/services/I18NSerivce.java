@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Callable;
 
-public interface I18NSerivce {
+public interface I18NService {
 
     void createLocale(String language, String script, String region);
 

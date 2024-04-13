@@ -14,7 +14,7 @@ import java.text.MessageFormat;
 import java.util.*;
 import java.util.concurrent.Callable;
 
-public class I18N implements I18NSerivce {
+public class I18N implements I18NService {
     private static final ObjectProperty<Locale> LOCALE;
 
     private static final List<Locale> LOCALE_LIST = new ArrayList<>(Arrays.asList(
