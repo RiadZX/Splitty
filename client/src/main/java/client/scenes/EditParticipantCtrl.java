@@ -86,6 +86,7 @@ public class EditParticipantCtrl implements Initializable {
         i18n.update(deleteButton);
         i18n.update(nameLabel2);
         i18n.update(editParticipant);
+        i18n.update(remind);
     }
 
     public void setEvent(Event event) {
@@ -111,7 +112,7 @@ public class EditParticipantCtrl implements Initializable {
             notificationHelper.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
-        if (!iban.getText().isBlank()&&iban.getText().length() != 34){
+        if (iban.getText() != null && !iban.getText().isBlank()&&iban.getText().length() != 34){
             String warningMessage = i18n.get("participant.add.error.message.iban");
             notificationHelper.showError(i18n.get("general.warning"), warningMessage);
             return;
