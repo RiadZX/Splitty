@@ -1,6 +1,5 @@
 package client.scenes;
 
-import client.services.I18N;
 import client.services.I18NService;
 import client.utils.ServerUtils;
 import client.utils.User;

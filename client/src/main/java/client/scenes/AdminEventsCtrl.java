@@ -1,7 +1,6 @@
 package client.scenes;
 
 import client.services.GsonInstantTypeAdapter;
-import client.services.I18N;
 import client.services.I18NService;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
