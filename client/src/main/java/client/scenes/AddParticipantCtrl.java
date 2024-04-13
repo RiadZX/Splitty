@@ -1,7 +1,6 @@
 package client.scenes;
 
 import client.services.I18N;
-import client.services.NotificationHelper;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
 import commons.Event;
