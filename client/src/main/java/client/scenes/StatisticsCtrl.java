@@ -26,7 +26,9 @@ public class StatisticsCtrl implements Initializable {
     private final MainCtrl mainCtrl;
     private final NotificationService notificationService;
     @FXML
-    public Label expenseLabel;
+    public Label expenseLabelSum;
+    @FXML
+    public Label expenseLabelText;
     @FXML
     public Label debtsLabel;
     @FXML
@@ -79,7 +81,7 @@ public class StatisticsCtrl implements Initializable {
         tOwed.setCellValueFactory(new PropertyValueFactory<>("owed"));
 
         i18n.update(tagDistr);
-        //i18n.update(expenseLabel);
+        i18n.update(expenseLabelText);
         i18n.update(tFrom);
         i18n.update(tTo);
         i18n.update(tAmount);
@@ -302,7 +304,7 @@ public class StatisticsCtrl implements Initializable {
             double convertedAmount = server.convert(e.getAmount(), e.getCurrency(), String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), e.getDate());
             sum += convertedAmount;
         }
-        expenseLabel.setText("Total expenses: " + String.format("%.2f", sum) + " " + mainCtrl.getUser().getPrefferedCurrency());
+        expenseLabelSum.setText(String.format("%.2f", sum) + " " + mainCtrl.getUser().getPrefferedCurrency());
     }
 
     public void back() {
