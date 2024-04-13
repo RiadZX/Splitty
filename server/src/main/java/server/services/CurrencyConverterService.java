@@ -90,35 +90,39 @@ public class CurrencyConverterService {
 
         try {
             if (!cache.exists()) {
-                Files.createDirectories(Path.of(dest));
-                try {
-                    cache.createNewFile();
-                } catch (IOException e) {
-                    throw new RuntimeException("Created directories, but failed to create .txt file: " + e.getMessage());
-                }
-                BigDecimal prevFrom = historicalCurrency(from, time);
-                BigDecimal prevTo = historicalCurrency(to, time);
-                double rate = prevTo.doubleValue() / prevFrom.doubleValue();
-                double ret = amount * rate;
-
-                FileWriter writer = new FileWriter(cache, false);
-                writer.write(Double.toString(rate));
-                writer.flush();
-                writer.close();
-                System.out.println("FROM API");
-                return ret;
+                return getFromApi(amount, dest, cache, from, to, time);
             } else {
                 Scanner reader = new Scanner(cache);
                 if (reader.hasNext()) {
                     System.out.println("FROM CACHE");
                     return amount * Double.parseDouble(reader.next());
                 } else {
-                    throw new RuntimeException("Failed to read from caching file.");
+                    return getFromApi(amount, dest, cache, from, to, time);
                 }
             }
         } catch (IOException e) {
             throw new RuntimeException("Failed to create caching file for currency rates: " + e.getMessage());
         }
+    }
+
+    private double getFromApi(double amount, String dest, File cache, String from, String to, Calendar time) throws IOException {
+        Files.createDirectories(Path.of(dest));
+        try {
+            cache.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException("Created directories, but failed to create .txt file: " + e.getMessage());
+        }
+        BigDecimal prevFrom = historicalCurrency(from, time);
+        BigDecimal prevTo = historicalCurrency(to, time);
+        double rate = prevTo.doubleValue() / prevFrom.doubleValue();
+        double ret = amount * rate;
+
+        FileWriter writer = new FileWriter(cache, false);
+        writer.write(Double.toString(rate));
+        writer.flush();
+        writer.close();
+        System.out.println("FROM API");
+        return ret;
     }
 
     public Calendar instantToPastCalendar(Instant when) {
