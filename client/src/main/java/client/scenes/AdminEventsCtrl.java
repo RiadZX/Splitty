@@ -212,6 +212,17 @@ public class AdminEventsCtrl implements Initializable {
         innerBp.setLeft(download);
         BorderPane.setMargin(download, insets);
 
+        Image viewImage = new Image("client/icons/eye.png");
+        ImageView view = new ImageView();
+        view.setImage(viewImage);
+        view.setOnMouseClicked(x -> mainCtrl.showEventOverviewScene(e));
+        view.cursorProperty().set(Cursor.HAND);
+        view.setFitHeight(12.0);
+        view.setPickOnBounds(true);
+        view.setFitWidth(12.0);
+        innerBp.setCenter(view);
+        BorderPane.setMargin(view, insets);
+
         bp.setRight(innerBp);
         return bp;
     }
