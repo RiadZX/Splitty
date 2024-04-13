@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.services.GsonInstantTypeAdapter;
 import client.services.I18N;
+import client.services.I18NService;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.common.base.Charsets;
@@ -59,7 +60,7 @@ public class AdminEventsCtrl implements Initializable {
     private String sortCol;
     private int sortType;
 
-    private final I18N i18n = new I18N();
+    private final I18NService i18n = new I18N();
 
     @Inject
     public AdminEventsCtrl(MainCtrl mainCtrl, ServerUtils server, NotificationService notificationService) {

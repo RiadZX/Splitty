@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.services.I18N;
+import client.services.I18NService;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
 import commons.Event;
@@ -51,7 +52,7 @@ public class EditParticipantCtrl implements Initializable {
     private Event event;
     private Participant p;
 
-    private final I18N i18n = new I18N();
+    private final I18NService i18n = new I18N();
 
     public Event getEvent() {
         return event;

@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.services.I18N;
+import client.services.I18NService;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -42,7 +43,7 @@ public class InviteViewCtrl implements Initializable {
     private Event event;
     private boolean validEmailConfig;
 
-    private final I18N i18n = new I18N();
+    private final I18NService i18n = new I18N();
 
 
     @Inject

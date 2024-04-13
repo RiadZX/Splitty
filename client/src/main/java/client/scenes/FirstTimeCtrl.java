@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.services.I18N;
+import client.services.I18NService;
 import client.utils.ServerUtils;
 import client.utils.User;
 import com.google.inject.Inject;
@@ -32,7 +33,7 @@ public class FirstTimeCtrl implements Initializable{
     @FXML
     private Labeled setup;
 
-    private final I18N i18n = new I18N();
+    private final I18NService i18n = new I18N();
 
 
     @Inject

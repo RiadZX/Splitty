@@ -16,6 +16,7 @@
 package client.scenes;
 
 import client.services.I18N;
+import client.services.I18NService;
 import client.services.NotificationHelper;
 import client.services.NotificationService;
 import client.utils.Config;
@@ -87,7 +88,7 @@ public class MainCtrl {
 
     private NotificationService notificationService;
 
-    private final I18N i18n = new I18N();
+    private final I18NService i18n = new I18N();
 
     public void initialize(Stage primaryStage, Pair<FirstTimeCtrl, Parent> firstTime,
                            Pair<EventOverviewCtrl, Parent> eventOverview,

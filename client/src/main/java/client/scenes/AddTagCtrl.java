@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.services.I18N;
+import client.services.I18NService;
 import client.services.NotificationService;
 import commons.Event;
 import commons.Tag;
@@ -54,7 +55,7 @@ public class AddTagCtrl implements Initializable {
 
     private final NotificationService notificationService;
 
-    private final I18N i18n = new I18N();
+    private final I18NService i18n = new I18N();
 
     @Inject
     public AddTagCtrl(MainCtrl mainCtrl, Event event, ServerUtils server, NotificationService notificationService) {

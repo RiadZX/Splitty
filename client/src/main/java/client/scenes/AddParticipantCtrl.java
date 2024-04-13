@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.services.I18N;
+import client.services.I18NService;
 import client.services.NotificationHelper;
 import client.utils.ServerUtils;
 import commons.Event;
@@ -42,7 +43,7 @@ public class AddParticipantCtrl implements Initializable {
     private Label addParticipant;
     private Event event;
 
-    private final I18N i18n = new I18N();
+    private final I18NService i18n = new I18N();
 
     @Inject
     public AddParticipantCtrl(MainCtrl mainCtrl, Event event, ServerUtils server) {
