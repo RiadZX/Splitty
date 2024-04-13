@@ -365,14 +365,14 @@ public class MainCtrl {
         Locale dutch = I18N.getSupportedLocales().get(1);
         i18n.setLocale(dutch);
         startCtrl.setFlag("dutch");
-        eventOverviewCtrl.s1etFlag("dutch");
+        eventOverviewCtrl.setFlag("dutch");
         eventOverviewCtrl.refreshLanguage();
         this.user.setLanguage("dutch");
         Config.writeUserConfigFile(this.user);
     }
 
     public void switchToRomanian(){
-        Locale romanian = i18n.getSupportedLocales().get(2);
+        Locale romanian = I18N.getSupportedLocales().get(2);
         i18n.setLocale(romanian);
         startCtrl.setFlag("romanian");
         eventOverviewCtrl.setFlag("romanian");
@@ -382,7 +382,7 @@ public class MainCtrl {
     }
 
     public void switchToUserLanguage() {
-        Locale userLang = i18n.getSupportedLocales().get(3);
+        Locale userLang = I18N.getSupportedLocales().get(3);
         i18n.setLocale(userLang);
         eventOverviewCtrl.refreshLanguage();
         this.user.setLanguage("Custom Language");

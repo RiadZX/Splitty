@@ -116,13 +116,13 @@ public class LanguageCtrl implements Initializable {
         try {
             Files.copy(templatePath, newFile, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException exception) {
-            notificationService.showError(I18N.get("admin.event.import.error.writeFile"), I18N.get("admin.event.import.errorMessage.writeFile") + exception);
+            notificationService.showError(i18n.get("admin.event.import.error.writeFile"), i18n.get("admin.event.import.errorMessage.writeFile") + exception);
         }
     }
 
     private File getDirectory() {
         DirectoryChooser chooser = new DirectoryChooser();
-        chooser.setTitle(I18N.get("admin.chooser.title"));
+        chooser.setTitle(i18n.get("admin.chooser.title"));
         File dir = chooser.showDialog(mainCtrl.getPrimaryStage());
         return dir;
     }
