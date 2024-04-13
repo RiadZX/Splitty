@@ -1,7 +1,7 @@
 package client.scenes;
 
 import client.services.I18N;
-import client.services.NotificationHelper;
+import client.services.NotificationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.*;
@@ -20,7 +20,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
@@ -28,6 +27,7 @@ import java.util.stream.Stream;
 public class AddExpenseCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private final NotificationService notificationService;
     private Event event;
     private Expense expense;
 
@@ -40,12 +40,16 @@ public class AddExpenseCtrl implements Initializable {
     @FXML
     private ComboBox<String> paidBySelector, currencySelector;
     @FXML
-    private TextField howMuchField, titleField;
+    private TextField howMuchField;
     @FXML
     private DatePicker whenField;
     @FXML
     private VBox tagSelector, partialPaidSelector;
+    @FXML
+    private TextField titleField;
 
+    @FXML
+    private Text title;
     @FXML
     private Text paid;
     @FXML
@@ -55,17 +59,16 @@ public class AddExpenseCtrl implements Initializable {
     @FXML
     private Text how;
     @FXML
-    private Text title;
-    @FXML
     private Button abortButton;
 
 
 
     @Inject
-    public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl, Event event) {
+    public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService, Event event) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.event = event;
+        this.notificationService=notificationService;
     }
 
     @Override
@@ -78,7 +81,7 @@ public class AddExpenseCtrl implements Initializable {
         I18N.update(abortButton);
         I18N.update(allBox);
         I18N.update(someBox);
-        this.prepareTagDialog();
+        //this.prepareTagDialog();
     }
     @FXML
     public void backToOverview(){
@@ -191,24 +194,21 @@ public class AddExpenseCtrl implements Initializable {
         //store who paid
         Participant paidBy = findParticipant(paidBySelector.getValue());
         if (paidBy == null) {
-            NotificationHelper notificationHelper = new NotificationHelper();
             String warningMessage = I18N.get("expense.add.error.emptyPayee");
-            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
+            notificationService.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
 
         LocalDate date = whenField.getValue();
         if (date == null){
-            NotificationHelper notificationHelper = new NotificationHelper();
             String warningMessage = I18N.get("expense.add.error.emptyDate");
-            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
+            notificationService.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
 
         if (!someBox.isSelected() && !allBox.isSelected()){
-            NotificationHelper notificationHelper = new NotificationHelper();
             String warningMessage = I18N.get("expense.add.error.emptySplit");
-            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
+            notificationService.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
 
@@ -223,16 +223,14 @@ public class AddExpenseCtrl implements Initializable {
         }
 
         if (howMuchField.getText() == null || howMuchField.getText().isEmpty()){
-            NotificationHelper notificationHelper = new NotificationHelper();
             String warningMessage = I18N.get("expense.add.error.emptyAmount");
-            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
+            notificationService.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
 
         if (Double.parseDouble(howMuchField.getText()) < 0.0){
-            NotificationHelper notificationHelper = new NotificationHelper();
             String warningMessage = I18N.get("expense.add.error.negativeAmount");
-            notificationHelper.showError(I18N.get("general.warning"), warningMessage);
+            notificationService.showError(I18N.get("general.warning"), warningMessage);
             return;
         }
 
@@ -243,23 +241,12 @@ public class AddExpenseCtrl implements Initializable {
                 .filter(n -> n.getClass() == CheckBox.class)
                 .map(n -> ((CheckBox) n)).filter(CheckBox::isSelected)
                 .map(Labeled::getText).map(this::findTag).toList();
-
-        // TODO we leave tag implementation for next week
-
-        /*if (tags.isEmpty()){
-            NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = """
-                    You have not selected any tags
-                    please create a tag.
-                    Or select a pre-existing one.
-                    """;
-            notificationHelper.showError("Warning", warningMessage);
-            return;
+        String title=titleField.getText();
+        if (title.isBlank()){
+            title=paidBy.getName() + " paid";
         }
-         */
-
         //create the expense
-        Expense newExpense = new Expense(titleField.getText(),
+        Expense newExpense = new Expense(title,
                 Double.parseDouble(howMuchField.getText()),
                 currencySelector.getValue(),
                 Instant.from(date.atStartOfDay(
@@ -309,19 +296,19 @@ public class AddExpenseCtrl implements Initializable {
         tagSelector.getChildren().add(new CheckBox(tag.getTag()));
     }
 
-    public void openTagDialog(){
-        tagDialog.getEditor().clear();
-        Optional<String> result = tagDialog.showAndWait();
-        result.ifPresent(this::createTag); // if ok is pressed check password
-    }
+//    public void openTagDialog(){
+//        tagDialog.getEditor().clear();
+//        Optional<String> result = tagDialog.showAndWait();
+//        result.ifPresent(this::createTag); // if ok is pressed check password
+//    }
 
-    public void prepareTagDialog(){
-        tagDialog=new TextInputDialog();
-        tagDialog.setTitle(I18N.get("expense.add.createTag"));
-        tagDialog.setContentText(I18N.get("expense.add.createTagText"));
-        tagDialog.setHeaderText("");
-        tagDialog.setGraphic(null);
-    }
+//    public void prepareTagDialog(){
+//        tagDialog=new TextInputDialog();
+//        tagDialog.setTitle(I18N.get("expense.add.createTag"));
+//        tagDialog.setContentText(I18N.get("expense.add.createTagText"));
+//        tagDialog.setHeaderText("");
+//        tagDialog.setGraphic(null);
+//    }
 
     public Participant findParticipant(String name){
         Participant r = null;
