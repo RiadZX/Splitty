@@ -86,6 +86,7 @@ public class EditParticipantCtrl implements Initializable {
         i18n.update(editParticipant);
         i18n.update(remind);
     }
+
     public void setEvent(Event event) {
         this.event = event;
     }
@@ -175,5 +176,8 @@ public class EditParticipantCtrl implements Initializable {
         this.name.setText(p.getName());
         this.iban.setText(p.getIban());
         this.bic.setText(p.getBic());
+        if (server.getMailConfig() == null || p.getEmail() == null || p.getEmail().isEmpty()) {
+            remind.setStyle("-fx-background-color: #808080");
+        }
     }
 }
