@@ -3,7 +3,9 @@ package client.scenes;
 import client.services.I18NService;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
+import commons.Debt;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
@@ -16,6 +18,7 @@ import javafx.scene.image.ImageView;
 
 import javax.inject.Inject;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class EditParticipantCtrl implements Initializable {
@@ -124,7 +127,26 @@ public class EditParticipantCtrl implements Initializable {
     }
 
     public void remind() {
+        System.out.println(calculateOutgoing(p));
+    }
 
+    public double calculateOutgoing(Participant p){
+        double outgoing = 0;
+        for (Expense e : event.getExpenses()){
+            if (e.getPaidBy().getId().equals(p.getId())){
+                continue;
+            }
+            List<Debt> debts = e.getDebts();
+            for (Debt d : debts) {
+                if (d.isPaid()) {
+                    continue;
+                }
+                if (d.getParticipant().getId().equals(p.getId())){
+                    outgoing+=server.convert(d.getAmount(), e.getCurrency(), String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), e.getDate());
+                }
+            }
+        }
+        return outgoing;
     }
 
     public void returnToOverview() {
