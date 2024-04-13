@@ -246,7 +246,7 @@ public class AddExpenseCtrl implements Initializable {
             title=paidBy.getName() + " paid";
         }
         //create the expense
-        Expense newExpense = new Expense(titleField.getText(),
+        Expense newExpense = new Expense(title,
                 Double.parseDouble(howMuchField.getText()),
                 currencySelector.getValue(),
                 Instant.from(date.atStartOfDay(
