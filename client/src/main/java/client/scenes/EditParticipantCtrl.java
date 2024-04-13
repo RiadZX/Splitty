@@ -41,6 +41,8 @@ public class EditParticipantCtrl implements Initializable {
     @FXML
     public Button cancelButton2;
     @FXML
+    public Button remind;
+    @FXML
     public Button editButton;
     @FXML
     public Button deleteButton;
@@ -79,6 +81,7 @@ public class EditParticipantCtrl implements Initializable {
         i18n.update(deleteButton);
         i18n.update(nameLabel2);
         i18n.update(editParticipant);
+        i18n.update(remind);
     }
     public void setEvent(Event event) {
         this.event = event;
@@ -119,6 +122,10 @@ public class EditParticipantCtrl implements Initializable {
         this.event.addParticipant(p);
         server.send("/app/events", this.event);
         returnToOverview();
+    }
+
+    public void remind() {
+
     }
 
     public void returnToOverview() {
