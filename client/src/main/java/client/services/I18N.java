@@ -14,7 +14,7 @@ import java.text.MessageFormat;
 import java.util.*;
 import java.util.concurrent.Callable;
 
-public class I18N {
+public class I18N implements I18NSerivce {
     private static final ObjectProperty<Locale> LOCALE;
 
     private static final List<Locale> LOCALE_LIST = new ArrayList<>(Arrays.asList(
@@ -34,7 +34,9 @@ public class I18N {
     ));
 
     static {
-        LOCALE = new SimpleObjectProperty<>(getDefaultLocale());
+        Locale sysDefault = Locale.getDefault();
+        Locale default_l = LOCALE_LIST.contains(sysDefault) ? sysDefault : Locale.ENGLISH;
+        LOCALE = new SimpleObjectProperty<>(default_l);
         LOCALE.addListener((observable, oldVal, newVal) -> Locale.setDefault(newVal));
     }
 
@@ -52,18 +54,8 @@ public class I18N {
      *
      * @return List of all locales supported by the application.
      */
-    public static List<Locale> getSupportedLocales() {
+    public List<Locale> getSupportedLocales() {
         return LOCALE_LIST;
-    }
-
-    /**
-     * get the default locale. This is the systems default if contained in the supported locales, english otherwise.
-     *
-     * @return the systems default language if supported and else English.
-     */
-    public static Locale getDefaultLocale() {
-        Locale sysDefault = Locale.getDefault();
-        return getSupportedLocales().contains(sysDefault) ? sysDefault : Locale.ENGLISH;
     }
 
     public Locale getLocale() {
