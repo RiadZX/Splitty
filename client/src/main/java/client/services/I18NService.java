@@ -33,11 +33,11 @@ public interface I18NService {
 
     ObjectProperty<Locale> localeProperty();
 
-    String get(final String key, final Object... args);
+    String get(String key, Object... args);
 
     StringBinding createStringBinding(Callable<String> func);
 
-    StringBinding createStringBinding(final String key, Object... args);
+    StringBinding createStringBinding(String key, Object... args);
 
     void update(Labeled entity);
 

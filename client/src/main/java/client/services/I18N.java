@@ -35,8 +35,8 @@ public class I18N implements I18NService {
 
     static {
         Locale sysDefault = Locale.getDefault();
-        Locale default_l = LOCALE_LIST.contains(sysDefault) ? sysDefault : Locale.ENGLISH;
-        LOCALE = new SimpleObjectProperty<>(default_l);
+        Locale defaultLocale = LOCALE_LIST.contains(sysDefault) ? sysDefault : Locale.ENGLISH;
+        LOCALE = new SimpleObjectProperty<>(defaultLocale);
         LOCALE.addListener((observable, oldVal, newVal) -> Locale.setDefault(newVal));
     }
 
