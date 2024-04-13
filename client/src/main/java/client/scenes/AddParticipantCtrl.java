@@ -1,7 +1,7 @@
 package client.scenes;
 
 import client.services.I18NService;
-import client.services.NotificationHelper;
+import client.services.NotificationService;
 import client.utils.ServerUtils;
 import commons.Event;
 import commons.Participant;
@@ -19,6 +19,8 @@ public class AddParticipantCtrl implements Initializable {
     private final MainCtrl mainCtrl;
 
     private final ServerUtils server;
+
+    private final  NotificationService notificationService;
 
     @FXML
     private TextField email;
@@ -50,6 +52,7 @@ public class AddParticipantCtrl implements Initializable {
         this.event = event;
         this.server = server;
         this.i18n = i18n;
+        this.notificationService=notificationService;
     }
 
     @Override
@@ -71,26 +74,23 @@ public class AddParticipantCtrl implements Initializable {
         String participantIban = iban.getText();
         String participantBic = bic.getText();
         if (participantName.isEmpty()) {
-            NotificationHelper notificationHelper = new NotificationHelper();
             String warningMessage = i18n.get("participant.add.error");
             if (participantName.isEmpty()){
                 warningMessage += i18n.get("participant.add.error.name") + " ";
             }
             warningMessage += ")";
-            notificationHelper.showError(i18n.get("general.warning"), warningMessage);
+            notificationService.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
 
         if (!participantEmail.isBlank()&&!participantEmail.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
             String warningMessage = i18n.get("participant.add.error.message.email");
-            NotificationHelper notificationHelper = new NotificationHelper();
-            notificationHelper.showError(i18n.get("general.warning"), warningMessage);
+            notificationService.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
         if (!participantIban.isBlank()&&participantIban.length() != 34) {
             String warningMessage = i18n.get("participant.add.error.message.iban");
-            NotificationHelper notificationHelper = new NotificationHelper();
-            notificationHelper.showError(i18n.get("general.warning"), warningMessage);
+            notificationService.showError(i18n.get("general.warning"), warningMessage);
             return;
         }
         Participant p = new Participant(
