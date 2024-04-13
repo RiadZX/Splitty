@@ -236,7 +236,7 @@ public class AddExpenseCtrl implements Initializable {
             return;
         }
 
-        List<Debt> debts = createDebts(toEur(Double.parseDouble(howMuchField.getText()), currencySelector.getValue()), participantList);
+        List<Debt> debts = createDebts(Double.parseDouble(howMuchField.getText()), participantList);
 
         //create the list of tags (God bless the creator of stream() :) )
         List<Tag> tags = tagSelector.getChildren().stream()
@@ -281,15 +281,6 @@ public class AddExpenseCtrl implements Initializable {
             debts.add(new Debt(new Expense(), p, amount/(participants.size()+1)));
         }
         return debts;
-    }
-
-    //temporary method to convert other currencies in EUR
-    private double toEur(double amount, String curr){
-        return switch (curr) {
-            case "USD" -> amount * mainCtrl.getUsdToEur();
-            case "RON" -> amount * mainCtrl.getRonToEur();
-            default -> amount;
-        };
     }
 
     public void createTag(String tagName){

@@ -199,51 +199,6 @@ public class StatisticsCtrl implements Initializable {
         tableView.setItems(data);
     }
 
-    /**
-     * Used while developing to generate dummy data for the pie chart
-     * @return a dummy event with expenses
-     */
-    public Event getDummyPieChartData() {
-        List<Tag> fakeTags = new ArrayList<>();
-        fakeTags.add(new Tag("Food"));
-        fakeTags.add(new Tag("Drinks"));
-        fakeTags.add(new Tag("Transport"));
-        fakeTags.add(new Tag("Accommodation"));
-        fakeTags.add(new Tag("Activities"));
-
-
-        Event e = new Event("Event ");
-
-        List<Tag> tags = new ArrayList<>();
-        //add tags randomly
-        int maxTags = new Random().nextInt(3);
-        for (int j = 0; j < maxTags; j++) {
-            tags.add(fakeTags.get(new Random().nextInt(fakeTags.size())));
-        }
-
-        for (int j = 0; j < 5; j++) {
-            Expense exp = new Expense(
-                    "Expense " + j,
-                    10,
-                    new Date().toInstant(),
-                    null,
-                    e,
-                    new ArrayList<>(),
-                    tags
-            );
-            exp.addTag(fakeTags.get(j));
-            e.addExpense(exp);
-        }
-        return e;
-
-    }
-
-    /**
-     * Share per participant is defined as : Expenses paid by p + debts to be paid by p.
-     * @param p participant to check the share for.
-     * @return total in user preferred currency
-     *
-     */
     public double getSharePerParticipant(Participant p){
         //For p
         //Sum of expenses this participant paid.
