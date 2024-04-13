@@ -51,8 +51,13 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 public class ServerUtils {
 
     private final String serverAddress;
+    private final AppConfig appConfig;
+    private final MailConfig mailConfig;
 
-    private final String senderEmail;
+    public MailConfig getMailConfig() {
+        return mailConfig;
+    }
+
     private ExecutorService exec = Executors.newSingleThreadExecutor();
     private StompSession session;
 
@@ -81,10 +86,10 @@ public class ServerUtils {
 
         String address = toml.getString("address");
         long port = toml.getLong("port");
+        appConfig = toml.to(AppConfig.class);
+        mailConfig = appConfig.getMailConfig();
 
-        senderEmail = toml.getString("email");
         serverAddress = address + ":" + port + "/";
-        //session = connect("ws://localhost:8080/websocket");
         session = connect(toml.getString("websocket")+":"+port+"/websocket");
         System.out.println(serverAddress);
     }
@@ -280,14 +285,40 @@ public class ServerUtils {
                 });
     }
 
-    public void sendEmail(String toEmail, String inviteCode, String creator) {
+    public void sendEmailInvitation(String toEmail, String inviteCode, String creator) {
         JsonObject body = new JsonObject();
-        body.addProperty("senderEmail", senderEmail);
+        body.addProperty("senderEmail", mailConfig.getUsername());
         body.addProperty("toEmail", toEmail);
         body.addProperty("inviteCode", inviteCode);
         body.addProperty("creator", creator);
+        body.addProperty("password", mailConfig.getPassword());
+        body.addProperty("host", mailConfig.getHost());
+        body.addProperty("port", mailConfig.getPort());
+        body.addProperty("smtpAuth", mailConfig.isSmtpAuth());
+        body.addProperty("startTls", mailConfig.isStartTls());
+
+        System.out.println(body);
         ClientBuilder.newClient(new ClientConfig())//
                 .target(serverAddress).path("api/mail")//
+                .request(APPLICATION_JSON)//
+                .accept(APPLICATION_JSON)//
+                .post(Entity.entity(body.toString(), APPLICATION_JSON), String.class);
+    }
+
+    public void sendEmail(String toEmail, String subject, String content) {
+        JsonObject body = new JsonObject();
+        body.addProperty("senderEmail", mailConfig.getUsername());
+        body.addProperty("toEmail", toEmail);
+        body.addProperty("password", mailConfig.getPassword());
+        body.addProperty("host", mailConfig.getHost());
+        body.addProperty("port", mailConfig.getPort());
+        body.addProperty("smtpAuth", mailConfig.isSmtpAuth());
+        body.addProperty("startTls", mailConfig.isStartTls());
+        body.addProperty("body", content);
+        body.addProperty("subject", subject);
+
+        ClientBuilder.newClient(new ClientConfig())//
+                .target(serverAddress).path("api/mail/custom")//
                 .request(APPLICATION_JSON)//
                 .accept(APPLICATION_JSON)//
                 .post(Entity.entity(body.toString(), APPLICATION_JSON), String.class);

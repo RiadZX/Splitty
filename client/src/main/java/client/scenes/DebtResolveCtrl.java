@@ -35,6 +35,7 @@ public class DebtResolveCtrl implements Initializable {
 
     private ObservableList<DebtResolveTableEntry> tableEntries = FXCollections.observableArrayList();
 
+
     @Inject
     public DebtResolveCtrl(ServerUtils server, MainCtrl mainCtrl, NotificationService notificationService) {
         this.server = server;
@@ -51,15 +52,12 @@ public class DebtResolveCtrl implements Initializable {
     public void setEvent(Event event) {
         this.event = event;
     }
-
     public void refresh() {
-
         tableEntries.clear();
         DebtResolve.resolve(this.event)
                 .stream()
-                .map(item -> new DebtResolveTableEntry(item.from().getName(), item.to().getName(), item.amount()))
+                .map(item -> new DebtResolveTableEntry(item.from().getName(), item.amount()))
                 .forEach(tableEntries::add);
     }
 }
-
 

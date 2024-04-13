@@ -34,10 +34,13 @@ public class InviteViewCtrl implements Initializable {
     @FXML
     public Button cancelBtn;
     @FXML
+    public Button testBtn;
+    @FXML
     public Labeled inviteInstr;
     @FXML
     public Labeled emailLabel;
     private Event event;
+    private boolean validEmailConfig;
 
 
     @Inject
@@ -46,6 +49,7 @@ public class InviteViewCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
         this.notificationService = notificationService;
         this.event=new Event();
+        validEmailConfig = server.getMailConfig() != null;
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -54,12 +58,29 @@ public class InviteViewCtrl implements Initializable {
         I18N.update(emailLabel);
         I18N.update(sendInviteBtn);
         I18N.update(cancelBtn);
+        I18N.update(testBtn);
         this.copyToClipboardBtn.setOnAction(event -> copyToClipboard());
         this.sendInviteBtn.setOnAction(event -> sendInvite());
         this.cancelBtn.setOnAction(event -> backToEvent());
+        if (server.getMailConfig() == null) {
+            testBtn.setStyle("-fx-background-color: #808080");
+            sendInviteBtn.setStyle("-fx-background-color: #808080");
+        }
+    }
+
+    public void testEmail() {
+        if (!validEmailConfig) {
+            System.out.println("NO CONFIG AVAILABLE");
+            return;
+        }
+        server.sendEmail(server.getMailConfig().getUsername(), "Test", "This is a test email. If you see it, then everything works fine!");
     }
 
     private void sendInvite() {
+        if (!validEmailConfig) {
+            System.out.println("NO CONFIG AVAILABLE");
+            return;
+        }
         if (textArea.getText().isEmpty()) {
             notificationService.showError("No addresses", "Please enter at least one address");
             return;
@@ -73,7 +94,7 @@ public class InviteViewCtrl implements Initializable {
             }
         }
         for (String email : addresses) {
-            server.sendEmail(email, eventCode.getText(), mainCtrl.getUser().getName());
+            server.sendEmailInvitation(email, eventCode.getText(), mainCtrl.getUser().getName());
         }
         backToEvent();
     }
