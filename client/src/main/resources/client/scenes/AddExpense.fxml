@@ -65,11 +65,11 @@
                 <Text fx:id="paid" fill="#eaeaea" strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.paid" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                 <Text fx:id="amount" fill="#eaeaea" strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.amount" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
                 <Text fx:id="when" fill="#eaeaea" strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.when" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-                <DatePicker fx:id="whenField" prefHeight="25.0" prefWidth="184.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <DatePicker fx:id="whenField" prefHeight="25.0" prefWidth="184.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></DatePicker>
-                <Text fx:id="how" fill="#eaeaea" strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.how" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                <Text fx:id="how" fill="#eaeaea" strokeType="OUTSIDE" strokeWidth="0.0" text="expense.add.label.how" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
                 <CheckBox fx:id="allBox" mnemonicParsing="false" onAction="#checkAll" text="expense.add.checkbox.equal" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <cursor>
                   <Cursor fx:constant="HAND" />
