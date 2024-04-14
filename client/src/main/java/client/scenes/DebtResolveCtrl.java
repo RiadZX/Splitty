@@ -29,10 +29,14 @@ public class DebtResolveCtrl implements Initializable {
     private TableView<DebtResolveTableEntry> debtTable;
 
     @FXML
-    private TableColumn<DebtResolveTableEntry, String> personColumn;
+    private TableColumn<DebtResolveTableEntry, String> fromColumn;
+
+    @FXML
+    private TableColumn<DebtResolveTableEntry, String> toColumn;
 
     @FXML
     private TableColumn<DebtResolveTableEntry, Double> amountColumn;
+
 
     private ObservableList<DebtResolveTableEntry> tableEntries = FXCollections.observableArrayList();
 
@@ -45,9 +49,11 @@ public class DebtResolveCtrl implements Initializable {
         this.i18n = i18n;
     }
 
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        personColumn.setCellValueFactory(new PropertyValueFactory<>("from"));
+        fromColumn.setCellValueFactory(new PropertyValueFactory<>("from"));
+        toColumn.setCellValueFactory(new PropertyValueFactory<>("to"));
         amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
         debtTable.setItems(tableEntries);
     }
@@ -61,8 +67,9 @@ public class DebtResolveCtrl implements Initializable {
         tableEntries.clear();
         DebtResolve.resolve(this.event)
                 .stream()
-                .map(item -> new DebtResolveTableEntry(item.from().getName(), item.to().getName(), item.amount()))
+                .map(DebtResolveTableEntry::from_result)
                 .forEach(tableEntries::add);
+        System.out.println(this.tableEntries);
     }
 }
 

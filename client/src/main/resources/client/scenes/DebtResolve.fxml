@@ -35,14 +35,15 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <Pane prefHeight="400.0" prefWidth="640.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.DebtResolveCtrl">
-   <children>
-      <TableView fx:id="debtTable" prefHeight="200.0" prefWidth="200.0">
-        <columns>
-          <TableColumn fx:id="personColumn" prefWidth="70.0" text="Person" />
-          <TableColumn fx:id="amountColumn" minWidth="0.0" text="Amount" />
-        </columns>
-      </TableView>
-   </children>
+    <children>
+        <TableView fx:id="debtTable" prefHeight="200.0" prefWidth="200.0">
+            <columns>
+                <TableColumn fx:id="fromColumn" prefWidth="70.0" text="From" />
+                <TableColumn fx:id="toColumn" minWidth="0.0" text="To" />
+                <TableColumn fx:id="amountColumn" minWidth="0.0" text="Amount" />
+            </columns>
+        </TableView>
+    </children>
 </Pane>
+

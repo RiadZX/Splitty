@@ -189,6 +189,10 @@ public class EventOverviewCtrl implements Initializable {
         return this.event;
     }
 
+    public void toSettleDebt() {
+        mainCtrl.showSettleDebt(this.event);
+    }
+
     public void setEvent(Event newEvent){
         this.event=newEvent;
 //        eventTitle.setText(this.event.getTitle());
