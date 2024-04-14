@@ -19,6 +19,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
@@ -60,6 +61,8 @@ public class AddExpenseCtrl implements Initializable {
     private Text how;
     @FXML
     private Button abortButton;
+
+    private List<CheckBox> tagCheckboxes;
 
     private final I18NService i18n;
 
@@ -119,8 +122,10 @@ public class AddExpenseCtrl implements Initializable {
         currencySelector.setVisible(true);
 
         tagSelector.getChildren().clear();
+        tagCheckboxes=new LinkedList<CheckBox>();
         for (int i = 1; i<event.getTags().size() + 1; i++){
             CheckBox checkbox = new CheckBox(event.getTags().get(i-1).getTag());
+            tagCheckboxes.add(checkbox);
             Platform.runLater(() -> tagSelector.getChildren().add(checkbox));
         }
         tagSelector.setVisible(true);
@@ -181,11 +186,9 @@ public class AddExpenseCtrl implements Initializable {
 
         //check selected tags
         for (Tag t : expense.getTags()){
-            for (Node c : tagSelector.getChildren()){
-                if (c.getClass() == CheckBox.class){
-                    if (((CheckBox) c).getText().equals(t.getTag())){
-                        ((CheckBox) c).setSelected(true);
-                    }
+            for (CheckBox c : tagCheckboxes){
+                if (c.getText().equals(t.getTag())){
+                    c.setSelected(true);
                 }
             }
         }

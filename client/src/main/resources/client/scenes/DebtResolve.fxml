@@ -38,13 +38,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane prefHeight="400.0" prefWidth="640.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.DebtResolveCtrl">
+<Pane prefHeight="357.0" prefWidth="424.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.DebtResolveCtrl">
     <children>
-        <TableView fx:id="debtTable" layoutX="45.0" layoutY="49.0" maxWidth="400.0" prefHeight="200.0">
+        <TableView fx:id="debtTable" layoutX="91.0" layoutY="57.0" maxWidth="400.0" prefHeight="200.0" prefWidth="262.0">
             <columns>
                 <TableColumn fx:id="fromColumn" minWidth="70.0" text="debts.table.from" />
                 <TableColumn fx:id="toColumn" prefWidth="70.0" text="debts.table.to" />
-                <TableColumn fx:id="amountColumn" text="debts.table.amount" />
+                <TableColumn fx:id="amountColumn" prefWidth="111.0" text="debts.table.amount" />
             </columns>
         </TableView>
         <Pane layoutX="7.0" layoutY="10.0" onMouseClicked="#backToOverview" prefHeight="27.0" prefWidth="84.0" styleClass="back-pane">
