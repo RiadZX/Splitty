@@ -23,7 +23,7 @@ public class DebtResolve {
             List<Debt> debts = e.getDebts();
             Participant person = e.getPaidBy();
             for (Debt d : debts) {
-                if (2d.isPaid()) continue;
+                if (d.isPaid()) continue;
                 amounts.merge(d.getParticipant(),
                         new Amounts(0., d.getAmount()),
                         (start, end) -> new Amounts(

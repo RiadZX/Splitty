@@ -64,7 +64,8 @@ public class DebtResolveCtrl implements Initializable {
     }
 
     public void executeSettle() {
-        event.getExpenses().stream().flatMap(e -> e.getDebts().stream()).forEach(Debt::pay);
+        event.getExpenses().stream().flatMap(e -> e.getDebts().stream()).forEach(d -> d.pay());
+        server.addEvent(event);
     }
 
     @Override
