@@ -148,6 +148,7 @@ public class AddExpenseCtrl implements Initializable {
         paidBySelector.setValue(expense.getPaidBy().getName());
         howMuchField.setText(String.valueOf(expense.getAmount()));
         whenField.setValue(expense.getDate().atZone(ZoneId.systemDefault()).toLocalDate());
+        currencySelector.setValue(expense.getCurrency());
 
         //check partial debtors if any
         boolean partialPay = false;
