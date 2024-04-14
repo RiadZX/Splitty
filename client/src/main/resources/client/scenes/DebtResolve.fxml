@@ -32,39 +32,37 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.text.Font?>
 <Pane prefHeight="400.0" prefWidth="640.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.DebtResolveCtrl">
     <children>
-        <TableView fx:id="debtTable" layoutX="45.0" layoutY="49.0" prefHeight="200.0" prefWidth="300.0">
+        <TableView fx:id="debtTable" layoutX="45.0" layoutY="49.0" maxWidth="200.0" prefHeight="200.0">
             <columns>
                 <TableColumn fx:id="fromColumn" minWidth="70.0" text="debts.table.from" />
                 <TableColumn fx:id="toColumn" prefWidth="70.0" text="debts.table.to" />
-                <TableColumn fx:id="amountColumn" prefWidth="50.0" text="debts.table.amount" />
+                <TableColumn fx:id="amountColumn" text="debts.table.amount" />
             </columns>
         </TableView>
-        <Pane layoutX="7.0" layoutY="10.0" onMouseClicked="#backToOverview" prefHeight="27.0" prefWidth="84.0"
-              styleClass="back-pane">
+        <Pane layoutX="7.0" layoutY="10.0" onMouseClicked="#backToOverview" prefHeight="27.0" prefWidth="84.0" styleClass="back-pane">
             <cursor>
-                <Cursor fx:constant="HAND"/>
+                <Cursor fx:constant="HAND" />
             </cursor>
             <ImageView fitHeight="21.0" fitWidth="17.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
-                <Image url="@/client/icons/back.png"/>
+                <Image url="@/client/icons/back.png" />
             </ImageView>
-            <Label fx:id="backButtonLabel" layoutX="20.0" layoutY="3.0" prefHeight="22.0" prefWidth="59.0"
-                   text="debts.back">
+            <Label fx:id="backButtonLabel" layoutX="20.0" layoutY="3.0" prefHeight="22.0" prefWidth="59.0" text="debts.back">
                 <font>
-                    <Font size="16.0"/>
+                    <Font size="16.0" />
                 </font>
                 <cursor>
-                    <Cursor fx:constant="CLOSED_HAND"/>
+                    <Cursor fx:constant="CLOSED_HAND" />
                 </cursor>
             </Label>
         </Pane>
+      <Button fx:id="settleButton" layoutX="189.0" layoutY="249.0" mnemonicParsing="false" onAction="#executeSettle" text="debts.settle" />
     </children>
 </Pane>

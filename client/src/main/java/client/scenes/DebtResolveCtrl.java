@@ -6,11 +6,14 @@ import client.utils.DebtResolve;
 import client.utils.ServerUtils;
 import client.utils.DebtResolveTableEntry;
 import com.google.inject.Inject;
+import commons.Debt;
 import commons.Event;
+import commons.Expense;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -41,6 +44,9 @@ public class DebtResolveCtrl implements Initializable {
     @FXML
     private Label backButtonLabel;
 
+    @FXML
+    private Button settleButton;
+
 
     private final ObservableList<DebtResolveTableEntry> tableEntries = FXCollections.observableArrayList();
 
@@ -57,12 +63,17 @@ public class DebtResolveCtrl implements Initializable {
         mainCtrl.showEventOverviewScene(this.event);
     }
 
+    public void executeSettle() {
+        event.getExpenses().stream().flatMap(e -> e.getDebts().stream()).forEach(Debt::pay);
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         i18n.update(fromColumn);
         i18n.update(toColumn);
         i18n.update(amountColumn);
         i18n.update(backButtonLabel);
+        i18n.update(settleButton);
         fromColumn.setCellValueFactory(new PropertyValueFactory<>("from"));
         toColumn.setCellValueFactory(new PropertyValueFactory<>("to"));
         amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
