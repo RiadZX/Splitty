@@ -1,5 +1,6 @@
 package client.utils;
 
+import client.scenes.MainCtrl;
 import commons.Debt;
 import commons.Event;
 import commons.Expense;
@@ -12,7 +13,7 @@ import java.util.Map;
 
 public class DebtResolve {
 
-    private static HashMap<Participant, Amounts> gather(Event event) {
+    private static HashMap<Participant, Amounts> gather(Event event, ServerUtils server, MainCtrl mainCtrl) {
         // gathers the total amounts everyone spent and received
 
         HashMap<Participant, Amounts> amounts = new HashMap<>();
@@ -24,8 +25,9 @@ public class DebtResolve {
             Participant person = e.getPaidBy();
             for (Debt d : debts) {
                 if (d.isPaid()) continue;
+                Double amount = server.convert(e.getAmount(), e.getCurrency(), String.valueOf(User.Currency.EUR), e.getDate());
                 amounts.merge(d.getParticipant(),
-                        new Amounts(0., d.getAmount()),
+                        new Amounts(0., amount),
                         (start, end) -> new Amounts(
                                 start.giving() + end.giving(),
                                 start.getting() + end.getting()
@@ -33,7 +35,7 @@ public class DebtResolve {
                 );
 
                 amounts.merge(person,
-                        new Amounts(d.getAmount(), 0.),
+                        new Amounts(amount, 0.),
                         (start, end) -> new Amounts(
                                 start.giving() + end.giving(),
                                 start.getting() + end.getting()
@@ -45,8 +47,8 @@ public class DebtResolve {
         return amounts;
     }
 
-    public static List<DebtResolveResult> resolve(Event event) {
-        HashMap<Participant, Amounts> amounts = gather(event);
+    public static List<DebtResolveResult> resolve(Event event, ServerUtils server, MainCtrl mainCtrl) {
+        HashMap<Participant, Amounts> amounts = gather(event, server, mainCtrl);
 
 
 
