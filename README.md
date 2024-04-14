@@ -1,22 +1,57 @@
-# OOPP Template Project
+# OOPP Splitty Project
 
-This repository contains the template for the OOPP project. Please extend this README.md with instructions on how to run your project.
+Splitty.
 
-# adding a language controlled button/label/something with text
- - Add the item in the fxml
- - make sure it has a id with the fx:id fxml property
- - make the text in the object the language item (something like "event.error")
- - make sure the item is in the class with the @FXML
- - call I18N.update() with the label as argument
- - add the language item in the .propery files
+# running the project
+Make sure to have the server running before you run the client.
 
-# first time setup
-no setup needed. If something breaks, then most likely there has been a change in the userconfig class, to fix delete the build folders in both client and server to make sure everything works correctly.
+running  the server 
 
-# cli args
+`./gradlew bootRun`
+
+running the client
+
+`./gradlew run`
+
+# live updating
+## websockets
+websockets are used in the event overview page.
+
+## longpolling
+used in the admin overview table.
+
+
+# Extensions
+## Foreign currency
+## Statistics page
+## custom colored tags
+
+# HCI features
+## Multi-modal visualization
+Some buttons are colored. For example cancellation buttons are colored red, while confirming/accepting buttons are green.
+
+Some buttons are an icon for easier use, like a settings cog or an icon of a person with a plus sign , resembling add new participant.
+
+## confirmation popups
+When doing an irreversible action, we ask for confirmation from the user, just in case.
+
+## information popups
+Whenever the user does something that needs some information, they get a popup with info. For example changing an event title would popup a window telling you if it is successful or a failure.
+
+If a user enters invalid information they get informed.
+
+## shortcuts
+On the main screen, press the shortcuts button or use the shortcut `Alt + H` to view all available shortcuts and where.
+
+## navigation
+Navigation is logical and consistent througout the application and accross different scenes. All scenes have a back button, so you can go back to the last viewed scene.
+
+Using the shortcuts you can create events, add expenses, change the title and more all without touching the mouse.
+
+shortcuts, logical navigation
+
+# CLI args
 to launch directly into admin page use <br>
 ``--admin=1``
 
-# shortcuts
-to view all shortcuts, refer to the button in the main menu.
-ALT + H to open it quickly (in main menu)
+You can access the admin page via the app itself as well
