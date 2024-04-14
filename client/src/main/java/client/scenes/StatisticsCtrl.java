@@ -10,7 +10,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -19,7 +18,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 public class StatisticsCtrl implements Initializable {
     private final ServerUtils server;
@@ -36,7 +38,7 @@ public class StatisticsCtrl implements Initializable {
     @FXML
     public Text tagDistr;
     @FXML
-    public Button backButton;
+    public Label backButtonLabel;
     @FXML
     public TableColumn<StatsRow, String> tFrom;
     @FXML
@@ -86,13 +88,14 @@ public class StatisticsCtrl implements Initializable {
         i18n.update(tTo);
         i18n.update(tAmount);
         i18n.update(tExpenseName);
-        i18n.update(backButton);
         i18n.update(debtsLabel);
         i18n.update(tParticipantShare);
         i18n.update(tShare);
         i18n.update(tOwed);
         i18n.update(tOwes);
         i18n.update(statShare);
+        i18n.update(backButtonLabel);
+
     }
 
     @Inject
@@ -162,7 +165,7 @@ public class StatisticsCtrl implements Initializable {
                 -fx-text-fill: white;
                 -fx-border-width: 0;
                 -fx-padding: 0;
-                -fx-background-color: #f4f4f4
+                -fx-background-color: #242424
                 """);
         //set colors for the pie chart slices
         pieStats.setCache(false);
