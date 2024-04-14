@@ -17,7 +17,6 @@ package client;
 
 import client.scenes.*;
 import com.google.inject.Injector;
-import commons.Debt;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

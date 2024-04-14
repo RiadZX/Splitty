@@ -78,7 +78,7 @@ public class DebtResolveCtrl implements Initializable {
         tableEntries.clear();
         DebtResolve.resolve(this.event)
                 .stream()
-                .map(DebtResolveTableEntry::from_result)
+                .map(DebtResolveTableEntry::fromResult)
                 .forEach(tableEntries::add);
         System.out.println(this.tableEntries);
     }

@@ -1,7 +1,7 @@
 package client.utils;
 
 public record DebtResolveTableEntry(String from, String to, Double amount) {
-    public static DebtResolveTableEntry from_result(DebtResolveResult res) {
+    public static DebtResolveTableEntry fromResult(DebtResolveResult res) {
         return new DebtResolveTableEntry(
                 res.from().getName(),
                 res.to().getName(),

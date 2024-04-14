@@ -4,7 +4,6 @@ import commons.Debt;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,18 +44,6 @@ public class DebtResolve {
         return amounts;
     }
 
-    public Participant min_get(HashMap<Participant, Amounts> amounts) {
-        Participant min = null;
-        double amount = Double.NEGATIVE_INFINITY;
-        for (Map.Entry<Participant, Amounts> a : amounts.entrySet()) {
-            if (a.getValue().getting() > amount) {
-                amount = a.getValue().getting();
-                min = a.getKey();
-            }
-        }
-        return min;
-    }
-
     public static List<DebtResolveResult> resolve(Event event) {
         HashMap<Participant, Amounts> amounts = gather(event);
 
@@ -80,22 +67,20 @@ public class DebtResolve {
             payments.add(new Tuple<>(a.getKey(), a.getValue()));
         }
 
-        payments.sort((a,b) ->
-            a.b().compareTo(b.b())
-        );
+        payments.sort((a, b) -> a.b().compareTo(b.b()));
 
         System.out.println(payments);
 
         List<DebtResolveResult> res = new ArrayList<>();
 
-        for ( int i = 0; i < (payments.size() - 1); i++ ) {
+        for (int i = 0; i < (payments.size() - 1); i++) {
             Tuple<Participant, Double> amount = payments.get(i+1);
             payments.set(i+1, new Tuple<>(
                     amount.a(),
                     amount.b() + payments.get(i).b()
             ));
             res.add(
-                    new DebtResolveResult (
+                    new DebtResolveResult(
                             payments.get(i).a(),
                             payments.get(i+1).a(),
                             -payments.get(i).b()
@@ -122,4 +107,4 @@ record Amounts(Double giving, Double getting) {
     }
 }
 
-record Tuple<A,B>(A a, B b) {}
+record Tuple<A, B>(A a, B b) {}
