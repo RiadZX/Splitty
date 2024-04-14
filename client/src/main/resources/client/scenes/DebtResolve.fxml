@@ -35,15 +35,36 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.text.Font?>
 <Pane prefHeight="400.0" prefWidth="640.0" stylesheets="@/client/stylesheets/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.DebtResolveCtrl">
     <children>
-        <TableView fx:id="debtTable" prefHeight="200.0" prefWidth="200.0">
+        <TableView fx:id="debtTable" layoutX="45.0" layoutY="49.0" prefHeight="200.0" prefWidth="300.0">
             <columns>
-                <TableColumn fx:id="fromColumn" prefWidth="70.0" text="From" />
-                <TableColumn fx:id="toColumn" minWidth="0.0" text="To" />
-                <TableColumn fx:id="amountColumn" minWidth="0.0" text="Amount" />
+                <TableColumn fx:id="fromColumn" minWidth="70.0" text="debts.table.from" />
+                <TableColumn fx:id="toColumn" prefWidth="70.0" text="debts.table.to" />
+                <TableColumn fx:id="amountColumn" prefWidth="50.0" text="debts.table.amount" />
             </columns>
         </TableView>
+        <Pane layoutX="7.0" layoutY="10.0" onMouseClicked="#backToOverview" prefHeight="27.0" prefWidth="84.0"
+              styleClass="back-pane">
+            <cursor>
+                <Cursor fx:constant="HAND"/>
+            </cursor>
+            <ImageView fitHeight="21.0" fitWidth="17.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="@/client/icons/back.png"/>
+            </ImageView>
+            <Label fx:id="backButtonLabel" layoutX="20.0" layoutY="3.0" prefHeight="22.0" prefWidth="59.0"
+                   text="debts.back">
+                <font>
+                    <Font size="16.0"/>
+                </font>
+                <cursor>
+                    <Cursor fx:constant="CLOSED_HAND"/>
+                </cursor>
+            </Label>
+        </Pane>
     </children>
 </Pane>
-

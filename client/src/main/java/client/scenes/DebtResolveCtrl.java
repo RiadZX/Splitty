@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -37,8 +38,11 @@ public class DebtResolveCtrl implements Initializable {
     @FXML
     private TableColumn<DebtResolveTableEntry, Double> amountColumn;
 
+    @FXML
+    private Label backButtonLabel;
 
-    private ObservableList<DebtResolveTableEntry> tableEntries = FXCollections.observableArrayList();
+
+    private final ObservableList<DebtResolveTableEntry> tableEntries = FXCollections.observableArrayList();
 
     private final I18NService i18n;
 
@@ -49,9 +53,16 @@ public class DebtResolveCtrl implements Initializable {
         this.i18n = i18n;
     }
 
+    public void backToOverview() {
+        mainCtrl.showEventOverviewScene(this.event);
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        i18n.update(fromColumn);
+        i18n.update(toColumn);
+        i18n.update(amountColumn);
+        i18n.update(backButtonLabel);
         fromColumn.setCellValueFactory(new PropertyValueFactory<>("from"));
         toColumn.setCellValueFactory(new PropertyValueFactory<>("to"));
         amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
