@@ -123,7 +123,7 @@ class AmountCellFormatter extends TableCell<Object, Double> {
             return;
         }
 
-        setText(String.format("%.2f",server.convert(e, String.valueOf(User.Currency.EUR), String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), Instant.now()))
+        setText(String.format("%.2f", server.convert(e, String.valueOf(User.Currency.EUR), String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), Instant.now()))
                 + " "
                 + mainCtrl.getUser().getPrefferedCurrency()
         );
