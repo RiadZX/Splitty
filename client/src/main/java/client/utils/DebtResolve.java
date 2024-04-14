@@ -27,7 +27,7 @@ public class DebtResolve {
                 if (d.isPaid()) {
                     continue;
                 }
-                Double amount = server.convert(e.getAmount(), e.getCurrency(), String.valueOf(User.Currency.EUR), e.getDate());
+                Double amount = server.convert(d.getAmount(), e.getCurrency(), String.valueOf(User.Currency.EUR), e.getDate());
                 amounts.merge(d.getParticipant(),
                         new Amounts(0., amount),
                         (start, end) -> new Amounts(
