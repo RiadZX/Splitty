@@ -9,7 +9,6 @@ import client.utils.User;
 import com.google.inject.Inject;
 import commons.Debt;
 import commons.Event;
-import commons.Expense;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,7 +19,6 @@ import javafx.util.Callback;
 
 import java.net.URL;
 import java.time.Instant;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 
@@ -108,14 +106,16 @@ class AmountCellFormatter extends TableCell<Object, Double> {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-    public AmountCellFormatter(ServerUtils server, MainCtrl main) {
+    AmountCellFormatter(ServerUtils server, MainCtrl main) {
         this.server = server;
         this.mainCtrl = main;
     }
 
     @Override
     protected void updateItem(Double e, boolean empty) {
-        if (e == null) return;
+        if (e == null) {
+            return;
+        }
         super.updateItem(e, empty);
 
         setText(server.convert(e, String.valueOf(User.Currency.EUR), String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), Instant.now())

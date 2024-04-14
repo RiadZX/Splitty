@@ -24,7 +24,9 @@ public class DebtResolve {
             List<Debt> debts = e.getDebts();
             Participant person = e.getPaidBy();
             for (Debt d : debts) {
-                if (d.isPaid()) continue;
+                if (d.isPaid()) {
+                    continue;
+                }
                 Double amount = server.convert(e.getAmount(), e.getCurrency(), String.valueOf(User.Currency.EUR), e.getDate());
                 amounts.merge(d.getParticipant(),
                         new Amounts(0., amount),
