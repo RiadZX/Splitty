@@ -94,15 +94,6 @@ public class ServerUtils {
         System.out.println(serverAddress);
     }
 
-    public List<Quote> getQuotes() {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverAddress).path("api/quotes")
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<List<Quote>>() {
-                });
-    }
-
     public Participant addParticipant(UUID eventId, Participant participant) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverAddress).path("api/events/" + eventId + "/participants")

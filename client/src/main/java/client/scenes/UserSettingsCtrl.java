@@ -1,7 +1,6 @@
 package client.scenes;
 
 import client.services.I18NService;
-import client.services.NotificationHelper;
 import client.services.NotificationService;
 import client.utils.ServerUtils;
 import client.utils.User;
@@ -90,30 +89,16 @@ public class UserSettingsCtrl implements Initializable {
         var email=emailField.getText();
         var iban=ibanField.getText();
         var bic=bicField.getText();
-        if (name.isEmpty() || email.isEmpty() || iban.isEmpty()
-                || bic.isEmpty()) {
-            NotificationHelper notificationHelper = new NotificationHelper();
-            String warningMessage = "You haven't filled in the following fields: ( ";
-            if (name.isEmpty()){
-                warningMessage += "name ";
-            }
-            if (email.isEmpty()){
-                warningMessage += "email ";
-            }
-            if (iban.isEmpty()){
-                warningMessage += "iban ";
-            }
-            if (bic.isEmpty()){
-                warningMessage += "bic";
-            }
-            warningMessage += ")";
-            notificationHelper.showError("Warning!", warningMessage);
+        var currency=currencyComboBox.getValue();
+        if (name.isEmpty()) {
+            notificationService.showError(i18n.get("general.warning"), i18n.get("settings.profile.warning"));
             return;
         }
         User newUser=new User(name, email, iban, bic);
         newUser.setLanguage(this.mainCtrl.getUser().getLanguage());
         LinkedHashMap<UUID, UUID> tmp =(LinkedHashMap<UUID, UUID>) this.mainCtrl.getUser().getEventParticipant();
         newUser.setEventParticipant(tmp);
+        newUser.setPrefferedCurrency(User.Currency.valueOf(currency));
         this.mainCtrl.setUser(newUser);
         back();
     }

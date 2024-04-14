@@ -148,6 +148,7 @@ public class AddExpenseCtrl implements Initializable {
         paidBySelector.setValue(expense.getPaidBy().getName());
         howMuchField.setText(String.valueOf(expense.getAmount()));
         whenField.setValue(expense.getDate().atZone(ZoneId.systemDefault()).toLocalDate());
+        currencySelector.setValue(expense.getCurrency());
 
         //check partial debtors if any
         boolean partialPay = false;
@@ -196,6 +197,7 @@ public class AddExpenseCtrl implements Initializable {
 
         //store who paid
         Participant paidBy = findParticipant(paidBySelector.getValue());
+
         if (paidBy == null) {
             String warningMessage = i18n.get("expense.add.error.emptyPayee");
             notificationService.showError(i18n.get("general.warning"), warningMessage);
@@ -216,7 +218,6 @@ public class AddExpenseCtrl implements Initializable {
         }
 
         //create a list of debtors
-        participantList.remove(paidBy);
         if (someBox.isSelected()){
             for (Node c : partialPaidSelector.getChildren()){
                 if (c.getClass() == CheckBox.class && !((CheckBox) c).isSelected()){
@@ -224,7 +225,8 @@ public class AddExpenseCtrl implements Initializable {
                 }
             }
         }
-
+        int size=participantList.size();
+        participantList.remove(paidBy);
         if (howMuchField.getText() == null || howMuchField.getText().isEmpty()){
             String warningMessage = i18n.get("expense.add.error.emptyAmount");
             notificationService.showError(i18n.get("general.warning"), warningMessage);
@@ -237,7 +239,7 @@ public class AddExpenseCtrl implements Initializable {
             return;
         }
 
-        List<Debt> debts = createDebts(Double.parseDouble(howMuchField.getText()), participantList);
+        List<Debt> debts = createDebts(Double.parseDouble(howMuchField.getText()), participantList, size);
 
         //create the list of tags (God bless the creator of stream() :) )
         List<Tag> tags = tagSelector.getChildren().stream()
@@ -276,10 +278,10 @@ public class AddExpenseCtrl implements Initializable {
         server.send("/app/events", event);
         mainCtrl.showEventOverviewScene(event);
     }
-    private List<Debt> createDebts(double amount, List<Participant> participants){
+    private List<Debt> createDebts(double amount, List<Participant> participants, int size){
         List<Debt> debts = new ArrayList<>();
         for (Participant p : participants) {
-            debts.add(new Debt(new Expense(), p, amount/(participants.size()+1)));
+            debts.add(new Debt(new Expense(), p, amount/size));
         }
         return debts;
     }

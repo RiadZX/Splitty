@@ -35,7 +35,7 @@ public class Participant {
     @Expose
     private List<Debt> debts;
 
-    @OneToMany(mappedBy = "paidBy", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "paidBy", orphanRemoval = true)
     @JsonIgnore
     private List<Expense> paidFor;
 
