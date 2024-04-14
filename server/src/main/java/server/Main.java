@@ -15,15 +15,23 @@
  */
 package server;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+
+import java.util.Collections;
 
 @SpringBootApplication
 @EntityScan(basePackages = { "commons", "server" })
 public class Main {
 
+    @Value("${server.port}")
+    public static int port;
+
     public static void main(String[] args) {
-        SpringApplication.run(Main.class, args);
+        SpringApplication app = new SpringApplication(Main.class);
+        app.setDefaultProperties(Collections.singletonMap("server.port", port));
+        app.run(args);
     }
 }
