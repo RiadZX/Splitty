@@ -43,8 +43,8 @@ public class DebtResolveCtrl implements Initializable {
     @FXML
     private Label backButtonLabel;
 
-    @FXML
-    private Button settleButton;
+    //@FXML
+    //private Button settleButton;
 
 
     private final ObservableList<DebtResolveTableEntry> tableEntries = FXCollections.observableArrayList();
@@ -74,7 +74,7 @@ public class DebtResolveCtrl implements Initializable {
         i18n.update(toColumn);
         i18n.update(amountColumn);
         i18n.update(backButtonLabel);
-        i18n.update(settleButton);
+        //:wi18n.update(settleButton);
 
         fromColumn.setCellValueFactory(new PropertyValueFactory<>("from"));
         toColumn.setCellValueFactory(new PropertyValueFactory<>("to"));

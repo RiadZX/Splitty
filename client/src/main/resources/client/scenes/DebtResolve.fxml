@@ -63,6 +63,6 @@
                 </cursor>
             </Label>
         </Pane>
-      <Button fx:id="settleButton" layoutX="189.0" layoutY="249.0" mnemonicParsing="false" onAction="#executeSettle" text="debts.settle" />
+      <!--<Button fx:id="settleButton" layoutX="189.0" layoutY="249.0" mnemonicParsing="false" onAction="#executeSettle" text="debts.settle" />-->
     </children>
 </Pane>
