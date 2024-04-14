@@ -189,6 +189,10 @@ public class EventOverviewCtrl implements Initializable {
         return this.event;
     }
 
+    public void toSettleDebt() {
+        mainCtrl.showSettleDebt(this.event);
+    }
+
     public void setEvent(Event newEvent){
         this.event=newEvent;
 //        eventTitle.setText(this.event.getTitle());
@@ -201,10 +205,6 @@ public class EventOverviewCtrl implements Initializable {
         System.out.println("expenses: "+ this.event.getExpenses().size());
         System.out.println("invite code: "+ this.event.getInviteCode());
         System.out.println("---------");
-    }
-
-    public void settleDebt(){
-        mainCtrl.showSettleDebt(this.event);
     }
 
     public void reassignParticipants(List<Participant> participantList){

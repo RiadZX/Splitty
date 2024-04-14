@@ -1,5 +1,6 @@
 package client.utils;
 
+import client.scenes.MainCtrl;
 import commons.Debt;
 import commons.Event;
 import commons.Expense;
@@ -11,24 +12,32 @@ import java.util.List;
 import java.util.Map;
 
 public class DebtResolve {
-    public static List<DebtResolveResult> resolve(Event event) {
-        HashMap<Participant, Amounts> amounts = new HashMap<>();
-        List<Expense> expenses = event.getExpenses();
 
-        System.out.println(expenses);
+    private static HashMap<Participant, Amounts> gather(Event event, ServerUtils server, MainCtrl mainCtrl) {
+        // gathers the total amounts everyone spent and received
+
+        HashMap<Participant, Amounts> amounts = new HashMap<>();
+
+        List<Expense> expenses = event.getExpenses();
 
         for (Expense e : expenses) {
             List<Debt> debts = e.getDebts();
-            amounts.merge(e.getPaidBy(),
-                    new Amounts(e.getAmount(), 0.),
-                    (start, end) -> new Amounts(
-                            start.giving() + end.giving(),
-                            start.getting() + end.getting()
-                    )
-            );
+            Participant person = e.getPaidBy();
             for (Debt d : debts) {
+                if (d.isPaid()) {
+                    continue;
+                }
+                Double amount = server.convert(d.getAmount(), e.getCurrency(), String.valueOf(User.Currency.EUR), e.getDate());
                 amounts.merge(d.getParticipant(),
-                        new Amounts(0., d.getAmount()),
+                        new Amounts(0., amount),
+                        (start, end) -> new Amounts(
+                                start.giving() + end.giving(),
+                                start.getting() + end.getting()
+                        )
+                );
+
+                amounts.merge(person,
+                        new Amounts(amount, 0.),
                         (start, end) -> new Amounts(
                                 start.giving() + end.giving(),
                                 start.getting() + end.getting()
@@ -37,28 +46,54 @@ public class DebtResolve {
             }
         }
 
+        return amounts;
+    }
+
+    public static List<DebtResolveResult> resolve(Event event, ServerUtils server, MainCtrl mainCtrl) {
+        HashMap<Participant, Amounts> amounts = gather(event, server, mainCtrl);
+
+
+
         HashMap<Participant, Double> netAmounts = new HashMap<>();
+        double maxAmount = Double.NEGATIVE_INFINITY;
 
         for (Map.Entry<Participant, Amounts> a : amounts.entrySet()) {
             // calculate net spent
             Double net = a.getValue().net();
             netAmounts.put(a.getKey(), net);
-        }
-
-        Participant max = null;
-        // gotta get negative infinity
-        Double maxAmount = Double.NEGATIVE_INFINITY;
-
-        for (Map.Entry<Participant, Double> a : netAmounts.entrySet()) {
-            if (a.getValue() > maxAmount) {
-                maxAmount = a.getValue();
-                max = a.getKey();
+            if (net > maxAmount) {
+                maxAmount = net;
             }
         }
 
+        List<Tuple<Participant, Double>> payments = new ArrayList<>();
+
+        for (Map.Entry<Participant, Double> a : netAmounts.entrySet()) {
+            payments.add(new Tuple<>(a.getKey(), a.getValue()));
+        }
+
+        payments.sort((a, b) -> a.b().compareTo(b.b()));
+
+        System.out.println(payments);
+
         List<DebtResolveResult> res = new ArrayList<>();
 
-        netAmounts.forEach((key, value) -> res.add(new DebtResolveResult(key, expenses.getFirst().getPaidBy(), value)));
+        for (int i = 0; i < (payments.size() - 1); i++) {
+            Tuple<Participant, Double> amount = payments.get(i+1);
+            payments.set(i+1, new Tuple<>(
+                    amount.a(),
+                    amount.b() + payments.get(i).b()
+            ));
+            res.add(
+                    new DebtResolveResult(
+                            payments.get(i).a(),
+                            payments.get(i+1).a(),
+                            -payments.get(i).b()
+                    )
+            );
+        }
+
+        //netAmounts.forEach((key, value) -> res.add(new DebtResolveResult(key, event.getExpenses().getFirst().getPaidBy(), value)));
 
         return res;
     }
@@ -77,3 +112,4 @@ record Amounts(Double giving, Double getting) {
     }
 }
 
+record Tuple<A, B>(A a, B b) {}
