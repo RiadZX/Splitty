@@ -92,7 +92,12 @@ public class DebtResolveCtrl implements Initializable {
     }
 
     public void refresh() {
-
+        amountColumn.setCellFactory(new Callback<TableColumn<DebtResolveTableEntry, Double>, TableCell<DebtResolveTableEntry, Double>>() {
+            @Override
+            public TableCell call(TableColumn tableColumn) {
+                return new AmountCellFormatter(server, mainCtrl);
+            }
+        });
         tableEntries.clear();
         DebtResolve.resolve(this.event, server, mainCtrl)
                 .stream()
@@ -113,10 +118,10 @@ class AmountCellFormatter extends TableCell<Object, Double> {
 
     @Override
     protected void updateItem(Double e, boolean empty) {
-        if (e == null) {
+        super.updateItem(e, empty);
+        if (e == null || empty) {
             return;
         }
-        super.updateItem(e, empty);
 
         setText(server.convert(e, String.valueOf(User.Currency.EUR), String.valueOf(mainCtrl.getUser().getPrefferedCurrency()), Instant.now())
                 + " "
