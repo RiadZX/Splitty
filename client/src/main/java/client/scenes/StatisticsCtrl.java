@@ -184,9 +184,12 @@ public class StatisticsCtrl implements Initializable {
             }
         }
         for (Map.Entry<String, Double> entry : stats.entrySet()) {
-            pieChartData.add(new PieChart.Data(entry.getKey() + ": " +
-                  Math.round(entry.getValue() / getTotalSumOfExpenses() * 100.0)+
-                    "%", entry.getValue()));
+            double fixedValue = Math.round(entry.getValue() / getTotalSumOfExpenses() * 100.0);
+            String value = ": " +  String.format("%.2f", fixedValue) + String.valueOf(mainCtrl.getUser().getPrefferedCurrency());
+
+            pieChartData.add(new PieChart.Data(
+                    entry.getKey() + ": " + Math.round(entry.getValue() / getTotalSumOfExpenses() * 100.0)+ "%" + value, entry.getValue())
+            );
         }
         pieStats.setData(pieChartData);
         //set colors for the pie chart slices
