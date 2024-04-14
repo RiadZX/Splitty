@@ -43,15 +43,6 @@ public class User implements Serializable {
         this.prefferedCurrency=Currency.EUR;
     }
 
-    /**
-     * Only use this for testing
-     * @param name name of the user
-     */
-    public User(String name){
-        this();
-        this.name=name;
-    }
-
     public User(String name, String preferredCurrency){
         this();
         if (!name.isBlank()) {
@@ -66,11 +57,6 @@ public class User implements Serializable {
         this.email=email;
         this.iban=iban;
         this.bic=bic;
-    }
-
-    public User(String name, String email, String iban, String bic, String language) {
-        this(name, email, iban, bic);
-        this.language = language;
     }
 
     public Participant createParticipant() {
